@@ -1,0 +1,255 @@
+% \iffalse meta-comment
+%% File: pl209.dtx
+%
+%  Copyright 1995,1996,1997  ASCII Corporation.
+%
+%  This file is part of pLaTeX2e system.
+%  -------------------------------------
+%
+% \fi
+%
+% \CheckSum{260}
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+%
+% \setcounter{StandardModuleDepth}{1}
+% \StopEventually{}
+%
+% \iffalse
+% \changes{v1.0}{1995/03/28}{Based on latex209.dtx v0.39}
+% \changes{v1.0b}{1995/08/30}{Based on latex209.dtx v0.46}
+% \changes{v1.0c}{1995/11/21}{Add footnote relatex commands.}
+% \changes{v1.0d}{1997/01/17}{Only define for p\LaTeXe relatex codes.}
+% \changes{v1.0e}{1997/01/28}{書体変更の二文字コマンドを旧版互換にした。}
+% \changes{v1.0f}{1997/06/25}{\cs{em}で和文を強調書体に}
+% \fi
+%
+% \iffalse
+%<*package>
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesFile{pl209.dtx}[1997/06/25 v1.0f Standard pLaTeX file]
+%</package>
+%<*driver>
+\documentclass{jltxdoc}
+\GetFileInfo{pl209.dtx}
+\title{p\LaTeXe\\2.09互換モード用マクロ\space\fileversion}
+\author{Ken Nakano \& Hideaki Togashi}
+\date{作成日：\filedate}
+\begin{document}
+   \maketitle
+   \DocInput{\filename}
+\end{document}
+%</driver>
+% \fi
+%
+% \section{\dst 用モジュール}
+% \dst で以下のモジュール名を指定することで、対象となる部分を取り出す
+% ことができます。
+%
+% \begin{center}
+% \begin{tabular}{ll}
+% pl209 & \file{pl209.def}ファイルを生成\\
+% oldfonts & \file{oldpfonts.sty}を生成\\
+% style &
+%    \begin{tabular}[t]{ll}
+%    jarticle & \file{jarticle.sty}ファイルを生成 \\ 
+%    jbook    & \file{jbook.sty}ファイルを生成\\
+%    jreport  & \file{jreport.sty}ファイルを生成\\
+%    tarticle & \file{tarticle.sty}ファイルを生成 \\ 
+%    tbook    & \file{tbook.sty}ファイルを生成\\
+%    treport  & \file{treport.sty}ファイルを生成
+%    \end{tabular}
+% \end{tabular}
+% \end{center}
+%
+%
+% \section{2.09互換マクロ}
+% 2.09用のコマンド定義ファイルがロードされたとき、メッセージを出力します。
+% また、\LaTeX{}の2.09コマンドマクロ定義をロードします。
+%    \begin{macrocode}
+%<*pl209>
+\typeout{Entering pLaTeX 2.09 compatibility mode.}
+\input{latex209.def}
+%</pl209>
+%    \end{macrocode}
+% フォント選択コマンドのトレースのために\file{ptrace}パッケージをロードします。
+% \changes{v1.0e}{1997/02/20}{Typemiss:oldlfont from oldlfonts}
+%    \begin{macrocode}
+%<oldfonts>\RequirePackage{oldlfont}
+%<pl209|oldfonts>\RequirePackage{ptrace}
+%    \end{macrocode}
+%
+% \begin{macro}{\Rensuji}
+% \begin{macro}{\prensuji}
+% p\LaTeXe{}では、|\Rensuji|, |\prensuji|の動作を|\rensuji|コマンドが
+% カバーしています。
+%    \begin{macrocode}
+%<*pl209>
+\let\Rensuji\rensuji
+\let\prensuji\rensuji
+%</pl209>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@footnotemark}
+% \begin{macro}{\@makefnmark}
+% 脚注の印を出力するマクロを、組み方向に応じて、脚注の方向が変わるように
+% します。
+%    \begin{macrocode}
+%<*pl209>
+\def\@footnotemark{\leavevmode
+  \ifhmode\edef\@x@sf{\the\spacefactor}\fi
+  \ifydir\@makefnmark
+  \else\hbox to\z@{\hskip-.25zw\raise2\cht\@makefnmark\hss}\fi
+  \ifhmode\spacefactor\@x@sf\fi\relax}
+\def\@makefnmark{\hbox{\ifydir $\m@th^{\@thefnmark}$
+  \else\hbox{\yoko$\m@th^{\@thefnmark}$}\fi}}
+%</pl209>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+%    \begin{macrocode}
+%<*pl209>
+\fontencoding{JY1}
+\fontfamily{mc}
+\fontsize{10}{15}
+%</pl209>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%<*pl209|oldfonts>
+\DeclareSymbolFont{mincho}{JY1}{mc}{m}{n}
+\DeclareSymbolFont{gothic}{JY1}{gt}{m}{n}
+\DeclareSymbolFontAlphabet\mathmc{mincho}
+\DeclareSymbolFontAlphabet\mathgt{gothic}
+\SetSymbolFont{mincho}{bold}{JY1}{gt}{m}{n}
+\jfam\symmincho
+%    \end{macrocode}
+% \changes{v1.0e}{1997/01/29}{二文字書体変更コマンドの動作を旧版と同等にした。}
+% |\mc|と|\gt|は、和文フォントを変更しますが、欧文フォントには影響しません。
+%    \begin{macrocode}
+\DeclareRobustCommand\mc{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \kanjifamily{\mcdefault}%
+    \kanjiseries{\kanjiseriesdefault}%
+    \kanjishape{\kanjishapedefault}%
+    \selectfont\mathgroup\symmincho}
+\DeclareRobustCommand\gt{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \kanjifamily{\gtdefault}%
+    \kanjiseries{\kanjiseriesdefault}%
+    \kanjishape{\kanjishapedefault}%
+    \selectfont\mathgroup\symgothic}
+%    \end{macrocode}
+% |\bf|コマンドは、和文フォントをゴシックにし、欧文フォントをボールドに
+% します。
+%    \begin{macrocode}
+\DeclareRobustCommand\bf{\normalfont\bfseries\mathgroup\symbold\jfam\symgothic}
+%    \end{macrocode}
+% |\rm|, |\sf|, |\sl|, |\sc|, |\it|, |\tt|の各コマンドを、欧文ファミリだけを
+% デフォルトフォントから属性を変更するようにし、和文フォントは影響を
+% 受けないように修正します。
+%    \begin{macrocode}
+\DeclareRobustCommand\roman@normal{%
+    \romanencoding{\encodingdefault}%
+    \romanfamily{\familydefault}%
+    \romanseries{\seriesdefault}%
+    \romanshape{\shapedefault}%
+    \selectfont\ignorespaces}
+\DeclareRobustCommand\rm{\roman@normal\rmfamily\mathgroup\symoperators}
+\DeclareRobustCommand\sf{\roman@normal\sffamily\mathgroup\symsans}
+\DeclareRobustCommand\sl{\roman@normal\slshape\mathgroup\symslanted}
+\DeclareRobustCommand\sc{\roman@normal\scshape\mathgroup\symsmallcaps}
+\DeclareRobustCommand\it{\roman@normal\itshape\mathgroup\symitalic}
+\DeclareRobustCommand\tt{\roman@normal\ttfamily\mathgroup\symtypewriter}
+%    \end{macrocode}
+%
+% \begin{macro}{\em}
+% \changes{v1.0f}{1997/06/25}{\cs{em}で和文を強調書体に}
+% |\em|コマンドで、和文フォントも|\gt|に切り替えるようにしました。
+%    \begin{macrocode}
+\DeclareRobustCommand\em{%
+  \@nomath\em
+  \ifdim \fontdimen\@ne\font>\z@\mc\rm\else\gt\it\fi}
+%</pl209|oldfonts>
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+%<*pl209>
+\let\mcfam\symmincho
+\let\gtfam\symgothic
+\renewcommand\vpt   {\edef\f@size{\@vpt}\rm\mc}
+\renewcommand\vipt  {\edef\f@size{\@vipt}\rm\mc}
+\renewcommand\viipt {\edef\f@size{\@viipt}\rm\mc}
+\renewcommand\viiipt{\edef\f@size{\@viiipt}\rm\mc}
+\renewcommand\ixpt  {\edef\f@size{\@ixpt}\rm\mc}
+\renewcommand\xpt   {\edef\f@size{\@xpt}\rm\mc}
+\renewcommand\xipt  {\edef\f@size{\@xipt}\rm\mc}
+\renewcommand\xiipt {\edef\f@size{\@xiipt}\rm\mc}
+\renewcommand\xivpt {\edef\f@size{\@xivpt}\rm\mc}
+\renewcommand\xviipt{\edef\f@size{\@xviipt}\rm\mc}
+\renewcommand\xxpt  {\edef\f@size{\@xxpt}\rm\mc}
+\renewcommand\xxvpt {\edef\f@size{\@xxvpt}\rm\mc}
+%</pl209>
+%    \end{macrocode}
+% そして、最後に\file{pl209.cfg}というファイルがあれば、それをロードします。
+%    \begin{macrocode}
+%<pl209>\InputIfFileExists{pl209.cfg}{}{}
+%    \end{macrocode}
+%
+%
+% \section{スタイルファイル}
+% 以下は、p\LaTeX~2.09での標準スタイルファイルです。
+% p\LaTeXe{}のクラスファイルをロードするようにしています。
+%    \begin{macrocode}
+%<*style>
+%<*jarticle|jbook|jreport|tarticle|tbook|treport>
+\NeedsTeXFormat{pLaTeX2e}
+%</jarticle|jbook|jreport|tarticle|tbook|treport>
+%<*jarticle>
+\@obsoletefile{jarticle.cls}{jarticle.sty}
+\LoadClass{jarticle}
+%</jarticle>
+%<*tarticle>
+\@obsoletefile{tarticle.cls}{tarticle.sty}
+\LoadClass{tarticle}
+%</tarticle>
+%<*jbook>
+\@obsoletefile{jbook.cls}{jbook.sty}
+\LoadClass{jbook}
+%</jbook>
+%<*tbook>
+\@obsoletefile{tbook.cls}{tbook.sty}
+\LoadClass{tbook}
+%</tbook>
+%<*jreport>
+\@obsoletefile{jreport.cls}{jreport.sty}
+\LoadClass{jreport}
+%</jreport>
+%<*treport>
+\@obsoletefile{treport.cls}{treport.sty}
+\LoadClass{treport}
+%</treport>
+%</style>
+%    \end{macrocode}
+%
+% \Finale
+%
+\endinput

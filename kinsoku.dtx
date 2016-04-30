@@ -1,0 +1,262 @@
+% \iffalse meta-comment
+%% File: kinsoku.dtx
+%
+%  Copyright 1995 ASCII Corporation.
+%
+%  This file is part of pLaTeX2e system.
+%  -------------------------------------
+%
+% \fi
+%
+% \CheckSum{167}
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+%
+% \setcounter{StandardModuleDepth}{1}
+% \StopEventually{}
+%
+% \iffalse
+%<*driver>
+\NeedsTeXFormat{pLaTeX2e}
+% \fi
+\ProvidesFile{kinsoku.dtx}[1995/04/01 v1.0 pLaTeX Kernel]
+% \iffalse
+\documentclass{jltxdoc}
+\GetFileInfo{kinsoku.dtx}
+\title{禁則パラメータ\space\fileversion}
+\author{Ken Nakano}
+\date{作成日：\filedate}
+\begin{document}
+   \maketitle
+   \DocInput{\filename}
+\end{document}
+%</driver>
+% \fi
+%
+% このファイルは、禁則と文字間スペースの設定について説明をしています。
+% 日本語\TeX{}の機能についての詳細は、『日本語\TeX テクニカルブックI』を
+% 参照してください。
+%
+% なお、このファイルのコード部分は、
+% 以前のバージョンで配布された\file{kinsoku.tex}と同一です。
+%
+%    \begin{macrocode}
+%<*plcore>
+%    \end{macrocode}
+%
+% \section{禁則}
+%
+% ある文字を行頭禁則の対象にするには、|\prebreakpenalty|に正の値を指定します。
+% ある文字を行末禁則の対象にするには、|\postbreakpenalty|に正の値を指定します。
+% 数値が大きいほど、行頭、あるいは行末で改行されにくくなります。
+%
+% \subsection{半角文字に対する禁則}
+% ここでは、半角文字に対する禁則の設定を行なっています。
+%
+%    \begin{macrocode}
+\prebreakpenalty`!=10000
+\prebreakpenalty`"=10000
+\postbreakpenalty`\#=500
+\postbreakpenalty`\$=500
+\postbreakpenalty`\%=500
+\postbreakpenalty`\&=500
+\postbreakpenalty`\`=10000
+\prebreakpenalty`'=10000
+\prebreakpenalty`)=10000
+\postbreakpenalty`(=10000
+\prebreakpenalty`*=500
+\prebreakpenalty`+=500
+\prebreakpenalty`-=10000
+\prebreakpenalty`.=10000
+\prebreakpenalty`,=10000
+\prebreakpenalty`/=500
+\prebreakpenalty`;=10000
+\prebreakpenalty`?=10000
+\prebreakpenalty`:=10000
+\prebreakpenalty`]=10000
+\postbreakpenalty`[=10000
+%    \end{macrocode}
+%
+% \subsection{全角文字に対する禁則}
+% ここでは、全角文字に対する禁則の設定を行なっています。
+%
+%    \begin{macrocode}
+\prebreakpenalty`、=10000
+\prebreakpenalty`。=10000
+\prebreakpenalty`，=10000
+\prebreakpenalty`．=10000
+\prebreakpenalty`・=10000
+\prebreakpenalty`：=10000
+\prebreakpenalty`；=10000
+\prebreakpenalty`？=10000
+\prebreakpenalty`！=10000
+\prebreakpenalty\jis"212B=10000
+\prebreakpenalty\jis"212C=10000
+\prebreakpenalty\jis"212D=10000
+\postbreakpenalty\jis"212E=10000
+\prebreakpenalty\jis"2139=10000
+\prebreakpenalty\jis"2144=250
+\prebreakpenalty\jis"2145=250
+\postbreakpenalty\jis"2146=10000
+\prebreakpenalty\jis"2147=5000
+\postbreakpenalty\jis"2148=5000
+\prebreakpenalty\jis"2149=5000
+\prebreakpenalty`）=10000
+\postbreakpenalty`（=10000
+\prebreakpenalty`｝=10000
+\postbreakpenalty`｛=10000
+\prebreakpenalty`］=10000
+\postbreakpenalty`［=10000
+\postbreakpenalty`‘=10000
+\prebreakpenalty`’=10000
+\postbreakpenalty\jis"214C=10000
+\prebreakpenalty\jis"214D=10000
+\postbreakpenalty\jis"2152=10000
+\prebreakpenalty\jis"2153=10000
+\postbreakpenalty\jis"2154=10000
+\prebreakpenalty\jis"2155=10000
+\postbreakpenalty\jis"2156=10000
+\prebreakpenalty\jis"2157=10000
+\postbreakpenalty\jis"2158=10000
+\prebreakpenalty\jis"2159=10000
+\postbreakpenalty\jis"215A=10000
+\prebreakpenalty\jis"215B=10000
+\prebreakpenalty`ー=10000
+\prebreakpenalty`＋=200
+\prebreakpenalty`−=200
+\prebreakpenalty`＝=200
+\postbreakpenalty`＃=200
+\postbreakpenalty`＄=200
+\postbreakpenalty`％=200
+\postbreakpenalty`＆=200
+\prebreakpenalty`ぁ=150
+\prebreakpenalty`ぃ=150
+\prebreakpenalty`ぅ=150
+\prebreakpenalty`ぇ=150
+\prebreakpenalty`ぉ=150
+\prebreakpenalty`っ=150
+\prebreakpenalty`ゃ=150
+\prebreakpenalty`ゅ=150
+\prebreakpenalty`ょ=150
+\prebreakpenalty\jis"246E=150
+\prebreakpenalty`ァ=150
+\prebreakpenalty`ィ=150
+\prebreakpenalty`ゥ=150
+\prebreakpenalty`ェ=150
+\prebreakpenalty`ォ=150
+\prebreakpenalty`ッ=150
+\prebreakpenalty`ャ=150
+\prebreakpenalty`ュ=150
+\prebreakpenalty`ョ=150
+\prebreakpenalty\jis"256E=150
+\prebreakpenalty\jis"2575=150
+\prebreakpenalty\jis"2576=150
+%    \end{macrocode}
+%
+% \section{文字間のスペース}
+%
+% ある英字の前後と、その文字に隣合う漢字に挿入されるスペースを制御するには、
+% |\xspcode|を用います。
+%
+% ある漢字の前後と、その文字に隣合う英字に挿入されるスペースを制御するには、
+% |\inhibitxspcode|を用います。
+%
+% \subsection{ある英字と前後の漢字の間の制御}
+% ここでは、英字に対する設定を行なっています。
+%
+% 指定する数値とその意味は次のとおりです。
+%
+% \begin{center}
+% \begin{tabular}{ll}
+% 0 & 前後の漢字の間での処理を禁止する。\\
+% 1 & 直前の漢字との間にのみ、スペースの挿入を許可する。\\
+% 2 & 直後の漢字との間にのみ、スペースの挿入を許可する。\\
+% 3 & 前後の漢字との間でのスペースの挿入を許可する。\\
+% \end{tabular}
+% \end{center}
+%
+%    \begin{macrocode}
+\xspcode`(=1
+\xspcode`)=2
+\xspcode`[=1
+\xspcode`]=2
+\xspcode``=1
+\xspcode`'=2
+\xspcode`;=2
+\xspcode`,=2
+\xspcode`.=2
+%    \end{macrocode}
+%
+% \subsection{ある漢字と前後の英字の間の制御}
+% ここでは、漢字に対する設定を行なっています。
+%
+% 指定する数値とその意味は次のとおりです。
+%
+% \begin{center}
+% \begin{tabular}{ll}
+% 0 & 前後の英字との間にスペースを挿入することを禁止する。\\
+% 1 & 直前の英字との間にスペースを挿入することを禁止する。\\
+% 2 & 直後の英字との間にスペースを挿入することを禁止する。\\
+% 3 & 前後の英字との間でのスペースの挿入を許可する。\\
+% \end{tabular}
+% \end{center}
+%
+%    \begin{macrocode}
+\inhibitxspcode`、=1
+\inhibitxspcode`。=1
+\inhibitxspcode`，=1
+\inhibitxspcode`．=1
+\inhibitxspcode`；=1
+\inhibitxspcode`？=1
+\inhibitxspcode`）=1
+\inhibitxspcode`（=2
+\inhibitxspcode`］=1
+\inhibitxspcode`［=2
+\inhibitxspcode`｝=1
+\inhibitxspcode`｛=2
+\inhibitxspcode`‘=2
+\inhibitxspcode`’=1
+\inhibitxspcode`“=2
+\inhibitxspcode`”=1
+\inhibitxspcode`〔=2
+\inhibitxspcode`〕=1
+\inhibitxspcode`〈=2
+\inhibitxspcode`〉=1
+\inhibitxspcode`《=2
+\inhibitxspcode`》=1
+\inhibitxspcode`「=2
+\inhibitxspcode`」=1
+\inhibitxspcode`『=2
+\inhibitxspcode`』=1
+\inhibitxspcode`【=2
+\inhibitxspcode`】=1
+\inhibitxspcode`―=0
+\inhibitxspcode`〜=0
+\inhibitxspcode`…=0
+\inhibitxspcode`￥=0
+\inhibitxspcode`°=1
+\inhibitxspcode`′=1
+\inhibitxspcode`″=1
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%</plcore>
+%    \end{macrocode}
+%
+% \Finale
+%
+\endinput

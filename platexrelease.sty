@@ -1,0 +1,434 @@
+%%
+%% This is file `platexrelease.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% plvers.dtx  (with options: `platexrelease')
+%% platexrelease.dtx  (with options: `platexrelease')
+%% plfonts.dtx  (with options: `platexrelease')
+%% plcore.dtx  (with options: `platexrelease')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from platexrelease.sty.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file plvers.dtx platexrelease.dtx plfonts.dtx plcore.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+%% File: plvers
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+\edef\p@known@latexreleaseversion
+   {2016/03/31}
+\edef\platexreleaseversion
+   {2016/04/17}
+\def\plIncludeInRelease#1{\kernel@ifnextchar[%
+  {\@plIncludeInRelease{#1}}
+  {\@plIncludeInRelease{#1}[#1]}}
+\def\@plIncludeInRelease#1[#2]{\@plIncludeInRele@se{#2}}
+\def\@plIncludeInRele@se#1#2#3{%
+  \toks@{[#1] #3}%
+  \expandafter\ifx\csname\string#2+\@currname+IIR\endcsname\relax
+    \ifnum\expandafter\@parse@version#1//00\@nil
+          >\expandafter\@parse@version\pfmtversion//00\@nil
+      \GenericInfo{}{Skipping: \the\toks@}%
+     \expandafter\expandafter\expandafter\@gobble@plIncludeInRelease
+    \else
+      \GenericInfo{}{Applying: \the\toks@}%
+      \expandafter\let\csname\string#2+\@currname+IIR\endcsname\@empty
+    \fi
+  \else
+    \GenericInfo{}{Already applied: \the\toks@}%
+    \expandafter\@gobble@plIncludeInRelease
+  \fi
+}
+\long\def\@gobble@plIncludeInRelease#1\plEndIncludeInRelease{}
+\let\plEndIncludeInRelease\relax
+%% File: platexrelease.dtx
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesPackage{platexrelease}
+                [2016/04/12 v1.0c latexrelease support for pLaTeX Kernel]
+\RequirePackageWithOptions{latexrelease}
+\ifnum\expandafter\@parse@version\latexreleaseversion//00\@nil
+  >\expandafter\@parse@version\p@known@latexreleaseversion//00\@nil
+  \PackageWarningNoLine{platexrelease}{%
+    Version of `latexrelease' is newer than\MessageBreak
+    what `platexrelease' knows}
+\fi
+\DeclareOption*{%
+  \def\@plIncludeInRelease#1[#2]{\@plIncludeInRele@se{#1}}%
+  \let\requestedplpatchdate\CurrentOption}
+\DeclareOption{latest}{%
+  \let\requestedplpatchdate\platexreleaseversion}
+\DeclareOption{current}{%
+  \let\requestedplpatchdate\pfmtversion}
+\ExecuteOptions{current}
+\ProcessOptions\relax
+\def\reserved@a{%
+\edef\requestedpLaTeXdate{\the\count@}%
+\reserved@b}
+\def\reserved@b#1\\{%
+\def\reserved@b{#1}%
+\ifx\reserved@b\@empty\else
+\PackageError{platexrelease}%
+             {Unexpected option \requestedplpatchdate}%
+             {The option must be of the form yyyy/mm/dd}%
+\fi}
+\afterassignment\reserved@a
+\count@\expandafter
+  \@parse@version\expandafter0\requestedplpatchdate//00\@nil\\
+\edef\currentpLaTeXdate{%
+   \expandafter\@parse@version\pfmtversion//00\@nil}
+\ifnum\requestedpLaTeXdate=\currentpLaTeXdate
+\PackageWarningNoLine{platexrelease}{%
+  Current format date selected, no patches applied.}
+\expandafter\endinput
+\fi
+\ifnum\currentpLaTeXdate
+  >\expandafter\@parse@version\platexreleaseversion//00\@nil
+\PackageWarningNoLine{platexrelease}{%
+The current package is for an older pLaTeX format:\MessageBreak
+pLaTeX \pfmtversion\space\MessageBreak
+Obtain a newer version of this package!}
+\expandafter\endinput
+\fi
+\ifnum\requestedpLaTeXdate
+  >\expandafter\@parse@version\platexreleaseversion//00\@nil
+\PackageWarningNoLine{platexrelease}{%
+The current package is for pLaTeX \platexreleaseversion:\MessageBreak
+It has no patches beyond that date\MessageBreak
+There may be an updated version\MessageBreak
+of this package available from CTAN}
+\expandafter\endinput
+\fi
+\let\pfmtversion\requestedplpatchdate
+\let\currentpLaTeXdate\requestedpLaTeXdate
+%% File: plfonts.dtx
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+\plIncludeInRelease{2016/04/17}{\@text@composite}
+                   {Fix for non-zero baselineshift}%
+\def\@text@composite#1#2#3#{%
+  \begingroup
+  \setbox\z@=\hbox\bgroup%
+  \ybaselineshift\z@\tbaselineshift\z@
+  \expandafter\@text@composite@x
+  \csname\string#1-\string#2\endcsname}
+\def\@text@composite@x#1#2{%
+  \ifx#1\relax
+    \expandafter\@secondoftwo
+  \else
+    \expandafter\@firstoftwo
+  \fi
+  #1{#2}\egroup
+  \leavevmode
+  \expandafter\lower
+    \iftdir
+      \ifmdir
+        \ifmmode\tbaselineshift\else\ybaselineshift\fi
+      \else
+        \tbaselineshift
+      \fi
+    \else
+      \ybaselineshift
+    \fi
+    \box\z@
+  \endgroup}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@text@composite}
+                   {Fix for non-zero baselineshift}%
+\def\@text@composite#1#2#3\@text@composite{%
+   \expandafter\@text@composite@x
+      \csname\string#1-\string#2\endcsname}
+\def\@text@composite@x#1{%
+   \ifx#1\relax
+      \expandafter\@secondoftwo
+   \else
+      \expandafter\@firstoftwo
+   \fi
+   #1}
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\eminnershape}{\eminnershape}%
+\DeclareRobustCommand\em
+        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+                       \eminnershape \else \gtfamily \itshape \fi}%
+\def\eminnershape{\mcfamily \upshape}%
+\plEndIncludeInRelease
+\plIncludeInRelease{2015/01/01}{\eminnershape}{\eminnershape}%
+\DeclareRobustCommand\em
+        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+                       \mcfamily \upshape \else \gtfamily \itshape \fi}
+\def\eminnershape{\upshape}% defined by LaTeX, but not used by pLaTeX
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\eminnershape}{\eminnershape}%
+\DeclareRobustCommand\em
+        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+                       \mcfamily \upshape \else \gtfamily \itshape \fi}
+\let\eminnershape\@undefined
+\plEndIncludeInRelease
+%% File: plcore.dtx
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+\plIncludeInRelease{2016/04/17}{\@makecol}{\@makecol}%
+\gdef\@makecol{%
+   \setbox\@outputbox\box\@cclv%
+   \xdef\@freelist{\@freelist\@midlist}%
+   \global \let \@midlist \@empty
+   \@combinefloats
+   \ifvbox\@kludgeins
+     \@makespecialcolbox
+   \else
+     \setbox\@outputbox \vbox to\@colht {%
+       \@texttop
+       \dimen@ \dp\@outputbox
+       \unvbox \@outputbox
+       \iftdir\hskip\z@\fi
+       \vskip -\dimen@
+       \@textbottom
+       \ifvoid\footins\else % for pLaTeX
+         \vskip \skip\footins
+         \color@begingroup
+            \normalcolor
+            \footnoterule
+            \unvbox \footins
+         \color@endgroup
+       \fi
+       }%
+   \fi
+   \global \maxdepth \@maxdepth
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@makecol}{\@makecol}%
+\gdef\@makecol{%
+   \setbox\@outputbox\box\@cclv%
+   \xdef\@freelist{\@freelist\@midlist}%
+   \global \let \@midlist \@empty
+   \@combinefloats
+   \ifvbox\@kludgeins
+     \@makespecialcolbox
+   \else
+     \setbox\@outputbox \vbox to\@colht {%
+%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+       \@texttop
+       \dimen@ \dp\@outputbox
+       \unvbox \@outputbox
+       \iftdir\hskip\z@
+       \else\vskip -\dimen@\fi
+       \@textbottom
+       \ifvoid\footins\else % for pLaTeX
+         \vskip \skip\footins
+         \color@begingroup
+            \normalcolor
+            \footnoterule
+            \unvbox \footins
+         \color@endgroup
+       \fi
+       }%
+   \fi
+   \global \maxdepth \@maxdepth
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\@outputtombow}{\@outputtombow}%
+\def\@outputtombow{%
+  \iftombow
+  \vbox to\z@{\kern-13mm\relax
+    \boxmaxdepth\maxdimen%% Added (Apr 1, 2016)
+    \moveleft3mm\vbox to\@@paperheight{%
+      \hbox to\@@paperwidth{\hskip3mm\relax
+         \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip3mm}%
+      \kern-10mm
+      \hbox to\@@paperwidth{\copy\@Tl\hfill\copy\@Tr}%
+      \vfill
+      \hbox to\@@paperwidth{\copy\@CL\hfill\copy\@CR}%
+      \vfill
+      \hbox to\@@paperwidth{\copy\@Bl\hfill\copy\@Br}%
+      \kern-10mm
+      \hbox to\@@paperwidth{\hskip3mm\relax
+         \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip3mm}%
+    }\vss
+  }%
+  \fi
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@outputtombow}{\@outputtombow}%
+\def\@outputtombow{%
+  \iftombow
+  \vbox to\z@{\kern-13mm\relax
+    \moveleft3mm\vbox to\@@paperheight{%
+      \hbox to\@@paperwidth{\hskip3mm\relax
+         \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip3mm}%
+      \kern-10mm
+      \hbox to\@@paperwidth{\copy\@Tl\hfill\copy\@Tr}%
+      \vfill
+      \hbox to\@@paperwidth{\copy\@CL\hfill\copy\@CR}%
+      \vfill
+      \hbox to\@@paperwidth{\copy\@Bl\hfill\copy\@Br}%
+      \kern-10mm
+      \hbox to\@@paperwidth{\hskip3mm\relax
+         \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip3mm}%
+    }\vss
+  }%
+  \fi
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\@makefnmark}
+                   {Remove extra \xkanjiskip}%
+\renewcommand\@makefnmark{%
+  \ifydir \hbox{}\hbox{\@textsuperscript{\normalfont\@thefnmark}}\hbox{}%
+  \else\hbox{\yoko\@textsuperscript{\normalfont\@thefnmark}}\fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@makefnmark}
+                   {Remove extra \xkanjiskip}%
+\renewcommand\@makefnmark{\hbox{%
+  \ifydir \@textsuperscript{\normalfont\@thefnmark}%
+  \else\hbox{\yoko\@textsuperscript{\normalfont\@thefnmark}}\fi}}
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\@tabular}
+                   {Remove extra \xkanjiskip}%
+\def\@tabular{\leavevmode \null\hbox \bgroup $\let\@acol\@tabacol
+   \let\@classz\@tabclassz
+   \let\@classiv\@tabclassiv \let\\\@tabularcr\@tabarray}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@tabular}
+                   {Remove extra \xkanjiskip}%
+\def\@tabular{\leavevmode \hbox \bgroup $\let\@acol\@tabacol
+   \let\@classz\@tabclassz
+   \let\@classiv\@tabclassiv \let\\\@tabularcr\@tabarray}
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\endtabular}
+                   {Remove extra \xkanjiskip}%
+\def\endtabular{\crcr\egroup\egroup $\egroup\null}
+\expandafter \let \csname endtabular*\endcsname = \endtabular
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\endtabular}
+                   {Remove extra \xkanjiskip}%
+\def\endtabular{\crcr\egroup\egroup $\egroup}
+\expandafter \let \csname endtabular*\endcsname = \endtabular
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\@iiiparbox}
+                   {Remove extra \xkanjiskip}%
+\let\@parboxto\@empty
+\long\def\@iiiparbox#1#2[#3]#4#5{%
+  \leavevmode
+  \@pboxswfalse
+  \setlength\@tempdima{#4}%
+  \@begin@tempboxa\vbox{\hsize\@tempdima\@parboxrestore#5\@@par}%
+    \ifx\relax#2\else
+      \setlength\@tempdimb{#2}%
+      \edef\@parboxto{to\the\@tempdimb}%
+    \fi
+    \if#1b\vbox
+    \else\if #1t\vtop
+    \else\ifmmode\vcenter
+    \else\@pboxswtrue\null$\vcenter% !!!
+    \fi\fi\fi
+    \@parboxto{\let\hss\vss\let\unhbox\unvbox
+       \csname bm@#3\endcsname}%
+    \if@pboxsw \m@th$\null\fi% !!!
+  \@end@tempboxa}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@iiiparbox}
+                   {Remove extra \xkanjiskip}%
+\let\@parboxto\@empty
+\long\def\@iiiparbox#1#2[#3]#4#5{%
+  \leavevmode
+  \@pboxswfalse
+  \setlength\@tempdima{#4}%
+  \@begin@tempboxa\vbox{\hsize\@tempdima\@parboxrestore#5\@@par}%
+    \ifx\relax#2\else
+      \setlength\@tempdimb{#2}%
+      \edef\@parboxto{to\the\@tempdimb}%
+    \fi
+    \if#1b\vbox
+    \else\if #1t\vtop
+    \else\ifmmode\vcenter
+    \else\@pboxswtrue $\vcenter
+    \fi\fi\fi
+    \@parboxto{\let\hss\vss\let\unhbox\unvbox
+       \csname bm@#3\endcsname}%
+    \if@pboxsw \m@th$\fi
+  \@end@tempboxa}
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\underline}
+                   {Remove extra \xkanjiskip}%
+\def\underline#1{%
+  \relax
+  \ifmmode\@@underline{#1}%
+  \else \leavevmode\null$\@@underline{\hbox{#1}}\m@th$\null\relax\fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\underline}
+                   {Remove extra \xkanjiskip}%
+\def\underline#1{%
+  \relax
+  \ifmmode\@@underline{#1}%
+  \else $\@@underline{\hbox{#1}}\m@th$\relax\fi}
+\plEndIncludeInRelease
+\endinput
+%%
+%% End of file `platexrelease.sty'.

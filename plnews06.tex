@@ -1,0 +1,137 @@
+%% <2000/11/03>
+\documentclass{plnews}
+
+\publicationyear{2000}% 発行年
+\publicationmonth{11}% 発行月
+\publicationissue{6}% 番号
+\author{中野 賢（\texttt{<ken-na at ascii.co.jp>}）
+     \& 富樫 秀昭（\texttt{<hideak-t at ascii.co.jp>}）
+}
+
+\begin{document}
+
+\maketitle
+
+\section{この文書について}
+この文書は、p\LaTeXe{}\texttt{<2000/11/03>}版について、
+前回の版（\texttt{<1999/08/09>}）からの更新箇所をまとめたものです。
+それ以前の変更点については、\textsf{plnews*.tex}やChanges.txtを
+参照してください。\LaTeX{}レベルでの更新箇所は、\LaTeX{}に付属の
+ltnewsファイルを参照してください。
+
+\section{前バージョンからの主な修正個所}
+\begin{itemize}
+\item 配布形態をte\TeX{}ライブラリの形式に変更した。
+\item |nidanfloat|パッケージを付け加えた。
+\item |\text..|コマンドの左側に|\xkanjiskip|が入らないのを修正（ありがと
+う、乙部＠東大さん）
+\item tarticle, tbook, treportで、文頭の全角開き括弧類が下がる現象に対処。
+|\adjustbaseline|を修正しました。
+\item \LaTeX \texttt{<2000/06/01>}に対応した。
+\end{itemize}
+
+
+\section{te\TeX{}ライブラリ形式での配布}
+\textit{\TeX{} Live}というTUGで配布している\TeX{}システムを集めた
+CD--ROMがあり、TUGboat購読者にはこれがTUGboatと一緒に定期的に配布されて
+います。te\TeX{}（Thomas Esserによる）は\textit{\TeX{} Live}用に集められ
+た\TeX{}のことです。
+
+te\TeX{}のTDS（\textit{\TeX{} Directory Structure}）に従った配布物には、
+ポーランド語の\LaTeX{}用に|platex|というディレクトリが含まれており、
+p\TeX{}のplatexと重なります。この問題を避けるために、p\TeX{}用のディレク
+トリを|texmf|直下に|texmf/ptex|と作り、p\TeX{}ではそちらを優先して使うよ
+うにし、te\TeX{}ライブラリに合わせた形でp\TeX{}関連のライブラリをまとめ
+て|ptex-texmf-*.tar.gz|として配布しています。
+
+このディレクトリ構成は従来のディレクトリ構成と異なっており、\LaTeXe{}の
+|*.ins|にはディレクトリ名を記述するので、te\TeX{}用の配布物とは別に、こ
+れまでのようにp\LaTeXe{}のパッケージを作ると、ディレクトリ名の記述だけが
+異なり、他は全く同じ2種類の配布物が出来上がることになります。この状態は
+望ましくないので、\TeX{}の世界全体がte\TeX{}にシフトしてきていることも考
+慮し\footnote{例えば、オリジナルのdvipsの最新版はte\TeX{}に含まれるもの
+だけとなっています。}、p\LaTeXe{}の配布もte\TeX{}ライブラリ形式での配布
+形態に絞ることにしました。今後p\LaTeXe{}のバージョンアップは、
+|ptex-texmf*.tar.gz|アーカイブに含まれる形で行なうことになります。
+
+
+\section{nidanfloatパッケージの使い方}
+|nidanfloat|パッケージは、二段組時に段抜きのフロートをページ下部にも配置
+できるようにするためのパッケージです。通常は、以下のような使い方になるで
+しょう。ページ下部に1段の幅に収まらない|filename.eps|を出力する場合です。
+\begin{verbatim}
+\documentclass[twocolumn]{jarticle}
+\usepackage{graphics}
+\usepackage{nidanfloat}
+\begin{document}
+     <本文>
+\begin{figure*}[b]
+\includegraphics{filename.eps}
+\caption{キャプション}
+\end{figure*}
+     <本文>
+\end{document}
+\end{verbatim}
+このように、二段組で|\usepackage{nidanfloat}|をプリアンブルに指定して、
+|figure|環境のオプションで|b|を指定します。オプションの意味は、通常の
+|figure|環境と同じです。|figure|環境のオプションを指定しない場合は、デフォ
+ルトで|tb|が指定されたものと見なされます。
+
+その他、追加されたパラメータなどに付いては、|nidanfloat.dtx|をご覧くださ
+い。
+
+
+\section{tarticle, tbook, treportで、文頭の全角開き括弧類が下がる問題}
+tarticle, tbook, treportで、文頭の全角開き括弧類が下がるという現象のご指
+摘を頂きました。このアキは、|\adustbaseline|で出力されていたものです。具
+体的には、|\tbaselineshift|に2度続けて値を指定すると、その後にある全角開
+き括弧類の前に余分なアキが出力されるようです。|\adustbaseline|では、縦組
+のベースライン位置を補正する際に|\tbaselineshift|を初期化し、その後に計
+算値を設定するということをしていたために、その直後に全角開き括弧類がくる
+と余分なアキが出力されていたものです。|\tbaselineshift|への連続した値の
+設定を行なわなければこの問題は起きないので、このバージョンで
+|\adustbaseline|の最初で行なっていた|\tbaselineshift|の初期化を行なわな
+いように変更しました。
+
+
+\section{\LaTeX \texttt{<2000/06/01>}に対応}
+\LaTeX{}のバージョンアップが今回から1年毎になりましたので、p\LaTeXe{}の
+更新も基本的に今後は\LaTeX{}に合わせて1年毎になります。
+
+
+\section{フォーマットファイル作成時の注意}
+現在のp\TeX{}では、8ビットコードの連続を16ビットコードと認識して
+しまう場合があります。そのため、フランス語やキリル文字などの
+8ビットコードが連続するハイフンパターンはまず使えせん。
+例えばcmcyraltパッケージでは、途中でつぎのようなエラーになります。
+
+\begin{verbatim}
+(/usr/local/share/texmf/tex/latex/contrib/
+other/cmcyralt/rhyphen.tex Russian hyphena
+tion
+! Bad \patterns.
+l.107  . え
+           2
+?
+\end{verbatim}
+
+このときは、``|?|''のプロンプトに対して``|x|''で終了してください。
+残念ながら、このハイフンパターンをp\TeX{}で利用することはできません。
+
+そこで、hyphen.cfgを用意して、不用意に他のハイフンパターンを
+読み込まないようにしてあります。詳しくはREADME2.txtをご覧ください。
+
+\section{その他}
+p\TeX{}やp\LaTeXe{}に関する最新情報は、p\TeX{}ホームページ
+\begin{verbatim}
+    http://www.ascii.co.jp/pb/ptex
+\end{verbatim}
+より、入手することができます。
+
+バグ報告やお問い合わせなどは、電子メールで
+\begin{verbatim}
+    www-ptex＠ascii.co.jp
+\end{verbatim}
+までお願いします。
+
+\end{document}

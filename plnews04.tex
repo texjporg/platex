@@ -1,0 +1,85 @@
+%% <1998/09/01>
+\documentclass{plnews}
+
+\publicationyear{1998}% 発行年
+\publicationmonth{9}% 発行月
+\publicationissue{4}% 番号
+\author{中野 賢（\texttt{<ken-na at ascii.co.jp>}）
+     \& 富樫 秀昭（\texttt{<hideak-t at ascii.co.jp>}）
+}
+
+\begin{document}
+
+\maketitle
+
+\section{この文書について}
+この文書は、p\LaTeXe{}\texttt{<1998/09/01>}版について、
+p\LaTeXe{}\texttt{<1998/02/17>}版からの更新箇所をまとめたものです。
+これまでの変更点については、\textsf{plnews*.tex}やChanges.txtを
+参照してください。
+
+このp\LaTeXe{}は、\LaTeX{}\texttt{<1998/06/01>}版に対応しています。
+\LaTeX{}レベルでの更新箇所は、\LaTeX{}に付属のltnewsファイルを
+参照してください。
+
+\section{NFSS2関連}
+\begin{itemize}
+\item |DeclareFixedCommand|をプリアンブル部でしか使えないようにしていたのを
+修正しました。
+\end{itemize}
+
+\section{パッチの取り込み}
+\texttt{<1998/02/17>}版へのパッチとして提供していた、
+つぎの修正を取り込みました。
+\begin{itemize}
+\item \textsf{jclasses.dtx}：
+	\verb|\rightmark|コマンドの引数に\verb|today|コマンドを修正した
+	とき、出力される日付が「平成元年」になってしまうのを修正
+	（\textsf{pl980409.patch}）。
+\item \textsf{jclasses.dtx}：
+	reportとbookクラスで、番号の付かない見出しレベルのペナルティを
+	\verb|\@M|に修正（\textsf{pl980323.patch}）。
+\item \textsf{tascmac.sty}：
+	calcパッケージとともに用いたとき、
+	\verb|screen|環境、\verb|itembox|環境、\verb|boxnote|環境が
+	エラーになるのを修正（\textsf{pl980227.patch}）。
+\end{itemize}
+
+
+
+\section{フォーマットファイル作成時の注意}
+現在のp\TeX{}では、8ビットコードの連続を16ビットコードと認識して
+しまう場合があります。そのため、フランス語やキリル文字などの
+8ビットコードが連続するハイフンパターンはまず使えせん。
+例えばcmcyraltパッケージでは、途中でつぎのようなエラーになります。
+
+\begin{verbatim}
+(/usr/local/share/texmf/tex/latex/contrib/
+other/cmcyralt/rhyphen.tex Russian hyphena
+tion
+! Bad \patterns.
+l.107  . え
+           2
+?
+\end{verbatim}
+
+このときは、``|?|''のプロンプトに対して``|x|''で終了してください。
+残念ながら、このハイフンパターンをp\TeX{}で利用することはできません。
+
+そこで、hyphen.cfgを用意して、不用意に他のハイフンパターンを
+読み込まないようにしてあります。詳しくはREADME2.txtをご覧ください。
+
+\section{その他}
+p\TeX{}やp\LaTeXe{}に関する最新情報は、p\TeX{}ホームページ
+\begin{verbatim}
+    http://www.ascii.co.jp/pb/ptex
+\end{verbatim}
+より、入手することができます。
+
+バグ報告やお問い合わせなどは、電子メールで
+\begin{verbatim}
+    www-ptex＠ascii.co.jp
+\end{verbatim}
+までお願いします。
+
+\end{document}

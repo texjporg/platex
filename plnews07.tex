@@ -1,0 +1,106 @@
+%% <2001/10/04>
+\documentclass{plnews}
+
+\publicationyear{2001}% 発行年
+\publicationmonth{09}% 発行月
+\publicationissue{7}% 番号
+\author{中野 賢（\texttt{<ken-na at ascii.co.jp>}）
+     \& 富樫 秀昭（\texttt{<hideak-t at ascii.co.jp>}）
+}
+
+\begin{document}
+
+\maketitle
+
+\section{この文書について}
+この文書は、p\LaTeXe{}\texttt{<2001/09/04>}版について、
+前回の版（\texttt{<2000/11/03>}）からの更新箇所をまとめたものです。
+それ以前の変更点については、\file{plnews*.tex}や\file{Changes.txt}を
+参照してください。
+\LaTeX{}レベルでの更新箇所は、\LaTeX{}に付属の\file{ltnews*.tex}などを
+参照してください。
+
+
+\section{使用および配付条件の変更}
+p\LaTeXe{}の配付および利用条件を「（変更済み）BSDライセンス」にしました。
+内容については、\file{COPYRIGHT}ファイルを参照してください。
+
+
+\section{nidanfloatパッケージ}
+nidanfloatパッケージは、最終ページの左右カラムの高さを均一に
+して出力するようになっていました。
+
+この機能は、左カラム用に保持している内容と、右カラム用の内容を
+一度まとめ、再び２分割するだけの簡略した実装で実現されています。
+
+そのため、左カラムだけで収まる量しかない場合、ページ下部への出力を
+指定した（２段抜きでない）フロートは右カラムの下に置かれます。
+また、|\newpage|コマンドでカラムを変更しても、
+ページ出力時に左カラム用の内容とまとめられ、分割位置が調整されるので、
+指定した|\newpage|コマンドの位置でカラムが変わりません。
+
+そこで、最終ページの高さ調整機能を使うかどうかを制御するための
+パッケージオプションを導入しました。
+
+自動調整するには、パッケージをロードするときに``balance''オプションを
+指定してください。
+\begin{verbatim}
+\usepackage[balance]{nidanfloat}
+\end{verbatim}
+
+逆に、調整しないようにするには、オプション``nobalance''を指定します。
+\begin{verbatim}
+\usepackage[nobalance]{nidanfloat}
+\end{verbatim}
+
+デフォルトは\textbf{nobalance}にしてあります。
+
+
+\section{その他の主な修正箇所}
+次のような不具合の修正や仕様の変更をしました。
+
+\begin{itemize}
+\item |\enlargethispage|コマンドを用いた場合、脚注と本文が重なってしまう。
+\item |\chpater|コマンドと|\chapter*|コマンドで見出しの出力位置が異なる。
+\item |\adjustbaseline|で調整量が合っていない。
+\item |\pbox|コマンドでzオプションを指定するとエラーになる。
+\item 目次のページ番号の書体を|\rmfamily|から|\normalfont|に変更しました。
+\end{itemize}
+
+
+\section{フォーマットファイル作成時の注意}
+現在のp\TeX{}では、8ビットコードの連続を16ビットコードと認識して
+しまう場合があります。そのため、フランス語やキリル文字などの
+8ビットコードが連続するハイフンパターンはまず使えせん。
+例えばcmcyraltパッケージでは、途中でつぎのようなエラーになります。
+
+\begin{verbatim}
+(/usr/local/share/texmf/tex/latex/contrib/
+other/cmcyralt/rhyphen.tex Russian hyphena
+tion
+! Bad \patterns.
+l.107  . え
+           2
+?
+\end{verbatim}
+
+このときは、``|?|''のプロンプトに対して``|x|''で終了してください。
+残念ながら、このハイフンパターンをp\TeX{}で利用することはできません。
+
+そこで、hyphen.cfgを用意して、不用意に他のハイフンパターンを
+読み込まないようにしてあります。詳しくはREADME2.txtをご覧ください。
+
+\section{その他}
+p\TeX{}やp\LaTeXe{}に関する最新情報は、p\TeX{}ホームページ
+\begin{verbatim}
+    http://www.ascii.co.jp/pb/ptex
+\end{verbatim}
+より、入手することができます。
+
+バグ報告やお問い合わせなどは、電子メールで
+\begin{verbatim}
+    www-ptex＠ascii.co.jp
+\end{verbatim}
+までお願いします。
+
+\end{document}

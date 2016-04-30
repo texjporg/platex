@@ -1,0 +1,1051 @@
+% \iffalse meta-comment
+%% File: plcore.dtx
+%
+%  Copyright 1994-2001 ASCII Corporation.
+%
+%  This file is part of pLaTeX2e system.
+%  -------------------------------------
+%
+% \fi
+%
+% \CheckSum{1266}
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+%
+% \setcounter{StandardModuleDepth}{1}
+% \StopEventually{}
+%
+% \iffalse
+% \changes{v1.0}{1994/09/16}{first edition}
+% \changes{v1.1}{1995/04/12}{脚注マクロ修正}
+% \changes{v1.1a}{1995/11/10}{\cs{topmargin}が反映されないバグを修正}
+% \changes{v1.1b}{1996/01/26}{脚注マークの後ろに余計なスペースが入るのを修正}
+% \changes{v1.1c}{1996/01/30}{ファイル名を\file{ploutput.dtx}から
+%    \file{plcore.dtx}とした。キャプション拡張を\file{plext.dtx}に移動。
+%    プリアンブルコマンドを追加}
+% \changes{v1.1d}{1996/02/17}{\cs{printglossary}を追加}
+% \changes{v1.1e}{1996/03/12}{tabbing環境での和欧文間スペース}
+% \changes{v1.1f}{1996/07/10}{トンボまわりを修正}
+% \changes{v1.1g}{1997/01/16}{\LaTeX\ \textt{!<1996/06/01!>}に対応}
+% \changes{v1.1h}{1997/06/25}{\LaTeX\ の改行マクロの変更に対応}
+% \changes{v1.1i}{1998/02/03}{\cs{@shipoutsetup}を\cs{@outputpage}内に入れた}
+% \changes{v1.1j}{2001/05/10}{\cs{@makecol}で組み立てられる
+%    \cs{@outputbox}の大きさが、縦組で中身が空のボックスだけの場合も適正になる
+%    ように修正}
+% \changes{v1.2}{2001/09/04}{本文と\cs{footnoterule}が重なってしまうのを修正}
+% \changes{v1.2a}{2001/09/26}{\LaTeX\ \texttt{!<2001/06/01!>}に対応}
+% \changes{v1.2b}{2016/01/26}{2013年以降のp\TeX\ (r28720)で脚注番号の前後の和文文字
+%    との間にxkanjiskipが入ってしまう問題に対応。
+%    \cs{@outputbox}の深さが他のものの位置に影響を与えない
+%    ようにする\texttt{\cs{vskip}~-\cs{dimen@}}が縦組モードでは無効になっていたので修正}
+% \changes{v1.2c}{2016/02/28}{1.2bと同様の修正を
+%     tabular環境、\cs{parbox}命令、\cs{underline}命令にも行った}
+% \changes{v1.2d}{2016/04/01}{multicolパッケージを使うとトンボの下端が縮む問題を修正}
+% \fi
+%
+% \iffalse
+%<*driver>
+\NeedsTeXFormat{pLaTeX2e}
+% \fi
+\ProvidesFile{plcore.dtx}[2016/04/01 v1.2d pLaTeX core file]
+% \iffalse
+\documentclass{jltxdoc}
+\GetFileInfo{plcore.dtx}
+\title{p\LaTeXe{}の拡張\space\fileversion}
+\author{Ken Nakano \& Hideaki Togashi}
+\date{作成日：\filedate}
+\begin{document}
+   \maketitle
+   \tableofcontents
+   \DocInput{\filename}
+\end{document}
+%</driver>
+% \fi
+%
+%
+% \section{概要}\label{plcore:intro}
+% このファイルでは、つぎの機能の拡張や修正を行っています。
+% 詳細は、それぞれの項目の説明を参照してください。
+%
+% \begin{itemize}
+% \item プリアンブルコマンド
+% \item 改ページ
+% \item 改行
+% \item オブジェクトの出力順序
+% \item トンボ
+% \item 脚注マクロ
+% \item 相互参照
+% \item 疑似タイプ入力
+% \item tabbing環境
+% \item 用語集の出力
+% \item 時分を示すカウンタ
+% \end{itemize}
+%
+%
+% \section{コード}
+%
+% このファイルの内容は、p\LaTeXe{}のコア部分です。
+%    \begin{macrocode}
+%<*plcore>
+%    \end{macrocode}
+%
+% \subsection{プリアンブルコマンド}
+% 文書ファイルが必要とするフォーマットファイルの指定をするコマンドを
+% 拡張子、p\LaTeXe{}フォーマットファイルも認識するようにします。
+%
+% \begin{macro}{\NeedsTeXFormat}
+% \begin{macro}{\@needsPformat}
+% \begin{macro}{\@needsPf@rmat}
+% |\NeedsTeXFormats|に``pLaTeX2e''を指定すると、
+% ``LaTeX2e''フォーマットを必要とする英語版のクラスファイルや
+% パッケージファイルなどが使えなくなってしまうために再定義します。
+% このコマンドは\file{ltclass.dtx}で定義されています。
+%    \begin{macrocode}
+\def\NeedsTeXFormat#1{%
+   \def\reserved@a{#1}%
+   \ifx\reserved@a\pfmtname
+     \expandafter\@needsPformat
+   \else
+     \ifx\reserved@a\fmtname
+       \expandafter\expandafter\expandafter\@needsformat
+     \else
+       \@latex@error{This file needs format `\reserved@a'%
+          \MessageBreak but this is `\pfmtname'}{%
+          The current input file will not be processed
+          further,\MessageBreak
+          because it was written for some other flavor of
+          TeX.\MessageBreak\@ehd}%
+       \endinput
+     \fi
+   \fi}
+%
+\def\@needsPformat{\@ifnextchar[\@needsPf@rmat{}}
+%
+\def\@needsPf@rmat[#1]{%
+    \@ifl@t@r\pfmtversion{#1}{}%
+    {\@latex@warning@no@line
+        {You have requested release `#1' of pLaTeX,\MessageBreak
+         but only release `\pfmtversion' is available}}}
+%
+\@onlypreamble\@needsPformat
+\@onlypreamble\@needsPf@rmat
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\documentstyle}
+% |\documentclass|の代わりに|\documentstyle|が使われると、
+% \LaTeX~2.09互換モードに入ります。このとき、
+% オリジナルの\LaTeX{}では\file{latex209.def}を読み込みますが、
+% p\LaTeXe{}では\file{pl209.def}を読み込みます。
+% このコマンドは\file{ltclass.dtx}で定義されています。
+%    \begin{macrocode}
+\def\documentstyle{%
+  \makeatletter\input{pl209.def}\makeatother
+  \documentclass}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%
+% \subsection{改ページ}
+% 縦組のとき、改ページ後の内容が偶数ページ（右ページ）からはじまるようにします。
+% 横組のときには、奇数ページ（右ページ）からはじまります。
+%
+% \begin{macro}{\cleardoublepage}
+% このコマンドによって出力される、白ページのページスタイルを
+% \pstyle{empty}にし、ヘッダとフッタが入らないようにしています。
+% \file{ltoutput.dtx}の定義を、縦組、横組に合わせて、定義しなおしたものです。
+%    \begin{macrocode}
+\def\cleardoublepage{\clearpage\if@twoside
+  \ifodd\c@page
+    \iftdir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \else
+    \ifydir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \fi\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{改行}
+% \changes{v1.1c}{1995/08/25}{行頭禁則文字の直前での改行での不具合の修正}
+% 日本語\TeX{}の行頭禁則処理は、禁則対象文字の直前に、
+% |\prekinsokupenalty|で指定されたペナルティの値を挿入することで
+% 行なっています。
+% ところが、改行コマンドは負のペナルティの値を挿入することで改行を行ないます。
+% そのために、禁則ペナルティの値が$10000$の文字の直後では、ペナルティの値が
+% 相殺され、改行することができません。
+%
+% \begin{verbatim}
+% あいうえお\\
+% ！かきくけこ
+% \end{verbatim}
+%
+% したがって、|\newline|マクロに|\mbox{}|を入れることによって、
+% |\newline|マクロのペナルティ$-10000$と行頭文字のペナルティ$10000$が
+% 加算されないようにします。|\\|は|\newline|マクロを呼び出しています。
+%
+% なお、|\newline|マクロは\file{ltspaces.dtx}で定義されています。
+%
+% \changes{v1.1j}{1999/04/05}{オプションを付けた場合に、余計な空白
+%    が入ってしまうのを修正。ありがとう、鈴木隆志＠京都大学さん。}
+% \changes{v1.1h}{1997/06/25}{\LaTeX\ の改行マクロの変更に対応。
+%    ありがとう、奥村さん。}
+% \LaTeX\ \texttt{<1996/12/01>}で改行マクロが変更され、|\\|が
+% |\newline|を呼び出さなくなったため、変更された改行マクロに対応しまし
+% た。|\mbox{}|の挿入位置は同じです。
+% \file{ltspace.dtx}の定義を上記に合わせて、定義しなおしました。
+%    \begin{macrocode}
+\def\@gnewline #1{%
+  \ifvmode
+    \@nolnerr
+  \else
+    \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \null
+    \ignorespaces
+  \fi}
+%    \end{macrocode}
+%
+% \subsection{オブジェクトの出力順序}
+% オリジナルの\LaTeX{}は、トップフロート、本文、脚注、ボトムフロート
+% の順番で出力しますけれども、日本語組版では、トップフロート、本文、
+% ボトムフロート、脚注という順番の方が一般的ですので、
+% このような順番になるよう修正をします。
+%
+% したがって、文書ファイルによっては\LaTeX{}の組版結果と異なる場合が
+% ありますので、注意をしてください。
+%
+% \begin{macro}{\@makecol}
+% このマクロが組み立てる部分の中心となります。
+% \file{ltoutput.dtx}で定義されているものです。
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\@makecol}{\@makecol}%
+%<*plcore|platexrelease>
+\gdef\@makecol{%
+   \setbox\@outputbox\box\@cclv%
+   \xdef\@freelist{\@freelist\@midlist}%
+   \global \let \@midlist \@empty
+   \@combinefloats
+   \ifvbox\@kludgeins
+     \@makespecialcolbox
+   \else
+     \setbox\@outputbox \vbox to\@colht {%
+%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+       \@texttop
+       \dimen@ \dp\@outputbox
+       \unvbox \@outputbox
+%    \end{macrocode}
+% 縦組の際に|\@outputbox|の内容が空のボックスだけの場合に、|\wd\@outputbox|が
+% 0ptになってしまい、結果としてフッタの位置がくるってしまっていた。
+% 0の|\hskip|を発生させると|\wd\@outputbox|の値が期待したものとなるので、
+% 縦組の場合はその方法で対処する。
+% \changes{v1.1j}{2001/05/10}{\cs{@makecol}で組み立てられる
+%    \cs{@outputbox}の大きさが、縦組で中身が空のボックスだけの場合も適正になる
+%    ように修正}
+% \changes{v1.2b}{2016/01/26}{\cs{@outputbox}の深さが他のものの位置に影響を与えない
+%    ようにする\texttt{\cs{vskip}~-\cs{dimen@}}が縦組モードでは無効になっていたので修正}
+%    \begin{macrocode}
+       \iftdir\hskip\z@\fi
+       \vskip -\dimen@
+       \@textbottom
+       \ifvoid\footins\else % for pLaTeX
+         \vskip \skip\footins
+         \color@begingroup
+            \normalcolor
+            \footnoterule
+            \unvbox \footins
+         \color@endgroup
+       \fi
+       }%
+   \fi
+   \global \maxdepth \@maxdepth
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@makecol}{\@makecol}%
+%<platexrelease>\gdef\@makecol{%
+%<platexrelease>   \setbox\@outputbox\box\@cclv%
+%<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
+%<platexrelease>   \global \let \@midlist \@empty
+%<platexrelease>   \@combinefloats
+%<platexrelease>   \ifvbox\@kludgeins
+%<platexrelease>     \@makespecialcolbox
+%<platexrelease>   \else
+%<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
+%<platexrelease>%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+%<platexrelease>       \@texttop
+%<platexrelease>       \dimen@ \dp\@outputbox
+%<platexrelease>       \unvbox \@outputbox
+%<platexrelease>       \iftdir\hskip\z@
+%<platexrelease>       \else\vskip -\dimen@\fi
+%<platexrelease>       \@textbottom
+%<platexrelease>       \ifvoid\footins\else % for pLaTeX
+%<platexrelease>         \vskip \skip\footins
+%<platexrelease>         \color@begingroup
+%<platexrelease>            \normalcolor
+%<platexrelease>            \footnoterule
+%<platexrelease>            \unvbox \footins
+%<platexrelease>         \color@endgroup
+%<platexrelease>       \fi
+%<platexrelease>       }%
+%<platexrelease>   \fi
+%<platexrelease>   \global \maxdepth \@maxdepth
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\@makespecialcolbox}
+% 本文（あるいはボトムフロート）と脚注の間に|\@textbottom|を入れたいので、
+% |\@makespecialcolbox|コマンドも修正をします。
+% やはり、\file{ltoutput.dtx}で定義されているものです。
+%
+% このマクロは、|\enlargedthispage|が使われたときに、
+% |\@makecol|マクロから呼び出されます。
+%    \begin{macrocode}
+%<*plcore|fltrace>
+\gdef\@makespecialcolbox{%
+%<*trace>
+   \tr@ce{Krudgeins ht \the\ht\@kludgeins\space
+                    dp \the\dp\@kludgeins\space
+                    wd \the\wd\@kludgeins}%
+%</trace>
+   \setbox\@outputbox \vbox {%
+     \@texttop
+     \dimen@ \dp\@outputbox
+     \unvbox\@outputbox
+     \vskip-\dimen@
+     }%
+   \@tempdima \@colht
+   \ifdim \wd\@kludgeins>\z@
+     \advance \@tempdima -\ht\@outputbox
+     \advance \@tempdima \pageshrink
+%<*trace>
+     \tr@ce {Natural ht of col: \the\ht\@outputbox}%
+     \tr@ce {\string \@colht: \the\@colht}%
+     \tr@ce {Pageshrink added: \the\pageshrink}%
+     \tr@ce {Hence, space added: \the\@tempdima}%
+%</trace>
+     \setbox\@outputbox \vbox to \@colht {%
+%       \boxmaxdepth \maxdepth
+       \unvbox\@outputbox
+       \vskip \@tempdima
+       \@textbottom
+%    \end{macrocode}
+% つぎの部分がp\LaTeX{}用の修正です。
+% \changes{v1.2}{2001/09/04}{本文と\cs{footnoterule}が重なってしまうのを修正}
+%    \begin{macrocode}
+       \ifvoid\footins\else % for pLaTeX
+         \vskip\skip\footins
+         \color@begingroup
+            \normalcolor
+            \footnoterule
+            \unvbox \footins
+         \color@endgroup
+       \fi
+     }%
+   \else
+     \advance \@tempdima -\ht\@kludgeins
+%<*trace>
+   \tr@ce {Natural ht of col: \the\ht\@outputbox}%
+   \tr@ce {\string \@colht: \the\@colht}%
+   \tr@ce {Extra size added: -\the \ht \@kludgeins}%
+   \tr@ce {Hence, height of inner box: \the\@tempdima}%
+   \tr@ce {Max? pageshrink available: \the\pageshrink}%
+%</trace>
+     \setbox \@outputbox \vbox to \@colht {%
+       \vbox to \@tempdima {%
+         \unvbox\@outputbox
+         \@textbottom
+%    \end{macrocode}
+% つぎの部分がp\LaTeX{}用の修正です。
+% 脚注があれば、ここでそれを出力します。
+% \changes{v1.2}{2001/09/04}{本文と\cs{footnoterule}が重なってしまうのを修正}
+%    \begin{macrocode}
+         \ifvoid\footins\else % for pLaTeX
+           \vskip\skip\footins
+           \color@begingroup
+              \normalcolor
+              \footnoterule
+              \unvbox \footins
+           \color@endgroup
+         \fi
+       }\vss}%
+   \fi
+   {\setbox \@tempboxa \box \@kludgeins}%
+}
+%</plcore|fltrace>
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\@reinserts}
+% このマクロは、|\@specialoutput|マクロから呼び出されます。
+% ボックス|footins|が組み立てられたモードに合わせて
+% 縦モードか横モードで|\unvbox|をします。
+%    \begin{macrocode}
+%<*plcore>
+\def\@reinserts{%
+  \ifvoid\footins\else\insert\footins{%
+    \iftbox\footins\tate\else\yoko\fi
+    \unvbox\footins}\fi
+  \ifvbox\@kludgeins\insert\@kludgeins{\unvbox\@kludgeins}\fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{トンボ}
+% ここではトンボを出力するためのマクロを定義しています。
+%
+% \begin{macro}{\iftombow}
+% \begin{macro}{\iftombowdate}
+% |\iftombow|はトンボを出力するかどうか、|\iftombowdate|はDVIを作成した
+% 日付をトンボの脇に出力するかどうかを示すために用います。
+%    \begin{macrocode}
+\newif\iftombow \tombowfalse
+\newif\iftombowdate \tombowdatetrue
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@tombowwidth}
+% |\@tombowwidth|には、トンボ用罫線の太さを指定します。
+% デフォルトは0.1ポイントです。
+% この値を変更し、|\maketombowbox|コマンドを実行することにより、トンボの
+% 罫線太さを変更して出力することができます。通常の使い方では、
+% トンボの罫線を変更する必要はありません。DVIをフィルムに面付け出力する
+% とき、トンボをつけずに位置はそのままにする必要があるときに、この太さを
+% ゼロポイントにします。
+%    \begin{macrocode}
+\newdimen\@tombowwidth
+\setlength{\@tombowwidth}{.1\p@}
+%    \end{macrocode}
+% \end{macro}
+%
+% トンボ用の罫線を定義します。
+%
+% \begin{macro}{\@TL}
+% \begin{macro}{\@Tl}
+% \begin{macro}{\@TC}
+% \begin{macro}{\@TR}
+% \begin{macro}{\@Tr}
+% |\@TL|と|\@Tl|はページ上部の左側、
+% |\@TC|はページ上部の中央、
+% |\@TR|と|\@Tr|はページ上部の左側のトンボとなるボックスです。
+%    \begin{macrocode}
+\newbox\@TL\newbox\@Tl
+\newbox\@TC
+\newbox\@TR\newbox\@Tr
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@BL}
+% \begin{macro}{\@Bl}
+% \begin{macro}{\@BC}
+% \begin{macro}{\@BR}
+% \begin{macro}{\@Br}
+% |\@BL|と|\@Bl|はページ下部の左側、
+% |\@BC|はページ下部の中央、
+% |\@BR|と|\@Br|はページ下部の左側のトンボとなるボックスです。
+%    \begin{macrocode}
+\newbox\@BL\newbox\@Bl
+\newbox\@BC
+\newbox\@BR\newbox\@Br
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@CL}
+% \begin{macro}{\@CR}
+% |\@CL|はページ左側の中央、|\@CR|はページ右側の中央のトンボとなる
+% ボックスです。
+%    \begin{macrocode}
+\newbox\@CL
+\newbox\@CR
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@bannertoken}
+% \begin{macro}{\@bannerfont}
+% |\@bannertoken|トークンは、トンボの横に出力する文字列を入れます。
+% デフォルトでは何も出力しません。
+% |\@bannerfont|フォントは、その文字列を出力するためのフォントです。
+% 9ポイントのタイプライタ体としています。
+% \changes{v1.1f}{1996/09/03}{Add \cs{@bannerbox}.}
+%    \begin{macrocode}
+\font\@bannerfont=cmtt9
+\newtoks\@bannertoken
+\@bannertoken{}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\maketombowbox}
+% |\maketombow|コマンドは、トンボとなるボックスを作るために用います。
+% このコマンドは、トンボとなるボックスを作るだけで、それらのボックスを
+% 出力するのではないことに注意をしてください。
+%    \begin{macrocode}
+\def\maketombowbox{%
+  \setbox\@TL\hbox to\z@{\yoko\hss
+      \vrule width13mm height\@tombowwidth depth\z@
+      \vrule height10mm width\@tombowwidth depth\z@
+%    \end{macrocode}
+% \changes{v1.0f}{1996/07/10}{トンボの横にDVIファイルの作成日を出力する
+%    ようにした。}
+% \changes{v1.0g}{1997/01/23}{作成日の出力をするかどうかをフラグで指定する
+%    ようにした。}
+%    \begin{macrocode}
+      \iftombowdate
+        \raise4pt\hbox to\z@{\hskip5mm\@bannerfont\the\@bannertoken\hss}%
+      \fi}%
+  \setbox\@Tl\hbox to\z@{\yoko\hss
+      \vrule width10mm height\@tombowwidth depth\z@
+      \vrule height13mm width\@tombowwidth depth\z@}%
+  \setbox\@TC\hbox{\yoko
+      \vrule width10mm height\@tombowwidth depth\z@
+      \vrule height10mm width\@tombowwidth depth\z@
+      \vrule width10mm height\@tombowwidth depth\z@}%
+  \setbox\@TR\hbox to\z@{\yoko
+      \vrule height10mm width\@tombowwidth depth\z@
+      \vrule width13mm height\@tombowwidth depth\z@\hss}%
+  \setbox\@Tr\hbox to\z@{\yoko
+      \vrule height13mm width\@tombowwidth depth\z@
+      \vrule width10mm height\@tombowwidth depth\z@\hss}%
+%
+  \setbox\@BL\hbox to\z@{\yoko\hss
+      \vrule width13mm depth\@tombowwidth height\z@
+      \vrule depth10mm width\@tombowwidth height\z@}%
+  \setbox\@Bl\hbox to\z@{\yoko\hss
+      \vrule width10mm depth\@tombowwidth height\z@
+      \vrule depth13mm width\@tombowwidth height\z@}%
+  \setbox\@BC\hbox{\yoko
+      \vrule width10mm depth\@tombowwidth height\z@
+      \vrule depth10mm width\@tombowwidth height\z@
+      \vrule width10mm depth\@tombowwidth height\z@}%
+  \setbox\@BR\hbox to\z@{\yoko
+      \vrule depth10mm width\@tombowwidth height\z@
+      \vrule width13mm depth\@tombowwidth height\z@\hss}%
+  \setbox\@Br\hbox to\z@{\yoko
+      \vrule depth13mm width\@tombowwidth height\z@
+      \vrule width10mm depth\@tombowwidth height\z@\hss}%
+%
+  \setbox\@CL\hbox to\z@{\yoko\hss
+      \vrule width10mm height.5\@tombowwidth depth.5\@tombowwidth
+      \vrule height10mm depth10mm width\@tombowwidth}%
+  \setbox\@CR\hbox to\z@{\yoko
+      \vrule height10mm depth10mm width\@tombowwidth
+      \vrule height.5\@tombowwidth depth.5\@tombowwidth width10mm\hss}%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@outputtombow}
+% |\@outputtombow|コマンドは、トンボを出力するのに用います。
+% \changes{v1.2d}{2016/04/01}{multicolパッケージを使うとトンボの下端が縮む問題を修正}
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\@outputtombow}{\@outputtombow}%
+%<*plcore|platexrelease>
+\def\@outputtombow{%
+  \iftombow
+  \vbox to\z@{\kern-13mm\relax
+    \boxmaxdepth\maxdimen%% Added (Apr 1, 2016)
+    \moveleft3mm\vbox to\@@paperheight{%
+      \hbox to\@@paperwidth{\hskip3mm\relax
+         \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip3mm}%
+      \kern-10mm
+      \hbox to\@@paperwidth{\copy\@Tl\hfill\copy\@Tr}%
+      \vfill
+      \hbox to\@@paperwidth{\copy\@CL\hfill\copy\@CR}%
+      \vfill
+      \hbox to\@@paperwidth{\copy\@Bl\hfill\copy\@Br}%
+      \kern-10mm
+      \hbox to\@@paperwidth{\hskip3mm\relax
+         \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip3mm}%
+    }\vss
+  }%
+  \fi
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@outputtombow}{\@outputtombow}%
+%<platexrelease>\def\@outputtombow{%
+%<platexrelease>  \iftombow
+%<platexrelease>  \vbox to\z@{\kern-13mm\relax
+%<platexrelease>    \moveleft3mm\vbox to\@@paperheight{%
+%<platexrelease>      \hbox to\@@paperwidth{\hskip3mm\relax
+%<platexrelease>         \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip3mm}%
+%<platexrelease>      \kern-10mm
+%<platexrelease>      \hbox to\@@paperwidth{\copy\@Tl\hfill\copy\@Tr}%
+%<platexrelease>      \vfill
+%<platexrelease>      \hbox to\@@paperwidth{\copy\@CL\hfill\copy\@CR}%
+%<platexrelease>      \vfill
+%<platexrelease>      \hbox to\@@paperwidth{\copy\@Bl\hfill\copy\@Br}%
+%<platexrelease>      \kern-10mm
+%<platexrelease>      \hbox to\@@paperwidth{\hskip3mm\relax
+%<platexrelease>         \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip3mm}%
+%<platexrelease>    }\vss
+%<platexrelease>  }%
+%<platexrelease>  \fi
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@@paperheight}
+% \begin{macro}{\@@paperwidth}
+% \begin{macro}{\@@topmargin}
+% |\@@pageheight|は、用紙の縦の長さにトンボの長さを加えた長さになります。
+%
+% |\@@pagewidth|は、用紙の横の長さにトンボの長さを加えた長さになります。
+%
+% |\@@topmargin|は、現在のトップマージンに1インチ加えた長さになります。
+%    \begin{macrocode}
+\newdimen\@@paperheight
+\newdimen\@@paperwidth
+\newdimen\@@topmargin
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+%  \begin{macro}{\@shipoutsetup}
+% \changes{v1.1i}{1998/02/03}{Command removed}
+% |\@outputpage|内に挿入したので削除しました。
+%  \end{macro}
+%
+% \begin{macro}{\@outputpage}
+% |\textwidth|と|\textheight|の交換は、|\@shipoutsetup|内では行ないません。
+% なぜなら、|\@shipoutsetup|マクロが実行されるときは、
+% |\shipout|されるvboxの中であり、このときは横組モードですので、
+% つねに|\iftdir|は偽と判断され、縦と横のサイズを交換できないからです。
+%
+% なお、この変更をローカルなものにするために、
+% |\begingroup|と|\endgroup|で囲みます。
+% \changes{v1.2a}{2001/09/26}{\LaTeX\ \texttt{!<2001/06/01!>}に対応}
+%    \begin{macrocode}
+\def\@outputpage{%
+\begingroup % the \endgroup is put in by \aftergroup
+  \iftdir
+    \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
+  \fi
+  \let \protect \noexpand
+  \@resetactivechars
+  \global\let\@@if@newlist\if@newlist
+  \global\@newlistfalse
+  \@parboxrestore
+  \shipout\vbox{\yoko
+    \set@typeset@protect
+    \aftergroup\endgroup
+    \aftergroup\set@typeset@protect
+%    \end{macrocode}
+% \changes{v1.1g}{1998/02/03}{\cs{@shipoutsetup}を\cs{@outputpage}内に入れた}
+% ここから|\@shipoutsetup|の内容。
+%    \begin{macrocode}
+     \if@specialpage
+       \global\@specialpagefalse\@nameuse{ps@\@specialstyle}%
+     \fi
+%    \end{macrocode}
+% \changes{v1.1c}{1995/02/05}{\cs{oddsidemargin}と\cs{evensidemargin}が
+%    逆だったのを修正}
+%    \begin{macrocode}
+     \if@twoside
+       \ifodd\count\z@ \let\@thehead\@oddhead \let\@thefoot\@oddfoot
+          \iftdir\let\@themargin\evensidemargin
+          \else\let\@themargin\oddsidemargin\fi
+       \else \let\@thehead\@evenhead
+          \let\@thefoot\@evenfoot
+           \iftdir\let\@themargin\oddsidemargin
+           \else\let\@themargin\evensidemargin\fi
+     \fi\fi
+%    \end{macrocode}
+% トンボ出力オプションが指定されている場合、ここで用紙サイズを再設定します。
+% \TeX の加える左と上部の1インチは、トンボの内側に入ります。
+% \changes{v1.1a}{1995/11/10}{\cs{topmargin}が反映されないバグを修正}
+%    \begin{macrocode}
+     \@@topmargin\topmargin
+     \iftombow
+       \@@paperwidth\paperwidth \advance\@@paperwidth 6mm\relax
+       \@@paperheight\paperheight \advance\@@paperheight 16mm\relax
+       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
+     \fi
+     \reset@font
+     \normalsize
+     \normalsfcodes
+     \let\label\@gobble
+     \let\index\@gobble
+     \let\glossary\@gobble
+     \baselineskip\z@skip \lineskip\z@skip \lineskiplimit\z@
+%    \end{macrocode}
+% ここまでが|\@shipoutsetup|の内容。
+%    \begin{macrocode}
+    \@begindvi
+    \@outputtombow
+    \vskip \@@topmargin
+    \moveright\@themargin\vbox{%
+      \setbox\@tempboxa \vbox to\headheight{%
+        \vfil
+        \color@hbox
+          \normalcolor
+          \hb@xt@\textwidth{\@thehead}%
+        \color@endbox
+      }%                        %% 22 Feb 87
+      \dp\@tempboxa \z@
+      \box\@tempboxa
+      \vskip \headsep
+      \box\@outputbox
+      \baselineskip \footskip
+      \color@hbox
+        \normalcolor
+        \hb@xt@\textwidth{\@thefoot}%
+      \color@endbox
+    }%
+  }%
+%  \endgroup now inserted by \aftergroup
+%    \end{macrocode}
+% |\if@newlist|を初期化。
+%    \begin{macrocode}
+  \global\let\if@newlist\@@if@newlist
+  \global \@colht \textheight
+  \stepcounter{page}%
+  \let\firstmark\botmark
+}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{脚注マクロ}
+% 脚注を組み立てる部分のマクロを再定義します。
+% 主な修正点は、縦組モードでの動作の追加です。
+%
+% これらのマクロは、\file{ltfloat.dtx}で定義されていたものです。
+%
+% \begin{macro}{\thempfn}
+% 本文で使われる脚注記号です。
+%
+% |\@footnotemark|で縦横の判断をするようにしたため、削除。
+%
+% \changes{v1.0a}{1995/04/12}{Removed \texttt{\protect\bslash thempfn}}
+%    \begin{macrocode}
+%\def\thempfn{%
+%  \ifydir\thefootnote\else\hbox{\yoko\thefootnote}\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\thempfootnote}
+% minipage環境で使われる脚注記号です。
+%
+% \changes{v1.0a}{1995/04/12}{Removed \texttt{\protect\bslash thempfootnote}}
+%    \begin{macrocode}
+%\def\thempfootnote{%
+%  \ifydir\alph{mpfootnote}\else\hbox{\yoko\alph{mpfootnote}}\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@makefnmark}
+% 脚注記号を作成するマクロです。
+%
+% \changes{v1.0a}{1995/04/12}{縦組でも上付き数字を使うように修正}
+% \changes{v1.1b}{1996/01/26}{脚注マークの後ろに余計なスペースが入るのを修正}
+% \changes{v1.1g}{1997/02/14}{縦組時に脚注マークの書体が正しくないのを修正}
+% \changes{v1.2b}{2016/01/26}{2013年以降のp\TeX\ (r28720)で脚注番号の前後の和文文字
+%    との間にxkanjiskipが入ってしまう問題に対応}
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\@makefnmark}
+%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<*plcore|platexrelease>
+\renewcommand\@makefnmark{%
+  \ifydir \hbox{}\hbox{\@textsuperscript{\normalfont\@thefnmark}}\hbox{}%
+  \else\hbox{\yoko\@textsuperscript{\normalfont\@thefnmark}}\fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@makefnmark}
+%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<platexrelease>\renewcommand\@makefnmark{\hbox{%
+%<platexrelease>  \ifydir \@textsuperscript{\normalfont\@thefnmark}%
+%<platexrelease>  \else\hbox{\yoko\@textsuperscript{\normalfont\@thefnmark}}\fi}}
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@footnotetext}
+% インサートボックス|\footins|に脚注のテキストを入れます。
+%
+% \changes{v1.0a}{1995/04/07}{組方向の判定をボックスの外でするようにした}
+%    \begin{macrocode}
+\long\def\@footnotetext#1{%
+  \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
+  \insert\footins{\@tempa%
+    \reset@font\footnotesize
+    \interlinepenalty\interfootnotelinepenalty
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+    \protected@edef\@currentlabel{%
+       \csname p@footnote\endcsname\@thefnmark
+    }%
+    \color@begingroup
+      \@makefntext{%
+        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
+    \color@endgroup}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@footnotemark}
+% \changes{v1.0a}{1995/04/12}{脚注記号の出力位置の調整}
+% \changes{v1.1g}{1997/02/14}{縦組時の位置調整を2\cs{ch}から.9zhに変更}
+% 脚注記号を出力します。
+%    \begin{macrocode}
+\def\@footnotemark{\leavevmode
+  \ifhmode\edef\@x@sf{\the\spacefactor}\nobreak\fi
+  \ifydir\@makefnmark
+  \else\hbox to\z@{\hskip-.25zw\raise.9zh\@makefnmark\hss}\fi
+  \ifhmode\spacefactor\@x@sf\fi\relax}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{相互参照}
+%
+% \begin{macro}{\@setref}
+% \changes{v1.1c}{1995/09/07}{change \cs{null} to \cs{relax} in \cs{@setref}.}
+% |\ref|コマンドや|\pageref|コマンドで参照したとき、これらのコマンドに
+% よって出力された番号と続く２バイト文字との間に|\xkanjiskip|が入りません。
+% これは、|\null|が|\hbox{}|と定義されているためです。
+% そこで|\null|を取り除きます。
+% このコマンドは、\file{ltxref.dtx}で定義されているものです。
+%    \begin{macrocode}
+\def\@setref#1#2#3{%
+  \ifx#1\relax
+    \protect\G@refundefinedtrue
+    \nfss@text{\reset@font\bfseries ??}%
+    \@latex@warning{Reference `#3' on page \thepage \space
+              undefined}%
+  \else
+    \expandafter#2#1\relax% change \null to \relax
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{疑似タイプ入力}
+%
+% \begin{macro}{\verb}
+% \changes{v1.1b}{1995/04/05}{互換モードのときは、pl209.defの定義を使う}
+% \changes{v1.1g}{1997/01/16}
+%    {\cs{verb}コマンドを\LaTeX\ \texttt{!<1996/06/01!>}に合わせて修正}
+% \LaTeX{}の|\verb|コマンドでは、数式モードでないときは、
+% |\leavevmode|で水平モードに入ったあと、|\null|を出力しています。
+% マクロ|\null|は|\hbox{}|として定義されていますので、
+% ここには和欧文間スペース（|\xkanjiskip|）が入りません。
+% そこで、|\null|を出力しないようマクロを修正します。
+% このマクロは、\file{ltmiscen.dtx}で定義されています。
+%    \begin{macrocode}
+\if@compatibility\else
+\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+  \bgroup
+    \verb@eol@error \let\do\@makeother \dospecials
+    \verbatim@font\@noligs
+    \@ifstar\@sverb\@verb}
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{tabbing環境}
+% \changes{v1.1d}{1996/03/12}{\cs{=}の後ろに和欧文間スペースが入るのを修正}
+% 相互参照や疑似タイプ入力では、和欧文間スペースが入らないので、|\null|を
+% 取り除きましたが、|tabbing|環境では、逆に|\null|がないため、
+% 和欧文間スペースが入ってしまうので、それを追加します。
+% \file{lttab.dtx}で定義されているものです。
+%    \begin{macrocode}
+\gdef\@stopfield{\null\color@endgroup\egroup}
+%    \end{macrocode}
+%
+% \subsection{用語集の出力}
+% \LaTeX{}には、なぜか用語集を出力するためのコマンドがありませんので、
+% 追加をします。
+% \changes{v1.1e}{1996/02/17}{\cs{printglossary}を追加}
+%
+% \begin{macro}{\printglossary}
+% \cs{printglossary}コマンドは、単に拡張子が\texttt{gls}のファイルを
+% 読み込むだけです。このファイルの生成には、mendexなどを用います。
+%    \begin{macrocode}
+\newcommand\printglossary{\@input@{\jobname.gls}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{時分を示すカウンタ}
+% \TeX には、年月日を示す数値を保持しているカウンタとして、それぞれ
+% |\year|, |\month|, |\day|がプリミティブとして存在します。しかし、
+% 時分については、深夜の零時からの経過時間を示す|\time|カウンタしか存在
+% していません。そこで、p\LaTeXe{}では、時分を示すためのカウンタ|\hour|と
+% |\minute|を作成しています。
+%
+% \begin{macro}{\hour}
+% \begin{macro}{\minute}
+% 何時か（|\hour|）を得るには、|\time|を60で割った商をそのまま用います。
+% 何分か（|\minute|）は、|\hour|に60を掛けた値を|\time|から引いて算出します。
+% ここではカウンタを宣言するだけです。実際の計算は、クラスやパッケージの中
+% で行なっています。
+%    \begin{macrocode}
+\newcount\hour
+\newcount\minute
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{tabular環境など}
+% \changes{v1.2c}{2016/02/28}{1.2bと同様の修正を
+%     tabular環境、\cs{parbox}命令、\cs{underline}命令にも行った}
+% \LaTeXe{}のカーネルのコードをそのまま使うと、p\TeX{}の|\xkanjiskip|由来の
+% アキが前後に入ってしまうことがありました。そうした命令にパッチをあてます。
+% \begin{macro}{\@tabular}
+% tabular環境の内部命令です。もとは\file{lttab.dtx}で定義されています。
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\@tabular}
+%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<*plcore|platexrelease>
+\def\@tabular{\leavevmode \null\hbox \bgroup $\let\@acol\@tabacol
+   \let\@classz\@tabclassz
+   \let\@classiv\@tabclassiv \let\\\@tabularcr\@tabarray}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@tabular}
+%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<platexrelease>\def\@tabular{\leavevmode \hbox \bgroup $\let\@acol\@tabacol
+%<platexrelease>   \let\@classz\@tabclassz
+%<platexrelease>   \let\@classiv\@tabclassiv \let\\\@tabularcr\@tabarray}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\endtabular}
+% \begin{macro}{\endtabular*}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\endtabular}
+%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<*plcore|platexrelease>
+\def\endtabular{\crcr\egroup\egroup $\egroup\null}
+\expandafter \let \csname endtabular*\endcsname = \endtabular
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\endtabular}
+%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<platexrelease>\def\endtabular{\crcr\egroup\egroup $\egroup}
+%<platexrelease>\expandafter \let \csname endtabular*\endcsname = \endtabular
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@iiiparbox}
+% |\parbox|の内部命令です。もとは\file{ltboxes.dtx}で定義されています。
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\@iiiparbox}
+%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<*plcore|platexrelease>
+\let\@parboxto\@empty
+\long\def\@iiiparbox#1#2[#3]#4#5{%
+  \leavevmode
+  \@pboxswfalse
+  \setlength\@tempdima{#4}%
+  \@begin@tempboxa\vbox{\hsize\@tempdima\@parboxrestore#5\@@par}%
+    \ifx\relax#2\else
+      \setlength\@tempdimb{#2}%
+      \edef\@parboxto{to\the\@tempdimb}%
+    \fi
+    \if#1b\vbox
+    \else\if #1t\vtop
+    \else\ifmmode\vcenter
+    \else\@pboxswtrue\null$\vcenter% !!!
+    \fi\fi\fi
+    \@parboxto{\let\hss\vss\let\unhbox\unvbox
+       \csname bm@#3\endcsname}%
+    \if@pboxsw \m@th$\null\fi% !!!
+  \@end@tempboxa}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@iiiparbox}
+%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<platexrelease>\let\@parboxto\@empty
+%<platexrelease>\long\def\@iiiparbox#1#2[#3]#4#5{%
+%<platexrelease>  \leavevmode
+%<platexrelease>  \@pboxswfalse
+%<platexrelease>  \setlength\@tempdima{#4}%
+%<platexrelease>  \@begin@tempboxa\vbox{\hsize\@tempdima\@parboxrestore#5\@@par}%
+%<platexrelease>    \ifx\relax#2\else
+%<platexrelease>      \setlength\@tempdimb{#2}%
+%<platexrelease>      \edef\@parboxto{to\the\@tempdimb}%
+%<platexrelease>    \fi
+%<platexrelease>    \if#1b\vbox
+%<platexrelease>    \else\if #1t\vtop
+%<platexrelease>    \else\ifmmode\vcenter
+%<platexrelease>    \else\@pboxswtrue $\vcenter
+%<platexrelease>    \fi\fi\fi
+%<platexrelease>    \@parboxto{\let\hss\vss\let\unhbox\unvbox
+%<platexrelease>       \csname bm@#3\endcsname}%
+%<platexrelease>    \if@pboxsw \m@th$\fi
+%<platexrelease>  \@end@tempboxa}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\underline}
+% 下線を引く命令です。もとは\file{ltboxes.dtx}で定義されています。
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\underline}
+%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<*plcore|platexrelease>
+\def\underline#1{%
+  \relax
+  \ifmmode\@@underline{#1}%
+  \else \leavevmode\null$\@@underline{\hbox{#1}}\m@th$\null\relax\fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\underline}
+%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<platexrelease>\def\underline#1{%
+%<platexrelease>  \relax
+%<platexrelease>  \ifmmode\@@underline{#1}%
+%<platexrelease>  \else $\@@underline{\hbox{#1}}\m@th$\relax\fi}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% \Finale
+\endinput

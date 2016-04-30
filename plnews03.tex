@@ -1,0 +1,80 @@
+%% <1998/02/17>
+\documentclass{plnews}
+
+\publicationyear{1998}
+\publicationmonth{2}
+\publicationissue{3}
+\author{中野 賢（\texttt{<ken-na at ascii.co.jp>}）
+     \& 富樫 秀昭（\texttt{<hideak-t at ascii.co.jp>}）
+}
+
+\begin{document}
+
+\maketitle
+
+\section{この文書について}
+この文書は、p\LaTeXe{}\texttt{<1998/02/01>}版について、
+p\LaTeXe{}\texttt{<1997/07/02>}版からの更新箇所をまとめたものです。
+
+このp\LaTeXe{}は、\LaTeX{}\texttt{<1997/12/01>}版に対応しています。
+\LaTeX{}レベルでの更新箇所は、\LaTeX{}に付属のltnewsファイルを
+参照してください。
+
+\section{パッチの取り込み}
+plpatch.ltxで提供していた、つぎの修正を取り込みました。
+
+\begin{itemize}
+\item 小文字のファイル名のフォント定義ファイル（.fdファイル）をロードする
+ための修正。
+\item |\\|コマンドの直前の空白を無視するための修正。
+\end{itemize}
+
+\section{クラスファイルの修正}
+日本語クラスファイル（1.1e）に対して、以下の変更を加えました。
+
+\begin{itemize}
+\item 縦組クラスで書体の大きさを変更したとき、ベースラインがずれる（1.1f）。
+\item onesideオプションを指定したとき、section レベルの文字列が柱に
+      出力されない（1.1g）。
+\item landscapeオプション指定時のレイアウトパラメータの修正（1.1h）。
+\item jreport, jbookクラスで、onesideオプションを指定し、ページスタイルを
+      bothstyleにすると、コンパイルエラーになる（1.1i）。
+\end{itemize}
+
+\section{フォーマットファイル作成時の注意}
+現在のp\TeX{}（p2.1.5）では、8ビットコードの連続を16ビットコードと認識して
+しまう場合があります。そのため、フランス語やキリル文字などの
+8ビットコードが連続するハイフンパターンはまず使えせん。
+例えばcmcyraltパッケージでは、途中でつぎのようなエラーになります。
+
+\begin{verbatim}
+(/usr/local/share/texmf/tex/latex/contrib/
+other/cmcyralt/rhyphen.tex Russian hyphena
+tion
+! Bad \patterns.
+l.107  . え
+           2
+?
+\end{verbatim}
+
+このときは、``|?|''のプロンプトに対して``|x|''で終了してください。
+残念ながら、このハイフンパターンをp\TeX{}で利用することはできません。
+
+p\LaTeXe{}では|$TEXMF/tex/platex/base/|ディレクトリにhyphen.cfgを
+用意して、不用意に他のハイフンパターンを読み込まないようにしてあります。
+
+
+\section{その他}
+p\TeX{}やp\LaTeXe{}に関する最新情報は、p\TeX{}ホームページ
+\begin{verbatim}
+    http://www.ascii.co.jp/pb/ptex
+\end{verbatim}
+より、入手することができます。
+
+バグ報告やお問い合わせなどは、電子メールで
+\begin{verbatim}
+    www-ptex＠ascii.co.jp
+\end{verbatim}
+までお願いします。
+
+\end{document}

@@ -1,0 +1,234 @@
+%% <1997/02/04>
+\documentclass{plnews}
+
+\publicationmonth{2}
+\publicationyear{1997}
+\publicationissue{1}
+\author{中野 賢（\texttt{ken-na at ascii.co.jp}）}
+
+\begin{document}
+
+\maketitle
+
+\section{この文書について}
+この文書は、p\LaTeXe{}の以前のバージョンからの更新箇所をまとめたものです。
+
+現在のp\LaTeXe{}は、\LaTeX{}\texttt{<1996/12/01>}版に対応しています。
+\LaTeX{}レベルでの更新箇所は、\LaTeX{}に付属のltnewsファイルを
+参照してください。
+
+\section{docstripバッチファイル}
+p\LaTeXe{}の.dtxファイルから内容を取り出すための
+\textsf{docstrip}用バッチファイルをいくつかのファイルに分割しました。
+
+.insファイルと作成されるファイルの関係は、つぎのとおりです。
+
+\begin{quote}
+\begin{description}
+\item[plcore.ins]\mbox{}\\
+    全体を展開するときに用いる。
+    以下の{.ins}ファイルを展開するのと同等。
+\item[plfmt.ins]\mbox{}\\
+    カーネル部分や付属パッケージファイルを作成するのに用いる。
+\item[plcls.ins]\mbox{}\\
+    標準クラスファイルを作成するのに用いる。
+\item[pldocs.ins]\mbox{}\\
+    付属の文書ファイルを処理するためのファイルを作成するのに用いる。
+\item[pl209.ins]\mbox{}\\
+    2.09互換モードで用いるファイルを作成するのに用いる。
+\end{description}
+\end{quote}
+
+たとえば、クラスファイルだけを再度、作成したい場合は、つぎのように
+platexコマンドでplcls.insファイルを処理します。
+
+\begin{verbatim}
+    platex plcls.ins
+\end{verbatim}
+
+すると、jarticle.clsやtarticle.clsなどの標準クラスファイルと、
+jsize10.cloなどの補助クラスファイルがカレントディレクトリに作成されます。
+
+
+\section{クラスファイル}
+標準クラスファイル\{j,t\}\{aritlce,book,report\}クラスに対して行なわれた
+変更はつぎのとおりです。
+
+\subsection{本文領域の広いレイアウト}
+j\LaTeX~2.09やp\LaTeX~2.09とともに使われていた、
+|a4j|, |a5j|, |b4j|,|b5j|, |a4p|, |a5p|, |b4p|,|b5p|のスタイルファイルと
+同等のレイアウトをするためのクラスオプションを追加しました。
+これらのオプションを指定すると、デフォルトで設定されている本文領域よりも
+広いレイアウトで文章を作成することができます。
+
+オプション名は、以前のスタイルファイル名と同じです。
+最後が``j''で終わるものは横組専用、``p''で終わるものは縦横両用のスタイル
+でしたが、p\LaTeXe{}ではとくに区別をしていません。
+``j''で終わるオプションも``p''で終わるオプションも縦横両用です。
+
+上記の8つのクラスオプションは、用紙サイズの設定も含んでいます。
+つまり``b5j''を指定したときには用紙サイズがB5になります。
+これらのクラスオプションを指定するときは、p\LaTeXe{}で標準の|b5paper|など
+の用紙サイズを指定するクラスオプションを省略することができます。
+
+なお、上記のスタイルファイルでサポートしていた、ランドスケープ時の指定は
+まだサポートしていません。
+
+\subsection{数式内での日本語文字}
+フォントファミリに日本語フォントを用いないようにするための
+クラスオプション|disablejfam|を導入しました。
+ただし、p\LaTeX~2.09互換モードでは|disablejfam|オプションを認識しません。
+指定した場合はエラーになります。
+
+このオプションを指定すると、数式内に日本語を直接、記述できなくなります。
+また、数式文字を切り替える|\mathmc|と|\mathgt|コマンドが宣言されませんので、
+これらのコマンドを使うとエラーになります。|disablejfam|を指定した状態で、
+数式内に日本語を記述する場合は|\textmc|や|\textgt|コマンドを用いてください。
+|\textmc|と|\textgt|はp\LaTeXe{}のフォーマットファイル内で宣言されています。
+
+p\LaTeXe{}では、article, book, reportクラスなど、\LaTeX{}のクラスを用いても
+文書を作成することもできますが、これらのクラスには数式内に日本語を直接記述
+する仕組みが用意されていません。
+これはp\LaTeXe{}のクラスで|disablejfam|を指定したのと同じ状態です。
+この場合も、|\textmc|や|\textgt|コマンドを用いれば数式内に日本語を記述する
+ことはできます。ただし、日本語を用いた文書ファイルはp\LaTeXe{}以外では
+処理できませんので、その文書ファイルの配布には注意してください。
+
+|disablejfam|オプションを設けた意味の詳細については、
+「フォントファミリ」を参照してください。
+
+\subsection{トンボ}
+p\LaTeXe{}\texttt{<1996/03/05>}版でも、|tombow|オプションによって、
+裁断用のトンボを出力することができました。
+p\LaTeXe{}\texttt{<1997/02/01>}版では、トンボの脇にDVIファイルの作成日付
+を出力するように拡張しています。
+作成日付を出力したくない場合は、|tombow|オプションではなく、
+（最後の``w''のない）|tombo|オプションを指定してください。
+
+また、p\LaTeX~2.09互換モードでトンボオプションを指定したときに、トンボが
+おかしな場所に出力されるバグを修正してあります。
+
+
+\section{書体変更コマンド}
+書体変更コマンドにもいくつかの修正が加えられました。
+
+\subsection{互換モードでのコマンド}
+p\LaTeX~2.09互換モードで用いられる|\rm|コマンドや|\it|コマンド
+などの書体変更コマンドを欧文フォントだけを切り替えるようにしました。
+ただし|\mc|コマンドと|\gt|コマンドは和文フォントだけを切り替えます。
+また|\bf|コマンドは和文と欧文フォントの両方を切り替えます。
+これは、j\LaTeX~2.09やp\LaTeX~2.09での動作と完全に同じです。
+
+p\LaTeXe{}の本来のモードで、従来の二文字コマンドを用いた場合は動作が
+異なりますの 注意してください。互換モード以外のとき、二文字コマンドは、
+一度、|\normalfont|にリセットしてから、そのコマンドに対応する属性を
+切り替えます。したがって、|\it\tt|という指定は|\tt|だけが有効
+であり、|\tt\it|という指定は|\it|の指定が有効です。
+
+この動作は和文フォントに対してもあてはまります。すなわち|\it\gt|と
+しても、和文フォントがゴシック体になるだけで、|\it|の影響は何も
+受けません。ただし|gt|コマンド内で実行される|\normalfont|の影響で
+欧文フォントは欧文のデフォルトフォントになります。
+逆に|\gt\it|の場合、欧文フォントはイタリック体になりますが、
+和文フォントは何も変わりません。この場合も|\it|コマンド内の
+|\normalfont|により、和文フォントは和文デフォルトフォントになります。
+
+p\LaTeXe{}の本来のモードで、
+和文フォントをゴシック体、欧文フォントをイタリック体にしたい場合は、
+|\gtfamily\itfamily|か|\itfamily\gtfamily|とします。
+
+\subsection{数式文字フォント}
+|\rm|コマンドで欧文フォントがローマン体の正体にならないバグを修正しました。
+|\bf|コマンドについても同様の修正がなされています。
+
+|\section|や|\caption|で|\rm|や|\bf|を用いたとき、
+目次ファイルや図表目次ファイルなどに、コマンドが展開された
+コードで出力されてしまうバグを修正しました。
+
+
+\subsection{フォントファミリ}
+p\LaTeXe{}の特徴の一つに、数式内にも直接、日本語を記述することができる
+ことが挙げられます。しかしAMSのパッケージやPostScript用のパッケージを
+用いた場合、
+\begin{verbatim}
+    No room for a new \mathgroup .
+\end{verbatim}
+や
+\begin{verbatim}
+    Too many math alphabets used in version
+    normal.
+\end{verbatim}
+などのエラーが表示される場合があります。
+
+これらのエラーは、数式内に直接、記述できるフォントファミリとして\TeX{}が
+扱えるのが最大16個ということから起こっています。このエラーを回避するには、
+用いるフォントファミリの数を16個以内にするしかありません。
+
+そこで、p\LaTeXe{}では、日本語を数式内に直接記述はできなくなるけれども、
+必要なパッケージをロードできる（かもしれない）ようにするためのオプション
+|disablejfam|をクラスファイルに用意しました。
+|disablejfam|オプションを指定すれば、フォントファミリを節約する
+ことができます。ただし、宣言している数は一つだけですので、用いるパッケージ
+によっては効果がないかもしれないことに注意をしてください。
+
+参考に表\ref{famlist}に\LaTeX{}やp\LaTeX{}やパッケージ類で用いる
+フォントファミリの一覧を示します。\LaTeX{}の4つは必須です。
+
+同じ名前のファミリ名は重複して宣言されませんので、
+p\LaTeXe{}の2.09互換モードでも``mincho''と``gothic''の二つだけが宣言
+されることになります。``mincho'', ``mincho'', ``gothic''の三つではありません。
+
+p\LaTeX~2.09互換モード時には、\LaTeX~2.09互換モード
+の設定もロードするため、合計で$4+7+2=13$個を使うことになります。
+
+psnfssのLucidaフォント関連パッケージは、noexpertオプションで2,~3個、
+抑制することができます。詳細はpsnfssのドキュメントを参照してください。
+
+\begin{table*}[htb]
+\caption{\label{famlist}フォントファミリの宣言箇所}
+\begin{tabbing}
+MMM\=p\LaTeX~2.09互換モード  \=: クラスファイル :\=\+\kill
+\LaTeX カーネル
+  \>:              \>: operators, letters, symbols, largesymbols\\
+\LaTeX~2.09互換モード
+  \>: latex209.def \>: bold, sans, typewriter, italic, smallcaps, slanted\\
+  \>: latexsym.sty \>: lasy\\
+p\LaTeXe 
+  \>: クラスファイル \>: mincho\\
+p\LaTeX~2.09互換モード
+  \>: pl209.def   \>: mincho, gothic\\
+AMSのパッケージ
+  \>: amsmath.sty \>: (none)\\
+  \>: amstex.sty  \>: AMSa, AMSb\\
+  \>: amsfonts.sty\>: AMSa, AMSb\\
+balelパッケージ
+  \>: cyrmath.sty \>: cyrletters\\
+psnfssパッケージ
+  \>: mathptm.sty \>: operators, letters, symbols, largesymbols, bold, italic\\
+  \>: lucbmath.sty\>: letters, mathupright, symbols, largesymbols, italics,\\
+                \>\>: arrows, boldarrows, operators\\
+  \>: lucbr.sty   \>: letters, mathupright, symbols, largesymbols, italics,\\
+                \>\>: arrows, boldarrows, operators\\
+  \>: lucmath.sty \>: operators, letters, symbols, largesymbols, italics,\\
+                \>\>: letters, mathupright, arrows, boldarrows\\
+  \>: lucmtime.sty\>: letters, operators, mathupright, symbols, largesymbols,\\
+                \>\>: italics, arrows, boldarrows
+\end{tabbing}
+\end{table*}
+
+
+
+\section{その他の情報}
+最新情報は、p\TeX{}ホームページ
+\begin{verbatim}
+    http://www.ascii.co.jp/pb/ptex
+\end{verbatim}
+より、入手することができます。
+
+p\LaTeXe{}についてのお問い合わせやバグレポートなどは、電子メールで
+\begin{verbatim}
+    www-ptex＠ascii.co.jp
+\end{verbatim}
+までお願いします。
+
+\end{document}

@@ -1,0 +1,301 @@
+% \iffalse meta-comment
+%% File: platexrelease.dtx
+%
+%  Copyright 2016 Japanese TeX Development Community.
+%
+%  This file is part of the pLaTeX2e system.
+%  -----------------------------------------
+%
+% \fi
+%
+% \CheckSum{108}
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+%
+% \iffalse
+% \changes{v1.0}{2016/02/01}{first edition}
+% \changes{v1.0a}{2016/02/03}{latexreleaseをもとにplatexreleaseとして拡張}
+% \changes{v1.0b}{2016/02/16}{latexreleaseのバージョン確認を導入}
+% \changes{v1.0c}{2016/04/12}{ドキュメントを更新}
+% \fi
+%
+% \iffalse
+\NeedsTeXFormat{pLaTeX2e}
+%<*driver>
+\ProvidesFile{platexrelease.dtx}
+%</driver>
+%<platexrelease>\ProvidesPackage{platexrelease}
+                [2016/04/12 v1.0c latexrelease support for pLaTeX Kernel]
+%<*driver>
+\documentclass{jltxdoc}
+\GetFileInfo{platexrelease.dtx}
+\author{Japanese \TeX\ Development Community}
+\title{\filename}
+\date{作成日：\filedate}
+\begin{document}
+  \newcommand\Lpack[1]{\textsf{#1}}
+  \maketitle
+  \DocInput{\filename}
+\end{document}
+%</driver>
+% \fi
+%
+% \changes{v1.0}{2016/02/01}{p\LaTeXe 用に\file{latexrelease.dtx}を修正}
+% \changes{v1.0a}{2016/02/03}{latexreleaseをもとにplatexreleaseとして拡張}
+%
+% p\LaTeXe{}がベースにしている\LaTeXe{}は、2015年より前まではカーネルの
+% 互換性を失わせる大きな変更は加えられず、修正は\Lpack{fixltx2e}パッケージ
+% で提供されていました。しかし、2015年以降は\Lpack{fixltx2e}の変更点が
+% すべて\LaTeXe{}のカーネルに取り込まれ、代わりに過去のバージョンの
+% \LaTeXe{}をエミュレートするための\Lpack{latexrelease}パッケージが提供
+% されるようになりました。
+%
+% この\Lpack{platexrelease}パッケージは、p\LaTeXe{}で\Lpack{latexrelease}に
+% 相当する機能を提供するためのパッケージです。
+% 基本的な使い方は
+%\begin{verbatim}
+% \RequirePackage[2015/01/01]{platexrelease}
+% \documentclass{jarticle}
+% ....
+%\end{verbatim}
+% です。\Lpack{latexrelease}の代わりに\Lpack{platexrelease}を読み込まな
+% いと、p\LaTeXe{}で日本語用に加えた\LaTeXe{}へのパッチがキャンセルされ
+% てしまう場合がありますので注意してください。このことをユーザに知らせる
+% ため、p\LaTeX{}のカーネルは、「\Lpack{latexrelease}パッケージが読み込
+% まれたのに\Lpack{platexrelease}パッケージが読み込まれなかった場合」に
+% 警告を出し、\Lpack{platexrelease}パッケージの利用を推奨します。また、
+% 「読み込まれた\Lpack{latexrelease}について\Lpack{platexrelease}が
+% 未知である」場合も、\Lpack{platexrelease}が万全ではありませんので警告
+% を出します。\Lpack{latexrelease}の使いかたについては、
+% \Lpack{latexrelease}のドキュメントを参照してください。
+%
+% \section{パッケージオプション}
+%
+% \Lpack{latexrelease}パッケージと同様です。\Lpack{platexrelease}に
+% 指定されたオプションは、内部で読み込まれる\Lpack{latexrelease}にも
+% そのまま渡ります。\Lpack{platexrelease}と\Lpack{latexrelease}
+% の間の関係もここで具体的に説明します。
+% \begin{itemize}
+% \item |\RequirePackage[|\emph{yyyy/mm/dd}|]{platexrelease}| \par
+% p\LaTeXe{}のフォーマットの日付を指定します。任意の日付を指定できます
+% が、パッケージよりも未来の日付が指定された場合は警告します。このオプ
+% ションが指定されると、「\emph{yyyy/mm/dd}時点の\LaTeX{}カーネルを読み
+% 込んだ後に、同じく\emph{yyyy/mm/dd}時点のp\LaTeX{}カーネルを読み込ん
+% だもの」をエミュレートします。
+% \item |\RequirePackage[current]{platexrelease}| \par
+% これはデフォルトの挙動です。フォーマットの日付は実効的に変更しません
+% が、|\plIncludeInRelease|コマンドが定義されることを保証します。
+% 具体的には\LaTeX{}のフォーマットは |\fmtversion| に、% p\LaTeX{}の
+% フォーマットは |\pfmtversion| になります。
+% \item |\RequirePackage[latest]{platexrelease}| \par
+% p\LaTeX{}のフォーマットの日付を、このファイルのリリース日に設定します。
+% したがって、古いフォーマットを使っている場合は現在利用可能なすべての
+% パッチが適用されます。具体的には、「\Lpack{latexrelease}が知っている
+% 最新の\LaTeX{}カーネルを読み込んだ後に、\Lpack{platexrelease}が知って
+% いる最新のp\LaTeX{}カーネルを読み込んだもの」をエミュレートします。
+% \end{itemize}
+%
+% \section{p\LaTeX{}カーネルやパッケージ開発者向け}
+%
+% \subsection{フォーマット作成にかかわるファイルを変更する場合}
+%
+% p\LaTeX{}のフォーマットplatex.fmtのソースを変更する場合は、大まかに
+% 以下のようにガードを付けます。
+% \begin{enumerate}
+% \item 古いコードを \par
+% |\plIncludeInRelease{日付}{ラベル}{メッセージ}| …
+% |\plEndIncludeInRelease| \par
+% に挟み、全体を |<platexrelease>| ガードの下に置きます。新しいコードと
+% 区別がつくように、すべての行にガードを付けます。
+% \item 新しいコードは \par
+% |\plIncludeInRelease{日付}{ラベル}{メッセージ}| …
+% |\plEndIncludeInRelease| \par
+% に挟みます。コード部分は \verb+<*plナントカ|platexrelease>+ ガードの中、
+% |\plIncludeInRelease| と |\plEndIncludeInRelease| には |<platexrelease>|
+% ガードを付けます。
+% \item すべてのコードはもともと |<*plナントカ>| ガードの中にあるはずです
+% ので、|\begin{macrocode}| 直後にいったん |<*plナントカ>| ガードを終了し、
+% |\end{macrocode}| 直前にもう一度 |<*plナントカ>| ガードを開始します。
+% \end{enumerate}
+% 日付は2006/11/10時点のアスキー版のコードなら「0000/00/00」とし、
+% その後なら「次回リリース（予定）日」とします。すべての日付ブロックは
+% 降順に並べるとよいようです。
+%
+% 典型例を示します。
+% \begin{verbatim}
+% % \begin{macro}{\em}
+% % \begin{macro}{\emph}
+% % \begin{macro}{\eminnershape}
+% % \changes{v1.3d}{1997/06/25}{\cs{em},\cs{emph}で和文を強調書体に}
+% % \changes{v1.6}{2016/02/01}{\LaTeX\ \texttt{!<2015/01/01!>}での\cs{em}の
+% %    定義変更に対応。\cs{eminnershape}を追加。}
+% % 従来は|\em|, |\emph|で和文フォントの切り替えは行っていませんでしたが、
+% % 和文フォントも|\gtfamily|に切り替えるようにしました。
+% % \LaTeX\ \texttt{<2015/01/01>}で追加された|\eminnershape|も取り入れ、
+% % 強調コマンドを入れ子にする場合の書体を自由に再定義できるようになりました。
+% %    \begin{macrocode}
+% %</pldefs>
+% %<platexrelease>\plIncludeInRelease{2016/04/17}{\eminnershape}{\eminnershape}%
+% %<*pldefs|platexrelease>
+% \DeclareRobustCommand\em
+%         {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+%                        \eminnershape \else \gtfamily \itshape \fi}%
+% \def\eminnershape{\mcfamily \upshape}%
+% %</pldefs|platexrelease>
+% %<platexrelease>\plEndIncludeInRelease
+% %<platexrelease>\plIncludeInRelease{0000/00/00}{\eminnershape}{\eminnershape}%
+% %<platexrelease>\DeclareRobustCommand\em
+% %<platexrelease>        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@ 
+% %<platexrelease>                       \mcfamily \upshape \else \gtfamily \itshape \fi}
+% %<platexrelease>\let\eminnershape\@undefined
+% %<platexrelease>\plEndIncludeInRelease
+% %<*pldefs>
+% %    \end{macrocode}
+% % \end{macro}
+% % \end{macro}
+% % \end{macro}
+% \end{verbatim}
+%
+% あとは、|\ProvidesFile|のバージョン番号、|\CheckSum|、|\changes|と
+% いった従来と同じ変更を行います。
+%
+% \subsection{パッケージ作成にかかわるファイルを変更する場合}
+%
+% フォーマットにかかわる場合と異なる点は、|<platexrelease>| ガードが
+% 不要であるという点です。
+% \begin{enumerate}
+% \item 古いコードを \par
+% |\plIncludeInRelease{日付}[フォーマットの日付]{ラベル}{メッセージ}|
+% … |\plEndIncludeInRelease| \par
+% に挟みます。
+% \item 新しいコードを \par
+% |\plIncludeInRelease{日付}[フォーマットの日付]{ラベル}{メッセージ}|
+% … |\plEndIncludeInRelease| \par
+% に挟みます。
+% \end{enumerate}
+% 日付は2006/11/10時点のアスキー版のコードなら「0000/00/00」とし、
+% その後なら「次回リリース（予定）日」とします。すべての日付ブロックは
+% 降順に並べるとよいようです。
+%
+% \setcounter{StandardModuleDepth}{1}
+% \StopEventually{}
+%
+% \section{コード}
+%
+% 最初に\Lpack{latexrelease}パッケージを読み込みます。
+%    \begin{macrocode}
+%<*platexrelease>
+\RequirePackageWithOptions{latexrelease}
+%    \end{macrocode}
+%
+% 読み込んだ\Lpack{latexrelease}パッケージのバージョンを確認し、
+% \Lpack{platexrelease}が未対応の新しいものであった場合に警告します。
+% \changes{v1.0b}{2016/02/16}{latexreleaseのバージョン確認を導入}
+%    \begin{macrocode}
+\ifnum\expandafter\@parse@version\latexreleaseversion//00\@nil
+  >\expandafter\@parse@version\p@known@latexreleaseversion//00\@nil
+  \PackageWarningNoLine{platexrelease}{%
+    Version of `latexrelease' is newer than\MessageBreak
+    what `platexrelease' knows}
+\fi
+%    \end{macrocode}
+%
+% \Lpack{platexrelease}パッケージのオプションを定義します。コードは
+% \Lpack{latexrelease}のものをp\LaTeXe{}用に書き換えたものです。
+%    \begin{macrocode}
+\DeclareOption*{%
+  \def\@plIncludeInRelease#1[#2]{\@plIncludeInRele@se{#1}}%
+  \let\requestedplpatchdate\CurrentOption}
+\DeclareOption{latest}{%
+  \let\requestedplpatchdate\platexreleaseversion}
+\DeclareOption{current}{%
+  \let\requestedplpatchdate\pfmtversion}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\ExecuteOptions{current}
+\ProcessOptions\relax
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\reserved@a{%
+\edef\requestedpLaTeXdate{\the\count@}%
+\reserved@b}
+\def\reserved@b#1\\{%
+\def\reserved@b{#1}%
+\ifx\reserved@b\@empty\else
+\PackageError{platexrelease}%
+             {Unexpected option \requestedplpatchdate}%
+             {The option must be of the form yyyy/mm/dd}%
+\fi}
+\afterassignment\reserved@a
+\count@\expandafter
+  \@parse@version\expandafter0\requestedplpatchdate//00\@nil\\
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\edef\currentpLaTeXdate{%
+   \expandafter\@parse@version\pfmtversion//00\@nil}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\ifnum\requestedpLaTeXdate=\currentpLaTeXdate
+\PackageWarningNoLine{platexrelease}{%
+  Current format date selected, no patches applied.}
+\expandafter\endinput
+\fi
+%    \end{macrocode}
+%
+% より新しいフォーマットに対しては、より新しいバージョンの
+% \Lpack{platexrelease}が提供されているはずです。
+%    \begin{macrocode}
+\ifnum\currentpLaTeXdate
+  >\expandafter\@parse@version\platexreleaseversion//00\@nil
+\PackageWarningNoLine{platexrelease}{%
+The current package is for an older pLaTeX format:\MessageBreak
+pLaTeX \pfmtversion\space\MessageBreak
+Obtain a newer version of this package!}
+\expandafter\endinput
+\fi
+%    \end{macrocode}
+%
+% 将来のp\LaTeXe{}をつくりだすパッチはありませんが、オプションは
+% 現時点では受け入れます。
+%    \begin{macrocode}
+\ifnum\requestedpLaTeXdate
+  >\expandafter\@parse@version\platexreleaseversion//00\@nil
+\PackageWarningNoLine{platexrelease}{%
+The current package is for pLaTeX \platexreleaseversion:\MessageBreak
+It has no patches beyond that date\MessageBreak
+There may be an updated version\MessageBreak
+of this package available from CTAN}
+\expandafter\endinput
+\fi
+%    \end{macrocode}
+%
+% フォーマットのバージョンを要求されている日付に更新します。
+%    \begin{macrocode}
+\let\pfmtversion\requestedplpatchdate
+\let\currentpLaTeXdate\requestedpLaTeXdate
+%</platexrelease>
+%    \end{macrocode}
+%
+% このあとは、p\LaTeXe{}のカーネルの変更点を示すコードが入ります。
+%
+% \Finale
+%
+\endinput

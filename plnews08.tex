@@ -1,0 +1,111 @@
+%% <2001/10/04>
+\documentclass{plnews}
+
+\publicationyear{2004}% 発行年
+\publicationmonth{08}% 発行月
+\publicationissue{8}% 番号
+\author{田中 禎之（\texttt{<sada-t at ascii.co.jp>}）
+}
+
+\begin{document}
+
+\maketitle
+
+\section{この文書について}
+この文書は、p\LaTeXe{}\texttt{<2004/08/10>}版について、
+前回の版（\texttt{<2001/09/04>}）からの更新箇所をまとめたものです。
+それ以前の変更点については、\file{plnews*.tex}や\file{Changes.txt}を
+参照してください。
+\LaTeX{}レベルでの更新箇所は、\LaTeX{}に付属の\file{ltnews*.tex}などを
+参照してください。
+
+
+\section{和文エンコーディング切り替え対応}
+これまでは和文エンコーディングにはJY1,JT1のみしか使用できませんでしたが、
+新たにエンコーディングを定義して使用できるようにしました。
+
+和文エンコーディングは以下のマクロで定義します。
+
+\begin{itemize}
+\item |\DeclareYokoKanjiEncoding{<エンコーディング名>}{<実行コード>}{<実行コード>}|\\
+	横書き用の和文エンコーディングを宣言する。
+	引数は|\DeclareFontEncoding|と同じ。
+\item |\DeclareTateKanjiEncoding{<エンコーディング名>}{<実行コード>}{<実行コード>}|\\
+	縦書き用の和文エンコーディングを宣言する。
+	引数は|\DeclareFontEncoding|と同じ。
+\item |\KanjiEncodingPair{<横エンコーディング名>}{<縦エンコーディング名>}|\\
+	横書きと縦書きの和文エンコーディングを関連付ける。
+\end{itemize}
+
+横書きと縦書きのエンコーディングは以下のように必ず|\KanjiEncodingPair|で
+対応を関連付けてから使用します。
+関連付けられたエンコーディングは|\yoko|, |\tate|の実行時に切り替わります。
+
+\begin{verbatim}
+  :
+\DeclareYokoKanjiEncoding{NY1}{}{}
+\DeclareYokoKanjiEncoding{NT1}{}{}
+\KanjiEncodingPair{NY1}{NT1}
+  :
+\begin{document}
+  :
+\fontencoding{NY1}
+  :
+\selectfont
+  :
+\end{verbatim}
+
+現時点では|\DeclareTextCompositeCommand|のようなエンコーディングで動作を
+切り替えるためのマクロには対応していません。そのため、フォントの組み合わせを
+変更する程度にしか利用できません。
+
+\section{その他の主な修正箇所}
+次のような不具合の修正や仕様の変更をしました。
+
+\begin{itemize}
+\item |verbatim|環境で余計な前後空きが発生しないように|\fontfamily|を修正。
+\item |\ascii|,|\Ascii|,|\ASCII|マクロのエラーを修正。
+\item 和文フォントサイズの基準値の設定を修正。
+\item 縦組スタイルで|\flushbottom|しないように修正。
+\item |\part|,|\chapter|の直後でインデントが発生しないバグを修正。
+\item 見出しの前後の空きを調整。
+\item \LaTeX 2003/12/01版での動作を確認。
+\end{itemize}
+
+
+\section{フォーマットファイル作成時の注意}
+現在のp\TeX{}では、8ビットコードの連続を16ビットコードと認識して
+しまう場合があります。そのため、フランス語やキリル文字などの
+8ビットコードが連続するハイフンパターンはまず使えせん。
+例えばcmcyraltパッケージでは、途中でつぎのようなエラーになります。
+
+\begin{verbatim}
+(/usr/local/share/texmf/tex/latex/contrib/
+other/cmcyralt/rhyphen.tex Russian hyphena
+tion
+! Bad \patterns.
+l.107  . え
+           2
+?
+\end{verbatim}
+
+このときは、``|?|''のプロンプトに対して``|x|''で終了してください。
+残念ながら、このハイフンパターンをp\TeX{}で利用することはできません。
+
+そこで、hyphen.cfgを用意して、不用意に他のハイフンパターンを
+読み込まないようにしてあります。詳しくはREADME2.txtをご覧ください。
+
+\section{その他}
+p\TeX{}やp\LaTeXe{}に関する最新情報は、p\TeX{}ホームページ
+\begin{verbatim}
+    http://www.ascii.co.jp/pb/ptex
+\end{verbatim}
+より、入手することができます。
+
+バグ報告やお問い合わせなどは、電子メールで
+\begin{verbatim}
+    www-ptex＠ascii.co.jp
+\end{verbatim}
+までお願いします。
+
+\end{document}

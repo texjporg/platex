@@ -1,0 +1,1240 @@
+% \iffalse meta-comment
+%% File: plext.dtx
+%
+%  Copyright 2001 ASCII Corporation.
+%
+%  This file is part of pLaTeX2e system.
+%  -------------------------------------
+%
+% \fi
+%
+% \CheckSum{1845}
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+%
+% \setcounter{StandardModuleDepth}{1}
+% \StopEventually{}
+%
+% \iffalse
+% \changes{v1.0}{1994/09/16}{first edition}
+% \changes{v1.1a}{1995/03/11}{縦組マクロ実装}
+% \changes{v1.1b}{1995/04/01}{互換モード部分を別ファイルに移動}
+% \changes{v1.1c}{1995/08/25}{\cs{newline}, \cs{strut}の修正}
+% \changes{v1.1d}{1995/11/10}{オリジナルとのコマンド名バッティングをやめた}
+% \changes{v1.1d}{1995/11/21}{\cs{Rensuji}, \cs{prensuji}を作成}
+% \changes{v1.1e}{1995/11/21}{プリアンブルコマンドを\file{plcore}に移動}
+% \changes{v1.1f}{1996/01/09}{縦組に依存しないコマンドを分離し、このファイルを
+%     拡張パッケージとした}
+% \changes{v1.1g}{1996/01/12}{minipage環境の中で\cs{parbox}を回転オプション
+%   付きで使用するとエラーとなるバグを修正}
+% \changes{v1.1h}{1996/01/30}{キャプション拡張マクロを追加}
+% \changes{v1.1i}{2001/05/10}{縦組でzを指定するとエラーになるのを修正。
+%    ありがとう、大石さん}
+% \changes{v1.2}{2001/09/26}{タグ名をplcoreからpackageに変更した}
+% \fi
+%
+% \iffalse
+\NeedsTeXFormat{pLaTeX2e}
+%<*driver>
+\ProvidesFile{plext.dtx}
+%</driver>
+%<package>\ProvidesPackage{plext}
+   [2001/09/26 v1.2 pLaTeX package file]
+%<*driver>
+\documentclass{jltxdoc}
+\usepackage{plext}
+\GetFileInfo{plext.dtx}
+\title{p\LaTeXe{}拡張パッケージ\space\fileversion}
+\author{Ken Nakano}
+\date{作成日：\filedate}
+\begin{document}
+   \maketitle
+   \tableofcontents
+   \DocInput{\filename}
+\end{document}
+%</driver>
+% \fi
+%
+%
+% \section{概要}\label{plext:intro}
+% このパッケージは、以下の項目に関する機能を拡張するものです。
+%
+% \begin{itemize}
+% \item 表組環境
+% \item フロートとキャプションの出力位置
+% \item 段落ボックス環境
+% \item 作図環境
+% \item 連数字、漢数字、傍点、下線
+% \item 参照番号
+% \end{itemize}
+%
+% このパッケージは縦組用クラス（tarticle, tbook, treport）のときには、
+% 自動的に読み込まれます。横組用クラス（jarticle, jbook, jreport）で
+% 拡張機能を使いたい場合は、文書ファイルのプリアンブルに以下の一行を
+% 記述してください。
+%
+% \begin{verbatim}
+%     \usepackage{plext}
+% \end{verbatim}
+% 
+% \section{組方向オプションについて}
+% つぎの環境やコマンドは、組方向オプションが追加され、拡張されています。
+%
+% \begin{itemize}
+% \item tabular環境、array環境
+% \item |\layoutcaption|コマンド
+% \item minipage環境、|\parbox|コマンド、|\pbox|コマンド
+% \item picture環境
+% \end{itemize}
+%
+% 組方向オプションは、コマンド名や環境の後ろで|<|と|>|で囲って、
+% ``y'', ``t'', ``z''のいずれかを指定します。
+% それぞれのオプションの意味はつぎのとおりです。
+% デフォルトの組み方向は、横組のときは``y''、縦組のときは``t''です。
+%
+% \medskip
+% \DeleteShortVerb{\|}
+% \begin{center}
+% \begin{tabular}{c|l}
+% \emph{オプション} & \emph{意味}\\\hline
+% \texttt{y}& 横組で出力（横組モードでは何もしない）\\
+% \texttt{t}& 縦組で出力（縦組モードでは何もしない）\\
+% \texttt{z}& 90度回転して出力（横組モードでは何もしない）\\
+% \end{tabular}
+% \end{center}
+% \MakeShortVerb{\|}
+%
+% 組方向オプションを用いたサンプルを図\ref{fig:diroption}に示します。
+% 左から、``y'', ``t'', ``z''オプションを指定してあります。
+%
+% \begin{figure}[htb]
+% \begin{small}
+% \begin{tsample}{10zw}
+% \vfil
+%  \parbox<z>{10zw}{たとえば、これはいったい何、いったいどうして、
+%   などと思えるようなことが世の中にはたくさんあります！}\par
+% \vfil
+%  \parbox<t>{10zw}{たとえば、これはいったい何、いったいどうして、
+%   などと思えるようなことが世の中にはたくさんあります？}\par
+% \vfil
+%  \parbox<y>{10zw}{たとえば、これはいったい何、いったいどうして、
+%   などと思えるようなことが世の中にはたくさんあります。}
+% \vfil
+% \end{tsample}
+% \end{small}
+% \caption{組方向オプションの使用例\label{fig:diroption}}
+% \end{figure}
+%
+%
+% \section{コード}
+%
+% \begin{macro}{\if@rotsw}
+% このスイッチは、縦組モードで90度回転させるかどうかを示すのに使います。
+%    \begin{macrocode}
+%<*package>
+\newif\if@rotsw
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{表組環境}
+% tabular環境とarray環境は、組方向を指定するオプションを追加しました。
+% これらのコマンドは、\file{lttab.dtx}で定義されています。
+%
+% \begin{macro}{\array}
+% \begin{macro}{\tabular}
+% \begin{macro}{\tabular*}
+% array環境とtabular環境を開始するコマンドです。
+% tabular環境にはアスタリスク形式があります。
+%    \begin{macrocode}
+\def\array{\let\@acol\@arrayacol \let\@classz\@arrayclassz
+ \let\@classiv\@arrayclassiv
+ \let\\\@arraycr\let\@halignto\@empty\X@tabarray}
+%
+\def\tabular{\let\@halignto\@empty\X@tabular}
+\@namedef{tabular*}{\@ifnextchar<%>
+   {\@stabular}{\@stabular<Z>}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\X@tabarray}
+% \begin{macro}{\X@tabular}
+% 組方向オプションを調べます。
+% \changes{v1.1c}{1995/08/11}{\cs{tabarray}のタイプミス修正}
+% \changes{v1.1d}{1995/11/10}{\cs{@tabarray} to \cs{p@tabarray}}
+% \changes{v1.1d}{1995/11/10}{\cs{@tabular} to \cs{p@tabular}}
+%    \begin{macrocode}
+\def\X@tabarray{\@ifnextchar<%>
+   {\p@tabarray}{\p@tabarray<Z>}}
+\def\X@tabular{\@ifnextchar<%>
+   {\p@tabular}{\p@tabular<Z>}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@stabular}
+% \begin{macro}{\p@tabular}
+% アスタリスク形式の場合は、組方向オプションの後ろに幅を指定します。
+% \changes{v1.1d}{1995/11/10}{\cs{@tabular} to \cs{p@tabular}}
+%    \begin{macrocode}
+\def\@stabular<#1>#2{\def\@halignto{to#2}\p@tabular<#1>}
+\def\p@tabular<#1>{\leavevmode \hbox \bgroup $\let\@acol\@tabacol
+   \let\@classz\@tabclassz
+   \let\@classiv\@tabclassiv \let\\\@tabularcr\p@tabarray<#1>}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\p@tabarray}
+% 位置オプションを調べます。
+% \changes{v1.1d}{1995/11/10}{\cs{@tabarray} to \cs{p@tabarray}}
+%    \begin{macrocode}
+\def\p@tabarray<#1>{\m@th\@ifnextchar[%]
+   {\p@array<#1>}{\p@array<#1>[c]}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\p@array}
+% tabular環境とarray環境の内部形式です。
+% \changes{v1.1d}{1995/11/10}{\cs{@array} to \cs{p@array}}
+%    \begin{macrocode}
+\def\p@array<#1>[#2]#3{\setbox\@arstrutbox\hbox{%
+  \iftdir
+    \if #1y\relax\yoko
+       \vrule\@height\arraystretch\ht\strutbox
+             \@depth\arraystretch\dp\strutbox \@width\z@
+    \else\if #1z\relax\@rotswtrue
+       \vrule\@height\arraystretch\ht\zstrutbox
+             \@depth\arraystretch\dp\zstrutbox \@width\z@
+    \else
+       \vrule\@height\arraystretch\ht\tstrutbox
+             \@depth\arraystretch\dp\tstrutbox \@width\z@
+    \fi\fi
+  \else
+    \if #1t\relax\hbox{\tate
+       \vrule\@height\arraystretch\ht\tstrutbox
+             \@depth\arraystretch\dp\tstrutbox \@width\z@}%
+    \else
+       \vrule\@height\arraystretch\ht\strutbox
+             \@depth\arraystretch\dp\strutbox \@width\z@
+    \fi
+  \fi}%
+  \fork@array@option<#1>[#2]%
+  \@mkpream{#3}\edef\@preamble{\ialign \noexpand\@halignto
+  \bgroup \tabskip\z@skip \@arstrut \@preamble \tabskip\z@skip \cr}%
+  \let\@startpbox\@@startpbox \let\@endpbox\@@endpbox
+  \let\tabularnewline\\%
+%    \end{macrocode}
+% \changes{v1.1c}{1995/09/11}{Add \cs{adjustbaseline}.}
+%    \begin{macrocode}
+  \@begin@alignbox\bgroup\box@dir\adjustbaseline
+    \let\par\@empty
+    \let\@sharp##\let\protect\relax
+    \lineskip\z@skip\baselineskip\z@skip\@preamble}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\endarray}
+% \begin{macro}{\endtabular}
+% array環境とtabular環境の終了コマンドです。
+% |\@end@alignbox|は|\p@array|から呼び出される|\fork@array@option|によって
+% 設定されます。
+%    \begin{macrocode}
+\def\endarray{\crcr\egroup\egroup\@end@alignbox}
+\def\endtabular{\crcr\egroup\egroup\@end@alignbox $\egroup}
+\expandafter \let \csname endtabular*\endcsname = \endtabular
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+%
+% \begin{macro}{\fork@array@option}
+% array環境とtabular環境で与えられた
+% 第一引数と第二引数の組合せの分岐を行ないます。
+%    \begin{macrocode}
+\def\fork@array@option<#1>[#2]{%
+\@rotswfalse
+%    \end{macrocode}
+% 縦組モードのとき：
+%    \begin{macrocode}
+\iftdir
+\if #1y\relax\let\box@dir\yoko
+  \if #2t\relax
+     \def\@begin@alignbox{\raise\cdp\vtop\bgroup\kern\z@\vbox}%
+     \let\@end@alignbox\egroup
+  \else\if #2b\relax
+     \def\@begin@alignbox{\lower\cdp\vbox\bgroup\vbox}%
+     \def\@end@alignbox{\kern\z@\egroup}%
+  \else
+     \let\@begin@alignbox\vcenter
+     \let\@end@alignbox\relax
+  \fi\fi
+\else\if #1z\relax\let\box@dir\relax\@rotswtrue
+  \if #2t\relax
+     \def\@begin@alignbox{\raise\cdp\vtop\bgroup\kern\z@\vbox}%
+     \let\@end@alignbox\egroup
+  \else\if #2b\relax
+     \def\@begin@alignbox{\lower\cdp\vbox\bgroup\vbox}%
+     \def\@end@alignbox{\kern\z@\egroup}%
+  \else
+     \let\@begin@alignbox\vcenter
+     \let\@end@alignbox\relax
+  \fi\fi
+\else\let\box@dir\tate
+  \if #2t\relax
+     \def\@begin@alignbox{\raise\cdp\vtop}%
+     \let\@end@alignbox\relax
+  \else\if #2b\relax
+     \let\@begin@alignbox\vbox
+     \let\@end@alignbox\relax
+  \else
+     \let\@begin@alignbox\vcenter
+     \let\@end@alignbox\relax
+  \fi\fi
+\fi\fi
+%    \end{macrocode}
+% 横組モードのとき：
+%    \begin{macrocode}
+\else
+\if #1t\relax\let\box@dir\tate
+  \if #2t\relax
+     \def\@begin@alignbox{\vtop\bgroup\kern\z@\vbox}%
+     \let\@end@alignbox\egroup
+  \else\if #2b\relax
+     \def\@begin@alignbox{\vbox\bgroup\vbox}%
+     \def\@end@alignbox{\kern\z@\egroup}%
+  \else
+     \let\@begin@alignbox\vcenter
+     \let\@end@alignbox\relax
+  \fi\fi
+\else\let\box@dir\yoko
+  \if #2t\relax
+     \def\@begin@alignbox{\raise\cdp\vtop}%
+     \let\@end@alignbox\relax
+  \else\if #2b\relax
+     \let\@begin@alignbox\vbox
+     \let\@end@alignbox\relax
+  \else
+     \let\@begin@alignbox\vcenter
+     \let\@end@alignbox\relax
+  \fi\fi
+\fi\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{フロートとキャプションの出力位置}
+% キャプションとフロートは、
+% 出力位置の指定や大きさの指定などができるように拡張しています。
+% 詳細は、『日本語\LaTeXe{}ブック』を参照してください。
+%
+% |\layoutfloat|コマンドで作られるボックスです。
+%    \begin{macrocode}
+\newbox\@floatbox
+%    \end{macrocode}
+% フロートオブジェクトの幅と高さです。
+%    \begin{macrocode}
+\newdimen\floatwidth
+\newdimen\floatheight
+%    \end{macrocode}
+% フロートオブジェクトのまわりに引かれる罫線の太さです。
+%    \begin{macrocode}
+\newdimen\floatruletick \floatruletick=0.4pt
+%    \end{macrocode}
+% フロートオブジェクトとキャプションの間のアキです。
+%    \begin{macrocode}
+\newdimen\captionfloatsep \captionfloatsep=10pt
+%    \end{macrocode}
+% |\caption@dir|には、キャプションを組む方向を示すオプションが格納されます。
+% |\captiondir|は|\caption@dir|の値と現在の組み方向によって、
+% |\yoko|, |\tate|, |\relax|のいずれかに設定されます。
+%    \begin{macrocode}
+\def\caption@dir{Z}
+\let\captiondir\relax
+%    \end{macrocode}
+% キャプションの幅です。
+%    \begin{macrocode}
+\newdimen\captionwidth \captionwidth\z@
+%    \end{macrocode}
+% キャプションを付ける位置を指定します。
+%    \begin{macrocode}
+\def\caption@posa{Z}
+\def\caption@posb{Z}
+%    \end{macrocode}
+% 組み立てられたキャプションが格納されるボックスです。
+%    \begin{macrocode}
+\newbox\@captionbox
+%    \end{macrocode}
+% キャプションに使われる文字です。
+%    \begin{macrocode}
+\def\captionfontsetup{\normalfont\normalsize}
+%    \end{macrocode}
+%
+% \begin{macro}{\layoutfloat}
+% \begin{macro}{\X@layoutfloat}
+% \begin{macro}{\@layoutfloat}
+% |\layoutfloat|は図表類の大きさと位置を指定するのに使います。
+% 大きさを省略するか、負の値を指定すると、
+% そのオブジェクトの自然な長さになります。このときは、罫が引かれません。
+% 正の大きさを指定すると、|\floatruletick|の太さの罫で囲まれます。
+%
+% 位置指定を省略した場合、中央揃えになるようにしています。
+%    \begin{macrocode}
+\def\layoutfloat{\@ifnextchar(%)
+   {\X@layoutfloat}{\X@layoutfloat(-5\p@,-5\p@)}}
+%
+\def\X@layoutfloat(#1,#2){\@ifnextchar[%]
+   {\@layoutfloat(#1,#2)}{\@layoutfloat(#1,#2)[c]}}
+%
+\long\def\@layoutfloat(#1,#2)[#3]#4{%
+  \setbox\z@\hbox{#4}%
+  \floatwidth=#1 \floatheight=#2 \edef\float@pos{#3}%
+  \ifdim\floatwidth<\z@
+     \floatwidth\wd\z@\floatruletick\z@
+  \fi
+  \ifdim\floatheight<\z@
+     \floatheight\ht\z@\advance\floatheight\dp\z@\relax
+     \floatruletick\z@
+  \fi
+  \setbox\@floatbox\vbox to\floatheight{\offinterlineskip
+    \hrule width\floatwidth height\floatruletick depth\z@
+    \vss\hbox to\floatwidth{%
+      \vrule width\floatruletick height\floatheight depth\z@
+      \hss\vbox to\floatheight{\hsize\floatwidth\vss#4\vss}\hss
+      \vrule width\floatruletick height\floatheight depth\z@
+    }\hrule width\floatwidth height\floatruletick depth\z@}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\DeclareLayoutCaption}
+% |\DeclareLayoutCaption|コマンドは、キャプションの組方向、付ける位置や幅の
+% デフォルトをフロートのタイプごとに設定することができます。
+% このコマンドでデフォルト値が設定されていないと、
+% |\pcaption|コマンドでエラーが発せられます。
+% このコマンドはプリアンブルでのみ、使用できます。
+%
+% \DescribeMacro\DeclareLayoutCaption
+% |\DeclareLayoutCaption|\meta{type}^^A
+%         |<|\meta{dir}|>(|\meta{width}|)[|\meta{pos1}\meta{pos2}|]|
+%
+% コマンド引数を省略することはできません。
+% \meta{dir}には、`|y|', `|t|', `|z|', `|n|'のいずれかを指定します。
+% `|n|'と指定をすると、本文の組み方向と同じ方向でキャプションが組まれます。
+% これがデフォルトです。
+%
+% \meta{width}には、キャプションを折り返す長さを指定します。
+% `|(12zw)|'と指定をすると、漢字12文字分の長さで折り返されます。
+% `|(\floatwidth)|'と指定をすると、
+% キャプションの幅はフロートオブジェクトの幅となります。
+% これがデフォルトです。なお、`|(\floatheigt)|'と指定をすると、
+% キャプションの幅はフロートオブジェクトの高さとなります。
+%
+% \meta{pos1}と\meta{pos2}には、キャプションを出力する位置を指定します。
+% \meta{pos1}は、`|c|', `|t|', `|b|'のいずれかです。
+% \meta{pos2}は、`|u|', `|d|', `|l|', `|r|'のいずれかです。
+% デフォルトは、|figure|タイプが`|cd|'、|table|タイプは`|cu|'です。
+%    \begin{macrocode}
+\def\DeclareLayoutCaption#1<#2>(#3)[#4#5]{%
+  \expandafter
+  \ifx\csname #1@layoutcaption\endcsname\relax \else
+    \@latex@info{Redeclaring capiton layout setting of '#1'}%
+  \fi
+  \expandafter
+  \gdef\csname #1@layoutcaption\endcsname{%
+     \if Z\caption@dir\def\caption@dir{#2}\fi
+     \ifdim\captionwidth=\z@ \captionwidth=#3\relax\fi
+     \if Z\caption@posa\def\caption@posa{#4}\fi
+     \if Z\caption@posb\def\caption@posb{#5}\fi}}
+\@onlypreamble\DeclareLayoutCaption
+%    \end{macrocode}
+% \changes{v1.0h}{1996/03/13}{キャプション出力位置の初期値を設定}
+%    \begin{macrocode}
+\DeclareLayoutCaption{figure}<y>(.8\linewidth)[cd]
+\DeclareLayoutCaption{table}<y>(.8\linewidth)[cu]
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\layoutcaption}
+% \begin{macro}{\X@layoutcaption}
+% \begin{macro}{\@ilayoutcaption}
+% \begin{macro}{\@iilayoutcaption}
+% |\DeclareLayoutCaption|コマンドで設定をした、デフォルト値とは異なる設定で
+% 組みたい場合は、|\layoutcaption|コマンドを使用します。
+% 
+% |\layoutcaption<|\meta{dir}|>(|\meta{width}|)[|\meta{pos}|]|
+%
+% なお、|\layoutcaption|に組み方向オプションを付けましたので、
+% |\captiondir|で組み方向を指定する必要はありません。
+% また、|\captiondir|で指定をしても、その値は無視されます。
+%    \begin{macrocode}
+\def\layoutcaption{\def\caption@dir{Z}\captionwidth\z@
+  \def\caption@posa{Z}\def\caption@posb{Z}%
+  \@ifnextchar<\X@layoutcaption{%
+    \@ifnextchar(\@ilayoutcaption{%
+      \@ifnextchar[\@iilayoutcaption\relax}}}
+%
+\def\X@layoutcaption<#1>{\def\caption@dir{#1}%
+  \@ifnextchar(\@ilayoutcaption{%
+    \@ifnextchar[\@iilayoutcaption\relax}}
+%
+\def\@ilayoutcaption(#1){\setlength\captionwidth{#1}%
+  \@ifnextchar[{\@iilayoutcaption}{\relax}}
+%
+\def\@iilayoutcaption[#1#2]{%
+  \def\caption@posa{#1}\def\caption@posb{#2}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\pcaption}
+% \begin{macro}{\@pcaption}
+% キャプションを図表類の天地左右の指定箇所に付けるには|\pcaption|コマンドで
+% 指定をします。位置の指定は|\layoutcaption|コマンドで行ないます。
+% |\layoutcaption|コマンドが省略された場合は、|\DeclareLayoutCaption|コマンド
+% で設定されているデフォルト値が使われます。
+%    \begin{macrocode}
+\def\pcaption{\refstepcounter\@captype \@dblarg{\@pcaption\@captype}}
+%
+\long\def\@pcaption#1[#2]#3{%
+  \addcontentsline{\csname ext@#1\endcsname}{#1}{%
+    \protect\numberline{\csname the#1\endcsname}{\ignorespaces#2}}%
+  \ifvoid\@floatbox
+     \latex@error{Use with `\protect\layoutfloat'.}\@eha
+  \fi
+  \make@pcaptionbox{#3}%
+  \@pboxswfalse
+  \setbox\@tempboxa\vbox{\hbox to\hsize{\if l\float@pos\else\hss\fi
+    \if l\caption@posb\box\@captionbox\kern\captionfloatsep\fi
+    \if t\caption@posa\vtop
+    \else\if b\caption@posa\vbox
+    \else\ifmmode\vcenter \else\@pboxswtrue $\vcenter \fi\fi\fi
+    {\if u\caption@posb\box\@captionbox\kern\captionfloatsep\fi
+     \unvbox\@floatbox
+     \if d\caption@posb\kern\captionfloatsep\box\@captionbox\fi}%
+    \if r\caption@posb\kern\captionfloatsep\box\@captionbox\fi
+    \if@pboxsw \m@th$\fi \if r\float@pos\else\hss\fi}}%
+  \par\vskip.25\baselineskip
+  \box\@tempboxa}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\make@pcaptionbox}
+% キャプションを組み立て、|\@captionbox|を作成します。
+%    \begin{macrocode}
+\def\make@pcaptionbox#1{%
+%    \end{macrocode}
+% まず、デフォルトの設定がされているかを確認します。
+% 設定されていない場合は、警告メッセージを出力し、
+% 現在の組モードでのデフォルト値を使用します。
+% 設定されていれば、そのデフォルト値にします。
+%
+% \changes{v1.1h}{1996/03/13}{typo: \cs{@latex@warning}.}
+%    \begin{macrocode}
+  \expandafter
+  \ifx\csname\@captype @layoutcaption\endcsname\relax
+     \@latex@warning{Default caption layout of `\@captype' unknown.}%
+       \def\caption@dir{Z}\captionwidth\z@
+       \def\caption@posa{Z}\def\caption@posb{Z}%
+  \else
+     \csname \@captype @layoutcaption\endcsname
+  \fi
+%    \end{macrocode}
+% 次に、組み方向を設定します。 
+% 基本組の組み方向とキャプションの組み方向を変える場合には、
+% |\@tempswa|を真とします。文字を回転させるときは|\@rotsw|を真にします。
+%    \begin{macrocode}
+  \@rotswfalse \@tempswafalse
+  \iftdir\if y\caption@dir \let\captiondir\yoko \@tempswatrue
+    \else\if z\caption@dir \let\captiondir\relax \@rotswtrue
+    \else\let\captiondir\tate\fi\fi
+  \else\if t\caption@dir\let\captiondir\tate \@tempswatrue
+    \else\let\captiondir\yoko\fi
+  \fi
+%    \end{macrocode}
+% キャプションを組み立てる前に、まず、キャプション文字列がどの程度の長さを
+% 持っているのかを確認するために、|\hbox|に入れます。
+%    \begin{macrocode}
+  \setbox0\hbox{\if@rotsw $\fi\hbox{\captiondir
+     \captionfontsetup\parindent\z@\inhibitglue
+     \csname fnum@\@captype\endcsname\char\euc"A1A1\relax#1}%
+  \if@rotsw \m@th$\fi}%
+%    \end{macrocode}
+% キャプションの幅に合わせるため、再び、ボックスを組み立てます。
+%
+% キャプションを折り返さなくてもよい場合、|\@tempdima|をキャプションの長さに
+% します。ただし、キャプションの組み方向が基本組の組み方向と異なる場合
+% （|\@tempswa|が真）は、ボックス０の幅ではなく、高さに設定をします。
+% |\captionwidth|の値が、キャプションの幅よりも長い場合、
+% 折り返さなくてはなりませんので、|\@tempdima|を|\captionwidth|にします。
+%    \begin{macrocode}
+  \if@tempswa \@tempdima\ht0 \else\@tempdima\wd0 \fi
+  \ifdim\@tempdima>\captionwidth \@tempdima\captionwidth \fi
+  \@pboxswfalse
+  \setbox0\hbox{\if@rotsw\ifmmode\@rotswfalse \else $\fi\fi
+    \if u\caption@posb\vbox
+    \else\if d\caption@posb\vbox
+    \else\if t\caption@posa\vtop
+    \else\if b\caption@posa\vbox
+    \else\ifmmode\vcenter\else\@pboxswtrue $\vcenter\fi
+    \fi\fi\fi\fi
+    {\hsize\@tempdima\kern\z@
+    \vbox{\captiondir\hsize\@tempdima
+      \captionfontsetup\parindent\z@\inhibitglue
+      \csname fnum@\@captype\endcsname\char\euc"A1A1\relax#1}\kern\z@
+    }\if@pboxsw \m@th$\fi \if@rotsw \m@th$\fi}%
+%    \end{macrocode}
+% 最後に|\@captionbox|を組み立てます。
+%
+% 位置２オプションが`|u|'か`|d|'の場合、
+% このボックスの幅をフロートオブジェクトの幅と同じ長さにし、
+% 位置１オプションでの揃えに組み立てます。
+%
+% 位置２オプションが`|l|'か`|r|'の場合は、キャプションの幅です。
+% このときの位置１オプションの揃えは、この前の段階で準備をしておき、
+% |\@pcaption|で最終的にフロートオブジェクトと組み合わせるときになされます。
+%    \begin{macrocode}
+  \let\to@captionboxwidth\relax
+  \if l\caption@posb \else\if r\caption@posb\else
+  \def\to@captionboxwidth{to\floatwidth}\fi\fi
+  \setbox\@captionbox\hbox\to@captionboxwidth{%
+     \if t\caption@posa\else\hss\fi
+     \unhbox0\relax
+     \if b\caption@posa\else\hss\fi}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%
+% \subsection{段落ボックス環境}
+% minipage環境と|\parbox|コマンドも、tabular環境と同じように、
+% 組方向を指定するオプションを追加してあります。
+% これらのコマンドは、\file{ltbox.dtx}で定義されています。
+%
+% |\parbox|コマンドは幅だけでなく高さも指定できるようになっています。
+% 新しい|\parbox|コマンドについての詳細は、\file{usrguide.tex}を参照
+% してください。
+%
+% \subsubsection*{minipage環境}
+%
+% \begin{macro}{\minipage}
+% 組方向オプションを調べます。
+%    \begin{macrocode}
+\def\minipage{\@ifnextchar<%>
+   {\X@minipage}{\X@minipage<Z>}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\X@minipage}
+% 位置オプションを調べます。
+%    \begin{macrocode}
+\def\X@minipage<#1>{\@ifnextchar[%]
+   {\@iminipage<#1>}{\@iiiminipage<#1>{c}\@empty[s]}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@iminipage}
+% 高さオプションを調べます。
+%    \begin{macrocode}
+\def\@iminipage<#1>[#2]{\@ifnextchar[%]
+   {\@iiminipage<#1>{#2}}{\@iiiminipage<#1>{#2}\@empty[s]}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@iiminipage}
+% 内部位置オプションを調べます。
+%    \begin{macrocode}
+\def\@iiminipage<#1>#2[#3]{\@ifnextchar[%]
+   {\@iiiminipage<#1>{#2}{#3}}{\@iiiminipage<#1>{#2}{#3}[#2]}}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{\@iiiminipage}
+% minipage環境の内部形式です。
+% \changes{v1.1g}{1996/01/12}{\break Grouping \cs{@iiiminipage}}
+% \cs{leavevmode}の後の\cs{bgroup}は、
+% 回転オプションが指定されたときのフラグ|\if@rotsw|が、このマクロの内部だけ
+% で有効になるようにするためです。この括弧は、\cs{endminipage}コマンドで
+% 閉じます。
+%    \begin{macrocode}
+\def\@iiiminipage<#1>#2#3[#4]#5{%
+  \leavevmode\bgroup
+  \setlength\@tempdima{#5}%
+  \def\@mpargs{<#1>{#2}{#3}[#4]{#5}}%
+  \@rotswfalse
+  \iftdir
+    \if #1y\relax\let\box@dir\yoko
+    \else\if #1z\relax\@rotswtrue \let\box@dir\relax
+    \else\let\box@dir\tate
+    \fi\fi
+  \else
+    \if #1t\relax\let\box@dir\tate
+    \else\let\box@dir\yoko
+    \fi
+  \fi
+  \setbox\@tempboxa\vbox\bgroup\box@dir
+    \if@rotsw \hsize\@tempdima\hbox\bgroup$\vbox\bgroup\fi
+%    \end{macrocode}
+% \changes{v1.1c}{1995/09/11}{Add \cs{adjustbaseline}.}
+%    \begin{macrocode}
+    \adjustbaseline
+    \color@begingroup
+      \hsize\@tempdima
+      \textwidth\hsize \columnwidth\hsize
+      \@parboxrestore
+      \def\@mpfn{mpfootnote}\def\thempfn{\thempfootnote}%
+      \c@mpfootnote\z@
+      \let\@footnotetext\@mpfootnotetext
+      \let\@listdepth\@mplistdepth \@mplistdepth\z@
+      \@minipagerestore
+      \global\@minipagetrue %% \global added 24 May 89
+      \everypar{\global\@minipagefalse\everypar{}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\endminipage}
+% minipage環境の終了コマンドです。
+%    \begin{macrocode}
+\def\endminipage{%
+    \par
+    \unskip
+    \ifvoid\@mpfootins\else
+      \vskip\skip\@mpfootins
+      \normalcolor
+      \footnoterule
+      \unvbox\@mpfootins
+    \fi
+    \global\@minipagefalse   %% added 24 May 89
+  \color@endgroup
+  \if@rotsw \egroup\m@th$\egroup\fi
+%    \end{macrocode}
+% \cs{@iiiminipage}で開始したグループを閉じるための\cs{egroup}です。
+%    \begin{macrocode}
+  \egroup
+  \expandafter\@iiiparbox\@mpargs{\unvbox\@tempboxa}\egroup}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection*{\cs{parbox}コマンド}
+%
+% \begin{macro}{\parbox}
+% 組方向オプションを調べます。
+%    \begin{macrocode}
+\def\parbox{\@ifnextchar<%>
+   {\X@parbox}{\X@parbox<Z>}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\X@parbox}
+% 位置オプションを調べます。
+%    \begin{macrocode}
+\def\X@parbox<#1>{\@ifnextchar[%]
+   {\@iparbox<#1>}{\@iiiparbox<#1>{c}\@empty[s]}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@iparbox}
+% 高さオプションを調べます。
+%    \begin{macrocode}
+\def\@iparbox<#1>[#2]{\@ifnextchar[%]
+   {\@iiparbox<#1>{#2}}{\@iiiparbox<#1>{#2}\@empty[s]}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@iiparbox}
+% 内部位置オプションを調べます。
+%    \begin{macrocode}
+\def\@iiparbox<#1>#2[#3]{\@ifnextchar[%]%
+   {\@iiiparbox<#1>{#2}{#3}}{\@iiiparbox<#1>{#2}{#3}[#2]}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@iiiparbox}
+% |parbox|の内部形式です。
+% \changes{v1.1c}{1995/09/11}{Add \cs{adjustbaseline}.}
+% \changes{v1.1c}{1995/10/24}{\break typo \cs{adjustbaesline}.}
+% \changes{v1.1g}{1996/01/12}{\break Grouping \cs{@iiiparbox}}
+% minipage環境と同じようにグルーピングをします。
+% この括弧と対になるのは、このマクロの最後の\cs{egroup}です。
+%    \begin{macrocode}
+\long\def\@iiiparbox<#1>#2#3[#4]#5#6{%
+  \leavevmode\bgroup
+  \setlength\@tempdima{#5}%
+  \fork@parbox@option<#1>[#2]%
+\if@rotsw
+  \@begin@tempboxa\vbox{\box@dir\hsize\@tempdima
+    \hbox{$\vbox{\@parboxrestore\adjustbaseline#6\endgraf}\m@th$}}%
+\else
+  \@begin@tempboxa\vbox{\box@dir
+    \hsize\@tempdima\@parboxrestore\adjustbaseline#6\endgraf}%
+\fi
+    \ifx\@empty#3\relax\else
+      \setlength\@tempdimb{#3}%
+      \def\@parboxto{to\@tempdimb}%
+    \fi
+    \@begin@parbox\@parboxto{\box@dir\adjustbaseline
+       \let\hss\vss\let\unhbox\unvbox
+       \csname bm@#4\endcsname}\@end@parbox
+  \@end@tempboxa\egroup}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\fork@parbox@option}
+% |\parbox|で与えられた第一引数と第二引数の組合せの分岐を行ないます。
+%    \begin{macrocode}
+\def\fork@parbox@option<#1>[#2]{%
+\@rotswfalse
+%    \end{macrocode}
+% 縦組モードのとき：
+%    \begin{macrocode}
+\iftdir
+\if #1y\relax\let\box@dir\yoko
+   \if #2t\relax
+      \def\@begin@parbox{\raise\cdp\vtop\bgroup\kern\z@\vtop}%
+      \let\@end@parbox\egroup
+   \else\if #2b\relax
+      \def\@begin@parbox{\lower\cdp\vbox\bgroup\vbox}%
+      \def\@end@parbox{\kern\z@\egroup}%
+   \else\ifmmode
+      \let\@begin@parbox\vcenter
+      \let\@end@parbox\relax
+   \else
+      \def\@begin@parbox{\hskip\tbaselineshift$\vcenter}%
+      \def\@end@parbox{\m@th$}%
+   \fi\fi\fi
+\else\if #1z\relax\@rotswtrue \let\box@dir\relax
+   \if #2t\relax
+      \def\@begin@parbox{\raise\cdp\vtop\bgroup\kern\z@\vtop}%
+      \let\@end@parbox\egroup
+   \else\if #2b\relax
+      \def\@begin@parbox{\lower\cdp\vbox\bgroup\vbox}%
+      \def\@end@parbox{\kern\z@\egroup}%
+   \else\ifmmode
+      \let\@begin@parbox\vcenter
+      \let\@end@parbox\relax
+   \else
+      \def\@begin@parbox{\hskip\tbaselineshift$\vcenter}%
+      \def\@end@parbox{\m@th$}%
+   \fi\fi\fi
+\else\let\box@dir\tate
+   \if #2t\relax
+      \let\@begin@parbox\vtop
+      \let\@end@parbox\relax
+   \else\if #2b\relax
+      \def\@begin@parbox{\lower\cdp\vbox}%
+      \let\@end@parbox\relax
+   \else\ifmmode
+      \let\@begin@parbox\vcenter
+      \let\@end@parbox\relax
+   \else
+      \def\@begin@parbox{$\vcenter}%
+      \def\@end@parbox{\m@th$}%
+   \fi\fi\fi
+\fi\fi
+%    \end{macrocode}
+% 横組モードのとき：
+%    \begin{macrocode}
+\else
+\if #1t\relax\let\box@dir\tate
+   \if #2t\relax
+      \def\@begin@parbox{\vtop\bgroup\kern\z@\vbox}%
+      \let\@end@parbox\egroup
+   \else\if #2b\relax
+      \def\@begin@parbox{\vbox\bgroup\vbox}%
+      \def\@end@parbox{\kern\z@\egroup}%
+   \else\ifmmode
+      \let\@begin@parbox\vcenter
+      \let\@end@parbox\relax
+   \else
+      \def\@begin@parbox{$\vcenter}%
+      \def\@end@parbox{\m@th$}%
+   \fi\fi\fi
+\else\let\box@dir\yoko
+   \if #2t\relax
+      \let\@begin@parbox\vtop
+      \let\@end@parbox\relax
+   \else\if #2b\relax
+      \let\@begin@parbox\vbox
+      \let\@end@parbox\relax
+   \else\ifmmode
+      \let\@begin@parbox\vcenter
+      \let\@end@parbox\relax
+   \else
+      \def\@begin@parbox{$\vcenter}%
+      \def\@end@parbox{\m@th$}%
+   \fi\fi\fi
+\fi\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection*{\cs{pbox}コマンド}
+%
+% |\pbox|は組み方向を指定できるボックスコマンドです。
+% 次のような構文となっています。
+%
+% |\pbox<|\meta{dir}|>[|\meta{width}|][|\meta{pos}|]{|\meta{obj}|}|
+%
+% \begin{macro}{\pbox}
+% \begin{macro}{\X@makepbox}
+% \begin{macro}{\@imakepbox}
+% オプションを調べます。
+%    \begin{macrocode}
+\def\pbox{\leavevmode\@ifnextchar<{\X@makePbox}{\X@makePbox<Z>}}
+%
+\def\X@makePbox<#1>{%
+  \@ifnextchar[{\@imakePbox<#1>}{\@imakePbox<#1>[-5\p@]}}
+%
+\def\@imakePbox<#1>[#2]{\@ifnextchar[%]
+  {\@iimakePbox<#1>{#2}}{\@iimakePbox<#1>{#2}[c]}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@iimakePbox}
+% |\pbox|の内部形式です。
+% \changes{v1.1i}{2001/05/10}{縦組でzを指定するとエラーになるのを修正。}
+%    \begin{macrocode}
+\def\@iimakePbox<#1>#2[#3]#4{%
+  \bgroup \@rotswfalse \@pboxswfalse
+  \iftdir
+    \if #1y\relax\let\box@dir\yoko
+    \else\if #1z\relax\@rotswtrue \let\box@dir\relax
+    \else\let\box@dir\tate
+    \fi\fi
+  \else
+    \if #1t\relax\let\box@dir\tate
+    \else\let\box@dir\yoko
+    \fi
+  \fi
+  \ifmmode\else\if@rotsw\@pboxswtrue\hbox\bgroup$\fi\fi
+    \ifdim #2 <\z@ \hbox{\box@dir#4}\else
+    \hbox to#2{\box@dir
+               \if #3l\relax\else\hss\fi
+               #4\relax
+               \if #3r\relax\else\hss\fi}\fi
+  \if@pboxsw \m@th$\egroup\fi\egroup}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{作図環境}
+% picture環境も、組方向を指定するオプションを追加してあります。
+% なお、これらのコマンドは、\file{ltpictur.dtx}で定義されています。
+%
+% \begin{macro}{\picture}
+% 組方向オプションを調べます。
+%    \begin{macrocode}
+\def\picture{\@ifnextchar<%>
+   {\X@picture}{\X@picture<Z>}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\X@picture}
+% 図形領域オプションを調べます。
+%    \begin{macrocode}
+\def\X@picture<#1>(#2,#3){\@ifnextchar(%)
+   {\@@picture<#1>(#2,#3)}{\@@picture<#1>(#2,#3)(0,0)}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@@picture}
+% picture環境の内部ではベースラインシフトの値をゼロにします。
+% 以前に設定されていた値は、それぞれ保存され、終了時に、その値に戻されます。
+%    \begin{macrocode}
+\newdimen\save@ybaselineshift
+\newdimen\save@tbaselineshift
+\newdimen\@picwd
+%    \end{macrocode}
+% |\picture|の内部形式です。３組目の引数は、原点座標です。
+%    \begin{macrocode}
+\def\@@picture<#1>(#2,#3)(#4,#5){%
+  \save@ybaselineshift\ybaselineshift
+  \save@tbaselineshift\tbaselineshift
+  \iftdir
+    \if#1y\let\box@dir\yoko
+      \@picwd=#3\unitlength \@picht=#2\unitlength
+      \@tempdima=#5\unitlength \@tempdimb=#4\unitlength
+    \else\let\box@dir\tate
+      \@picwd=#2\unitlength \@picht=#3\unitlength
+      \@tempdima=#4\unitlength \@tempdimb=#5\unitlength
+    \fi
+  \else
+    \if#1t\let\box@dir\tate
+      \@picwd=#3\unitlength \@picht=#2\unitlength
+      \@tempdima=#5\unitlength \@tempdimb=#4\unitlength
+    \else\let\box@dir\yoko
+      \@picwd=#2\unitlength \@picht=#3\unitlength
+      \@tempdima=#4\unitlength \@tempdimb=#5\unitlength
+    \fi
+  \fi
+  \setbox\@picbox\hbox to\@picwd\bgroup\box@dir
+  \hskip-\@tempdima\lower\@tempdimb\hbox\bgroup
+  \ybaselineshift\z@ \tbaselineshift\z@
+  \ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\endpicture}
+% 図形領域の幅と高さを指定の大きさにしてから、出力をします。
+% そして、最後にベースラインシフトの値を元に戻します。
+%    \begin{macrocode}
+\def\endpicture{%
+  \egroup\hss\egroup
+  \ht\@picbox\@picht \wd\@picbox\@picwd \dp\@picbox\z@
+  \mbox{\box\@picbox}%
+  \ybaselineshift\save@ybaselineshift
+  \tbaselineshift\save@tbaselineshift}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\put}
+% \begin{macro}{\line}
+% \begin{macro}{\vector}
+% \begin{macro}{\dashbox}
+% \begin{macro}{\oval}
+% \begin{macro}{\circle}
+% picture環境の内部で、フォントサイズ変更コマンドなどが使用された場合、
+% ベースラインシフト量が新たに設定されてしまうため、
+% これらのコマンドがベースラインシフトの影響を受けないように再定義をします。
+% ベースラインシフトを有効にしたい場合は、|\pbox|コマンドを使用してください。
+%    \begin{macrocode}
+\let\org@put\put
+\def\put{\ybaselineshift\z@\tbaselineshift\z@\org@put}
+%
+\let\org@line\line
+\def\line{\ybaselineshift\z@\tbaselineshift\z@\org@line}
+%
+\let\org@vector\vector
+\def\vector{\ybaselineshift\z@\tbaselineshift\z@\org@vector}
+%
+\let\org@dashbox\dashbox
+\def\dashbox{\ybaselineshift\z@\tbaselineshift\z@\org@dashbox}
+%
+\let\org@oval\oval
+\def\oval{\ybaselineshift\z@\tbaselineshift\z@\org@oval}
+%
+\let\org@circle\circle
+\def\circle{\ybaselineshift\z@\tbaselineshift\z@\org@circle}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+%
+%
+% \subsection{連数字／漢数字／傍点／下線}
+% ここでは、連数字、漢数字、傍点、下線について説明をしています。
+%
+% 連数字と漢数字、および傍点と下線についての詳細は、
+% 『日本語\LaTeXe{}ブック』を参照してください。
+% なお、傍点に使う文字は\file{pldefs.ltx}で定義されています。
+%
+% なお、連数字コマンドは３種類ありましたが、
+% |\rensuji|コマンド一つにまとめました。
+% 新しい連数字コマンドは次の構文となります。
+%
+% \medskip
+% |\rensuji[|\meta{pos}|]|\meta{横に並べる半角文字}
+%
+% |\rensuji*[|\meta{pos}|]|\meta{横に並べる半角文字}
+% \medskip
+%
+% アスタリスク形式の場合は、行間を連数字の幅に合わせて広げません。
+% \meta{pos}は、連数字を揃える位置です。
+% `|c|'（中央揃え）、`|r|'（右寄せ）、`|l|'（左寄せ）を指定できます。
+% デフォルトでは、中央に揃えます。
+%
+% 次のフラグが真の場合には、連数字の幅に合わせて行間を広げ\emph{ません}。
+% アスタリスク形式の場合に真になります。
+%    \begin{macrocode}
+\newif\ifnot@advanceline
+%    \end{macrocode}
+%
+% |\rensujiskip|は連数字の前後に入るアキです。
+% デフォルトは、現在の文字の幅の４分の１を基準にしています。
+%    \begin{macrocode}
+\newskip\rensujiskip
+\rensujiskip=0.25\chs plus.25zw minus.25zw
+%    \end{macrocode}
+%
+% \subsubsection*{連数字}
+%
+% \begin{macro}{\rensuji}
+% \begin{macro}{\@rensuji}
+% \begin{macro}{\@@rensuji}
+% |\rensuji|は、|*|形式かどうかを調べます。
+% |\@rensuji|は、位置オプションを調べます。
+% |\@@rensuji|が|\rensuji|の内部形式です。
+%    \begin{macrocode}
+\DeclareRobustCommand\rensuji{%
+  \@ifstar{\not@advancelinetrue\@rensuji}{\@rensuji}}
+\def\@rensuji{\@ifnextchar[{\@@rensuji}{\@@rensuji[c]}}
+\def\@@rensuji[#1]#2{\ifydir\hbox{#2}\else
+  \hskip\rensujiskip
+  \ifvmode\leavevmode\fi
+  \ifnot@advanceline\not@advancelinefalse\else
+    \setbox\z@\hbox{\yoko#2}%
+    \@tempdima\ht\z@ \advance\@tempdima\dp\z@
+    \if #1c\relax\vrule\@width\z@ \@height.5\@tempdima \@depth.5\@tempdima
+    \else\if #1r\relax\vrule\@width\z@\@height\z@ \@depth\@tempdima
+    \else\vrule\@width\z@ \@height\@tempdima \@depth\z@
+    \fi\fi
+  \fi
+  \if #1c\relax\hbox to1zw{\yoko\hss#2\hss}%
+  \else\if #1r\relax\vbox{\hbox to1zw{\yoko\hss#2}}%
+  \else\vtop{\hbox to1zw{\yoko#2\hss}}%
+  \fi\fi
+  \hskip\rensujiskip
+\fi}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\Rensuji}
+% \begin{macro}{\prensuji}
+% \changes{v1.1d}{1995/11/21}{\cs{Rensuji}, \cs{prensuji}を作成}
+% |\Rensuji|コマンドと|\prensuji|コマンドは、|\rensuji|コマンドで代用でき
+% ます。
+%    \begin{macrocode}
+\let\Rensuji\rensuji
+\let\prensuji\rensuji
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+%
+% \subsubsection*{漢数字}
+%
+% \begin{macro}{\Kanji}
+% \begin{macro}{\@Kanji}
+% \begin{macro}{\kanji}
+% |\Kanji|コマンドを定義します。|\Kanji|コマンドは|\Alpha|と同じように、
+% カウンタに対してのみ使用することができます。
+%
+% |\kanji|コマンドは、後続の半角数字を漢数字にします。
+% |\kanji 1989|のように指定をします。
+% ただし、横組モードのときには、何もしません。
+% つねに漢数字にしたい場合は、|\kansuji|プリミティブを使ってください。
+%
+% \changes{v1.0h}{1996/03/13}{\cs{@Kanji}を追加。英語版と同様にした。}
+%    \begin{macrocode}
+\def\Kanji#1{\expandafter\@Kanji\csname c@#1\endcsname}
+\def\@Kanji#1{\expandafter\kansuji\number #1}
+\def\kanji{\iftdir\expandafter\kansuji\fi}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsubsection*{傍点}
+%
+% \begin{macro}{\boutenchar}
+% \begin{macro}{\bou}
+% |\bou|は、傍点を付けるコマンドです。
+%
+% 傍点として出力する文字は|\boutenchar|に指定します。
+% この文字は、いつでも、横組用フォントが使われます。
+% デフォルトは、EUCコード|A1A2|（\hbox{\yoko 、}）です。
+%    \begin{macrocode}
+\def\boutenchar{\char\euc"A1A2}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\bou#1{\ifvmode\leavevmode\fi\@bou#1\end}
+\def\@bou#1{%
+  \ifx#1\end \let\next=\relax
+  \else
+    \iftdir\if@rotsw
+      \hbox to\z@{\vbox to\z@{\boxmaxdepth\maxdimen
+        \vss\moveleft-0.2zw\hbox{\boutenchar}\nointerlineskip
+        \hbox{\char\euc"A1A1}}\hss}\nobreak#1\relax
+    \else
+      \hbox to\z@{\vbox to\z@{\boxmaxdepth\maxdimen
+        \vss\moveleft0.2zw\hbox{\yoko\boutenchar}\nointerlineskip
+        \hbox{\char\euc"A1A1}}\hss}\nobreak#1\relax
+    \fi\else
+      \hbox to\z@{\vbox to\z@{%
+        \vss\moveleft-0.2zw\hbox{\yoko\boutenchar}\nointerlineskip
+        \hbox{\char\euc"A1A1}}\hss}\nobreak#1\relax
+    \fi
+    \let\next=\@bou
+  \fi\next}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \subsubsection*{下線}
+%
+% \begin{macro}{\kasen}
+% 下線を引くコマンドです。
+% 横組モードのときは、引数を|\underline|に渡します。
+% 縦組モードでも、回転モードの|\parbox|などで使われたときには、
+% やはり引数を|\underline|に渡します。
+% これ以外の場合は、引数の上に直線を引きます。
+%    \begin{macrocode}
+\def\kasen#1{%
+  \ifydir\underline{#1}%
+  \else\if@rotsw\underline{#1}\else
+    \setbox\z@\hbox{#1}\leavevmode\raise.7zw
+    \hbox to\z@{\vrule\@width\wd\z@ \@depth\z@ \@height.4\p@\hss}%
+    \box\z@
+  \fi\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%
+% \subsection{参照番号}
+% 参照番号の類を連数字で出力するように再定義します。
+% itemize環境などのリスト型のラベルについては、jarticleなどの
+% パッケージで定義しています。詳細は、\file{jclasses.dtx}を参照してください。
+%
+% \begin{macro}{\@eqnnum}
+% \begin{macro}{\@thecounter}
+% これらは|\equation|コマンドで作成された数式に付加される番号です。
+% \file{ltmath.dtx}で定義されています。
+%    \begin{macrocode}
+\def\@eqnnum{{\reset@font\rmfamily \normalcolor
+  \iftdir\raise.25zh\hbox{\yoko(\theequation)}%
+  \else (\theequation)\fi}}
+\def\@thecounter#1{\noexpand\rensuji{\noexpand\arabic{#1}}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@thmcounter}
+% |\newtheorem|コマンドで作成した環境で参照されるラベルです。
+% \file{ltthm.dtx}で定義されています。
+%    \begin{macrocode}
+\def\@thmcounter#1{\noexpand\rensuji{\noexpand\arabic{#1}}}
+%</package>
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \Finale
+\endinput

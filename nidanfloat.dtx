@@ -1,0 +1,1074 @@
+% \iffalse
+%% File: nidanfloat.dtx
+%
+% Copyright 1994 ASCII Co.
+%
+% \fi
+% \CheckSum{1657}
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+%
+% \setcounter{StandardModuleDepth}{1}
+%
+% \StopEventually{}
+%
+% \iffalse
+% \changes{v1.10}{1994/04/07}{platex2.09用}
+% \changes{v2.2}{1997/10/22}{platex2e用に修正}
+% \changes{v2.3}{2000/12/20}{一段抜きのフロートを混ぜるとエラーに
+%    なるのを修正（ありがとう、倉沢＠QUIPUさん）}
+% \changes{v2.4}{2001/02/19}{最終ページで左右の行間が揃わない部分を修正}
+% \changes{v2.4}{2001/02/19}{柱が出ないのを修正}
+% \changes{v2.4}{2001/07/23}{ページの大きさが小さくなるのを修正}
+% \changes{v2.5}{2001/09/14}{パッケージオプション(balance,nobalance)を追加}
+% \changes{v2.6}{2003/05/15}{\cs{@fstype}を\cs{@fstyle}とタイプミスしていた
+%    のを修正（ありがとう、川上＠航空宇宙研究所さん）}
+% \changes{v2.7}{2005/12/09}{必須フォーマットファイルをpLaTeX2eからLaTeX2eへ変更}
+% \fi
+%
+% \iffalse
+\NeedsTeXFormat{LaTeX2e}
+%<*driver>
+\ProvidesFile{nidanfloat.dtx}
+%</driver>
+%<core>\ProvidesPackage{nidanfloat}%
+  [2005/12/09 v2.7 Put double-floats at top/bottom within twocolumn mode]
+%
+%<*driver>
+\documentclass{jltxdoc}
+\GetFileInfo{nidanfloat.dtx}
+\title{TOP, BOTTOM指定が可能な２段抜きフロート\\
+  バージョン \space\fileversion}
+\date{作成日：\filedate}
+\author{中野 賢\footnote{株式会社 アスキー 出版技術部
+  （メールアドレス：ken-na at ascii.co.jp）}}
+\begin{document}
+  \maketitle
+  \DocInput{\filename}
+\end{document}
+%</driver>
+% \fi
+%
+% \begin{abstract}
+% \file{nidanfloat}パッケージは、二段組時に段抜きのフロートをページ下部にも
+% 配置可能にする。
+% \end{abstract}
+%
+% \section{コード}
+%
+% \subsection{パッケージオプション}
+% \changes{v2.5}{2001/09/14}{パッケージオプションを追加}
+% \file{nidanfloat}パッケージでは、最終ページの左右カラムの高さを
+% 均一に振り分けるようにしている。しかし、この機能の影響により、
+% 最終ページでの|\newpage|と|\clearpage|コマンドが正しく動作しない。
+% そこで、この機能を使うかどうかを指定するオプションを導入した。
+% パッケージ指定時にオプション``balance''を指定すると、
+% 最終ページの自動調整を行なうようになる。デフォルトでは行なわない。
+%    \begin{macrocode}
+%<*core>
+\DeclareOption{balance}{\AtEndDocument{\let\clearpage\balanceclearpage}}
+\DeclareOption{nobalance}{\relax}
+\ExecuteOptions{nobalance}
+\ProcessOptions
+%    \end{macrocode}
+%
+% \subsection{フロートパラメータ}
+% ここでは、段抜きのフロートをページ下部に置くために作成したパラメータに
+% ついて説明をする。
+%
+% \begin{macro}{\dblbotfraction}
+% ２段組時にページ下部に占めることのできる、二段抜きフロートの割合。
+% デフォルトは0.5、すなわちページ半分を占めることができるようにしている。
+%    \begin{macrocode}
+\newcommand\dblbotfraction{0.5}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\c@dblbotnumber}
+% ページ下部に入れることのできる、二段抜きフロートの数。
+% デフォルトでは、二つの図を置くことができるようにしている。
+% |\c@dblbotnumber|はカウンタ|dblnumber|の内部形式。
+%    \begin{macrocode}
+\newcount\c@dblbotnumber
+\setcounter{dblbotnumber}{2}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@dblbotroom}
+% \begin{macro}{\@dblbotnum}
+% |\@dblbotroom|は、ページ下部に占めることのできる、
+% 二段抜きフロートの割合を示す長さ変数。
+% |\@dblbotnum|は、ページ下部に入れることのできる、
+% 二段抜きフロートの数を保持するカウンタ。
+%    \begin{macrocode}
+\newdimen\@dblbotroom
+\newcount\@dblbotnum
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@dblfloatplacement}
+% 二段組用のフロートパラメータを設定するマクロを、新たに追加したパラメータ
+% も設定するように再定義する。
+%    \begin{macrocode}
+\def\@dblfloatplacement{%
+   \global\@dbltopnum\c@dbltopnumber
+   \global\@dblbotnum\c@dblbotnumber % added
+   \global\@dbltoproom\dbltopfraction\@colht
+   \global\@dblbotroom\dblbotfraction\@colht % added
+   \@textmin\@colht
+     \advance\@textmin-\@dbltoproom
+     \advance\@textmin-\@dblbotroom % added
+   \@fpmin\dblfloatpagefraction\textheight
+   \@fptop\@dblfptop
+   \@fpsep\@dblfpsep
+   \@fpbot\@dblfpbot
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{フロートリストへの登録}
+% 二段抜きフロートの定義は、クラスファイルで、つぎのようにして行なわれる。
+% \begin{verbatim}
+%    \newenvironment{figure*}
+%                   {\@dblfloat{figure}}
+%                   {\end@dblfloat}
+% \end{verbatim}
+% 文章中で|figure*|環境で囲まれた部分は、フロート保持用のリストに登録される。
+% この節では、段抜きフロートをページ下部にも置けるようにするために拡張した
+% マクロについて説明をする。
+%
+% \begin{macro}{\@dblbotlist}
+% \begin{macro}{\L@toplist}
+% \begin{macro}{\R@toplist}
+% \begin{macro}{\L@botlist}
+% \begin{macro}{\R@botlist}
+% 二段組のページ下部に置くフロートを保持するために|\@dblbotlist|を追加する。
+% また、カラムの上下に置くフロート用には、左側と右側で区別をするため、
+% |\L@toplist|, |\R@toplist|, |\L@botlist|, |\R@botlist|を追加する。
+%    \begin{macrocode}
+\gdef\@dblbotlist{}
+\gdef\L@toplist{}
+\gdef\R@toplist{}
+\gdef\L@botlist{}
+\gdef\R@botlist{}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@dblfloat}
+% \begin{macro}{\@dbflt}
+% \begin{macro}{\end@dblfloat}
+% |\@dblfloat|から呼び出される、|\@dbflt|を再定義し、位置指定が省略された
+% ときのパラメータを``tb''とする。また、|\end@dblfloat|を|\end@float|にして、
+% 現在ページの下部にフロートを置けるようにする。
+%    \begin{macrocode}
+\def\@dblfloat{%
+  \if@twocolumn\let\reserved@a\@dbflt\else\let\reserved@a\@float\fi
+  \reserved@a}
+\def\@dbflt#1{\@ifnextchar[{\@xdblfloat{#1}}{\@xdblfloat{#1}[tb]}}
+\def\@xdblfloat#1[#2]{%
+  \@xfloat{#1}[#2]\hsize\textwidth\linewidth\textwidth}
+\let\end@dblfloat\end@float
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\addtocurcol}
+% |\@xdblfloat|から呼び出された、|\@xfloat|は位置指定オプションの評価を行ない、
+% フロートオブジェクトの組み立てを開始する。
+% フロートオブジェクトの組み立ては|\end@float|で終了する。
+% |\end@float|は、ペナルティ値を$-10004$にして|\output|ルーチンを起動する。
+% この値での|\output|ルーチンは|\@specialoutput|を起動する。
+% |\@specialoutput|は|\@addtocurcol|を呼び出し、フロートの内容を現在ページに
+% 出力できるのならば出力をする。そうでなければ、別の可能性を探る。
+%    \begin{macrocode}
+\def\@addtocurcol{%
+%    \end{macrocode}
+% このパッケージの場合、段抜きのフロートが渡される可能性があるので、まず、
+% それをチェックする。フロートの幅がカラム幅よりも大きい場合は、強制的に
+% 段抜きフロートとして扱う。
+%    \begin{macrocode}
+  \ifdim\wd\@currbox>\columnwidth
+    \@addtodblcol
+  \else
+%    \end{macrocode}
+% それ以外の場合は、元の動作とほとんど同じである。
+%    \begin{macrocode}
+    \@insertfalse
+    \@setfloattypecounts
+    \ifnum\@fpstype=8 % is only `!p'
+    \else
+      \ifnum\@fpstype=24 % is only `p'
+      \else
+        \@flsettextmin
+        \advance\@textmin\@textfloatsheight
+        \@reqcolroom\@pageht
+        \ifdim\@textmin>\@reqcolroom \@reqcolroom\@textmin\fi
+        \advance\@reqcolroom\ht\@currbox
+        \ifdim\@colroom>\@reqcolroom
+          \@flsetnum\@colnum
+          \ifnum\@colnum>\z@
+            \@bitor\@currtype\@deferlist
+            \if@test
+            \else
+%    \end{macrocode}
+% ページ下部のフロートを保持しているフロートリストの名前が異なる。
+%    \begin{macrocode}
+              \@bitor\@currtype{\L@botlist\R@botlist}%
+              \if@test
+                \@addtobot
+              \else 
+                \ifodd\count\@currbox
+                  \advance\@reqcolroom\intextsep
+                  \ifdim\@colroom>\@reqcolroom
+                    \global\advance\@colnum\m@ne
+                    \global\advance\@textfloatsheight\ht\@currbox
+                    \global\advance\@textfloatsheight 2\intextsep
+                    \@cons\@midlist\@currbox
+                    \if@nobreak
+                      \nobreak
+                      \@nobreakfalse
+                      \everypar{}%
+                    \else
+                      \addpenalty \interlinepenalty
+                    \fi
+                    \vskip\intextsep
+                    \box\@currbox 
+                    \penalty\interlinepenalty
+                    \vskip\intextsep
+                    \ifnum\outputpenalty<-\@Mii \vskip-\parskip \fi
+                    \outputpenalty\z@ 
+                    \@inserttrue
+                  \fi
+                \fi
+                \if@insert\else\@addtotoporbot\fi
+              \fi
+            \fi
+          \fi
+        \fi
+      \fi
+    \fi
+    \if@insert\else\@resethfps\@cons\@deferlist\@currbox\fi
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@addtotoporbot}
+% フロートを保持しているリスト変数の修正。
+% \changes{v2.3}{2000/12/20}{%
+%    タイプミスの修正と\cs{@flcheckspace}の呼び出しを変更}
+%    \begin{macrocode}
+\def\@addtotoporbot{%
+  \@getfpsbit \tw@
+  \ifodd\@tempcnta
+    \@flsetnum\@topnum
+    \ifnum\@topnum>\z@
+      \@tempswafalse
+      \@flcheckspace\@toproom\@toplist\L@toplist\R@toplist
+      \if@tempswa
+        \@bitor\@currtype{\@midlist\L@botlist\R@botlist}%
+        \if@test\else
+          \if@firstcolumn
+            \@flupdates \@topnum \@toproom \L@toplist
+          \else
+            \@flupdates \@topnum \@toproom \R@toplist
+          \fi
+          \@inserttrue
+        \fi
+      \fi
+    \fi
+  \fi
+  \if@insert\else\@addtobot\fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@addtobot}
+% フロートを保持しているリスト変数の修正。
+% \changes{v2.3}{2000/12/20}{\cs{@flcheckspace}の呼び出しを変更}
+%    \begin{macrocode}
+\def\@addtobot{%
+  \@getfpsbit 4\relax
+  \ifodd\@tempcnta
+    \@flsetnum\@botnum
+    \ifnum\@botnum>\z@
+      \@tempswafalse
+      \@flcheckspace\@botroom\@botlist\L@botlist\R@botlist
+      \if@tempswa
+        \global\maxdepth\z@
+        \if@firstcolumn
+          \@flupdates \@botnum \@botroom \L@botlist
+        \else
+          \@flupdates \@botnum \@botroom \R@botlist
+        \fi
+        \@inserttrue
+      \fi
+    \fi
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\org@addtonextcol}
+% \begin{macro}{\@addtonextcol}
+% 挿入に失敗したフロートや`p'指定のフロートを出力するのに、
+% |\@startcolumn|で用いられる。このパッケージでは、カラム幅よりも大きい幅を
+% 持つフロートに対しては、段抜きフロートリストとして出力するようにしている。
+%    \begin{macrocode}
+\let\org@addtonextcol\@addtonextcol
+\def\@addtonextcol{%
+  \ifdim\wd\@currbox>\columnwidth
+    \@addtodblcol
+  \else
+    \org@addtonextcol
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@addtodblcol}
+% |\@addtodblcol|マクロは、フロートオブジェクトが現在ページに入るかどうか
+% を確認し、入るのであれば|\@addtodbltoporbot|を呼び出す。そうでなければ、
+% |\@dbldeferlist|に登録する。
+%
+% まず|@insert|フラグを偽にする。そして、フロートタイプを|\@fpstype|に得る。
+% フロートタイプが8または24の場合、位置オプションは`!p'か`p'だけであるので、
+% 無条件に|\@dbldeferlist|に加える。
+%    \begin{macrocode}
+\def\@addtodblcol{%
+  \begingroup
+  \@insertfalse
+  \@setfloattypecounts
+  \ifnum\@fpstype=8 % is only `!p'
+  \else
+    \ifnum\@fpstype=24 % is only `p'
+    \else
+%    \end{macrocode}
+% そうでなければ、同タイプのフロートで未出力のものがあるかどうかを確認する。
+% 同タイプのフロートでまだ出力していないものがある場合は、現在のフロートを
+% 出力しない。ただし、同タイプであってもカラム幅のフロートについては考慮
+% しない。出力することができるのならば、|\@addtodblbotortop|を呼び出す。
+%    \begin{macrocode}
+      \@bitor\@currtype{\@dbldeferlist}
+      %\@bitor\@currtype{\@deferlist\@dbldeferlist}
+      \if@test
+      \else
+        \@tempswafalse
+        \@checkdblspace
+        \if@tempswa
+          \@addtodbltoporbot
+        \fi
+      \fi
+    \fi
+  \fi
+  \if@insert\else\@cons\@dbldeferlist\@currbox\fi
+  \endgroup
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@addtodbltoporbot}
+% まず、`t'の指定があるかと、ページ上部に入れる数を越えていないかを確認する。
+%    \begin{macrocode}
+\def\@addtodbltoporbot{%
+  \@getfpsbit \tw@
+  \ifodd\@tempcnta
+    \@flsetnum\@dbltopnum
+    \ifnum\@dbltopnum>\z@
+%    \end{macrocode}
+% そして、ページ上部あるいは下部に同タイプのフロートが出力される可能性が
+% あるのかを調べる。二段組フロートは一段組フロートの上部に置かれることに注意。
+%    \begin{macrocode}
+      \@bitor\@currtype{%
+         \L@toplist\R@toplist\L@botlist\R@botlist\@dblbotlist}
+      \if@test
+      \else
+%    \end{macrocode}
+% 配置可能ならば、出力するだけのスペースがあるのかを確認する。
+%    \begin{macrocode}
+        \@tempswafalse
+        \@dblflcheckspace \@dbltoproom \@dbltoplist
+%    \end{macrocode}
+% スペースがあれば、段抜きフロートが上部に占めることのできる高さから、
+% その分を引く。また、上部に入れる段抜きフロートの数を減らし、
+% 上部段抜き用のフロートリストに登録をする。
+%    \begin{macrocode}
+        \if@tempswa
+          \@tempdima-\ht\@currbox
+          \advance\@tempdima
+           -\ifx\@dbltoplist\@empty \dbltextfloatsep\else\dblfloatsep\fi
+          \global\advance\@dbltoproom\@tempdima
+          \global\advance\@dbltopnum\m@ne
+          \@cons\@dbltoplist\@currbox
+%    \end{macrocode}
+% 左カラムのときは、カラムの高さ|\@colroom|からフロート分を引く。
+%    \begin{macrocode}
+          \if@firstcolumn
+            \advance\@colroom\@tempdima
+            \global\advance\@colroom\maxdepth
+%    \end{macrocode}
+% 右カラムのときは、新規の段抜きフロート分だけでなく、これを挿入すること
+% によって、左カラムから移動してくるテキストの高さも引く。
+%    \begin{macrocode}
+          \else
+            \@tempdima\textheight
+            \@chkdblfloatht\advance\@tempdima-\@floatht
+            \L@chkfloatht\advance\@tempdima-\@floatht
+            \vbadness=\@M \splittopskip=\topskip \splitmaxdepth=\maxdepth
+            \setbox\z@=\vbox{\unvcopy\@leftcolumn}%
+            \setbox\@ne=\vsplit\z@ to\@tempdima
+            \advance\@colroom-\ht\z@
+            \global\advance\@colroom-\dp\z@
+          \fi
+%    \end{macrocode}
+% 最後に、|@inert|フラグを真にする。
+%    \begin{macrocode}
+          \@inserttrue
+        \fi
+      \fi
+    \fi
+  \fi
+  \if@insert\else\@addtodblbot\fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@addtodblbot}
+% ページ下部に段抜きフロートを置くときも、上部と同じである。
+% ただし、二段組フロートは最下部に置かれるので、他の出力用リストを調べる
+% 必要はないことが異なる。
+%    \begin{macrocode}
+\def\@addtodblbot{%
+  \@getfpsbit 4\relax
+  \ifodd\@tempcnta
+    \@flsetnum\@botnum
+    \ifnum\@botnum>\z@
+      \@tempswafalse
+      \@dblflcheckspace \@dbltoproom \@dbltoplist
+      \if@tempswa
+        \@tempdima-\ht\@currbox \advance\@tempdima
+           -\ifx\@dblbotlist\@empty \dbltextfloatsep\else\dblfloatsep\fi
+        \global\advance\@dblbotroom\@tempdima
+        \global\advance\@dblbotnum\m@ne
+        \@cons\@dblbotlist\@currbox
+        \if@firstcolumn
+          \advance\@colroom\@tempdima
+          \global\advance\@colroom\maxdepth
+        \else
+          \@tempdima\textheight
+          \@chkdblfloatht\advance\@tempdima-\@floatht
+          \L@chkfloatht\advance\@tempdima-\@floatht
+          \vbadness=\@M \splittopskip=\topskip \splitmaxdepth=\maxdepth
+          \setbox\z@=\vbox{\unvcopy\@leftcolumn}%
+          \setbox\@ne=\vsplit\z@ to\@tempdima
+          \advance\@colroom-\ht\z@
+          \global\advance\@colroom-\dp\z@
+        \fi
+        \@inserttrue
+      \fi
+    \fi
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{フロートの高さを計算するマクロ}
+%
+% \begin{macro}{\@floatht}
+% |\@floatht|は、出力リストに格納されているフロートの高さを格納するのに用いる。
+%    \begin{macrocode}
+\global\newdimen\@floatht \@floatht\z@
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@flcheckspace}
+% \changes{v2.3}{2000/12/20}{状況別に場合わけするようにした}
+%    \begin{macrocode}
+\def \@flcheckspace #1#2#3#4{%
+   \advance \@reqcolroom
+  \if@twocolumn
+    \if@firstcolumn
+      \ifx #3\@empty \textfloatsep \else \floatsep \fi
+    \else
+      \ifx #4\@empty \textfloatsep \else \floatsep \fi
+    \fi
+  \else
+     \ifx #2\@empty \textfloatsep \else \floatsep \fi
+  \fi
+   \ifdim \@colroom>\@reqcolroom
+     \ifdim #1>\ht\@currbox
+       \@tempswatrue
+     \else
+       \ifnum \@fpstype<\sixt@@n
+         \@tempswatrue
+       \fi
+     \fi
+   \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@dblflcheckspace}
+% 段抜きフロートがページ上部あるいは下部に占めることのできる割合を越えて
+% いないかをチェックする。越えていなければ|\@tempswa|を真にする。
+% \changes{v2.6}{2003/05/15}{\cs{@fstype}を\cs{@fstyle}とタイプミスしていた}
+%    \begin{macrocode}
+\def\@dblflcheckspace#1#2{%
+  \@tempdima=#1\relax
+  \advance\@tempdima
+     -\ifx #2\@empty \dbltextfloatsep\else\dblfloatsep\fi
+  \ifdim\@tempdima>\ht\@currbox
+    \@tempswatrue
+  \else
+    \ifnum\@fpstype<\sixt@@n
+      \advance\@tempdima\@textmin
+      \if \@tempdima>\ht\@currbox
+        \@tempswatrue
+      \fi
+    \fi
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@checkdblspace}
+% 段抜きフロートと段抜きフロート間スペース（あるいは段抜きフロートとテキストと
+% の間のスペース）を入れる余裕があるかを調べる。
+%
+% まず、現在、組み立ててあるテキストの高さと、最小限入らなくてはならない
+% テキストの量とを比較し、大きいほうを|\@tempdima|に格納する。
+% 右カラムにいるときは、左カラムのテキストの高さも加える。
+%    \begin{macrocode}
+\def\@checkdblspace{%
+   \@tempdima\@pageht\advance\@tempdima\@pagedp
+   \@tempdimb\textfraction\@colht
+   \ifdim\@tempdima<\@tempdimb \@tempdima\@tempdimb\fi
+   \if@firstcolumn\else
+     \advance\@tempdima\ht\@leftcolumn
+     \advance\@tempdima\dp\@leftcolumn
+   \fi
+%    \end{macrocode}
+% そして、出力する予定のカラム幅フロートと段抜きフロートの高さを加える。
+% このとき、段抜き用のフロートの高さは二倍する。
+%    \begin{macrocode}
+   \L@chkfloatht\advance\@tempdima\@floatht
+   \R@chkfloatht\advance\@tempdima\@floatht
+   \@chkdblfloatht\advance\@tempdima\tw@\@floatht
+%    \end{macrocode}
+% それから、現在のフロートの高さと必要なスペースを加える。
+% このときも、それらの高さを二倍する。
+%    \begin{macrocode}
+   \@tempdimb\ht\@currbox\advance\@tempdimb\dp\@currbox
+   \advance\@tempdimb
+      \ifdim\@floatht>\z@ \dbltextfloatsep\else\dblfloatsep\fi
+   \multiply\@tempdimb\tw@ \advance\@tempdima\@tempdimb
+%    \end{macrocode}
+% これらすべての要素分の高さが|\textheight|の２倍よりも小さければ、
+% 現在のフロートを置くことができると判断する。
+%    \begin{macrocode}
+   \ifdim\@tempdima>\tw@\textheight
+     \@tempswafalse
+   \else
+     \@tempswatrue
+   \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tmp@comflelt}
+% \begin{macro}{\tmp@comdblflelt}
+% 出力リストに格納されているフロートの高さを計るために用いる。
+% それぞれ、|\@comfelt|, |\@comdblflelt|と同じだが、フロートの内容が
+% 失われないように|\copy|をしているのが異なる。
+%    \begin{macrocode}
+\def\tmp@comflelt#1{%
+  \setbox\@tempboxa
+  \vbox{\unvbox\@tempboxa\copy #1\vskip\floatsep}%
+}
+\def\tmp@comdblflelt#1{%
+  \setbox\@tempboxa
+  \vbox{\unvbox\@tempboxa\copy #1\vskip\dblfloatsep}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\L@chkfloatht}
+% \begin{macro}{\R@chkfloatht}
+% それぞれ、左カラムと右カラムに出力するフロートの高さを計算するのに用いる。
+% 計算結果は|\@floatht|に格納する。
+%    \begin{macrocode}
+\def\L@chkfloatht{\@floatht\z@
+  \ifx\L@toplist\@empty\else
+    \let\@elt\tmp@comflelt\setbox\@tempboxa\vbox{}\L@toplist
+    \setbox\@ne\vbox{\boxmaxdepth\maxdepth
+        \unvbox\@tempboxa\vskip-\floatsep\topfigrule\vskip\textfloatsep
+        }%
+    \let\@elt\relax \advance\@floatht\ht\@ne \advance\@floatht\dp\@ne
+  \fi
+  \ifx\L@botlist\@empty\else
+    \let\@elt\tmp@comflelt\setbox\@tempboxa\vbox{}\L@botlist
+    \setbox\@ne\vbox{\boxmaxdepth\maxdepth
+        \vskip\textfloatsep\botfigrule\unvbox\@tempboxa\vskip-\floatsep
+        }%
+    \let\@elt\relax \advance\@floatht\ht\@ne \advance\@floatht\dp\@ne
+  \fi
+  \global\@floatht\@floatht
+}
+\def\R@chkfloatht{\@floatht\z@
+  \ifx\R@toplist\@empty\else
+    \let\@elt\tmp@comflelt\setbox\@tempboxa\vbox{}\R@toplist
+    \setbox\@ne\vbox{\boxmaxdepth\maxdepth
+        \unvbox\@tempboxa\vskip-\floatsep\topfigrule\vskip\textfloatsep
+        }%
+    \let\@elt\relax \advance\@floatht\ht\@ne \advance\@floatht\dp\@ne
+  \fi
+  \ifx\R@botlist\@empty\else
+    \let\@elt\tmp@comflelt\setbox\@tempboxa\vbox{}\R@botlist
+    \setbox\@ne\vbox{\boxmaxdepth\maxdepth
+        \vskip\textfloatsep\botfigrule\unvbox\@tempboxa\vskip-\floatsep
+        }%
+    \let\@elt\relax \advance\@floatht\ht\@ne \advance\@floatht\dp\@ne
+  \fi
+  \global\@floatht\@floatht
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@chkdblfloatht}
+% ページ上部と下部に出力する段抜きフロートの高さを計算し、
+% 結果を|\@floatht|に格納する。
+%    \begin{macrocode}
+\def\@chkdblfloatht{\@floatht\z@
+  \ifx\@dbltoplist\@empty\else
+    \let\@elt\tmp@comdblflelt\setbox\@tempboxa\vbox{}\@dbltoplist
+    \setbox\@ne\vbox{\boxmaxdepth\maxdepth
+        \unvbox\@tempboxa
+        \vskip-\dblfloatsep
+        \dblfigrule
+        \vskip\dbltextfloatsep
+        }%
+    \let\@elt\relax \advance\@floatht\ht\@ne \advance\@floatht\dp\@ne
+  \fi
+  \ifx\@dblbotlist\@empty\else
+    \let\@elt\tmp@comdblflelt\setbox\@tempboxa\vbox{}\@dblbotlist
+    \setbox\@ne\vbox{\boxmaxdepth\maxdepth
+        \vskip\dbltextfloatsep
+        \dblfigrule
+        \unvbox\@tempboxa
+        \vskip-\dblfloatsep
+        }%
+    \let\@elt\relax \advance\@floatht\ht\@ne \advance\@floatht\dp\@ne
+  \fi
+  \global\@floatht\@floatht
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{フロートとテキストのマージ}
+%
+% \begin{macro}{\@fixht}
+% |\@fixht|は、左カラムの高さを格納するのに用いる。
+%    \begin{macrocode}
+\global\newdimen\@fixht
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@combinefloats}
+% \changes{v2.4}{2001/07/23}{\cs{boxmaxdepth}を\cs{maxdepth}にしないようにした}
+% |@combinefloats|は、カラム単位で、テキストとフロートをマージする。
+% このマクロは右カラムのときに実行する。
+%    \begin{macrocode}
+\def\@combinefloats{%
+  %%\boxmaxdepth\maxdepth
+  \if@twocolumn
+    \if@firstcolumn
+    \else
+%    \end{macrocode}
+% 左カラムのテキスト、上下のカラム幅フロート、上下の段抜きフロートの高さの
+% 合計を|\@fixht|に格納する。
+%    \begin{macrocode}
+      \@fixht\ht\@leftcolumn \advance\@fixht\dp\@leftcolumn
+      \@chkdblfloatht \@tempdima\@floatht
+      \L@chkfloatht \advance\@tempdima\@floatht
+      \advance\@fixht\@tempdima
+%    \end{macrocode}
+% |\@fixht|の高さが|\textheight|よりも大きい場合、テキストを分割し、入らない
+% 部分を右カラムに移す。
+%    \begin{macrocode}
+      \ifdim\@fixht>\textheight
+%    \end{macrocode}
+% 左カラムに残す部分の高さを|\@fixht|に格納する。
+%    \begin{macrocode}
+        \@fixht\textheight
+        \advance\@fixht-\@tempdima
+        \advance\@fixht\maxdepth
+%    \end{macrocode}
+% |\@fixht|分のテキストをボックス０に格納する。
+%    \begin{macrocode}
+        \vbadness=\@M \splittopskip=\topskip \splitmaxdepth=\maxdepth
+        \setbox\z@=\vsplit\@leftcolumn to\@fixht
+%    \end{macrocode}
+% 移動する部分は|\@leftcolumn|に残っているので、
+% それを右カラム（|\@outputbox|）に入れる。
+% また、ボックス０の内容を左カラムに戻す。
+% \changes{v2.4}{2001/02/19}{行間が揃わない部分を修正}
+% \changes{v2.4}{2001/02/19}{柱が出ないのを修正}
+%    \begin{macrocode}
+        \advance\@fixht-\maxdepth
+        \@tempdima\baselineskip \advance\@tempdima-\topskip
+        \setbox\@outputbox=\vbox to\@fixht{%
+            \ifvoid\@leftcolumn
+            \else
+              \unvbox\@leftcolumn\vskip\@tempdima
+            \fi\relax
+            \unvbox\@outputbox\vss}%
+%    \end{macrocode}
+% \changes{v2.5}{2001/09/14}{\cs{vsplit}時、infiniteエラーになるのを修正}
+% |\@leftcolumn|を作成するときに用いていた|\vss|が
+% \begin{verbatim}
+% ! Infinite glue shrinkage found in box being split.
+% \end{verbatim}
+% のエラーを起こすことがあるので削除した。
+%    \begin{macrocode}
+        \setbox\@leftcolumn=\vbox to\@fixht{\unvbox\z@}%
+      \fi
+%    \end{macrocode}
+% 左右、それぞれテキストとカラム幅フロートを組み立てる。
+%    \begin{macrocode}
+      \@fixht\ht\@leftcolumn
+        \advance\@fixht\dp\@leftcolumn \advance\@fixht\@floatht
+      \ifx\L@toplist\@empty\else\L@cflt\fi
+      \ifx\L@botlist\@empty\else\L@cflb\fi
+      \ifx\R@toplist\@empty\else\R@cflt\fi
+      \ifx\R@botlist\@empty\else\R@cflb\fi
+    \fi
+%    \end{macrocode}
+% 二段組でないときは従来どおりの動作をする。
+%    \begin{macrocode}
+  \else
+      \ifx\@toplist\@empty\else\@cflt\fi
+      \ifx\@botlist\@empty\else\@cflb\fi
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\L@cflt}
+% \begin{macro}{\L@cflb}
+% \begin{macro}{\R@cflt}
+% \begin{macro}{\R@cflb}
+% 左カラムと右カラムを組み立てるのに用いる。
+% \changes{v2.3}{2000/12/20}{\cs{gdef}を\cs{global}\cs{let}に変更}
+%    \begin{macrocode}
+\def\L@cflt{%
+  \let\@elt\@comflelt\setbox\@tempboxa\vbox{}\L@toplist
+  \setbox\@leftcolumn\vbox to\@fixht{\boxmaxdepth\maxdepth
+      \unvbox\@tempboxa
+      \vskip-\floatsep\topfigrule\vskip\textfloatsep\unvbox\@leftcolumn
+      \vss}%
+  \let\@elt\relax
+  \xdef\@freelist{\@freelist\L@toplist}\global\let\L@toplist\@empty
+}
+\def\L@cflb{%
+  \let\@elt\@comflelt\setbox\@tempboxa\vbox{}\L@botlist
+  \setbox\@leftcolumn\vbox to\@fixht{\boxmaxdepth\maxdepth
+      \unvbox\@leftcolumn
+      \vskip\textfloatsep\botfigrule\unvbox\@tempboxa\vskip-\floatsep
+      \vss}%
+  \let\@elt\relax
+  \xdef\@freelist{\@freelist\L@botlist}\global\let\L@botlist\@empty
+}
+\def\R@cflt{%
+  \let\@elt\@comflelt\setbox\@tempboxa\vbox{}\R@toplist
+  \setbox\@outputbox\vbox to\@fixht{\boxmaxdepth\maxdepth
+      \unvbox\@tempboxa
+      \vskip-\floatsep\topfigrule\vskip\textfloatsep\unvbox\@outputbox
+      \vss}%
+  \let\@elt\relax
+  \xdef\@freelist{\@freelist\R@toplist}\global\let\R@toplist\@empty
+}
+\def\R@cflb{%
+  \let\@elt\@comflelt\setbox\@tempboxa\vbox{}\R@botlist
+  \setbox\@outputbox\vbox to\@fixht{\boxmaxdepth\maxdepth
+      \unvbox\@outputbox
+      \vskip\textfloatsep\botfigrule\unvbox\@tempboxa\vskip-\floatsep
+      \vss}%
+  \let\@elt\relax
+  \xdef\@freelist{\@freelist\R@botlist}\global\let\R@botlist\@empty
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@combinedblfloats}
+% テキストと段抜きフロートをマージする。このパッケージでは、ページ下部の
+% 段抜きフロートもマージするように拡張している。
+%    \begin{macrocode}
+%\def\@comdblflelt#1{\setbox\@tempboxa
+%      \vbox{\unvbox\@tempboxa\box#1\vskip\dblfloatsep}}
+%
+\def\@combinedblfloats{%
+  \ifx\@dbltoplist\@empty
+  \else
+    \let\@elt\@comdblflelt\setbox\@tempboxa\vbox{}\@dbltoplist
+    \setbox\@outputbox\vbox{\boxmaxdepth\maxdepth
+       \unvbox\@tempboxa
+       \vskip-\dblfloatsep
+       \dblfigrule
+       \vskip\dbltextfloatsep
+       \box\@outputbox}%
+    \let\@elt\relax\xdef\@freelist{\@freelist\@dbltoplist}%
+    \global\let\@dbltoplist\@empty
+  \fi
+  \ifx\@dblbotlist\@empty
+  \else
+    \let\@elt\@comdblflelt\setbox\@tempboxa\vbox{}\@dblbotlist
+    \setbox\@outputbox\vbox{\boxmaxdepth\maxdepth
+       \box\@outputbox
+       \vskip\dbltextfloatsep
+       \dblfigrule
+       \unvbox\@tempboxa
+       \vskip-\dblfloatsep
+       }%
+    \let\@elt\relax\xdef\@freelist{\@freelist\@dblbotlist}%
+    \global\let\@dblbotlist\@empty
+  \fi
+  \global\setbox\@outputbox\vbox to\textheight{\unvbox\@outputbox}%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{二段組の出力}
+%
+% \begin{macro}{\if@balance}
+% 左右のカラムを均等にして出力するかどうかを示すフラグ。
+%    \begin{macrocode}
+\newif\if@balance \@balancefalse
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@outputdblcol}
+% 左右のカラムを連結し、出力するのは|\@outputdblcol|が行なう。
+% このパッケージでは、左右のカラムを均等に分割するためのルーチンを加えてある。
+%    \begin{macrocode}
+\newbox\@combinebox
+%    \end{macrocode}
+% 左カラムを組み立てただけの時点では、それを|\@leftcolumn|に格納するだけで
+% 出力はしない。
+% \changes{v2.4}{2001/02/19}{最終ページで左右の行間が揃わない部分を修正}
+% \changes{v2.4}{2001/02/19}{柱が出ないのを修正}
+%    \begin{macrocode}
+\def\@outputdblcol{%
+  \if@firstcolumn
+    \global\@firstcolumnfalse
+    \global\setbox\@leftcolumn\box\@outputbox
+    \@colht\textheight
+    \@chkdblfloatht\global\advance\@colht-\@floatht
+  \else
+    \global\@firstcolumntrue
+    \if@balance % 左右カラムを均等に分割
+      \@tempdima\baselineskip
+      \advance\@tempdima-\topskip
+      % 連結
+      \setbox\@combinebox=\vbox{%
+          \unvbox\@leftcolumn\vskip\@tempdima\unvbox\@outputbox}%
+      \@tempdima\ht\@combinebox
+      \advance\@tempdima\dp\@combinebox
+      \divide\@tempdima\tw@
+      % 分割
+      \vbadness=\@M \splittopskip=\topskip \splitmaxdepth=\maxdepth
+      \setbox\@leftcolumn=\vsplit\@combinebox to\@tempdima
+      \setbox\@outputbox=\vtop{\unvbox\@combinebox}
+      \setbox\@leftcolumn=\vtop{\unvbox\@leftcolumn}
+    \fi
+    % 整形
+    \@tempdima\ht\@leftcolumn
+    \setbox\@outputbox\vbox to\@tempdima{%
+      \hb@xt@\textwidth{%
+        \hb@xt@\columnwidth{%
+           \vbox to\@tempdima{\box\@leftcolumn\vss}\hss}%
+        \hfil
+        \vrule width\columnseprule
+        \hfil
+        \hb@xt@\columnwidth{%
+           \vbox to\@tempdima{\box\@outputbox\vss}\hss}%
+      }%
+      \vss
+    }%
+    \@combinedblfloats
+    \@outputpage
+    \begingroup
+      \@dblfloatplacement
+      \@startdblcolumn
+      \@whilesw\if@fcolmade \fi{\@outputpage\@startdblcolumn}%
+    \endgroup
+  \fi
+  \global\@balancefalse
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@startdblcolumn}
+% 二段組を開始するとき、まだ出力をしていないフロートを出力する。
+% それらは|\sdblcolelt|を通じて、|\@addtonextcol|で出力される。
+% このパッケージでは、カラムの高さを|\textheight|からフロートの高さを
+% 引いたものに設定するように再定義する。
+%    \begin{macrocode}
+\def\@startdblcolumn{%
+  \global\@colht\textheight
+  \@tryfcolumn\@dbldeferlist
+  \if@fcolmade
+  \else
+    \begingroup
+      \let\reserved@b\@dbldeferlist
+      \global\let\@dbldeferlist\@empty
+      \let\@elt\@sdblcolelt
+      \reserved@b
+    \endgroup
+  \fi
+  \@chkdblfloatht
+  \global\advance\@colht-\@floatht
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@doclearpage}
+% 出力フロート用リストの初期化をするために、|\@doclearpage|を再定義する。
+%    \begin{macrocode}
+\def\@doclearpage{%
+  \ifvoid\footins
+    \setbox\@tempboxa\vsplit\@cclv to\z@ \unvbox\@tempboxa
+    \setbox\@tempboxa\box\@cclv
+    \xdef\@deferlist{%
+       \L@toplist\R@toplist\L@botlist\R@botlist\@deferlist}%
+    \global\let\L@toplist\@empty % changed from \@toplist
+    \global\let\R@toplist\@empty % added
+    \global\let\L@botlist\@empty % changed from \@botlist
+    \global\let\R@botlist\@empty % added
+    \global\@colroom\@colht
+    \ifx\@currlist\@empty
+    \else
+      \@latexerr{Float(s) lost}\@ehb
+        \global\let\@currlist\@empty
+    \fi
+    \@makefcolumn\@deferlist
+    \@whilesw\if@fcolmade \fi{\@opcol\@makefcolumn\@deferlist}%
+    \if@twocolumn
+      \if@firstcolumn
+        % added \@dblbotlist
+        \xdef\@dbldeferlist{\@dbltoplist\@dblbotlist\@dbldeferlist}%
+        \global\let\@dbltoplist\@empty
+        \global\let\@dblbotlist\@empty % added
+        \global\@colht\textheight
+        \begingroup
+          \@dblfloatplacement
+          \@makefcolumn\@dbldeferlist
+          \@whilesw\if@fcolmade \fi{\@outputpage
+                                    \@makefcolumn\@dbldeferlist}%
+        \endgroup
+      \else
+        \vbox{}\clearpage
+      \fi
+    \fi
+  \else
+    \setbox\@cclv\vbox{\box\@cclv\vfil}%
+    \@makecol\@opcol
+    \clearpage
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@topnewpage}
+% |\@dblbotroom|と|dblbotnumber|を初期化するために|\@topnewpage|を再定義する。
+%    \begin{macrocode}
+\long\def\@topnewpage[#1]{%
+  %\@nodocument
+  \@next\@currbox\@freelist{}{}%
+  \global\setbox\@currbox
+    \color@vbox
+      \normalcolor
+      \vbox{\hsize\textwidth
+            \@parboxrestore
+            \col@number\@ne
+            #1%
+            \vskip-\dbltextfloatsep}%
+    \color@endbox
+  \ifdim\ht\@currbox>\textheight
+    \ht\@currbox\textheight
+  \fi
+  \global\count\@currbox\tw@
+  \@tempdima-\ht\@currbox
+  \advance\@tempdima-\dbltextfloatsep
+  \global\advance\@colht\@tempdima
+  \ifx\@dbltoplist\@empty
+  \else
+    \@latexerr{Float(s) lost}\@ehb
+    \let\@dbltoplist\@empty
+  \fi
+  \@cons\@dbltoplist\@currbox
+  \global\@dbltopnum\m@ne
+  \global\@dblbotnum\m@ne % added
+  \ifdim\@colht<2.5\baselineskip
+    \@latex@warning@no@line {Optional argument of \noexpand\twocolumn
+          too tall on page \thepage}%
+    \@emptycol
+    \if@firstcolumn
+    \else
+      \@emptycol
+    \fi
+  \else
+    \global\vsize\@colht
+    \global\@colroom\@colht
+    \@floatplacement
+  \fi
+  %\global\@dbltoproom\maxdimen
+  %\global\@dblbotroom\maxdimen
+  %\@addtodblcol
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\balancenewpage}
+% \begin{macro}{\balanceclearpage}
+% テキストを均等に分割して出力するためのマクロ。
+% ただし、このマクロを用いた場合、そのページ内での|\newpage|や
+% |\clearpage|コマンドが無効になることに注意。
+%    \begin{macrocode}
+\def\balancenewpage{\par\vfil\global\@balancetrue\penalty-\@M}
+\def\balanceclearpage{\balancenewpage
+    \write\m@ne{}\vbox{}\global\@balancetrue\penalty-\@Mi}
+\endinput
+%</core>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \Finale
+%
+% \endinput

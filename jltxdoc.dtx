@@ -1,0 +1,197 @@
+% \iffalse meta-comment
+%% File: jltxdoc.dtx
+%
+%  Copyright 1995,1996,1997  ASCII Corporation.
+%
+%  This file is part of pLaTeX2e system.
+%  -------------------------------------
+%
+% \fi
+%
+% \CheckSum{150}
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+%
+% \setcounter{StandardModuleDepth}{1}
+% \StopEventually{}
+%
+% \iffalse
+% \changes{v1.0a}{1997/01/23}{\LaTeX \texttt{!<1996/12/01!>}への対応に
+%     合わせて修正}
+% \changes{v1.0b}{1997/07/29}{\cs{}と\texttt{"}の\cs{xspcode}を変更}
+% \fi
+%
+% \iffalse
+%<class>
+%<class>\NeedsTeXFormat{pLaTeX2e}
+%<class>\ProvidesClass{jltxdoc}[1997/07/29 v1.0b Standard pLaTeX file]
+%<*driver>
+\documentclass{jltxdoc}
+\GetFileInfo{jltxdoc.cls}
+\title{p\LaTeXe{}ドキュメント記述用クラス\space\fileversion}
+\author{Ken Nakano}
+\date{作成日：\filedate}
+\begin{document}
+   \maketitle
+   \DocInput{jltxdoc.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \file{jltxdoc}クラスは、\file{ltxdoc}をテンプレートにして、日本語用の
+% 修正を加えています。
+%    \begin{macrocode}
+%<*class>
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{ltxdoc}}
+\ProcessOptions
+\LoadClass{ltxdoc}
+%    \end{macrocode}
+%
+% \begin{macro}{\normalsize}
+% \begin{macro}{\small}
+% \begin{macro}{\parindent}
+% \changes{v1.0a}{1997/01/23}{\cs{normalsize}, \cs{small}などの再定義}
+% \file{ltxdoc}からロードされる\file{article}クラスでの行間などの設定値で、
+% 日本語の文章を組版すると、行間が狭いように思われるので、多少広くするように
+% 再設定します。また、段落先頭での字下げ量を全角一文字分とします。
+%    \begin{macrocode}
+\renewcommand{\normalsize}{%
+    \@setfontsize\normalsize\@xpt{15}%
+  \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
+  \abovedisplayshortskip \z@ \@plus3\p@
+  \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
+   \belowdisplayskip \abovedisplayskip
+   \let\@listi\@listI}
+\renewcommand{\small}{%
+  \@setfontsize\small\@ixpt{11}%
+  \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
+  \abovedisplayshortskip \z@ \@plus2\p@
+  \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+  \def\@listi{\leftmargin\leftmargini
+              \topsep 4\p@ \@plus2\p@ \@minus2\p@
+              \parsep 2\p@ \@plus\p@ \@minus\p@
+              \itemsep \parsep}%
+  \belowdisplayskip \abovedisplayskip}
+\normalsize
+\setlength\parindent{1zw}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\file}
+% |\file|マクロは、ファイル名を示すのに用います。
+%    \begin{macrocode}
+\providecommand*{\file}[1]{\texttt{#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pstyle}
+% |\pstyle|マクロは、ページスタイル名を示すのに用います。
+%    \begin{macrocode}
+\providecommand*{\pstyle}[1]{\textsl{#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Lcount}
+% |\Lcount|マクロは、カウンタ名を示すのに用います。
+%    \begin{macrocode}
+\providecommand*{\Lcount}[1]{\textsl{\small#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Lopt}
+% |\Lopt|マクロは、クラスオプションやパッケージオプションを示すのに用います。
+%    \begin{macrocode}
+\providecommand*{\Lopt}[1]{\textsf{#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\dst}
+% |\dst|マクロは、``\dst''を出力する。
+%    \begin{macrocode}
+\providecommand\dst{{\normalfont\scshape docstrip}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\NFSS}
+% |\NFSS|マクロは、``\NFSS''を出力します。
+%    \begin{macrocode}
+\providecommand\NFSS{\textsf{NFSS}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\c@clineno}
+% \begin{macro}{\mlineplus}
+% |\mlineplus|マクロは、その時点でのマクロコードの行番号に、引数に指定された
+% 行数だけを加えた数値を出力します。たとえば|\mlineplus{3}|とすれば、
+% 直前のマクロコードの行番号(\arabic{CodelineNo})に3を加えた数、
+% ``\mlineplus{3}''が出力されます。
+%    \begin{macrocode}
+\newcounter{@clineno}
+\def\mlineplus#1{\setcounter{@clineno}{\arabic{CodelineNo}}%
+   \addtocounter{@clineno}{#1}\arabic{@clineno}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{environment}{tsample}
+% |tsample|環境は、環境内に指定された内容を罫線で囲って出力をします。
+% 第一引数は、出力するボックスの高さです。
+% \file{plext.dtx}の中で使用しています。
+% このマクロ内では縦組になることに注意してください。
+%    \begin{macrocode}
+\def\tsample#1{%
+  \hbox to\linewidth\bgroup\vrule width.1pt\hss
+    \vbox\bgroup\hrule height.1pt
+      \vskip.5\baselineskip
+      \vbox to\linewidth\bgroup\tate\hsize=#1\relax\vss}
+\def\endtsample{%
+      \vss\egroup
+      \vskip.5\baselineskip
+    \hrule height.1pt\egroup
+  \hss\vrule width.1pt\egroup}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{macro}{\DisableCrossrefs}
+% \begin{macro}{\EnableCrossrefs}
+% \file{jclasses.dtx}を処理するときに、|\if西暦|の部分でエラーになるため、
+% 一時的にクロスリファレンスの機能をオフにします。
+% しかし、デフォルトの定義では完全に制御できないので、ここで再定義をします。
+%    \begin{macrocode}
+\def\DisableCrossrefs{\@bsphack\scan@allowedfalse\@esphack}
+\def\EnableCrossrefs{\@bsphack\scan@allowedtrue
+   \def\DisableCrossrefs{\@bsphack\scan@allowedfalse\@esphack}\@esphack}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\xspcode}
+% コマンド名の|\|と16進数を示すための|"|の前にもスペースが入るよう、
+% これらの|\xspcode|の値を変更します。
+% \changes{v1.0b}{1997/07/29}{\cs{}と\texttt{"}の\cs{xspcode}を変更}
+%    \begin{macrocode}
+\xspcode"5C=3 %% \
+\xspcode"22=3 %% "
+%</class>
+%    \end{macrocode}
+% \end{macro}
+%
+% \Finale
+%
+\endinput

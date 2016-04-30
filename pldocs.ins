@@ -1,0 +1,14 @@
+\input docstrip
+\keepsilent
+\ifToplevel{\askonceonly}
+\usedir{tex/platex/base}
+
+\Msg{*** Generating the pLaTeX files for making the documents ***}
+
+\generate{
+    \file{jltxdoc.cls}{\from{jltxdoc.dtx}{class}}
+    \file{pldoc.tex}{\from{platex.dtx}{pldoc}}
+    \file{Xins.ins}{\from{platex.dtx}{Xins}}
+}
+
+\endbatchfile

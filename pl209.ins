@@ -1,0 +1,22 @@
+\input docstrip
+\keepsilent
+\ifToplevel{\askonceonly}
+\usedir{tex/platex/base}
+
+\Msg{*** Generating the pLaTeX compatibility mode files ***}
+
+\generate{
+    \file{pl209.def}{\from{pl209.dtx}{pl209}}
+    \file{oldpfont.sty}{\from{pl209.dtx}{oldfonts}}
+}
+
+\generate{
+    \file{jarticle.sty}{\from{pl209.dtx}{style,jarticle}}
+    \file{tarticle.sty}{\from{pl209.dtx}{style,tarticle}}
+    \file{jbook.sty}{\from{pl209.dtx}{style,jbook}}
+    \file{tbook.sty}{\from{pl209.dtx}{style,tbook}}
+    \file{jreport.sty}{\from{pl209.dtx}{style,jreport}}
+    \file{treport.sty}{\from{pl209.dtx}{style,treport}}
+}
+
+\endbatchfile

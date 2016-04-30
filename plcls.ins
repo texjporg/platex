@@ -1,0 +1,38 @@
+\input docstrip
+\keepsilent
+\ifToplevel{\askonceonly}
+\usedir{tex/platex/base}
+
+\Msg{*** Generating the pLaTeX class files ***}
+
+%
+% 横組用クラスファイル
+%
+\generate{
+    \file{jarticle.cls}{\from{jclasses.dtx}{article,yoko}}
+    \file{jreport.cls}{\from{jclasses.dtx}{report,yoko}}
+    \file{jbook.cls}{\from{jclasses.dtx}{book,yoko}}
+    \file{jsize10.clo}{\from{jclasses.dtx}{10pt,yoko}}
+    \file{jsize11.clo}{\from{jclasses.dtx}{11pt,yoko}}
+    \file{jsize12.clo}{\from{jclasses.dtx}{12pt,yoko}}
+    \file{jbk10.clo}{\from{jclasses.dtx}{10pt,bk,yoko}}
+    \file{jbk11.clo}{\from{jclasses.dtx}{11pt,bk,yoko}}
+    \file{jbk12.clo}{\from{jclasses.dtx}{12pt,bk,yoko}}
+}
+
+%
+% 縦組用クラスファイル
+%
+\generate{
+    \file{tarticle.cls}{\from{jclasses.dtx}{article,tate}}
+    \file{treport.cls}{\from{jclasses.dtx}{report,tate}}
+    \file{tbook.cls}{\from{jclasses.dtx}{book,tate}}
+    \file{tsize10.clo}{\from{jclasses.dtx}{10pt,tate}}
+    \file{tsize11.clo}{\from{jclasses.dtx}{11pt,tate}}
+    \file{tsize12.clo}{\from{jclasses.dtx}{12pt,tate}}
+    \file{tbk10.clo}{\from{jclasses.dtx}{10pt,bk,tate}}
+    \file{tbk11.clo}{\from{jclasses.dtx}{11pt,bk,tate}}
+    \file{tbk12.clo}{\from{jclasses.dtx}{12pt,bk,tate}}
+}
+
+\endbatchfile

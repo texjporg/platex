@@ -1,0 +1,299 @@
+<2006/11/10>
+  * plfonts.dtx: $a^\mathrm{b}, a_\mathrm{b}$のような記述をした場合に
+      エラーになる問題に対処。（ありがとうございます、ymtさん）
+  * jclasses.dtx: 解説を追加。（ありがとうございます、ymtさん）
+----------------
+<2006/06/27>
+  * plfonts.dtx: \reDeclareMathAlphabetをLaTeX <2005/12/01>で数式用書
+      体変更命令がrubustになったのに対応。（ありがとうございます、ymtさん）
+  * jclasses.dtx: pLaTeX 209互換モードで数式famが重複使用されていたの
+      を解消。（ありがとうございます、ymtさん）
+  * tascmac.sty: itembox,screen環境で罫線がずれるバグを修正。
+      （ありがとうございます、北見さん）
+----------------
+<2006/01/04>
+  * nidanfloat.dtx: 必須フォーマットファイルをpLaTeX2eからLaTeX2eへ変更。
+  * plfonts.dtx: \DeclareFontEncoding@ 中で \LastDeclaredEncodeng の再定義が
+      抜けていたので追加。
+  * plvers.dtx: バージョン番号更新(platex<2006/01/04>)
+----------------
+<2005/01/04>
+  * plfonts.dtx: \fontfamily中のフラグを修正。
+      （ありがとうございます、角藤さん）
+  * plvers.dtx: バージョン番号更新(platex<2005/01/04>)
+----------------
+<2004/08/10>
+  * plfonts.dtx: verbatim環境で余計な前後空きが発生しないように \fontfamily
+      を修正。
+      （ありがとうございます、本田さん）
+  * plfonts.dtx: JY1,JT1以外の和文エンコーディングも使用できるように修正。
+      （ありがとうございます、井上さん）
+  * jclasses.dtx: \part, \chapter の \@afterindentfalse を \@afterindenttrue
+      に変更。
+  * jclasses.dtx: \section, \subsection, \subsubsection の前後空きの
+      伸縮幅を修正。
+      （ありがとうございます、鈴木た＠MILNさん）
+  * LaTeX2e 2003/12/01 版への対応を確認。
+----------------
+<2002/04/09>
+  * jclasses.dtx: 縦組スタイルで \flushbottom しないようにした。
+----------------
+<2002/04/05>
+  * plfonts.dtx: |\adjustbaseline|の|\iftdir|の位置を、和文フォントの基
+      準値を設定した後に移動。（ありがとう、奥村さん）
+----------------
+<2002/04/01>
+  * tascmac.sty: \ascii, \Ascii, \ASCII マクロがエラーになっていたのを修正。
+----------------
+<2002/01/17>
+  * plvers.dtx: v1.0i の更新日付が 2009 年になっていたのを 2001 に修正。
+  		LaTeX のバージョンも 2000 になっていたのを 2001 に修正。
+----------------
+<2001/10/04>
+  * jclasses.dtx: 目次で出力されるページ番号の書体を|\normalfont|に変更
+     （ありがとう、鈴木た＠MILNさん）
+  * plnews07.tex: 上記の変更の記述を追加
+----------------
+<2001/09/26>
+  * plnews07.tex: 追加
+  * plvers.dtx: LaTeX <2001/06/01> 用に修正
+  * plcore.dtx: LaTeX <2001/06/01> 用に修正
+  * plext.dtx: タグ名を plcore から package に変更
+  * plfmt.ins: plext.dtx の展開に用いるタグ名の変更
+----------------
+<2001/09/14>
+  * nidanfloat.dtx: パッケージオプション(balance, nobalance)を追加
+----------------
+<2001/09/04>
+  * README.txt: 使用条項を削除（ptex-texmf の COPYRIGHT を採用）
+  * Copyright: 削除（ptex-texmf の COPYRIGHT を採用）
+  * plvers.dtx: pLaTeX <2001/09/04> 用に修正
+  * plpatch.ltx: pLaTeX <2001/09/04> 用に修正
+  * plcore.dtx: \enlargethispage を使ったとき、脚注の線が本文と重なるのを修正
+  * jclasses.dtx: \chapter コマンドをアスタリスク形式で使ったときと
+      そうでないときで、出力位置が異なるのを修正（ありがとう、鈴木＠津さん）
+----------------
+<2001/05/10>
+  * plext.dtx: 縦組のとき z オプションでエラーが出るのを修正
+    （ありがとう、大石さん）
+  * plfonts.dtx: ベースラインシフトの調整値が大きくなっているのを修正
+----------------
+<2001/02/19>
+  * nidanfloat.dtx: 最終ページで左右の行間が揃わないのを修正
+  * nidanfloat.dtx: 柱が出ないのを修正
+----------------
+<2000/12/20>
+  * nidanfloat.dtx: 一段抜きのフロートを混ぜるとエラーになるのを修正
+    （ありがとう、倉沢＠QUIPUさん）
+----------------
+<2000/11/03>
+  * plvers.dtx: LaTeX <2000/06/01> に合わせて修正。
+  * plpatch.ltx: pLaTeX<2000/11/03> 用に修正。
+----------------
+<2000/10/24>
+  * plfonts.dtx: \adjustbaselineで余分なアキが入らないようにした
+----------------
+<2000/07/14>
+  * plfonts.dtx: \textbf などの書体変更コマンドで、左端の欧文との間に
+    \xkanjiskip が入らないのを修正（ありがとう、乙部＠東大さん）
+----------------
+<2000/07/13>
+  * nidanfloat.{dtx,ins,sty} を追加。
+----------------
+<2000/02/29>
+  * plvers.dtx: LaTeX <1999/12/01> に合わせて修正。
+  * plpatch.ltx: pLaTeX<2000/02/29> 用に修正。
+----------------
+<1999/05/18>
+  * jclasses.dtx: enumerate 
+----------------
+<1999/04/05>
+  * plvers.dtx: LaTeX <1998/12/01> に合わせて修正。
+    pLaTeX のバージョンを <1999/04/05> にした。
+  * plfonts.dtx: 文書の先頭で、和文デフォルトフォントの変更が反映
+    されないのを修正（ありがとう、山本＠理科大さん）。
+  * plcore.dtx: \\ にオプションを付けたときに余計なスペースが出力
+    されてしまうのを修正（ありがとう、鈴木＠京大さん）。
+  * plpatch.ltx: pLaTeX<1999/04/05> 用に修正。
+  * README.txt: バージョンの変更
+  * plnews05.txt: 新規追加
+----------------
+<1999/01/27>
+  * docstrip.cfg: 削除
+----------------
+<1998/09/01>
+  * plvers.dtx: pLaTeX バージョンを <1998/09/01> とした。
+  * plpatch.ltx: pLaTeX <1998/09/01> 用に修正。
+----------------
+<1998/08/10>
+  * plfonts.dtx: \DeclareFixedFont コマンドが \@onlypreambre になっていた
+    のを修正した。
+  * plnews.cls: itemize環境を再定義
+----------------
+<1998/04/09>
+  * jclasses.dtx: \rightmark コマンドの引数に \today コマンドを修正した
+    とき、出力される日付が「平成元年」になってしまうのを修正
+	（pl980409.patch）。
+----------------
+<1998/03/23>
+  * jclasses.dtx: report, book クラスで、番号の付かない見出しレベルの
+    ペナルティを \@M に修正した（pl980323.patch）。
+----------------
+<1998/02/27>
+  * tascmac.sty: calc パッケージとともに用いたとき、screen 環境、
+    itembox 環境、boxnote 環境がエラーになるのを修正（pl980227.patch）。
+----------------
+<1998/02/03>
+  * All: LaTeX <1997/12/01> に対応した。
+  * hyphen.cfg ファイルを追加した。
+  * Copyright ファイルを追加した。
+  * jclasses.dtx: 2eモード時のa5pのトップマージンを0.7in増やした。
+----------------
+<1997/12/12>
+  * jclasses.dtx: [j,t]report, [j,t]bookクラスで oneside オプションを指定し、
+    bothstyle スタイルにすると、コンパイルエラーになるのを修正。
+----------------
+<1997/09/03>
+  * jclasses.dtx: 2.09互換モードで landscape オプションが効かないのを修正。
+  * jclasses.dtx: landscape 時に、縦横のサイズを交換してから、左右マージン
+    などを計算するように変更。
+----------------
+<1997/08/25>
+  * jclasses.dtx: 片面印刷のとき、section レベルの文字列が柱に出力されない
+    のを修正。
+----------------
+<1997/07/29>
+  * jltxdoc.dtx: \ と " の前にも \xkanjiskip が入るように修正。
+----------------
+<1997/07/10>
+  * plfonts.dtx: fdファイル名の小文字化が効いていなかったのを修正。
+----------------
+<1997/07/08>
+  * jclasses.dtx: 縦組クラスで、書体サイズを変更したとき、ベースラインが
+    おかしくなるのを修正。
+----------------
+<1997/07/02>
+  * plnews02.tex: 項目の移動と記述内容の修正。
+----------------
+<1997/06/25>
+  * plcore.dtx: オリジナルの LaTeX2e の改行マクロの変更に対応。
+  * plfonts.dtx, pl209.dtx:  \em, \emph で和文書体も変更するように修正。
+  * plnews02.tex: 上記 2つの修正について記述。
+----------------
+<1997/04/24>
+  * plfonts.dtx: フォント定義ファイル名を小文字に変換してから探すようにした。
+----------------
+<1997/04/09>
+  * plfonts.dtx: 縦横エンコード・リストの分離による拡張
+----------------
+<1997/04/08>
+  * jclasses.dtx: 横組クラスでのトップマージンの値を修正した。
+  * plfonts.dtx: 和文エンコード関連の修正
+  * plfonts.dtx: 和文エンコード宣言コマンドを縦組用と横組用で分けるようにした。
+  * plnews02.tex (NEW): 前回からの変更をまとめた文書ファイル。
+----------------
+<1997/03/11>
+  * plfonts.dtx: 和文フォントをすべてのサイズでロードできるようにした。
+----------------
+<1997/02/24>
+  * pl209.dtx: \RequirePackage{oldlfonts} を \RequirePackage{oldlfonts} に
+    修正。
+  * jclasses.dtx: 縦組クラスの \thefigure の \if 文の対応がおかしいのを修正。
+  * jclasses.dtx: 縦組クラスの表紙を縦組にした。
+----------------
+<1997/02/02>+2
+  * jclasses.dtx: \topmargin の計算を間違えていたのを修正。
+  * jclasses.dtx: 縦組クラスで開始ページがおかしくなるのを修正。
+----------------
+<1997/02/02>+1
+  * jclasses.dtx: disablejfam オプションの処理で、互換モードかそうでないかの
+    判断が逆なのを修正。
+  * plnews01.tex: \mathrm, \mathbf の部分の記述を修正
+----------------
+<1997/02/01>
+  * plnews.cls (NEW): plnews01tex 用のクラスファイルを作成した。
+  * plnews01.tex (NEW): 前回からの変更をまとめた文書ファイル。
+----------------
+<1997/01/31>
+  * plcore.dtx: 下付き文字を出力する \textsubscript コマンドを削除。
+  * plfonts.dtx: 数式文字フォントの設定をクラスファイルに移動。
+  * plfonts.dtx: 和欧文の数式文字フォントを一度に切り替えるためのコマンドを
+    定義する、\reDeclareMathAlphabet コマンドを追加。
+  * jclasses.dtx: 数式文字フォントの設定を追加。
+  * jclasses.dtx: 日本語ファミリを宣言しないオプション（disablejfam）を
+    2e モードでだけ指定可能にした。
+----------------
+<1997/01/30>
+  * README.euc: ltxcheck による確認時の記述を追加
+  * plcore.dtx: 下付き文字を出力する \textsubscript コマンドを追加。
+  * plfonts.dtx: \mathrm, \mathbf を和欧文フォントを切り替えるように拡張。
+  * jclasses.dtx: 2eモードで、通常よりテキスト領域を広くとる設定を a4j
+    などのオプション指定時に有効になるように修正した。
+  * jclasses.dtx: \thefigure の定義内、\c@chapter のタイプミス修正。
+  * pl209.dtx: 互換モードでの \rm や \tt のような二文字の書体変更コマンド
+    の動作を pLaTeX 2.09 での動作と同じにした。
+----------------
+<1997/01/29>
+  * jclasses.dtx: 日本語ファミリの宣言をしないオプション（disablejfam）
+    を追加。
+  * jclasses.dtx: labelitemii で \fi していないのと \bfseries の
+    タイプミスを修正。
+  * jclasses.dtx: \documentclass 時のレイアウトを少し広げた。
+  * pl209.dtx, jclasses.dtx, plfonts.dtx: 数式モード内で \rm, \bf コマンド
+    でローマン体、ボールド体にならないバグを修正。
+----------------
+<1997/01/26>
+  * All: 変更履歴の説明を mendex で処理できるように修正。
+  * README.euc: EC フォントの記述を追加した。
+  * platex.dtx: pldoc.ind を作成するための mendex 辞書ファイルを
+    pldoc.tex を処理したときに、自動的に用意するようにした。
+  * plfonts.dtx: 小文字のフォント定義ファイル(jy1mc.fd など)をロードする
+    ようにした。
+  * jclasses.dtx: 2.09互換モードで tombow オプションがおかしくなるのを修正。
+  * jclasses.dtx: 2.09互換モードで {a,b}{4,5}{j,p} のスタイルオプション
+    をサポート。ただし、ランドスケープモード用の設定はしていない。
+----------------
+<1997/01/24>
+  * pl209.def: \let\jfam\symmincho としていたのを修正。
+----------------
+<1997/01/23>
+  * All: LaTeX2e <1996/12/01> に対応
+  * plcore.dtx: クラスオプションに tombow を指定したとき、トンボの脇に
+    作成日付を出力するようにした。日付の出力を抑制したい場合は、tombo
+    （最後の w なし）を指定する。
+  * jclasses.dtx: LaTeX2e <1996/06/01> と組み合わせたとき、
+    {j|t}{article|book} の \part コマンドの後ろで二段組になってしまう
+    のを修正。
+  * jclasses.dtx: verse 環境で「@centercr」という文字列が出力されるのを
+    修正。
+  * jclasses.dtx, pl209.dtx: mincho, gothic を数式記号としてではなく、
+    文字として宣言するようにし、数式ファミリを使用しないようにした。
+    ただし、2.09互換モードでは、従来どおり、日本語ファミリを定義している。
+  * jltxdoc.dtx: ltxdoc, doc, article クラスをベースにするようにした。
+  * pl209.def: latex209.def をロードするようにした。
+----------------
+<1996/03/05>
+  * All: 縦組拡張部分を外部パッケージ（plext.sty）にした。
+  * All: いくつかのタイプミス修正。
+  * plfonts.dtx: \DeclareFixedFont の日本語化。
+  * plfonts.dtx: 和文代用フォントが使われないのを修正。
+  * plfonts.dtx: \notkfam@list, \notffam@list の初期値を変更し、
+    起動直後の速度を速めた。
+  * jclasses.dtx: \evensidemargin と \oddsidemargin の影響が縦組と横組で
+    逆なのを修正。
+  * jclasses.dtx: report, article クラスのページスタイルのデフォルトを
+    headings から plain にした。
+  * jclasses.dtx: bothstyle ページスタイルでの偶数ページと奇数ページの
+    出力位置が逆なのを修正。
+  * jclases.dtx: plain や headings から headnombre, footnombre, plain
+    などに切り替えたときに、ページ番号位置が揃わないのを修正。
+  * jclasses.dtx: \topmargin の値が反映されないのを修正。
+  * jclasses.dtx: \tabbing 環境で和欧文間スペースが入るのを修正。
+  * jclasses.dtx: landscape オプションを指定してもランドスケープにならない
+    のを修正。
+  * pl209.def: 互換モードの縦組で脚注がおかしくなるのを修正。
+  * pl209.def: 互換モードで \Rensuji, \prensuji を使えるようにした。
+----------------
+<1995/09/01>
+  * 公開版リリース
+=== EOT =====

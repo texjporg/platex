@@ -1,0 +1,24 @@
+\input docstrip
+\keepsilent
+\usedir{tex/platex/base}
+\ifToplevel{\askonceonly}
+
+\Msg{*** Generating the pLaTeX files for making the documents ***}
+
+\generate{
+  \file{platex.ltx}{\from{platex.dtx}{plcore}}
+  \file{plcore.ltx}{\from{plvers.dtx}{plcore}
+          \from{plfonts.dtx}{plcore}
+          \from{plcore.dtx}{plcore}
+          \from{plvers.dtx}{plfinal}}
+  \file{kinsoku.tex}{\from{kinsoku.dtx}{plcore}}
+  \file{pldefs.ltx}{\from{plfonts.dtx}{pldefs,xpt}}
+  \file{jy1mc.fd}{\from{plfonts.dtx}{JY1mc}}
+  \file{jy1gt.fd}{\from{plfonts.dtx}{JY1gt}}
+  \file{jt1mc.fd}{\from{plfonts.dtx}{JT1mc}}
+  \file{jt1gt.fd}{\from{plfonts.dtx}{JT1gt}}
+  \file{plext.sty}{\from{plext.dtx}{package}}
+  \file{ptrace.sty}{\from{plfonts.dtx}{trace}}
+}
+
+\endbatchfile

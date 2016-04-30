@@ -1,0 +1,122 @@
+%% <1997/07/02>
+\documentclass{plnews}
+
+\publicationmonth{7}
+\publicationyear{1997}
+\publicationissue{2}
+\author{中野 賢（\texttt{<ken-na at ascii.co.jp>}）
+        \& 富樫 秀昭（\texttt{<hideak-t at ascii.co.jp>}）
+}
+
+\begin{document}
+
+\maketitle
+
+\section{この文書について}
+この文書は、p\LaTeXe{}\texttt{<1997/02/01>+2}からの更新箇所をまとめたものです。
+
+このp\LaTeXe{}は、\LaTeX{}\texttt{<1997/06/01>}版に対応しています。
+\LaTeX{}レベルでの更新箇所は、\LaTeX{}に付属のltnewsファイルを
+参照してください。
+
+\section{クラスファイル}
+日本語クラスファイルに関して、以下の変更を加えました。
+
+\begin{itemize}
+\item 縦組クラスで|\maketitle|によるタイトルを縦組で出力するようにした。
+\item 横組クラスで|a4j|や|b5j|などのオプションを指定したときの
+  トップマージンを大きくした。
+\item treport, tbookクラスで|\thefigure|コマンドが構文エラーになるのを
+  修正した。
+\end{itemize}
+
+\section{フォント・セレクション}
+日本語NFSS2における、
+\begin{itemize}
+\item 縦組時に|\bfseries|を使うと後続の|\textgt|や|\gtfamily|などの
+  ゴシック切り替え命令が効かない
+\end{itemize}
+というバグを修正するために、以下のようにしました。
+\begin{itemize}
+\item 和文エンコードの宣言を縦組用と横組用とで別のコマンドで行う
+\end{itemize}
+具体的には、つぎのコマンドで宣言をします。
+
+\begin{tabbing}
+****\=12345678\=12345678901234567890\kill
+\>|\DeclareYokoKanjiEncoding|\\
+\> \> 横組用和文エンコードの宣言\\
+\>|\DeclareTateKanjiEncoding|\\
+\> \> 縦組用和文エンコードの宣言\\
+\end{tabbing}
+
+以前のバージョンからの|\DeclareKanjiEncoding|コマンドは
+横組用和文エンコード宣言コマンドと同じ動作をします。
+|\DeclareKanjiEncoding|コマンドで縦組用和文エンコードを宣言している箇所は
+|\DeclareTateKanjiEncoding|コマンドを用いて宣言するように修正してください。
+
+
+\section{強調コマンドでゴシックに}
+従来、|\emph|や|\em|では和文フォントを切り替えることはしていませんでしたが、
+今回の版から強調時に|\gtfamily|にするようにしました。
+入れ子となった|\emph|や|\em|の中では|\mcfamily|を使います。
+
+\section{改行マクロの変更に対応}
+日本語\TeX{}の行頭禁則処理は、禁則対象文字の直前に、
+|\prekinsokupenalty|で指定されたペナルティの値を挿入することで行なっています。
+一方、改行コマンドは負のペナルティ（$-10,000$）の値を挿入することで
+改行を行なっています。このため、改行コマンドの直後に禁則文字があり、
+その禁則ペナルティの値が$10,000$の文字のとき、改行のためのペナルティと
+禁則ペナルティの値が相殺されてしまい、改行されません。
+
+\begin{quote}
+\begin{verbatim}
+あいうえお\\
+！かきくけこ
+\end{verbatim}
+\end{quote}
+
+そこでp\LaTeXe{}では、\LaTeXe{}の改行マクロに|\mbox{}|を入れることによって、
+改行マクロのペナルティと行頭禁則文字のペナルティが加算されることを防いで
+いました。
+
+ところが、\LaTeXe\ \texttt{<1996/12/01>}で改行コマンドが大幅に変更されて
+いたため、p\LaTeXe{}で加えた処理が無効になっていました。
+今回の版で\LaTeXe{}の改行マクロ変更に対応しました。
+
+また、以前の\LaTeXe{}の改行マクロでは、改行コマンドで|\mbox{}|が置かれて
+いたので、
+\begin{quote}
+\begin{verbatim}
+\verb|*****|\\
+\verb|   aiueo|
+\end{verbatim}
+\end{quote}
+と書いた場合も正しく処理されていましたが、
+\LaTeXe\ \texttt{<1996/12/01>}以降の改行コマンドでは|\mbox{}|が置かれないため、
+|\\|の次の行の|\verb|の行頭の空白が無視されるという現象がおきていました。
+
+\LaTeXe{}で正しく処理されるのは、|\verb|コマンドの最初に|\hbox{}|を入れている
+からです。しかし、このボックスがあると|\xkanjiskip|が入らないため、
+p\LaTeXe{}では|\verb|の直後に|\hbox{}|を入れないようにしています。
+
+|\verb|で|\hbox{}|が入らなくても、改行コマンドによって行頭に|\mbox{}|が入る
+場合は、先頭の空白は空白として認識されていたのですが、
+\LaTeXe{}の改行マクロ変更によって、行頭の|\mbox{}|が挿入されなくなったために、
+\TeX{}が無視すべき行頭の空白と解釈される結果となっていました。
+今回の対応で、この問題も同時に解決されています。
+
+\section{その他の情報}
+最新情報は、p\TeX{}ホームページ
+\begin{verbatim}
+    http://www.ascii.co.jp/pb/ptex
+\end{verbatim}
+より、入手することができます。
+
+p\LaTeXe{}についてのバグ報告やお問い合わせなどは、電子メールで
+\begin{verbatim}
+    www-ptex＠ascii.co.jp
+\end{verbatim}
+までお願いします。
+
+\end{document}

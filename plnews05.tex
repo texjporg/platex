@@ -1,0 +1,67 @@
+%% <1999/04/05>
+\documentclass{plnews}
+
+\publicationyear{1999}% 発行年
+\publicationmonth{4}% 発行月
+\publicationissue{5}% 番号
+\author{中野 賢（\texttt{<ken-na at ascii.co.jp>}）
+     \& 富樫 秀昭（\texttt{<hideak-t at ascii.co.jp>}）
+}
+
+\begin{document}
+
+\maketitle
+
+\section{この文書について}
+この文書は、p\LaTeXe{}\texttt{<1999/04/05>}版について、
+前回の版（\texttt{<1998/09/01>}）からの更新箇所をまとめたものです。
+それ以前の変更点については、\textsf{plnews*.tex}やChanges.txtを
+参照してください。\LaTeX{}レベルでの更新箇所は、\LaTeX{}に付属の
+ltnewsファイルを参照してください。
+
+\section{前バージョンからの修正個所}
+\begin{itemize}
+\item 和文デフォルトフォントを変更しても、文書の先頭では反映されない
+  のを修正した（ありがとう、山本＠理科大さん）。
+\item \verb|\\|コマンドにオプションを付けた場合、その後ろに余計な
+  空白が入ってしまうのを修正した（ありがとう、鈴木＠京大さん）。
+\item \LaTeX \texttt{<1998/12/01>}に対応した。
+\end{itemize}
+
+
+\section{フォーマットファイル作成時の注意}
+現在のp\TeX{}では、8ビットコードの連続を16ビットコードと認識して
+しまう場合があります。そのため、フランス語やキリル文字などの
+8ビットコードが連続するハイフンパターンはまず使えせん。
+例えばcmcyraltパッケージでは、途中でつぎのようなエラーになります。
+
+\begin{verbatim}
+(/usr/local/share/texmf/tex/latex/contrib/
+other/cmcyralt/rhyphen.tex Russian hyphena
+tion
+! Bad \patterns.
+l.107  . え
+           2
+?
+\end{verbatim}
+
+このときは、``|?|''のプロンプトに対して``|x|''で終了してください。
+残念ながら、このハイフンパターンをp\TeX{}で利用することはできません。
+
+そこで、hyphen.cfgを用意して、不用意に他のハイフンパターンを
+読み込まないようにしてあります。詳しくはREADME2.txtをご覧ください。
+
+\section{その他}
+p\TeX{}やp\LaTeXe{}に関する最新情報は、p\TeX{}ホームページ
+\begin{verbatim}
+    http://www.ascii.co.jp/pb/ptex
+\end{verbatim}
+より、入手することができます。
+
+バグ報告やお問い合わせなどは、電子メールで
+\begin{verbatim}
+    www-ptex＠ascii.co.jp
+\end{verbatim}
+までお願いします。
+
+\end{document}
