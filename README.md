@@ -39,6 +39,7 @@ pldoc.pdf. If you are interested in typesetting pldoc.tex yourself,
 the following commands will be helpful:
 
 ~~~~
+  platex pldocs.ins
   platex Xins.ins
   sh mkpldoc.sh
   dvipdfmx pldoc.dvi
