@@ -1,3 +1,9 @@
+$B$3$N%I%-%e%a%s%H$O(B ASCII $B$N%*%j%8%J%k$N$b$N$r$=$N$^$^<}O?$9$k$b$N$G$9$,!"(B
+CTAN $B$N(B URL $B$N$_!"(BCTAN $B$+$i$N%j%/%(%9%H$K=>$$=$@5$7$^$7$?!#(B
+
+2016-04-17
+Japanese TeX Development Community
+
 ===========================================================================
                          pLaTeX2e <2006/01/04>
 
@@ -34,16 +40,9 @@ pLaTeX2e $B$r%$%s%9%H!<%k$9$k$K$O!"(BpTeX $B$H(B LaTeX2e $B$N%U%!%$%k$,I,MW
     * ftp://bash.cc.keio.ac.jp/pub/TeX/ascii-ptex/
     * ftp://ftp.ring.gr.jp/pub/text/TeX/ascii-ptex/
 
-LaTeX2e $B$O!"(BCTAN $B%5%$%H$N(B macros/latex/base $B%G%#%l%/%H%j$+$iF~<j$9$k$3(B
-$B$H$,$G$-$^$9!#<g$J(B CTAN $B%5%$%H$O$D$.$N$H$*$j$G$9!#(B
+LaTeX2e $B$O!"(BCTAN $B%5%$%H$+$iF~<j$9$k$3$H$,$G$-$^$9!#(B
 
-    * ftp://ftp.ring.gr.jp/pub/text/CTAN/
-    * ftp://ftp.u-aizu.ac.jp/pub/tex/CTAN/
-    * ftp://ftp.riken.go.jp/pub/tex-archive/
-    * ftp://lab.kdd.co.jp/TeX/CTAN/
-    * ftp://ftp.shsu.edu/tex-archive/
-    * ftp://ftp.dante.de/tex-archive/
-    * ftp://ftp.tex.ac.uk/tex-archive/
+    * http://www.ctan.org/pkg/latex-base
 
 LaTeX2e $B$G$O!"%G%U%)%k%H$G(B EC $B%(%s%3!<%I$N%U%)%s%H$,MQ$$$i$l$F$$$^$9!#(B
 EC $B%(%s%3!<%I$N%U%)%s%H$O!"(BCTAN $B%5%$%H$N(B fonts/ec $B%G%#%l%/%H%j$K$"$j$^$9!#(B
