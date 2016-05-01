@@ -10,7 +10,7 @@ rm $TMP/$PROJECT/.gitignore
 rm $TMP/$PROJECT/create_archive.sh
 rm $TMP/$PROJECT/kinsoku.tex
 rm $TMP/$PROJECT/pl209.def
-ls $TMP/$PROJECT/*.cls | grep -v plnews.cls | grep -v jltxdoc.cls | xargs rm
+ls $TMP/$PROJECT/*.cls | grep -v plnews.cls | xargs rm
 rm $TMP/$PROJECT/*.clo
 rm $TMP/$PROJECT/*.fd
 ls $TMP/$PROJECT/*.ltx | grep -v plpatch.ltx | xargs rm
