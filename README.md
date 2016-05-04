@@ -1,11 +1,11 @@
-# platex-base
+# platex
 
 The bundle provides pLaTeX2e and miscellaneous macros for pTeX and e-pTeX.
 
 The bundle is a community edition forked from the original ASCII edition
 (ptex-texmf-2.5). The GitHub repository
 
-- https://github.com/texjporg/platex-base
+- https://github.com/texjporg/platex
 
 is now maintained by [Japanese TeX Development Community](http://texjp.org).
 
@@ -54,7 +54,7 @@ are most suitable for the traditional pTeX engine.
 ## Repository
 
 The bundle is maintained on GitHub:
-https://github.com/texjporg/platex-base
+https://github.com/texjporg/platex
 
 If you have issues, please let us know from the above page.
 
