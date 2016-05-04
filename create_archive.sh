@@ -3,7 +3,12 @@
 PROJECT=platex
 TMP=/tmp
 PWDF=`pwd`
-RELEASEDATE=`git tag | sort -r | head -n 1`
+LATESTRELEASEDATE=`git tag | sort -r | head -n 1`
+RELEASEDATE=`git tag --points-at HEAD | sort -r | head -n 1`
+
+if [ -z "$RELEASEDATE" ]; then
+    RELEASEDATE="**not tagged**; later than $LATESTRELEASEDATE?"
+fi
 
 echo " * Create $PROJECT.tds.zip"
 git archive --format=tar --prefix=$PROJECT/ HEAD | (cd $TMP && tar xf -)
@@ -49,7 +54,6 @@ rm $TMP/$PROJECT/.gitignore
 rm $TMP/$PROJECT/create_archive.sh
 rm $TMP/$PROJECT/kinsoku.tex
 rm $TMP/$PROJECT/pl209.def
-rm $TMP/$PROJECT/pldoc.tex
 ls $TMP/$PROJECT/*.cls | grep -v plnews.cls | xargs rm
 rm $TMP/$PROJECT/*.clo
 rm $TMP/$PROJECT/*.fd
