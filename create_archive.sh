@@ -20,7 +20,6 @@ mv $TMP/$PROJECT/*.txt $TMP/$PROJECT/doc/platex/base/
 
 mkdir -p $TMP/$PROJECT/source/platex/base
 mv $TMP/$PROJECT/Makefile $TMP/$PROJECT/source/platex/base/
-mv $TMP/$PROJECT/pldoc.tex $TMP/$PROJECT/source/platex/base/
 mv $TMP/$PROJECT/plnews* $TMP/$PROJECT/source/platex/base/
 cp $TMP/$PROJECT/plpatch.ltx $TMP/$PROJECT/source/platex/base/
 mv $TMP/$PROJECT/*.dtx $TMP/$PROJECT/source/platex/base/
