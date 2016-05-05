@@ -61,9 +61,8 @@ ls $TMP/$PROJECT/*.ltx | grep -v plpatch.ltx | xargs rm
 rm $TMP/$PROJECT/*.sty
 perl -pi.bak -e "s/\\\$RELEASEDATE/$RELEASEDATE/g" $TMP/$PROJECT/README.md
 rm -f $TMP/$PROJECT/README.md.bak
-mv $TMP/$PROJECT.tds.zip $TMP/$PROJECT/
 
-cd $TMP && zip -r $PWDF/$PROJECT.zip $PROJECT
-rm -rf $TMP/$PROJECT
+cd $TMP && zip -r $PWDF/$PROJECT.zip $PROJECT $PROJECT.tds.zip
+rm -rf $TMP/$PROJECT $TMP/$PROJECT.tds.zip
 echo
 echo " * Done: $PROJECT.zip ($RELEASEDATE)"
