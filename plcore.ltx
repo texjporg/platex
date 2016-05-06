@@ -1052,40 +1052,12 @@
 %%   Grave accent  \`     Left brace    \{     Vertical bar  \|
 %%   Right brace   \}     Tilde         \~}
 %%
-\IfFileExists{plpatch.ltx}
-  {\typeout{************************************^^J%
-            * Appliying patch file plpatch.ltx *^^J%
-            ************************************}
-  \def\pfmtversion@topatch{unknown}
-  \input{plpatch.ltx}
-  \ifx\pfmtversion\pfmtversion@topatch
-    \ifx\ppatch@level\@undefined
-      \typeout{^^J^^J^^J%
-   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!^^J%
-   !! Patch file `plpatch.ltx' (for version <\pfmtversion@topatch>)^^J%
-   !! is not suitable for version <\pfmtversion> of pLaTeX.^^J^^J%
-   !! Please check if iniptex found an old patch file:^^J%
-   !! --- if so, rename it or delete it, and redo the^^J%
-   !!     iniptex run.^^J%
-   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!^^J}%
-      \batchmode \@@end
-    \fi
-  \else
-      \typeout{^^J^^J^^J%
-   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!^^J%
-   !! Patch file `plpatch.ltx' (for version <\pfmtversion@topatch>)^^J%
-   !! is not suitable for version <\pfmtversion> of pLaTeX.^^J%
-   !!^^J%
-   !! Please check if iniptex found an old patch file:^^J%
-   !! --- if so, rename it or delete it, and redo the^^J%
-   !!     iniptex run.^^J%
-   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!^^J}%
-      \batchmode \@@end
-  \fi
-  \let\pfmtversion@topatch\relax
-  }{}
-\ifx\patch@level\@undefined
-  \ifx\ppatch@level\@undefined
+\ifx\patch@level\@undefined % fallback if undefined in LaTeX
+  \def\patch@level{0}\fi
+\ifx\ppatch@level\@undefined % fallback if undefined in pLaTeX
+  \def\ppatch@level{0}\fi
+\ifnum\patch@level=0
+  \ifnum\ppatch@level=0
      \everyjob{\typeout{%
         \pfmtname\space<\pfmtversion>\space
           (based on \fmtname\space<\fmtversion>)}}
@@ -1093,20 +1065,32 @@
      \everyjob{\typeout{%
         \pfmtname\space<\pfmtversion>+\ppatch@level\space
           (based on \fmtname\space<\fmtversion>)}}
+  \fi
+\else\ifnum\patch@level>0
+  \ifnum\ppatch@level=0
+     \everyjob{\typeout{%
+        \pfmtname\space<\pfmtversion>\space
+          (based on \fmtname\space<\fmtversion>\space
+            patch level \patch@level)}}
+  \else
+     \everyjob{\typeout{%
+        \pfmtname\space<\pfmtversion>+\ppatch@level\space
+          (based on \fmtname\space<\fmtversion>\space
+            patch level \patch@level)}}
   \fi
 \else
-  \ifx\ppatch@level\@undefined
+  \ifnum\ppatch@level=0
      \everyjob{\typeout{%
         \pfmtname\space<\pfmtversion>\space
           (based on \fmtname\space<\fmtversion>\space
-            patch level \patch@level)}}
+            pre-release\patch@level)}}
   \else
      \everyjob{\typeout{%
         \pfmtname\space<\pfmtversion>+\ppatch@level\space
           (based on \fmtname\space<\fmtversion>\space
-            patch level \patch@level)}}
+            pre-release\patch@level)}}
   \fi
-\fi
+\fi\fi
 \AtBeginDocument{%
   \@ifpackageloaded{latexrelease}{%
     \@ifpackageloaded{platexrelease}{}{%
