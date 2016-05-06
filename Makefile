@@ -86,7 +86,7 @@ pldoc.pdf: $(PLDOC_SRC)
 	platex --kanji=jis Xins.ins && sh mkpldoc.sh && \
 	dvipdfmx pldoc.dvi
 	rm *.aux *.log pldoc.toc pldoc.idx pldoc.ind pldoc.ilg
-	rm pldoc.glo pldoc.gls *.dvi
+	rm pldoc.glo pldoc.gls *.dvi pldoc.tex Xins.ins
 	rm *.cfg pldoc.dic mkpldoc.sh dstcheck.pl
 
 nidanfloat.pdf: $(NIDAN_SRC)
