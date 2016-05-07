@@ -8,7 +8,7 @@
 %
 % \fi
 %
-% \CheckSum{370}
+% \CheckSum{374}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -47,13 +47,14 @@
 %     p\LaTeXe{}に付属するファイルの説明を更新}
 % \changes{v1.0e}{2016/02/16}{platexreleaseの説明を追加}
 % \changes{v1.0f}{2016/04/12}{ドキュメントを更新}
+% \changes{v1.0g}{2016/05/07}{フォーマット作成時に\LaTeX{}のバナーを一旦保存}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2016/04/12 v1.0f pLaTeX document file]
+\ProvidesFile{platex.dtx}[2016/05/07 v1.0g pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -234,12 +235,14 @@
 % したがって\file{platex.ltx}はとても短いものとなっています。
 % \file{latex.ltx}には\LaTeX{}のコマンドが、
 % \file{plcore.ltx}にはp\LaTeXe{}で拡張したコマンドが定義されています。
+% \changes{v1.0g}{2016/05/07}{フォーマット作成時に\LaTeX{}のバナーを一旦保存}
 %
 %    \begin{macrocode}
 %<*plcore>
 \let\orgdump\dump
 \let\dump\relax
 \input latex.ltx
+\edef\platexBANNER{\the\everyjob}% save LaTeX banner
 \typeout{**************************^^J%
          *^^J%
          * making pLaTeX format^^J%
