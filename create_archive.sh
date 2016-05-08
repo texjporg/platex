@@ -26,7 +26,6 @@ mv $TMP/$PROJECT/*.txt $TMP/$PROJECT/doc/platex/base/
 mkdir -p $TMP/$PROJECT/source/platex/base
 mv $TMP/$PROJECT/Makefile $TMP/$PROJECT/source/platex/base/
 mv $TMP/$PROJECT/plnews* $TMP/$PROJECT/source/platex/base/
-cp $TMP/$PROJECT/plpatch.ltx $TMP/$PROJECT/source/platex/base/
 mv $TMP/$PROJECT/*.dtx $TMP/$PROJECT/source/platex/base/
 mv $TMP/$PROJECT/*.ins $TMP/$PROJECT/source/platex/base/
 
@@ -57,7 +56,7 @@ rm $TMP/$PROJECT/pl209.def
 ls $TMP/$PROJECT/*.cls | grep -v plnews.cls | xargs rm
 rm $TMP/$PROJECT/*.clo
 rm $TMP/$PROJECT/*.fd
-ls $TMP/$PROJECT/*.ltx | grep -v plpatch.ltx | xargs rm
+rm $TMP/$PROJECT/*.ltx
 rm $TMP/$PROJECT/*.sty
 perl -pi.bak -e "s/\\\$RELEASEDATE/$RELEASEDATE/g" $TMP/$PROJECT/README.md
 rm -f $TMP/$PROJECT/README.md.bak
