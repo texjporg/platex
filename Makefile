@@ -2,7 +2,7 @@ TARGET1 = platex.ltx jarticle.cls pl209.def platexrelease.sty \
 	nidanfloat.sty tascmac.sty
 TARGET2 = platex.pdf platexrelease.pdf pldoc.pdf \
 	nidanfloat.pdf ascmac.pdf
-FONTMAP = -f ipaex.map -f ptex-ipaex.map -f otf-ipaex.map
+FONTMAP = -f ipaex.map -f ptex-ipaex.map
 
 all: $(TARGET1) $(TARGET2)
 
