@@ -2,6 +2,7 @@ TARGET1 = platex.ltx jarticle.cls pl209.def platexrelease.sty \
 	nidanfloat.sty tascmac.sty
 TARGET2 = platex.pdf platexrelease.pdf pldoc.pdf \
 	nidanfloat.pdf ascmac.pdf
+FONTMAP = -f ipaex.map -f ptex-ipaex.map -f otf-ipaex.map
 
 all: $(TARGET1) $(TARGET2)
 
@@ -69,13 +70,13 @@ tascmac.sty: $(ASCMAC_SRC)
 platex.pdf: $(INTRODOC_SRC)
 	platex --kanji=jis platex.dtx && \
 	platex --kanji=jis platex.dtx && \
-	dvipdfmx platex.dvi
+	dvipdfmx $(FONTMAP) platex.dvi
 	rm platex.aux platex.log platex.dvi
 
 platexrelease.pdf: $(PLRELDOC_SRC)
 	platex --kanji=jis platexrelease.dtx && \
 	platex --kanji=jis platexrelease.dtx && \
-	dvipdfmx platexrelease.dvi
+	dvipdfmx $(FONTMAP) platexrelease.dvi
 	rm platexrelease.aux platexrelease.log platexrelease.dvi
 
 pldoc.pdf: $(PLDOC_SRC)
@@ -84,7 +85,7 @@ pldoc.pdf: $(PLDOC_SRC)
 	done
 	platex --kanji=jis pldocs.ins && \
 	platex --kanji=jis Xins.ins && sh mkpldoc.sh && \
-	dvipdfmx pldoc.dvi
+	dvipdfmx $(FONTMAP) pldoc.dvi
 	rm *.aux *.log pldoc.toc pldoc.idx pldoc.ind pldoc.ilg
 	rm pldoc.glo pldoc.gls *.dvi pldoc.tex Xins.ins
 	rm *.cfg pldoc.dic mkpldoc.sh dstcheck.pl
@@ -92,13 +93,13 @@ pldoc.pdf: $(PLDOC_SRC)
 nidanfloat.pdf: $(NIDAN_SRC)
 	platex --kanji=jis nidanfloat.dtx && \
 	platex --kanji=jis nidanfloat.dtx && \
-	dvipdfmx nidanfloat.dvi
+	dvipdfmx $(FONTMAP) nidanfloat.dvi
 	rm nidanfloat.aux nidanfloat.log nidanfloat.dvi
 
 ascmac.pdf: $(ASCMAC_SRC)
 	platex --kanji=jis ascmac.dtx && \
 	platex --kanji=jis ascmac.dtx && \
-	dvipdfmx ascmac.dvi
+	dvipdfmx $(FONTMAP) ascmac.dvi
 	rm ascmac.aux ascmac.log ascmac.toc ascmac.dvi
 
 .PHONY: clean
