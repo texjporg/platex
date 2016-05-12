@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{204}
+% \CheckSum{187}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -58,12 +58,16 @@
 % \changes{v1.0u}{2016/04/17}{\LaTeX\ \texttt{!<2016/03/31!>}版対応確認}
 % \changes{v1.0v}{2016/05/07}{パッチファイルをロードするのをやめた。}
 % \changes{v1.0v}{2016/05/07}{起動時の文字列を最新の\LaTeX{}に合わせた。}
+% \changes{v1.0w}{2016/05/12}{起動時の文字列に入れる\LaTeX{}のバージョンを
+%    元の\LaTeX{}のバナーから引き継ぐように改良}
+% \changes{v1.0w}{2016/05/12}{起動時の文字列に入れるBabelのバージョンを
+%    元の\LaTeX{}のバナーから取得するコードを\file{platex.ini}から取り入れた}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2016/05/07 v1.0v pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2016/05/12 v1.0w pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -126,7 +130,7 @@
 %</plcore>
 %<platexrelease>\edef\platexreleaseversion
 %<*plcore|platexrelease>
-   {2016/05/07}
+   {2016/05/12}
 %</plcore|platexrelease>
 %    \end{macrocode}
 % \end{macro}
@@ -178,46 +182,50 @@
 % 起動時に表示される文字列です。
 % \LaTeX{}にパッチがあてられている場合は、それも表示します。
 % \changes{v1.0v}{2016/05/07}{起動時の文字列を最新の\LaTeX{}に合わせた。}
+% \changes{v1.0w}{2016/05/12}{起動時の文字列に入れる\LaTeX{}のバージョンを
+%    元の\LaTeX{}のバナーから引き継ぐように改良}
 %    \begin{macrocode}
 \ifx\patch@level\@undefined % fallback if undefined in LaTeX
   \def\patch@level{0}\fi
 \ifx\ppatch@level\@undefined % fallback if undefined in pLaTeX
   \def\ppatch@level{0}\fi
-\ifnum\patch@level=0
-  \ifnum\ppatch@level=0
-     \everyjob{\typeout{%
+\begingroup
+  \def\parse@BANNER#1{\expandafter\parse@@BANNER#1}
+  \def\parse@@BANNER#1#2#3#4{#2}
+  \edef\platexTMP{%
+    \ifnum\ppatch@level=0
+      \everyjob{\noexpand\typeout{%
         \pfmtname\space<\pfmtversion>\space
-          (based on \fmtname\space<\fmtversion>)}}
-  \else
-     \everyjob{\typeout{%
+          (based on \parse@BANNER{\platexBANNER})}}%
+    \else
+      \everyjob{\noexpand\typeout{%
         \pfmtname\space<\pfmtversion>+\ppatch@level\space
-          (based on \fmtname\space<\fmtversion>)}}
-  \fi
-\else\ifnum\patch@level>0
-  \ifnum\ppatch@level=0
-     \everyjob{\typeout{%
-        \pfmtname\space<\pfmtversion>\space
-          (based on \fmtname\space<\fmtversion>\space
-            patch level \patch@level)}}
-  \else
-     \everyjob{\typeout{%
-        \pfmtname\space<\pfmtversion>+\ppatch@level\space
-          (based on \fmtname\space<\fmtversion>\space
-            patch level \patch@level)}}
-  \fi
-\else
-  \ifnum\ppatch@level=0
-     \everyjob{\typeout{%
-        \pfmtname\space<\pfmtversion>\space
-          (based on \fmtname\space<\fmtversion>\space
-            pre-release\patch@level)}}
-  \else
-     \everyjob{\typeout{%
-        \pfmtname\space<\pfmtversion>+\ppatch@level\space
-          (based on \fmtname\space<\fmtversion>\space
-            pre-release\patch@level)}}
-  \fi
-\fi\fi
+          (based on \parse@BANNER{\platexBANNER})}}%
+    \fi
+  }
+\expandafter
+\endgroup \platexTMP
+%    \end{macrocode}
+%
+% p\LaTeX{}は、独自のハイフネーション・パターンを定義していません。
+% 代わりに、\LaTeX{}が読み込んでいるBabelパッケージのものが適用されます。
+% 起動時の文字列にも\file{hyphen.cfg}のバージョンを反映します。
+% \changes{v1.0w}{2016/05/12}{起動時の文字列に入れるBabelのバージョンを
+%    元の\LaTeX{}のバナーから取得するコードを\file{platex.ini}から取り入れた}
+%    \begin{macrocode}
+\begingroup
+  \def\parse@BANNER#1{\expandafter\parse@@BANNER#1}
+  \def\parse@@BANNER#1#2#3#4{#4}
+  \edef\platexTMP{%
+    \the\everyjob\noexpand\typeout{\parse@BANNER{\platexBANNER}}%
+  }
+  \everyjob=\expandafter{\platexTMP}%
+  \edef\platexTMP{%
+    \noexpand\let\noexpand\platexBANNER=\noexpand\@undefined
+    \noexpand\everyjob={\the\everyjob}%
+  }
+  \expandafter
+\endgroup \platexTMP
 %</plfinal>
 %    \end{macrocode}
 %

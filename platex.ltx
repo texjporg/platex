@@ -40,9 +40,10 @@
          **************************}
 \makeatletter
 \input plcore.ltx
-\makeatother
 \the\everyjob
 \let\dump\orgdump
+\let\orgdump\@undefined
+\makeatother
 \dump
 \endinput
 \endinput

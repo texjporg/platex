@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{373}
+% \CheckSum{376}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -51,13 +51,14 @@
 % \changes{v1.0f}{2016/04/12}{ドキュメントを更新}
 % \changes{v1.0g}{2016/05/07}{フォーマット作成時に\LaTeX{}のバナーを一旦保存}
 % \changes{v1.0h}{2016/05/08}{ドキュメントから\file{plpatch.ltx}を除外}
+% \changes{v1.0i}{2016/05/12}{一時コマンド\cs{orgdump}を最終的に未定義へ}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2016/05/08 v1.0h pLaTeX document file]
+\ProvidesFile{platex.dtx}[2016/05/12 v1.0i pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -239,6 +240,7 @@
 % \file{latex.ltx}には\LaTeX{}のコマンドが、
 % \file{plcore.ltx}にはp\LaTeXe{}で拡張したコマンドが定義されています。
 % \changes{v1.0g}{2016/05/07}{フォーマット作成時に\LaTeX{}のバナーを一旦保存}
+% \changes{v1.0i}{2016/05/12}{一時コマンド\cs{orgdump}を最終的に未定義へ}
 %
 %    \begin{macrocode}
 %<*plcore>
@@ -253,9 +255,10 @@
          **************************}
 \makeatletter
 \input plcore.ltx
-\makeatother
 \the\everyjob
 \let\dump\orgdump
+\let\orgdump\@undefined
+\makeatother
 \dump
 %<plcore>\endinput
 %</plcore>
@@ -489,6 +492,7 @@
 %    \end{macrocode}
 % ここからが本文ページとなります。
 % \changes{v1.0c}{1997/01/29}{Rename pltpatch to plpatch.}
+% \changes{v1.0h}{2016/05/08}{ドキュメントから\file{plpatch.ltx}を除外}
 %    \begin{macrocode}
 \begin{document}
  \title{The p\LaTeXe\ Sources}

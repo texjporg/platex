@@ -34,7 +34,7 @@
 %%
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2016/05/07}
+   {2016/05/12}
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
   {\@plIncludeInRelease{#1}[#1]}}
@@ -1048,41 +1048,35 @@
   \def\patch@level{0}\fi
 \ifx\ppatch@level\@undefined % fallback if undefined in pLaTeX
   \def\ppatch@level{0}\fi
-\ifnum\patch@level=0
-  \ifnum\ppatch@level=0
-     \everyjob{\typeout{%
+\begingroup
+  \def\parse@BANNER#1{\expandafter\parse@@BANNER#1}
+  \def\parse@@BANNER#1#2#3#4{#2}
+  \edef\platexTMP{%
+    \ifnum\ppatch@level=0
+      \everyjob{\noexpand\typeout{%
         \pfmtname\space<\pfmtversion>\space
-          (based on \fmtname\space<\fmtversion>)}}
-  \else
-     \everyjob{\typeout{%
+          (based on \parse@BANNER{\platexBANNER})}}%
+    \else
+      \everyjob{\noexpand\typeout{%
         \pfmtname\space<\pfmtversion>+\ppatch@level\space
-          (based on \fmtname\space<\fmtversion>)}}
-  \fi
-\else\ifnum\patch@level>0
-  \ifnum\ppatch@level=0
-     \everyjob{\typeout{%
-        \pfmtname\space<\pfmtversion>\space
-          (based on \fmtname\space<\fmtversion>\space
-            patch level \patch@level)}}
-  \else
-     \everyjob{\typeout{%
-        \pfmtname\space<\pfmtversion>+\ppatch@level\space
-          (based on \fmtname\space<\fmtversion>\space
-            patch level \patch@level)}}
-  \fi
-\else
-  \ifnum\ppatch@level=0
-     \everyjob{\typeout{%
-        \pfmtname\space<\pfmtversion>\space
-          (based on \fmtname\space<\fmtversion>\space
-            pre-release\patch@level)}}
-  \else
-     \everyjob{\typeout{%
-        \pfmtname\space<\pfmtversion>+\ppatch@level\space
-          (based on \fmtname\space<\fmtversion>\space
-            pre-release\patch@level)}}
-  \fi
-\fi\fi
+          (based on \parse@BANNER{\platexBANNER})}}%
+    \fi
+  }
+\expandafter
+\endgroup \platexTMP
+\begingroup
+  \def\parse@BANNER#1{\expandafter\parse@@BANNER#1}
+  \def\parse@@BANNER#1#2#3#4{#4}
+  \edef\platexTMP{%
+    \the\everyjob\noexpand\typeout{\parse@BANNER{\platexBANNER}}%
+  }
+  \everyjob=\expandafter{\platexTMP}%
+  \edef\platexTMP{%
+    \noexpand\let\noexpand\platexBANNER=\noexpand\@undefined
+    \noexpand\everyjob={\the\everyjob}%
+  }
+  \expandafter
+\endgroup \platexTMP
 \AtBeginDocument{%
   \@ifpackageloaded{latexrelease}{%
     \@ifpackageloaded{platexrelease}{}{%
