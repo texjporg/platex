@@ -52,13 +52,14 @@
 % \changes{v1.0g}{2016/05/07}{フォーマット作成時に\LaTeX{}のバナーを一旦保存}
 % \changes{v1.0h}{2016/05/08}{ドキュメントから\file{plpatch.ltx}を除外}
 % \changes{v1.0i}{2016/05/12}{一時コマンド\cs{orgdump}を最終的に未定義へ}
+% \changes{v1.0j}{2016/05/20}{pfltraceの説明を追加}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2016/05/12 v1.0i pLaTeX document file]
+\ProvidesFile{platex.dtx}[2016/05/20 v1.0j pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -337,6 +338,7 @@
 %
 % p\LaTeXe{}に付属のクラスファイルは、次のとおりです。
 % \changes{v1.0d}{2016/01/27}{p\LaTeXe{}に付属するファイルの説明を更新}
+% \changes{v1.0j}{2016/05/20}{pfltraceの説明を追加}
 %
 % \begin{itemize}
 % \item jbook.cls, jarticle.cls, jreport.cls\par
@@ -346,26 +348,36 @@
 %   縦組用の標準クラスファイル。\file{jclasses.dtx}から作成される。
 %
 % \item jltxdoc.cls\par
-%   \file{.dtx}ファイルを組版するためのクラスファイル。
+%   日本語の\file{.dtx}ファイルを組版するためのクラスファイル。
 %   \file{jltxdoc.dtx}から作成される。
 % \end{itemize}
 %
 % また、p\LaTeXe{}に付属のパッケージファイルは、次のとおりです。
 %
 % \begin{itemize}
+% \item plext.sty\par
+%   縦組用の拡張コマンドなどが定義されているファイル。
+%
 % \item oldpfont.sty\par
-%    p\LaTeX~2.09のフォントコマンドを提供するパッケージ。
-%    \file{pl209.dtx}から作成される。
+%   p\LaTeX~2.09のフォントコマンドを提供するパッケージ。
+%   \file{pl209.dtx}から作成される。
 %
 % \item ptrace.sty\par
-%   \file{tracefnt.sty}で再定義された\NFSS2コマンドをp\LaTeXe{}用に
-%   再々定義するためのパッケージ。
+%   \LaTeX{}でフォント選択コマンドのトレースに使う\file{tracefnt.sty}が
+%   再定義してしまう\NFSS2コマンドを、p\LaTeXe{}用に再々定義するための
+%   パッケージ。
+%   \file{plfonts.dtx}から作成される。
+%
+% \item pfltrace.sty\par
+%   \LaTeX{}でフロート関連コマンドのトレースに使う\file{fltrace.sty}%
+%   \footnote{\LaTeX\ 2014/05/01で追加されました。参考：
+%   \LaTeXe\ News Issue 21 (ltnews21.tex)}が再定義してしまうコマンド
+%   を、p\LaTeXe{}用に再々定義するためのパッケージ。
+%   \file{plcore.dtx}から作成される。
 %
 % \item ascmac.sty, tascmac.sty\par
-%    旧バージョンのp\LaTeX{}で配布されていたファイル。
-%
-% \item plext.sty\par
-%    縦組用の拡張コマンドなどが定義されているファイル。
+%   \LaTeX{}の標準機能の範囲で、図や罫線で囲んだボックスを出力する命令
+%   などを提供するパッケージ。旧バージョンのp\LaTeX{}でも配布されていた。
 %
 % \item nidanfloat.sty\par
 %   二段組時に段抜きのフロートをページ下部にも配置可能にする
