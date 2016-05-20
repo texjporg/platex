@@ -1,0 +1,92 @@
+%%
+%% This is file `pfltrace.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% plcore.dtx  (with options: `fltrace,trace')
+%% 
+%% Copyright (c) 2010 ASCII MEDIA WORKS
+%% Copyright (c) 2016 Japanese TeX Development Community
+%% 
+%% This file is part of the pLaTeX2e system (community edition).
+%% -------------------------------------------------------------
+%% 
+%% File: plcore.dtx
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesPackage{pfltrace}
+     [2016/05/20 v1.2e Standard pLaTeX package (float tracing)]
+\RequirePackageWithOptions{fltrace}
+\gdef\@makespecialcolbox{%
+   \fl@trace{Krudgeins ht \the\ht\@kludgeins\space
+                    dp \the\dp\@kludgeins\space
+                    wd \the\wd\@kludgeins}%
+   \setbox\@outputbox \vbox {%
+     \@texttop
+     \dimen@ \dp\@outputbox
+     \unvbox\@outputbox
+     \vskip-\dimen@
+     }%
+   \@tempdima \@colht
+   \ifdim \wd\@kludgeins>\z@
+     \advance \@tempdima -\ht\@outputbox
+     \advance \@tempdima \pageshrink
+     \fl@trace {Natural ht of col: \the\ht\@outputbox}%
+     \fl@trace {\string \@colht: \the\@colht}%
+     \fl@trace {Pageshrink added: \the\pageshrink}%
+     \fl@trace {Hence, space added: \the\@tempdima}%
+     \setbox\@outputbox \vbox to \@colht {%
+       \unvbox\@outputbox
+       \vskip \@tempdima
+       \@textbottom
+       \ifvoid\footins\else % for pLaTeX
+         \vskip\skip\footins
+         \color@begingroup
+            \normalcolor
+            \footnoterule
+            \unvbox \footins
+         \color@endgroup
+       \fi
+     }%
+   \else
+     \advance \@tempdima -\ht\@kludgeins
+     \fl@trace {Natural ht of col: \the\ht\@outputbox}%
+     \fl@trace {\string \@colht: \the\@colht}%
+     \fl@trace {Extra size added: -\the \ht \@kludgeins}%
+     \fl@trace {Hence, height of inner box: \the\@tempdima}%
+     \fl@trace {Max? pageshrink available: \the\pageshrink}%
+     \setbox \@outputbox \vbox to \@colht {%
+       \vbox to \@tempdima {%
+         \unvbox\@outputbox
+         \@textbottom
+         \ifvoid\footins\else % for pLaTeX
+           \vskip\skip\footins
+           \color@begingroup
+              \normalcolor
+              \footnoterule
+              \unvbox \footins
+           \color@endgroup
+         \fi
+       }\vss}%
+   \fi
+   {\setbox \@tempboxa \box \@kludgeins}%
+}
+\endinput
+%%
+%% End of file `pfltrace.sty'.

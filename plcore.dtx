@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{1266}
+% \CheckSum{1269}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -57,13 +57,15 @@
 % \changes{v1.2c}{2016/02/28}{1.2bと同様の修正を
 %     tabular環境、\cs{parbox}命令、\cs{underline}命令にも行った}
 % \changes{v1.2d}{2016/04/01}{multicolパッケージを使うとトンボの下端が縮む問題を修正}
+% \changes{v1.2e}{2016/05/20}{\file{fltrace}パッケージのp\LaTeX{}版
+%    として\file{pfltrace}パッケージを新設}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2016/04/01 v1.2d pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2016/05/20 v1.2e pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -225,6 +227,7 @@
     \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \null
     \ignorespaces
   \fi}
+%</plcore>
 %    \end{macrocode}
 %
 % \subsection{オブジェクトの出力順序}
@@ -236,11 +239,25 @@
 % したがって、文書ファイルによっては\LaTeX{}の組版結果と異なる場合が
 % ありますので、注意をしてください。
 %
+% 2014年に\LaTeX{}に\file{fltrace}パッケージが追加されましたので、
+% そのp\LaTeX{}版として\file{pfltrace}パッケージを追加します。
+% この\file{pfltrace}パッケージは\LaTeX{}の\file{fltrace}パッケージに
+% 依存します。
+% \changes{v1.2e}{2016/05/20}{\file{fltrace}パッケージのp\LaTeX{}版
+%    として\file{pfltrace}パッケージを新設}
+%    \begin{macrocode}
+%<*fltrace>
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesPackage{pfltrace}
+     [2016/05/20 v1.2e Standard pLaTeX package (float tracing)]
+\RequirePackageWithOptions{fltrace}
+%</fltrace>
+%    \end{macrocode}
+%
 % \begin{macro}{\@makecol}
 % このマクロが組み立てる部分の中心となります。
 % \file{ltoutput.dtx}で定義されているものです。
 %    \begin{macrocode}
-%</plcore>
 %<platexrelease>\plIncludeInRelease{2016/04/17}{\@makecol}{\@makecol}%
 %<*plcore|platexrelease>
 \gdef\@makecol{%
@@ -323,13 +340,13 @@
 % |\@makespecialcolbox|コマンドも修正をします。
 % やはり、\file{ltoutput.dtx}で定義されているものです。
 %
-% このマクロは、|\enlargedthispage|が使われたときに、
+% このマクロは、|\enlargethispage|が使われたときに、
 % |\@makecol|マクロから呼び出されます。
 %    \begin{macrocode}
 %<*plcore|fltrace>
 \gdef\@makespecialcolbox{%
 %<*trace>
-   \tr@ce{Krudgeins ht \the\ht\@kludgeins\space
+   \fl@trace{Krudgeins ht \the\ht\@kludgeins\space
                     dp \the\dp\@kludgeins\space
                     wd \the\wd\@kludgeins}%
 %</trace>
@@ -344,10 +361,10 @@
      \advance \@tempdima -\ht\@outputbox
      \advance \@tempdima \pageshrink
 %<*trace>
-     \tr@ce {Natural ht of col: \the\ht\@outputbox}%
-     \tr@ce {\string \@colht: \the\@colht}%
-     \tr@ce {Pageshrink added: \the\pageshrink}%
-     \tr@ce {Hence, space added: \the\@tempdima}%
+     \fl@trace {Natural ht of col: \the\ht\@outputbox}%
+     \fl@trace {\string \@colht: \the\@colht}%
+     \fl@trace {Pageshrink added: \the\pageshrink}%
+     \fl@trace {Hence, space added: \the\@tempdima}%
 %</trace>
      \setbox\@outputbox \vbox to \@colht {%
 %       \boxmaxdepth \maxdepth
@@ -370,11 +387,11 @@
    \else
      \advance \@tempdima -\ht\@kludgeins
 %<*trace>
-   \tr@ce {Natural ht of col: \the\ht\@outputbox}%
-   \tr@ce {\string \@colht: \the\@colht}%
-   \tr@ce {Extra size added: -\the \ht \@kludgeins}%
-   \tr@ce {Hence, height of inner box: \the\@tempdima}%
-   \tr@ce {Max? pageshrink available: \the\pageshrink}%
+     \fl@trace {Natural ht of col: \the\ht\@outputbox}%
+     \fl@trace {\string \@colht: \the\@colht}%
+     \fl@trace {Extra size added: -\the \ht \@kludgeins}%
+     \fl@trace {Hence, height of inner box: \the\@tempdima}%
+     \fl@trace {Max? pageshrink available: \the\pageshrink}%
 %</trace>
      \setbox \@outputbox \vbox to \@colht {%
        \vbox to \@tempdima {%
