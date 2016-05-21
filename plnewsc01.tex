@@ -1,0 +1,150 @@
+%% <2016/05/07>
+\documentclass{plnews}
+
+\publicationyear{2016}% 発行年
+\publicationmonth{05}% 発行月
+\publicationissue{c1}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\pTeX{p\kern-.15em\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+
+\begin{document}
+
+\maketitle
+
+\section{この文書について}
+この文書は\pLaTeXe\ \texttt{<2015/05/07>} community editionについて、
+アスキー版\texttt{<2006/11/10>}からの更新箇所をまとめたものです。
+以前のアスキー版の変更点については、
+\file{plnews*.tex}や\file{Changes\_asciimw.txt}を参照してください。
+今後のコミュニティ版の変更点については、\file{plnewsc*.tex}で説明します。
+\LaTeX{}レベルでの更新箇所は、\LaTeX{}に付属の\file{ltnews*.tex}などを
+参照してください。
+
+
+\section{コミュニティ版p\LaTeX{}の説明}
+元々の\pLaTeX{}は、株式会社アスキー（現アスキー・メディアワークス）が
+日本語化した\pTeX{}エンジンとともに配布していた、日本語版\LaTeX{}です。
+ここでは、これを「アスキー版\pLaTeX{}」と呼びます。
+
+\pTeX{}は横組だけでなく縦組にも対応した高品質の日本語組版ソフトウェアと
+して、デファクトスタンダードの地位にあるといえます。
+この\pTeX{}やその上で動く\pLaTeX{}は長らく日本国内での利用にとどまってい
+ましたが、2010年に国際的な\TeX\ Liveというディストリビューションに取り込
+まれ、世界中のユーザが簡単に日本語の組版に\pTeX{}と\pLaTeX{}を利用できる
+環境が整いました。同時に、\pTeX{}もコミュニティベースで改良や仕様変更が
+加えられるようになりました。
+最近の\TeX\ LiveやW32\TeX{}では、\pLaTeX{}も元々の\pTeX{}ではなく、その
+拡張版\epTeX{}をエンジンとして用いるようになっています。また、\pLaTeX{}の
+ベースとなっている\LaTeX{}も更新が進められ、特に2015年には相次いでカーネル
+のコードが変更されました。
+
+アスキー版\pLaTeX{}は\texttt{<2006/11/10>}の版を最後に更新が停止している
+ようで、こうした変更の影響でいくつかの不整合が生じてしまいました。
+この不整合や残っていたバグを修正するのが、コミュニティ版\pLaTeX{}の目的
+です。コミュニティ版\pLaTeX{}はアスキー版\pLaTeX{}をベースに、
+日本語\TeX{}開発コミュニティによって開発されます。開発中の版はGitHubの
+リポジトリ\footnote{\texttt{https://github.com/texjporg/platex}}で
+管理しています。これにあわせ、\pTeX{}の内部コードをUnicode化した拡張版で
+あるu\pTeX{}の上で動くu\pLaTeX{}も、コミュニティ版\pLaTeX{}と同期させて
+あります。u\pLaTeX{}の開発中の版も\pLaTeX{}と同様に、GitHubの
+リポジトリ\footnote{\texttt{https://github.com/texjporg/uplatex}}で
+管理しています。
+
+
+\section{脚注番号前後やtabular前後などの不自然なアキの削除}
+2013年の\pTeX{}の仕様変更で、脚注番号やtabular環境、
+|\parbox[c]{...}|（またはminipage環境）の前後\footnote{これらの命令は、
+内部的には\texttt{\char92hbox}の中でいったん数式モードに入るという処理
+を含んでいます。}に|\xkanjiskip|由来のアキが入るようになっていましたの
+で、対策しました。
+（参考：\TeX\ Forum~913、\TeX\ Q\&A~57084、\TeX\ Forum~1783）
+
+また、|\underline{...}|の前後が和文文字である場合にも
+一律に|\xkanjiskip|由来のアキが入っていました。
+これも不自然だと考え、アキを削除しました。
+
+
+\section{縦組でOverfull警告が出るバグの修正}
+縦組時に|\@outputbox|の深さ分の補正が無効になっているバグのせいで
+|Overfull \vbox|の警告が出ていましたので、修正しました。
+（参考：\TeX\ Forum 1442）
+
+
+\section{縦組で「\AA{}」が乱れるバグの修正}
+ベースライン補正量|\{y,t}baselineshift|がゼロでない場合に、合成文字が乱れ
+ることがありました。特に「\AA{}」のアクセント位置が縦組で大きく乱れていた
+ため、対策しました。
+
+
+\section{トンボが縮む問題への対処}
+\LaTeX\ toolsバンドルに付属する\file{multicol}パッケージ（2015/03/07 v1.8j
+-- 2016/02/08 v1.8o）を使うと、\pLaTeX{}のトンボが縮むという問題が発生して
+いました。これは\file{multicol}側のバグ\footnote{これは2016/04/07 v1.8pで
+修正されました。}によるものですが、何らかの理由で不用意に|\boxmaxdepth|が
+小さく設定されてもトンボが正しく出るように修正しました。
+
+
+\section{\LaTeX\ \texttt{<2016/03/31>}への対応}
+\LaTeX\ \texttt{<2015/01/01>}で追加された|\eminnershape|を\pLaTeX{}にも
+採用しました。これは|{\em ...}|という強調命令を入れ子にした場合の書体を
+ユーザが指定できるものです。\LaTeX{}によるデフォルトの定義は|\upshape|です
+が、\pLaTeX{}では従来版に合わせた|\mcfamily \upshape|を採用しました。
+
+
+\section{\file{platexrelease}パッケージの追加}
+\LaTeX\ \texttt{<2015/01/01>}で追加された|latexrelease|パッケージと
+同等の\file{platexrelease}パッケージを導入しました。これは、過去
+（\texttt{<2006/11/10>}以降）の\pLaTeX{}をエミュレートするために用いる
+ことができます。\pLaTeX{}の互換性が必要な場面で役に立つかもしれません。
+詳細はパッケージのドキュメントを参照してください。
+
+
+\section{\file{ascmac}パッケージの更新}
+\file{ascmac}（\file{tascmac}）パッケージのバグ修正と一部の仕様変更です。
+
+\begin{itemize}
+\item \file{pict2e}パッケージとの共存で出るエラーを解消
+\item itembox環境やscreen環境の角が理想値からずれていたのを修正
+\item |\maskbox|や|\Maskbox|が段落の先頭で正しく働かない不具合を修正
+      （以上3点、\file{bxascmac}パッケージ%
+        \footnote{\texttt{http://zrbabbler.sp.land.to/bxptool.html}}より。
+        ありがとうございます、ZRさん）
+\item 環境直前の改段落：\par
+      shadebox環境の直前で改段落しないと版面をはみ出す不具合を修正。
+      併せてboxnote環境も|\par\vspace{.3\baselineskip}|で始めるよう変更。
+\item ベースライン補正：\par
+      |\tbaselineshift|だけでなく|\ybaselineshift|も退避・復帰。
+      |\keytop{...}|を使うと以降すべてでベースライン補正がゼロになるバグの
+      修正。itembox環境のタイトルとshadebox環境内でもベースライン補正を維持。
+\item その他：
+      |\keytop|の角が理想値からずれていたのを修正、
+      |\keytop[c]{...}|前後の|\xkanjiskip|由来のアキを削除。
+\end{itemize}
+
+
+\section{その他の変更点}
+\pLaTeX{}の概要については\file{platex.pdf}を、実際のコードは\file{pldoc.pdf}を
+参照してください。コードの変更履歴も\file{pldoc.pdf}の末尾で確認できます。
+
+一般のユーザにはあまり関係ない変更として、\pLaTeX{}起動時のバナーを定義
+するコードを改良しました。従来は、読み込んだハイフネーション・パターン
+の情報を起動時のバナーに表示するためだけに、コードを追加した独自
+の\file{hyphen.cfg}を使用していました\footnote{トノさんによるコードです。
+参考：\TeX\ Q\&A~31691}。この方法を廃止して\pLaTeX{}カーネル内で対処した
+ため、今後は独自の\file{hyphen.cfg}が不要になりました。
+
+
+\section{開発版とバグレポート先}
+コミュニティ版\pLaTeX{}とu\pLaTeX{}はアスキー版\pLaTeX{}とは異なります
+ので、バグレポートはアスキー宛てではなく、日本語\TeX{}開発コミュニティ
+に報告してください。\TeX\ ForumやGitHubのIssueシステムが利用できます。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
