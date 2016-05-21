@@ -29,10 +29,12 @@
 %%
 %
 % \setcounter{StandardModuleDepth}{1}
-% \def\chuui#1{\par\vskip.5\baselineskip
-%   \noindent\bfseries{注意：}\par
-%   \noindent\bgroup\gtfamily\sffamily#1}
+% \makeatletter
+% \def\chuui{\@ifnextchar[{\@chuui}{\@chuui[注意：]}}
+% \def\@chuui[#1]{\par\vskip.5\baselineskip
+%   \noindent{\em #1}\par\bgroup\gtfamily\sffamily}
 % \def\endchuui{\egroup\vskip.5\baselineskip}
+% \makeatother
 % \def\pTeX{p\kern-.15em\TeX}
 % \def\epTeX{$\varepsilon$-\pTeX}
 % \def\pLaTeX{p\kern-.05em\LaTeX}
@@ -53,13 +55,14 @@
 % \changes{v1.0h}{2016/05/08}{ドキュメントから\file{plpatch.ltx}を除外}
 % \changes{v1.0i}{2016/05/12}{一時コマンド\cs{orgdump}を最終的に未定義へ}
 % \changes{v1.0j}{2016/05/20}{pfltraceの説明を追加}
+% \changes{v1.0k}{2016/05/21}{変更履歴も出力するようにした}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2016/05/20 v1.0j pLaTeX document file]
+\ProvidesFile{platex.dtx}[2016/05/21 v1.0k pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -67,15 +70,47 @@
 \title{p\LaTeXe{}について}
 \author{Ken Nakano \& Japanese \TeX\ Development Community}
 \date{作成日：\filedate}
+\renewcommand{\refname}{参考文献}
+\GlossaryPrologue{\section*{変更履歴}%
+                  \markboth{変更履歴}{変更履歴}%
+                  \addcontentsline{toc}{section}{変更履歴}}
+\makeatletter
+\def\levelchar{>・}
+\def\changes@#1#2#3{%
+  \let\protect\@unexpandable@protect
+  \edef\@tempa{\noexpand\glossary{#2\space#1\levelchar
+    \ifx\saved@macroname\@empty
+%     \space\actualchar\generalname: %% comment out (platex.dtx only)
+    \else
+      \expandafter\@gobble
+      \saved@macroname\actualchar
+      \string\verb\quotechar*%
+      \verbatimchar\saved@macroname
+      \verbatimchar:
+    \fi
+    #3}}%
+  \@tempa\endgroup\@esphack}
+\makeatother
+\RecordChanges
 \begin{document}
    \MakeShortVerb{\+}
    \maketitle
    \DocInput{\filename}
+   \StopEventually{\end{document}}
+   \clearpage
+   % Make TeX shut up.
+   \hbadness=10000
+   \newcount\hbadness
+   \hfuzz=\maxdimen
+   \PrintChanges
+   \let\PrintChanges\relax
 \end{document}
 %</driver>
 % \fi
 %
 %
+% \changes{v1.0f}{2016/04/12}{ドキュメントを更新}
+% \changes{v1.0k}{2016/05/21}{変更履歴も出力するようにした}
 % \begin{chuui}
 % これは、株式会社アスキー（現アスキー・メディアワークス\footnote{アスキー
 % 日本語\TeX{}（\pTeX{}）、\texttt{http://ascii.asciimw.jp/pb/ptex/}}）が
@@ -98,10 +133,7 @@
 % してください。\TeX\ ForumやGitHubのIssueシステムが利用できます。
 %
 % この文書(platex.pdf)はコミュニティ版\pLaTeX{}の概要を説明した
-% もの\footnote{ただし、アスキーの中野さんによって書かれた古い
-% 文書を一部アップデートしたものですので、最近の状況に即してい
-% ない部分が残っているかもしれません。}で、実際の\pLaTeX{}の
-% ソースコードはpldoc.pdfで説明しています。
+% もので、実際の\pLaTeX{}のソースコードはpldoc.pdfで説明しています。
 %
 %
 % \clearpage
@@ -110,6 +142,8 @@
 % この文書は、p\LaTeXe{}の概要を示していますが、使い方のガイドでは
 % ありません。p\LaTeXe{}の機能についての説明は、\cite{platex2e-book}を
 % 参照してください。日本語\TeX{}については\cite{jtex-tech}を参照してください。
+% \changes{v1.0}{1995/05/08}{first edition}
+% \changes{v1.0a}{1995/08/25}{互換性について、\dst{}の使い方、参考文献を追加}
 %
 % p\LaTeXe{}では\cite{tate-book}で説明されている、いくつかの拡張コマンドの
 % 動作を修正しています。その詳細については、\file{plext.dtx}を参照して
@@ -212,6 +246,12 @@
 % 実行時の速度を高めるために、あらかじめ\TeX の内部形式の形で保存されて
 % います。
 %
+% クラスファイルは文書のレイアウトを設定するファイル、
+% パッケージファイルはマクロの拡張を定義するファイルです。
+% 前者は|\documentclass|コマンドを用いて読み込み、
+% 後者は|\usepackage|コマンドを用いて読み込みます。
+%
+% \begin{chuui}[従来のp\LaTeX~2.09ユーザへの注意：]\normalfont
 % クラスファイルとパッケージファイルは、従来、スタイルファイルと呼ばれていた
 % ものです。\LaTeXe{}ではそれらを、レイアウトに関するものをクラスファイルと
 % 呼び、マクロの拡張をするものをパッケージファイルと呼んで区別するように
@@ -226,6 +266,7 @@
 %
 % 旧版では、|\documentstyle|のオプションでマクロファイルを読み込んで
 % いましたが、\LaTeX{}では、|\usepackage|コマンドを用いて読み込みます。
+% \end{chuui}
 %
 % \subsection{フォーマットファイル}
 % フォーマットファイルには、基本的な機能が定義されていますが、
@@ -327,14 +368,14 @@
 %
 %
 % \subsection{クラスファイルとパッケージファイル}
-% クラスファイルとパッケージファイルは、従来、スタイルファイルと呼ばれていた
-% ものです。\LaTeX{}ではそれらを、レイアウトに関するものをクラスファイルと
-% 呼び、マクロの拡張をするものをパッケージファイルと呼んで区別するように
-% なりました。
+% ^^A クラスファイルとパッケージファイルは、従来、スタイルファイルと呼ばれていた
+% ^^A ものです。\LaTeX{}ではそれらを、レイアウトに関するものをクラスファイルと
+% ^^A 呼び、マクロの拡張をするものをパッケージファイルと呼んで区別するように
+% ^^A なりました。
 %
 % p\LaTeXe{}が提供をする、クラスファイルやパッケージファイルのいくつかは、
 % オリジナルのファイルを修正しています。
-% 修正箇所には``\texttt{platex}''条件が付けられています。
+% ^^A 修正箇所には``\texttt{platex}''条件が付けられています。
 %
 % p\LaTeXe{}に付属のクラスファイルは、次のとおりです。
 % \changes{v1.0d}{2016/01/27}{p\LaTeXe{}に付属するファイルの説明を更新}

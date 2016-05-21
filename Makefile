@@ -2,6 +2,7 @@ TARGET1 = platex.ltx jarticle.cls pl209.def platexrelease.sty \
 	nidanfloat.sty tascmac.sty
 TARGET2 = platex.pdf platexrelease.pdf pldoc.pdf \
 	nidanfloat.pdf ascmac.pdf
+KANJI = -kanji=jis
 FONTMAP = -f ipaex.map -f ptex-ipaex.map
 
 all: $(TARGET1) $(TARGET2)
@@ -45,38 +46,58 @@ PLDOC_SRC = platex.dtx plvers.dtx plfonts.dtx plcore.dtx plext.dtx \
 	pl209.dtx kinsoku.dtx jclasses.dtx jltxdoc.dtx
 
 platex.ltx: $(PLFMT_SRC)
-	platex --kanji=jis plfmt.ins
+	for x in $(PLFMT); do \
+	if [ -e $$x ]; then rm $$x; fi \
+	done
+	platex $(KANJI) plfmt.ins
 	rm plfmt.log
 
 jarticle.cls: $(PLCLS_SRC)
-	platex --kanji=jis plcls.ins
+	for x in $(PLCLS); do \
+	if [ -e $$x ]; then rm $$x; fi \
+	done
+	platex $(KANJI) plcls.ins
 	rm plcls.log
 
 pl209.def: $(PL209_SRC)
-	platex --kanji=jis pl209.ins
+	for x in $(PL209); do \
+	if [ -e $$x ]; then rm $$x; fi \
+	done
+	platex $(KANJI) pl209.ins
 	rm pl209.log
 
 platexrelease.sty: $(PLREL_SRC)
-	platex --kanji=jis platexrelease.ins
+	for x in $(PLREL); do \
+	if [ -e $$x ]; then rm $$x; fi \
+	done
+	platex $(KANJI) platexrelease.ins
 	rm platexrelease.log
 
 nidanfloat.sty: $(NIDAN_SRC)
-	platex --kanji=jis nidanfloat.ins
+	for x in $(NIDAN); do \
+	if [ -e $$x ]; then rm $$x; fi \
+	done
+	platex $(KANJI) nidanfloat.ins
 	rm nidanfloat.log
 
 tascmac.sty: $(ASCMAC_SRC)
-	platex --kanji=jis ascmac.ins
+	for x in $(ASCNAC); do \
+	if [ -e $$x ]; then rm $$x; fi \
+	done
+	platex $(KANJI) ascmac.ins
 	rm ascmac.log
 
 platex.pdf: $(INTRODOC_SRC)
-	platex --kanji=jis platex.dtx && \
-	platex --kanji=jis platex.dtx && \
+	platex $(KANJI) platex.dtx
+	mendex -f -s gglo.ist -o platex.gls platex.glo
+	platex $(KANJI) platex.dtx
 	dvipdfmx $(FONTMAP) platex.dvi
 	rm platex.aux platex.log platex.dvi
+	rm platex.glo platex.gls platex.ilg
 
 platexrelease.pdf: $(PLRELDOC_SRC)
-	platex --kanji=jis platexrelease.dtx && \
-	platex --kanji=jis platexrelease.dtx && \
+	platex $(KANJI) platexrelease.dtx
+	platex $(KANJI) platexrelease.dtx
 	dvipdfmx $(FONTMAP) platexrelease.dvi
 	rm platexrelease.aux platexrelease.log platexrelease.dvi
 
@@ -84,22 +105,23 @@ pldoc.pdf: $(PLDOC_SRC)
 	for x in jltxdoc.cls pldoc.tex Xins.ins; do \
 	if [ -e $$x ]; then rm $$x; fi \
 	done
-	platex --kanji=jis pldocs.ins && \
-	platex --kanji=jis Xins.ins && sh mkpldoc.sh && \
+	platex $(KANJI) pldocs.ins
+	platex $(KANJI) Xins.ins
+	sh mkpldoc.sh
 	dvipdfmx $(FONTMAP) pldoc.dvi
 	rm *.aux *.log pldoc.toc pldoc.idx pldoc.ind pldoc.ilg
 	rm pldoc.glo pldoc.gls *.dvi pldoc.tex Xins.ins
 	rm *.cfg pldoc.dic mkpldoc.sh dstcheck.pl
 
 nidanfloat.pdf: $(NIDAN_SRC)
-	platex --kanji=jis nidanfloat.dtx && \
-	platex --kanji=jis nidanfloat.dtx && \
+	platex $(KANJI) nidanfloat.dtx
+	platex $(KANJI) nidanfloat.dtx
 	dvipdfmx $(FONTMAP) nidanfloat.dvi
 	rm nidanfloat.aux nidanfloat.log nidanfloat.dvi
 
 ascmac.pdf: $(ASCMAC_SRC)
-	platex --kanji=jis ascmac.dtx && \
-	platex --kanji=jis ascmac.dtx && \
+	platex $(KANJI) ascmac.dtx
+	platex $(KANJI) ascmac.dtx
 	dvipdfmx $(FONTMAP) ascmac.dvi
 	rm ascmac.aux ascmac.log ascmac.toc ascmac.dvi
 
