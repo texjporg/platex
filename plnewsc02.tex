@@ -1,0 +1,71 @@
+%% <2016/06/07>
+\documentclass{plnews}
+
+\publicationyear{2016}% 発行年
+\publicationmonth{06}% 発行月
+\publicationissue{c2}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\pTeX{p\kern-.15em\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+
+\begin{document}
+
+\maketitle
+
+\section{この文書について}
+この文書はコミュニティ版\pLaTeXe\ \texttt{<2016/06/07>}について、
+\pLaTeXe\ \texttt{<2016/05/07>}からの更新箇所をまとめたものです。
+以前のアスキー版の変更点については、
+\file{plnews*.tex}や\file{Changes\_asciimw.txt}を参照してください。
+コミュニティ版の変更点については、\file{plnewsc*.tex}を参照してください。
+\LaTeX{}レベルでの更新箇所は、\LaTeX{}に付属の\file{ltnews*.tex}などを
+参照してください。
+
+
+\section{アクセント文字のバグ修正}
+\pLaTeX\ \texttt{<2016/05/07>}で「縦組で「\AA{}」が乱れるバグの修正」を
+導入しましたが、この変更で「すべての合成文字でリガチャやカーニングがきか
+ない、周囲に|\xkanjiskip|が入らない」という不具合が入ってしまいました。
+この問題を修正しました (Issue \#5) 。
+
+
+\section{\file{pfltrace}パッケージの追加}
+\LaTeX\ \texttt{<2014/05/01>}で、\file{fltrace}パッケージが追加されまし
+た。これは\LaTeX{}カーネルのソースに隠れていたフロート配置アルゴリズムの
+トレースに使うコードをパッケージの形に抽出したもの\footnote{参考：
+\LaTeX\ News Issue 21、\file{ltnews21.tex}}で、実は\pLaTeX{}カーネルの
+ソースにも同様に隠れていたコードがありました。これを取り出したものが
+\file{pfltrace}パッケージです。
+
+フロートアルゴリズムの動作を確認したい場合は
+\begin{verbatim}
+  \usepackage{pfltrace} \tracefloats
+\end{verbatim}
+のように書きます。トレースを中断するには|\tracefloatsoff|を使い、
+現在のさまざまなフロートパラメータの値を確認するには|\tracefloatvals|を
+使います。実際の処理は\file{fltrace}パッケージを読み込むことで行い、
+\pLaTeX{}特有の変更のみが\file{pfltrace}パッケージに書かれています
+\footnote{フォント選択コマンドのトレースに使う\file{ptrace}パッケージ
+と\file{tracefnt}パッケージ、過去の\pLaTeX{}のエミュレートに使う
+\file{platex\-release}パッケージと\file{latex\-release}パッケージも、
+これと同様の関係になっています。}。
+
+
+\section{その他の変更点}
+\pLaTeX{}の概要については\file{platex.pdf}を、実際のコードは\file{pldoc.pdf}を
+参照してください。コードの変更履歴も\file{pldoc.pdf}の末尾で確認できます。
+
+
+\section{開発版とバグレポート先}
+コミュニティ版\pLaTeX{}とu\pLaTeX{}はアスキー版\pLaTeX{}とは異なります
+ので、バグレポートはアスキー宛てではなく、日本語\TeX{}開発コミュニティ
+に報告してください。\TeX\ ForumやGitHubのIssueシステムが利用できます。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
