@@ -157,8 +157,7 @@
 % \begin{quote}
 % \begin{description}
 % \item[第\ref{platex:intro}節]
-%  この節です。この文書についての概要と、
-%  \dst{}のためのオプションについて述べています。
+%  この節です。この文書についての概要を述べています。
 %
 % \item[第\ref{platex:plcore}節]
 %  p\LaTeXe{}で拡張した機能についての概要です。
@@ -168,9 +167,12 @@
 % \item[第\ref{platex:compatibility}節]
 %  旧バージョンのp\LaTeX{}との互換性について述べています。
 %
+% \item[付録\ref{app:dst}]
+%  この文書ソースの\dst{}のためのオプションについて述べています。
+%
 % \item[付録\ref{app:pldoc}]
 %  p\LaTeXe{}のdtxファイルをまとめて一つのDVIファイルにするための
-%  文書ファイル説明をしています。
+%  文書ファイルの説明をしています。
 %
 % \item[付録\ref{app:omake}]
 %  付録\ref{app:pldoc}で説明をした文書ファイルを処理するshスクリプト（手順）、
@@ -178,56 +180,6 @@
 %  説明しています。
 % \end{description}
 % \end{quote}
-%
-%
-% \subsection{\dst{}プログラムのためのオプション}
-% この文書を\dst{}プログラムによって処理することによって、
-% いくつかの異なるファイルを生成することができます。
-%
-% この文書の\dst{}プログラムのためのオプションは、次のとおりです。
-%
-% \DeleteShortVerb{\|}
-% \begin{center}
-% \begin{tabular}{l|p{.8\linewidth}}
-% \emph{オプション} & \emph{意味}\\\hline
-% plcore & フォーマットファイルを作るためのファイルを生成\\
-% pldoc  & p\LaTeXe{}のソースファイルをまとめて組版するための
-%          文書ファイルを生成\\[2mm]
-% shprog & 上記のファイルを作成するためのshスクリプトを生成\\
-% plprog & 入れ子構造を調べる簡単なperlスクリプトを生成\\
-% Xins   & 上記のshスクリプトやperlスクリプトを取り出すための
-%            \dst{}バッチファイルを生成\\
-% \end{tabular}
-% \end{center}
-% \MakeShortVerb{\|}
-%
-% \subsubsection{ファイルの取り出し方}
-%
-% たとえば、この文書の``plcore''の部分を``\file{platex.ltx}''という
-% ファイルにするときの手順はつぎのようになります。
-%
-% \begin{enumerate}
-% \item platex docstrip
-% \item 入力ファイルの拡張子（dtx）を入力する。
-% \item 出力ファイルの拡張子（ltx）を入力する。
-% \item \dst{}オプション（plcore）を入力する。
-% \item 入力ファイル名（platex）を入力する。
-% \item \file{platex.ltx}が存在する場合は、確認を求めてくるので、
-%  ``y''を入力する。
-% \item 別の処理を行なうかを問われるので、``n''を入力する。
-% \end{enumerate}
-% これで、\file{platex.ltx}が作られます。
-%
-% あるいは、次のような内容のファイル\file{batch.ins}を作成し、
-% |platex fmt.ins|することでも\file{platex.ltx}を作ることができます。
-%
-% \begin{verbatim}
-%   \def\batchfile{batch.ins}
-%   \input docstrip.tex
-%   \generateFile{platex.ltx}{t}{\from{platex.dtx}{plcore}}
-% \end{verbatim}
-%
-% \dst プログラムの詳細は、\file{docstrip.dtx}を参照してください。
 %
 %
 %
@@ -251,7 +203,7 @@
 % 前者は|\documentclass|コマンドを用いて読み込み、
 % 後者は|\usepackage|コマンドを用いて読み込みます。
 %
-% \begin{chuui}[従来のp\LaTeX~2.09ユーザへの注意：]\normalfont
+% \begin{chuui}[古いp\LaTeX~2.09ユーザへの注意：]\normalfont
 % クラスファイルとパッケージファイルは、従来、スタイルファイルと呼ばれていた
 % ものです。\LaTeXe{}ではそれらを、レイアウトに関するものをクラスファイルと
 % 呼び、マクロの拡張をするものをパッケージファイルと呼んで区別するように
@@ -273,8 +225,14 @@
 % これらは\TeX{}の内部形式に変換された形式となっています。
 % フォーマットファイルを作成するには、
 % ソースファイル``platex.ltx''を|iniptex|プログラムで処理します。
+% ただし、\TeX\ LiveやW32\TeX{}ではこの処理を簡単にする|fmtutil|あるいは
+% |fmtutil-sys|というプログラムが用意されています。
+% 以下を実行すれば、フォーマットファイル\file{platex.fmt}が作成されます。
+% \begin{verbatim}
+%   fmtutil --byfmt platex
+% \end{verbatim}
 %
-% 次のリストが、その内容です。
+% 次のリストが、``platex.ltx''の内容です。
 % ただし、このバージョンでは、\LaTeX{}からp\LaTeXe{}への拡張を
 % \file{plcore.ltx}をロードすることで行ない、
 % \file{latex.ltx}には直接、手を加えないようにしています。
@@ -457,6 +415,55 @@
 %
 %
 % \appendix
+%
+% \section{\dst{}プログラムのためのオプション}\label{app:dst}
+% この文書のソース(platex.dtx)を\dst{}プログラムによって処理することによって、
+% いくつかの異なるファイルを生成することができます。
+% \dst プログラムの詳細は、\file{docstrip.dtx}を参照してください。
+%
+% この文書の\dst{}プログラムのためのオプションは、次のとおりです。
+%
+% \DeleteShortVerb{\|}
+% \begin{center}
+% \begin{tabular}{l|p{.8\linewidth}}
+% \emph{オプション} & \emph{意味}\\\hline
+% plcore & フォーマットファイルを作るためのファイルを生成\\
+% pldoc  & p\LaTeXe{}のソースファイルをまとめて組版するための
+%          文書ファイルを生成\\[2mm]
+% shprog & 上記のファイルを作成するためのshスクリプトを生成\\
+% plprog & 入れ子構造を調べる簡単なperlスクリプトを生成\\
+% Xins   & 上記のshスクリプトやperlスクリプトを取り出すための
+%            \dst{}バッチファイルを生成\\
+% \end{tabular}
+% \end{center}
+% \MakeShortVerb{\|}
+%
+% \subsection{ファイルの取り出し方}
+%
+% たとえば、この文書の``plcore''の部分を``\file{platex.ltx}''という
+% ファイルにするときの手順はつぎのようになります。
+%
+% \begin{enumerate}
+% \item platex docstrip
+% \item 入力ファイルの拡張子（dtx）を入力する。
+% \item 出力ファイルの拡張子（ltx）を入力する。
+% \item \dst{}オプション（plcore）を入力する。
+% \item 入力ファイル名（platex）を入力する。
+% \item \file{platex.ltx}が存在する場合は、確認を求めてくるので、
+%  ``y''を入力する。
+% \item 別の処理を行なうかを問われるので、``n''を入力する。
+% \end{enumerate}
+% これで、\file{platex.ltx}が作られます。
+%
+% あるいは、次のような内容のファイル\file{fmt.ins}を作成し、
+% |platex fmt.ins|することでも\file{platex.ltx}を作ることができます。
+%
+% \begin{verbatim}
+%   \def\batchfile{fmt.ins}
+%   \input docstrip.tex
+%   \generateFile{platex.ltx}{t}{\from{platex.dtx}{plcore}}
+% \end{verbatim}
+%
 %
 % \section{文書ファイル}\label{app:pldoc}
 % \changes{v1.0c}{1997/01/25}{Add to filecontents environment for pldoc.dic.}
@@ -659,14 +666,10 @@
 % \section{おまけプログラム}\label{app:omake}
 %
 % \subsection{シェルスクリプト\file{mkpldoc.sh}}\label{app:shprog}
-% ここでは、p\LaTeXe{}のマクロ定義ファイルをまとめて組版するときに便利な、
-% シェルスクリプト\footnote{このシェルスクリプトはUNIX用です。
+% p\LaTeXe{}のマクロ定義ファイルをまとめて組版するときに便利なシェルスクリプトです。
+% このシェルスクリプト\footnote{このシェルスクリプトはUNIX用です。
 % しかしrmコマンドをdeleteコマンドにするなどすれば、簡単にDOSなどのバッチ
-% ファイルに修正することができます。}について説明をしています。
-% また、このシェルスクリプトを取り出すための、
-% \dst{}バッチファイルについても説明をしています。
-%
-% このシェルスクリプトの使用方法は次のとおりです。
+% ファイルに修正することができます。}の使用方法は次のとおりです。
 % \begin{verbatim}
 %    sh mkpldoc.sh
 % \end{verbatim}
