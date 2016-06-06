@@ -44,12 +44,12 @@
 \def\@text@composite@x#1#2{%
   \ifx#1\relax
     \@secondoftwo#1{#2}%
-  \else\pltx@isletter{#1}{\@firstoftwo#1{#2}}{%
+  \else\pltx@isletter{#1}{#1}{%
     \begingroup
     \g@tlastchart@\@tempcnta
     \setbox\z@\hbox\bgroup%
       \ybaselineshift\z@\tbaselineshift\z@
-      \@firstoftwo#1{#2}%
+      #1%
     \egroup
     \@tempdima=\iftdir
       \ifmdir
