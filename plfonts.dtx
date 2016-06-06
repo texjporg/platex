@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{1811}
+% \CheckSum{1866}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -69,13 +69,15 @@
 %    \cs{AA}など一部の合成文字がおかしくなることへの対応。}
 % \changes{v1.6b}{2016/04/30}{ptrace.styの冒頭でtracefnt.styを
 %    \cs{RequirePackageWithOptions}するようにした}
+% \changes{v1.6c}{2016/06/06?}{v1.6aでの修正で\'e など全てのアクセント付き文字で
+%    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2016/04/30 v1.6b pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2016/06/06? v1.6c pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -1637,37 +1639,50 @@
 %    \begin{macrocode}
 %<*pldefs>
 \ProvidesFile{pldefs.ltx}
-      [2016/04/01 v1.6a pLaTeX Kernel (Default settings)] 
+      [2016/06/06? v1.6c pLaTeX Kernel (Default settings)] 
+%</pldefs>
 %    \end{macrocode}
 %
 % \subsection{合成文字}
-% \begin{macro}{\@text@composite}
-% \begin{macro}{\@text@composite@x}
 % \LaTeXe{}のカーネルのコードをそのまま使うと、p\TeX{}のベースライン
 % 補正量がゼロでないときに合成文字がおかしくなっていたため、対策します。
 % \changes{v1.6a}{2016/04/01}{ベースライン補正量が0でないときに
 %    \cs{AA}など一部の合成文字がおかしくなることへの対応。}
+% \changes{v1.6c}{2016/06/06?}{v1.6aでの修正で\'e など全てのアクセント付き文字で
+%    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
 %    \begin{macrocode}
-%</pldefs>
 %<platexrelease>\plIncludeInRelease{2016/04/17}{\@text@composite}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
 %<*pldefs|platexrelease>
+%    \end{macrocode}
+% \begin{macro}{\g@tlastchart@}
+% \TeX\ Live 2015で追加された\cs{lastnodechar}を利用して、
+% 「直前の文字」の符号位置を得るコードです。\cs{lastnodechar}が未定義の場合は
+% $-1$が返ります。
+%    \begin{macrocode}
+\def\g@tlastchart@#1{#1\ifx\lastnodechar\relax\m@ne\else\lastnodechar\fi}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@text@composite}
+% \begin{macro}{\@text@composite@x}
+%    \begin{macrocode}
 \def\@text@composite#1#2#3#{%
   \begingroup
-  \setbox\z@=\hbox\bgroup%
-  \ybaselineshift\z@\tbaselineshift\z@
+  \g@tlastchart@\@tempcnta
   \expandafter\@text@composite@x
   \csname\string#1-\string#2\endcsname}
 \def\@text@composite@x#1#2{%
   \ifx#1\relax
-    \expandafter\@secondoftwo
+    \@secondoftwo#1{#2}%
   \else
-    \expandafter\@firstoftwo
-  \fi
-  #1{#2}\egroup
-  \leavevmode
-  \expandafter\lower
-    \iftdir
+    \setbox\z@\hbox\bgroup%
+      \ybaselineshift\z@\tbaselineshift\z@
+      \@firstoftwo#1{#2}%
+      \g@tlastchart@\@tempcntb
+      \xdef\@temp{\noexpand\@tempcntb=\the\@tempcntb}%
+      \aftergroup\@temp
+    \egroup
+    \@tempdima=\iftdir
       \ifmdir
         \ifmmode\tbaselineshift\else\ybaselineshift\fi
       \else
@@ -1676,7 +1691,21 @@
     \else
       \ybaselineshift
     \fi
-    \box\z@
+    \leavevmode
+    \ifdim\@tempdima=\z@\unhbox\z@\else
+      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
+        \ifodd\xspcode\@tempcntb
+          \ifnum\@tempcnta<\@cclvi\else
+            \ifnum\inhibitxspcode\@tempcnta>\@ne
+              \ifdim\lastskip=\z@\hskip\xkanjiskip\fi
+            \fi
+          \fi
+        \fi
+      \fi\fi
+      \lower\@tempdima\box\z@
+    \fi
+  \fi
+  %
   \endgroup}
 %</pldefs|platexrelease>
 %<platexrelease>\plEndIncludeInRelease

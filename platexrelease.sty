@@ -151,22 +151,24 @@ of this package available from CTAN}
 %%
 \plIncludeInRelease{2016/04/17}{\@text@composite}
                    {Fix for non-zero baselineshift}%
+\def\g@tlastchart@#1{#1\ifx\lastnodechar\relax\m@ne\else\lastnodechar\fi}
 \def\@text@composite#1#2#3#{%
   \begingroup
-  \setbox\z@=\hbox\bgroup%
-  \ybaselineshift\z@\tbaselineshift\z@
+  \g@tlastchart@\@tempcnta
   \expandafter\@text@composite@x
   \csname\string#1-\string#2\endcsname}
 \def\@text@composite@x#1#2{%
   \ifx#1\relax
-    \expandafter\@secondoftwo
+    \@secondoftwo#1{#2}%
   \else
-    \expandafter\@firstoftwo
-  \fi
-  #1{#2}\egroup
-  \leavevmode
-  \expandafter\lower
-    \iftdir
+    \setbox\z@\hbox\bgroup%
+      \ybaselineshift\z@\tbaselineshift\z@
+      \@firstoftwo#1{#2}%
+      \g@tlastchart@\@tempcntb
+      \xdef\@temp{\noexpand\@tempcntb=\the\@tempcntb}%
+      \aftergroup\@temp
+    \egroup
+    \@tempdima=\iftdir
       \ifmdir
         \ifmmode\tbaselineshift\else\ybaselineshift\fi
       \else
@@ -175,7 +177,21 @@ of this package available from CTAN}
     \else
       \ybaselineshift
     \fi
-    \box\z@
+    \leavevmode
+    \ifdim\@tempdima=\z@\unhbox\z@\else
+      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
+        \ifodd\xspcode\@tempcntb
+          \ifnum\@tempcnta<\@cclvi\else
+            \ifnum\inhibitxspcode\@tempcnta>\@ne
+              \ifdim\lastskip=\z@\hskip\xkanjiskip\fi
+            \fi
+          \fi
+        \fi
+      \fi\fi
+      \lower\@tempdima\box\z@
+    \fi
+  \fi
+  %
   \endgroup}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@text@composite}
