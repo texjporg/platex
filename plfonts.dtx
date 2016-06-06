@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{1861}
+% \CheckSum{1923}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -69,7 +69,7 @@
 %    \cs{AA}など一部の合成文字がおかしくなることへの対応。}
 % \changes{v1.6b}{2016/04/30}{ptrace.styの冒頭でtracefnt.styを
 %    \cs{RequirePackageWithOptions}するようにした}
-% \changes{v1.6c}{2016/06/06?}{v1.6aでの修正で\'e など全てのアクセント付き文字で
+% \changes{v1.6c}{2016/06/06}{v1.6aでの修正で\'e など全てのアクセント付き文字で
 %    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
 % \fi
 %
@@ -77,7 +77,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2016/06/06? v1.6c pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2016/06/06 v1.6c pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -1639,19 +1639,15 @@
 %    \begin{macrocode}
 %<*pldefs>
 \ProvidesFile{pldefs.ltx}
-      [2016/06/06? v1.6c pLaTeX Kernel (Default settings)] 
+      [2016/06/06 v1.6c pLaTeX Kernel (Default settings)] 
 %</pldefs>
 %    \end{macrocode}
 %
 % \subsection{合成文字}
 % \LaTeXe{}のカーネルのコードをそのまま使うと、p\TeX{}のベースライン
 % 補正量がゼロでないときに合成文字がおかしくなっていたため、対策します。
-% \changes{v1.6a}{2016/04/01}{ベースライン補正量が0でないときに
-%    \cs{AA}など一部の合成文字がおかしくなることへの対応。}
-% \changes{v1.6c}{2016/06/06?}{v1.6aでの修正で\'e など全てのアクセント付き文字で
-%    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2016/04/17}{\@text@composite}
+%<platexrelease>\plIncludeInRelease{2016/06/06dev}{\@text@composite}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
 %<*pldefs|platexrelease>
 %    \end{macrocode}
@@ -1659,13 +1655,15 @@
 % \TeX\ Live 2015で追加された\cs{lastnodechar}を利用して、
 % 「直前の文字」の符号位置を得るコードです。\cs{lastnodechar}が未定義の場合は
 % $-1$が返ります。
+% \changes{v1.6c}{2016/06/06}{マクロ追加}
 %    \begin{macrocode}
-\def\g@tlastchart@#1{#1\ifx\lastnodechar\relax\m@ne\else\lastnodechar\fi}
+\def\g@tlastchart@#1{#1\ifx\lastnodechar\@undefined\m@ne\else\lastnodechar\fi}
 %    \end{macrocode}
 % \end{macro}
 % \begin{macro}{\pltx@isletter}
 % 第一引数のマクロ(|#1|)の置換テキストが、カテゴリコード11か12の文字トークン1文字であった
 % 場合に第二引数の内容に展開され、そうでない場合は第三引数の内容に展開されます。
+% \changes{v1.6c}{2016/06/06}{マクロ追加}
 %    \begin{macrocode}
 \def\pltx@isletter#1#2#3{%
   \expandafter\expandafter\expandafter
@@ -1677,6 +1675,10 @@
 % \end{macro}
 % \begin{macro}{\@text@composite}
 % \begin{macro}{\@text@composite@x}
+% \changes{v1.6a}{2016/04/01}{ベースライン補正量が0でないときに
+%    \cs{AA}など一部の合成文字がおかしくなることへの対応。}
+% \changes{v1.6c}{2016/06/06}{v1.6aでの修正で\'e など全てのアクセント付き文字で
+%    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
 %    \begin{macrocode}
 \def\@text@composite#1#2#3#{%
   \expandafter\@text@composite@x
@@ -1709,8 +1711,41 @@
 }
 %</pldefs|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\@text@composite}
+%<platexrelease>                   {Fix for non-zero baselineshift}%
+%<platexrelease>\let\g@tlastchart@\@undefined
+%<platexrelease>\let\pltx@isletter\@undefined
+%<platexrelease>\def\@text@composite#1#2#3#{%
+%<platexrelease>  \begingroup
+%<platexrelease>  \setbox\z@=\hbox\bgroup%
+%<platexrelease>  \ybaselineshift\z@\tbaselineshift\z@
+%<platexrelease>  \expandafter\@text@composite@x
+%<platexrelease>  \csname\string#1-\string#2\endcsname}
+%<platexrelease>\def\@text@composite@x#1#2{%
+%<platexrelease>  \ifx#1\relax
+%<platexrelease>    \expandafter\@secondoftwo
+%<platexrelease>  \else
+%<platexrelease>    \expandafter\@firstoftwo
+%<platexrelease>  \fi
+%<platexrelease>  #1{#2}\egroup
+%<platexrelease>  \leavevmode
+%<platexrelease>  \expandafter\lower
+%<platexrelease>    \iftdir
+%<platexrelease>      \ifmdir
+%<platexrelease>        \ifmmode\tbaselineshift\else\ybaselineshift\fi
+%<platexrelease>      \else
+%<platexrelease>        \tbaselineshift
+%<platexrelease>      \fi
+%<platexrelease>    \else
+%<platexrelease>      \ybaselineshift
+%<platexrelease>    \fi
+%<platexrelease>    \box\z@
+%<platexrelease>  \endgroup}
+%<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@text@composite}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
+%<platexrelease>\let\g@tlastchart@\@undefined
+%<platexrelease>\let\pltx@isletter\@undefined
 %<platexrelease>\def\@text@composite#1#2#3\@text@composite{%
 %<platexrelease>   \expandafter\@text@composite@x
 %<platexrelease>      \csname\string#1-\string#2\endcsname}

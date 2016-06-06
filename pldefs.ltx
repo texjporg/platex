@@ -30,8 +30,8 @@
 %%   Right brace   \}     Tilde         \~}
 %%
 \ProvidesFile{pldefs.ltx}
-      [2016/06/06? v1.6c pLaTeX Kernel (Default settings)]
-\def\g@tlastchart@#1{#1\ifx\lastnodechar\relax\m@ne\else\lastnodechar\fi}
+      [2016/06/06 v1.6c pLaTeX Kernel (Default settings)]
+\def\g@tlastchart@#1{#1\ifx\lastnodechar\@undefined\m@ne\else\lastnodechar\fi}
 \def\pltx@isletter#1#2#3{%
   \expandafter\expandafter\expandafter
     \ifx\expandafter\@cdr#1\@nil\@nil\@nil

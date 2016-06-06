@@ -34,7 +34,7 @@
 \edef\p@known@latexreleaseversion
    {2016/03/31}
 \edef\platexreleaseversion
-   {2016/05/21}
+   {2016/06/06dev}
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
   {\@plIncludeInRelease{#1}[#1]}}
@@ -149,9 +149,9 @@ of this package available from CTAN}
 %%   Grave accent  \`     Left brace    \{     Vertical bar  \|
 %%   Right brace   \}     Tilde         \~}
 %%
-\plIncludeInRelease{2016/04/17}{\@text@composite}
+\plIncludeInRelease{2016/06/06dev}{\@text@composite}
                    {Fix for non-zero baselineshift}%
-\def\g@tlastchart@#1{#1\ifx\lastnodechar\relax\m@ne\else\lastnodechar\fi}
+\def\g@tlastchart@#1{#1\ifx\lastnodechar\@undefined\m@ne\else\lastnodechar\fi}
 \def\pltx@isletter#1#2#3{%
   \expandafter\expandafter\expandafter
     \ifx\expandafter\@cdr#1\@nil\@nil\@nil
@@ -188,8 +188,41 @@ of this package available from CTAN}
   \fi
 }
 \plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\@text@composite}
+                   {Fix for non-zero baselineshift}%
+\let\g@tlastchart@\@undefined
+\let\pltx@isletter\@undefined
+\def\@text@composite#1#2#3#{%
+  \begingroup
+  \setbox\z@=\hbox\bgroup%
+  \ybaselineshift\z@\tbaselineshift\z@
+  \expandafter\@text@composite@x
+  \csname\string#1-\string#2\endcsname}
+\def\@text@composite@x#1#2{%
+  \ifx#1\relax
+    \expandafter\@secondoftwo
+  \else
+    \expandafter\@firstoftwo
+  \fi
+  #1{#2}\egroup
+  \leavevmode
+  \expandafter\lower
+    \iftdir
+      \ifmdir
+        \ifmmode\tbaselineshift\else\ybaselineshift\fi
+      \else
+        \tbaselineshift
+      \fi
+    \else
+      \ybaselineshift
+    \fi
+    \box\z@
+  \endgroup}
+\plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@text@composite}
                    {Fix for non-zero baselineshift}%
+\let\g@tlastchart@\@undefined
+\let\pltx@isletter\@undefined
 \def\@text@composite#1#2#3\@text@composite{%
    \expandafter\@text@composite@x
       \csname\string#1-\string#2\endcsname}
