@@ -43,7 +43,7 @@
   \csname\string#1-\string#2\endcsname}
 \def\@text@composite@x#1#2{%
   \ifx#1\relax
-    \@secondoftwo#1{#2}%
+    #2%
   \else\pltx@isletter{#1}{#1}{%
     \begingroup
     \g@tlastchart@\@tempcnta

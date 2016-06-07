@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{1921}
+% \CheckSum{1920}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -1685,7 +1685,7 @@
   \csname\string#1-\string#2\endcsname}
 \def\@text@composite@x#1#2{%
   \ifx#1\relax
-    \@secondoftwo#1{#2}%
+    #2%
   \else\pltx@isletter{#1}{#1}{%
     \begingroup
     \g@tlastchart@\@tempcnta
