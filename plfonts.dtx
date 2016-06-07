@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{1920}
+% \CheckSum{1961}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -1688,10 +1688,12 @@
     #2%
   \else\pltx@isletter{#1}{#1}{%
     \begingroup
-    \g@tlastchart@\@tempcnta
     \setbox\z@\hbox\bgroup%
       \ybaselineshift\z@\tbaselineshift\z@
       #1%
+      \g@tlastchart@\@tempcntb
+      \xdef\pltx@composite@temp{\noexpand\@tempcntb=\the\@tempcntb\relax}%
+      \aftergroup\pltx@composite@temp
     \egroup
     \@tempdima=\iftdir
       \ifmdir
@@ -1702,10 +1704,18 @@
     \else
       \ybaselineshift
     \fi
-    \leavevmode
-    \ifdim\@tempdima=\z@\unhbox\z@\else
-      \lower\@tempdima\box\z@
-    \fi
+    %%%\ifdim\@tempdima=\z@\unhbox\z@\else
+      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
+        \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
+      \fi\fi$%
+      \ifx\textbaselineshiftfactor\@undefined\else
+        \textbaselineshiftfactor\z@\fi
+      \box\z@
+      $%
+      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
+        \ifnum\xspcode\@tempcntb<2\hbox{}\fi
+      \fi\fi
+    %%%\fi
     \endgroup}%
   \fi
 }
