@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{1961}
+% \CheckSum{1962}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -1680,9 +1680,9 @@
 % \changes{v1.6c}{2016/06/06}{v1.6aでの修正で\'e など全てのアクセント付き文字で
 %    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
 %    \begin{macrocode}
-\def\@text@composite#1#2#3#{%
-  \expandafter\@text@composite@x
-  \csname\string#1-\string#2\endcsname}
+%<platexrelease>\def\@text@composite#1#2#3\@text@composite{%
+%<platexrelease>   \expandafter\@text@composite@x
+%<platexrelease>      \csname\string#1-\string#2\endcsname}
 \def\@text@composite@x#1#2{%
   \ifx#1\relax
     #2%

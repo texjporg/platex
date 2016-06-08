@@ -132,6 +132,17 @@ of this package available from CTAN}
 \fi
 \let\pfmtversion\requestedplpatchdate
 \let\currentpLaTeXdate\requestedpLaTeXdate
+\plIncludeInRelease{2016/06/07}{\PackageWarning}{pLaTeX Info}%
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\PackageWarning}{pLaTeX Info}%
+  \PackageWarningNoLine{platexrelease}{%
+      You selected pLaTeX2e <\pfmtversion>, but\MessageBreak
+      this version of pLaTeX2e is known to have\MessageBreak
+      some critical bugs. We advise you to\MessageBreak
+      select another format date}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\PackageWarning}{pLaTeX Info}%
+\plEndIncludeInRelease
 %% File: plfonts.dtx
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -158,9 +169,9 @@ of this package available from CTAN}
     \expandafter\expandafter\expandafter\ifcat\expandafter\@car#1\@nil e#2\else
     \expandafter\expandafter\expandafter\ifcat\expandafter\@car#1\@nil -#2%
     \else #3\fi\fi\else#3\fi}
-\def\@text@composite#1#2#3#{%
-  \expandafter\@text@composite@x
-  \csname\string#1-\string#2\endcsname}
+\def\@text@composite#1#2#3\@text@composite{%
+   \expandafter\@text@composite@x
+      \csname\string#1-\string#2\endcsname}
 \def\@text@composite@x#1#2{%
   \ifx#1\relax
     #2%

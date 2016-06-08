@@ -8,7 +8,7 @@
 %
 % \fi
 %
-% \CheckSum{108}
+% \CheckSum{122}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -295,6 +295,26 @@ of this package available from CTAN}
 %    \end{macrocode}
 %
 % このあとは、p\LaTeXe{}のカーネルの変更点を示すコードが入ります。
+%
+% \section{注意：p\LaTeXe{}のバグ情報}
+%
+% 以下の日付のp\LaTeXe{}にはcriticalなバグがあることを、
+% 日本語\TeX{}開発コミュニティが把握しています。
+% エミュレートしようと考えている場合は、注意してください。
+%
+%    \begin{macrocode}
+\plIncludeInRelease{2016/06/07}{\PackageWarning}{pLaTeX Info}%
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\PackageWarning}{pLaTeX Info}%
+  \PackageWarningNoLine{platexrelease}{%
+      You selected pLaTeX2e <\pfmtversion>, but\MessageBreak
+      this version of pLaTeX2e is known to have\MessageBreak
+      some critical bugs. We advise you to\MessageBreak
+      select another format date}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\PackageWarning}{pLaTeX Info}%
+\plEndIncludeInRelease
+%    \end{macrocode}
 %
 % \Finale
 %

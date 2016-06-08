@@ -38,9 +38,6 @@
     \expandafter\expandafter\expandafter\ifcat\expandafter\@car#1\@nil e#2\else
     \expandafter\expandafter\expandafter\ifcat\expandafter\@car#1\@nil -#2%
     \else #3\fi\fi\else#3\fi}
-\def\@text@composite#1#2#3#{%
-  \expandafter\@text@composite@x
-  \csname\string#1-\string#2\endcsname}
 \def\@text@composite@x#1#2{%
   \ifx#1\relax
     #2%
