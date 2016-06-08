@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{1962}
+% \CheckSum{1980}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -1695,16 +1695,20 @@
       \xdef\pltx@composite@temp{\noexpand\@tempcntb=\the\@tempcntb\relax}%
       \aftergroup\pltx@composite@temp
     \egroup
-    \@tempdima=\iftdir
-      \ifmdir
-        \ifmmode\tbaselineshift\else\ybaselineshift\fi
-      \else
-        \tbaselineshift
-      \fi
-    \else
-      \ybaselineshift
+    \ifnum\@tempcntb<\z@
+      \@tempdima=\iftdir
+          \ifmdir
+            \ifmmode\tbaselineshift\else\ybaselineshift\fi
+          \else
+            \tbaselineshift
+          \fi
+        \else
+          \ybaselineshift
+        \fi
+      \@tempcntb=\@cclvi
+    \else\@tempdima=\z@
     \fi
-    %%%\ifdim\@tempdima=\z@\unhbox\z@\else
+    \ifnum\@tempcntb<\@cclvi
       \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
         \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
       \fi\fi$%
@@ -1715,7 +1719,9 @@
       \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
         \ifnum\xspcode\@tempcntb<2\hbox{}\fi
       \fi\fi
-    %%%\fi
+    \else
+      \ifdim\@tempdima=\z@\unhbox\z@\else\lower\@tempdima\box\z@\fi
+    \fi
     \endgroup}%
   \fi
 }

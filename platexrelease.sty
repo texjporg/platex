@@ -184,16 +184,20 @@ of this package available from CTAN}
       \xdef\pltx@composite@temp{\noexpand\@tempcntb=\the\@tempcntb\relax}%
       \aftergroup\pltx@composite@temp
     \egroup
-    \@tempdima=\iftdir
-      \ifmdir
-        \ifmmode\tbaselineshift\else\ybaselineshift\fi
-      \else
-        \tbaselineshift
-      \fi
-    \else
-      \ybaselineshift
+    \ifnum\@tempcntb<\z@
+      \@tempdima=\iftdir
+          \ifmdir
+            \ifmmode\tbaselineshift\else\ybaselineshift\fi
+          \else
+            \tbaselineshift
+          \fi
+        \else
+          \ybaselineshift
+        \fi
+      \@tempcntb=\@cclvi
+    \else\@tempdima=\z@
     \fi
-    %%%\ifdim\@tempdima=\z@\unhbox\z@\else
+    \ifnum\@tempcntb<\@cclvi
       \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
         \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
       \fi\fi$%
@@ -204,7 +208,9 @@ of this package available from CTAN}
       \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
         \ifnum\xspcode\@tempcntb<2\hbox{}\fi
       \fi\fi
-    %%%\fi
+    \else
+      \ifdim\@tempdima=\z@\unhbox\z@\else\lower\@tempdima\box\z@\fi
+    \fi
     \endgroup}%
   \fi
 }
