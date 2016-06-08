@@ -209,7 +209,8 @@ of this package available from CTAN}
         \ifnum\xspcode\@tempcntb<2\hbox{}\fi
       \fi\fi
     \else
-      \ifdim\@tempdima=\z@\unhbox\z@\else\lower\@tempdima\box\z@\fi
+      \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
+      \else\lower\@tempdima\box\z@\fi
     \fi
     \endgroup}%
   \fi

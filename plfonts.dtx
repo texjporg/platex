@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{1980}
+% \CheckSum{1982}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -1695,6 +1695,8 @@
       \xdef\pltx@composite@temp{\noexpand\@tempcntb=\the\@tempcntb\relax}%
       \aftergroup\pltx@composite@temp
     \egroup
+%    \end{macrocode}
+%    \begin{macrocode}
     \ifnum\@tempcntb<\z@
       \@tempdima=\iftdir
           \ifmdir
@@ -1708,6 +1710,11 @@
       \@tempcntb=\@cclvi
     \else\@tempdima=\z@
     \fi
+%    \end{macrocode}
+% アクセントが付く「本体の文字」が欧文文字と推測される場合には、
+% 一旦数式モードに入ることによって\cs{xkanjiskip}が前後に入るようにします。
+% 必要なら、数式モードの前後に\cs{null}を補って\cs{xkanjiskip}の挿入を抑制します。
+%    \begin{macrocode}
     \ifnum\@tempcntb<\@cclvi
       \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
         \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
@@ -1719,8 +1726,11 @@
       \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
         \ifnum\xspcode\@tempcntb<2\hbox{}\fi
       \fi\fi
+%    \end{macrocode}
+%    \begin{macrocode}
     \else
-      \ifdim\@tempdima=\z@\unhbox\z@\else\lower\@tempdima\box\z@\fi
+      \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
+      \else\lower\@tempdima\box\z@\fi
     \fi
     \endgroup}%
   \fi
