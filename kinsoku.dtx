@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{167}
+% \CheckSum{178}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -28,6 +28,12 @@
 %%   Right brace   \}     Tilde         \~}
 %%
 %
+% \iffalse
+% \changes{v1.0}{1995/04/01}{first edition}
+% \changes{v1.0a}{2016/06/08}{T1などの8ビットフォントエンコーディング
+%      のために128--256の文字を\texttt{\cs{xspcode}=3}に設定}
+% \fi
+%
 % \setcounter{StandardModuleDepth}{1}
 % \StopEventually{}
 %
@@ -35,7 +41,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{kinsoku.dtx}[1995/04/01 v1.0 pLaTeX Kernel]
+\ProvidesFile{kinsoku.dtx}[2016/06/08 v1.0a pLaTeX Kernel (community edition)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{kinsoku.dtx}
@@ -201,6 +207,21 @@
 \xspcode`;=2
 \xspcode`,=2
 \xspcode`.=2
+%    \end{macrocode}
+%
+%
+% T1などの8ビットフォントエンコーディングで128--255の文字は欧文文字ですので、
+% 周囲の和文文字との間に|\xkanjiskip|が挿入される必要があります。そこで、
+% 奥村さんの\file{jsclasses}や田中さんのup\LaTeX{}と同等の対処をします。
+% \changes{v1.0a}{2016/06/08}{T1などの8ビットフォントエンコーディング
+%      のために128--256の文字を\texttt{\cs{xspcode}=3}に設定}
+%
+%    \begin{macrocode}
+\@tempcnta="80
+\loop\ifnum\@tempcnta<\@cclvi
+  \xspcode\@tempcnta=3
+  \advance\@tempcnta\@ne
+\repeat
 %    \end{macrocode}
 %
 % \subsection{ある漢字と前後の英字の間の制御}
