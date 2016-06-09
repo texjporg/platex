@@ -1,0 +1,21 @@
+%#!ptex2pdf -l a.tex
+\documentclass{jarticle}
+%\DeclareTextComposite{\"}{OT1}{圏}{`点}% invalid
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\DeclareTextCompositeCommand{\"}{OT1}{圏}{テン}
+\DeclareTextCompositeCommand{\"}{T1}{圏}{テン}
+\def\test{あ\AA あ\'eあ\'圏い\"圏うa\"圏a\AA a（\AA）\'e}
+\makeatletter
+\@tempcnta=128
+\loop\ifnum\@tempcnta<256
+  \xspcode\@tempcnta=3
+  \advance\@tempcnta1
+\repeat
+\begin{document}
+\xkanjiskip15pt
+\ybaselineshift10pt
+\test\par
+\ybaselineshift0pt
+\test
+\end{document}
