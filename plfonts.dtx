@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{1982}
+% \CheckSum{2026}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -1665,12 +1665,24 @@
 % 場合に第二引数の内容に展開され、そうでない場合は第三引数の内容に展開されます。
 % \changes{v1.6c}{2016/06/06}{マクロ追加}
 %    \begin{macrocode}
-\def\pltx@isletter#1#2#3{%
-  \expandafter\expandafter\expandafter
-    \ifx\expandafter\@cdr#1\@nil\@nil\@nil
-    \expandafter\expandafter\expandafter\ifcat\expandafter\@car#1\@nil e#2\else
-    \expandafter\expandafter\expandafter\ifcat\expandafter\@car#1\@nil -#2%
-    \else #3\fi\fi\else#3\fi}
+\def\pltx@mark{\pltx@mark@}
+\let\pltx@scanstop\relax
+\long\def\pltx@cond#1\fi{%
+  #1\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
+\long\def\pltx@isletter#1{%
+  \expandafter\pltx@isletter@i\romannumeral-`0#1\pltx@scanstop}
+\long\def\pltx@isletter@i#1\pltx@scanstop{%
+  \pltx@cond\ifx\pltx@mark#1\pltx@mark\fi{\@firstoftwo}%
+    {\pltx@isletter@ii\pltx@scanstop#1\pltx@scanstop{}#1\pltx@mark}}
+\long\def\pltx@isletter@ii#1\pltx@scanstop#{%
+  \pltx@cond\ifx\pltx@mark#1\pltx@mark\fi%
+    {\pltx@isletter@iii}{\pltx@isletter@iv}}
+\long\def\pltx@isletter@iii#1\pltx@mark{\@secondoftwo}
+\long\def\pltx@isletter@iv#1#2#3\pltx@mark{%
+  \pltx@cond\ifx\pltx@mark#3\pltx@mark\fi{%
+    \pltx@cond{\ifnum0\ifcat A\noexpand#21\fi\ifcat=\noexpand#21\fi>\z@}\fi
+      {\@firstoftwo}{\@secondoftwo}%
+  }{\@secondoftwo}}
 %    \end{macrocode}
 % \end{macro}
 % \begin{macro}{\@text@composite}
