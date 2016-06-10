@@ -212,11 +212,12 @@ of this package available from CTAN}
     \ifnum\@tempcntb<\@cclvi
       \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
         \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
-      \fi\fi$%
-      \ifx\textbaselineshiftfactor\@undefined\else
-        \textbaselineshiftfactor\z@\fi
-      \box\z@
-      $%
+      \fi\fi
+      \begingroup\mathsurround\z@$%
+        \ifx\textbaselineshiftfactor\@undefined\else
+          \textbaselineshiftfactor\z@\fi
+        \box\z@
+      $\endgroup%
       \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
         \ifnum\xspcode\@tempcntb<2\hbox{}\fi
       \fi\fi
