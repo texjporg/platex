@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{2026}
+% \CheckSum{2030}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -1730,11 +1730,12 @@
     \ifnum\@tempcntb<\@cclvi
       \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
         \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
-      \fi\fi$%
-      \ifx\textbaselineshiftfactor\@undefined\else
-        \textbaselineshiftfactor\z@\fi
-      \box\z@
-      $%
+      \fi\fi
+      \begingroup\mathsurround\z@$%
+        \ifx\textbaselineshiftfactor\@undefined\else
+          \textbaselineshiftfactor\z@\fi
+        \box\z@
+      $\endgroup%
       \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
         \ifnum\xspcode\@tempcntb<2\hbox{}\fi
       \fi\fi
