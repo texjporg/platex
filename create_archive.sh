@@ -14,6 +14,7 @@ echo " * Create $PROJECT.tds.zip"
 git archive --format=tar --prefix=$PROJECT/ HEAD | (cd $TMP && tar xf -)
 rm $TMP/$PROJECT/.gitignore
 rm $TMP/$PROJECT/create_archive.sh
+rm -rf $TMP/$PROJECT/tests
 perl -pi.bak -e "s/\\\$RELEASEDATE/$RELEASEDATE/g" $TMP/$PROJECT/README.md
 rm -f $TMP/$PROJECT/README.md.bak
 
@@ -51,6 +52,7 @@ git archive --format=tar --prefix=$PROJECT/ HEAD | (cd $TMP && tar xf -)
 # Remove generated and auxiliary files
 rm $TMP/$PROJECT/.gitignore
 rm $TMP/$PROJECT/create_archive.sh
+rm -rf $TMP/$PROJECT/tests
 rm $TMP/$PROJECT/kinsoku.tex
 rm $TMP/$PROJECT/pl209.def
 ls $TMP/$PROJECT/*.cls | grep -v plnews.cls | xargs rm
