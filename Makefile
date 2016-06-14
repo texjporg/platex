@@ -46,44 +46,32 @@ PLDOC_SRC = platex.dtx plvers.dtx plfonts.dtx plcore.dtx plext.dtx \
 	pl209.dtx kinsoku.dtx jclasses.dtx jltxdoc.dtx
 
 platex.ltx: $(PLFMT_SRC)
-	for x in $(PLFMT); do \
-	if [ -e $$x ]; then rm $$x; fi \
-	done
+	rm -f $(PLFMT)
 	platex $(KANJI) plfmt.ins
 	rm plfmt.log
 
 jarticle.cls: $(PLCLS_SRC)
-	for x in $(PLCLS); do \
-	if [ -e $$x ]; then rm $$x; fi \
-	done
+	rm -f $(PLCLS)
 	platex $(KANJI) plcls.ins
 	rm plcls.log
 
 pl209.def: $(PL209_SRC)
-	for x in $(PL209); do \
-	if [ -e $$x ]; then rm $$x; fi \
-	done
+	rm -f $(PL209)
 	platex $(KANJI) pl209.ins
 	rm pl209.log
 
 platexrelease.sty: $(PLREL_SRC)
-	for x in $(PLREL); do \
-	if [ -e $$x ]; then rm $$x; fi \
-	done
+	rm -f $(PLREL)
 	platex $(KANJI) platexrelease.ins
 	rm platexrelease.log
 
 nidanfloat.sty: $(NIDAN_SRC)
-	for x in $(NIDAN); do \
-	if [ -e $$x ]; then rm $$x; fi \
-	done
+	rm -f $(NIDAN)
 	platex $(KANJI) nidanfloat.ins
 	rm nidanfloat.log
 
 tascmac.sty: $(ASCMAC_SRC)
-	for x in $(ASCNAC); do \
-	if [ -e $$x ]; then rm $$x; fi \
-	done
+	rm -f $(ASCNAC)
 	platex $(KANJI) ascmac.ins
 	rm ascmac.log
 
@@ -102,9 +90,7 @@ platexrelease.pdf: $(PLRELDOC_SRC)
 	rm platexrelease.aux platexrelease.log platexrelease.dvi
 
 pldoc.pdf: $(PLDOC_SRC)
-	for x in jltxdoc.cls pldoc.tex Xins.ins; do \
-	if [ -e $$x ]; then rm $$x; fi \
-	done
+	rm -f jltxdoc.cls pldoc.tex Xins.ins
 	platex $(KANJI) pldocs.ins
 	platex $(KANJI) Xins.ins
 	sh mkpldoc.sh
@@ -127,10 +113,8 @@ ascmac.pdf: $(ASCMAC_SRC)
 
 .PHONY: clean
 clean:
-	for x in $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
+	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
 	$(NIDAN) $(ASCMAC) \
 	platex.pdf platexrelease.pdf pldoc.pdf \
 	nidanfloat.pdf ascmac.pdf \
-	jltxdoc.cls pldoc.tex Xins.ins; do \
-	if [ -e $$x ]; then rm $$x; fi \
-	done
+	jltxdoc.cls pldoc.tex Xins.ins
