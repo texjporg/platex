@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{376}
+% \CheckSum{381}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -56,13 +56,14 @@
 % \changes{v1.0i}{2016/05/12}{一時コマンド\cs{orgdump}を最終的に未定義へ}
 % \changes{v1.0j}{2016/05/20}{pfltraceの説明を追加}
 % \changes{v1.0k}{2016/05/21}{変更履歴も出力するようにした}
+% \changes{v1.0l}{2016/06/19}{パッチレベルを\file{plvers.dtx}から取得}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2016/05/21 v1.0k pLaTeX document file]
+\ProvidesFile{platex.dtx}[2016/06/19 v1.0l pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -553,6 +554,7 @@
 % ここからが本文ページとなります。
 % \changes{v1.0c}{1997/01/29}{Rename pltpatch to plpatch.}
 % \changes{v1.0h}{2016/05/08}{ドキュメントから\file{plpatch.ltx}を除外}
+% \changes{v1.0l}{2016/06/19}{パッチレベルを\file{plvers.dtx}から取得}
 %    \begin{macrocode}
 \begin{document}
  \title{The p\LaTeXe\ Sources}
@@ -568,11 +570,12 @@
   Things we did wrong\ldots
   \IndexInput{plpatch.ltx}}
 
-% Get the date from plvers.dtx
+% Get the date and patch level from plvers.dtx
 \makeatletter
-\def\patchdate{0}%% Modified (May 8, 2016)
+\let\patchdate=\@empty
 \begingroup
-   \def\ProvidesFile#1\pfmtversion#2{\date{#2}\endinput}
+   \def\ProvidesFile#1\pfmtversion#2#3\ppatch@level#4{%
+      \date{#2}\xdef\patchdate{#4}\endinput}
    \input{plvers.dtx}
 \global\let\X@date=\@date
 
@@ -588,7 +591,7 @@
 \ifx\@date\X@date
   \def\Xpatch{0}
   \ifx\patchdate\Xpatch\else
-    \edef\@date{\@date\space Patch level\patchdate}
+    \edef\@date{\@date\space Patch level\space\patchdate}
   \fi
 \else
    \@warning{plpatch.ltx does not match plvers.dtx!}

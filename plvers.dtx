@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{187}
+% \CheckSum{189}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -62,12 +62,13 @@
 %    元の\LaTeX{}のバナーから引き継ぐように改良}
 % \changes{v1.0w}{2016/05/12}{起動時の文字列に入れるBabelのバージョンを
 %    元の\LaTeX{}のバナーから取得するコードを\file{platex.ini}から取り入れた}
+% \changes{v1.0x}{2016/06/19}{パッチレベルを\file{plvers.dtx}で設定}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2016/05/12 v1.0w pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2016/06/19 v1.0x pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -121,7 +122,9 @@
 %
 % \begin{macro}{\pfmtname}
 % \begin{macro}{\pfmtversion}
+% \begin{macro}{\ppatch@level}
 % p\LaTeXe{}のフォーマットファイル名とバージョンです。
+% \changes{v1.0x}{2016/06/19}{パッチレベルを\file{plvers.dtx}で設定}
 %    \begin{macrocode}
 %<*plcore>
 \def\pfmtname{pLaTeX2e}
@@ -131,7 +134,11 @@
 %<*plcore|platexrelease>
    {2016/06/10}
 %</plcore|platexrelease>
+%<*plcore>
+\def\ppatch@level{1}
+%</plcore>
 %    \end{macrocode}
+% \end{macro}
 % \end{macro}
 % \end{macro}
 %

@@ -71,6 +71,7 @@
 %    \cs{RequirePackageWithOptions}するようにした}
 % \changes{v1.6c}{2016/06/06}{v1.6aでの修正で\'e など全てのアクセント付き文字で
 %    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
+% \changes{v1.6d}{2016/06/19}{アクセント付き文字をさらに修正(forum:1951)}
 % \fi
 %
 % \iffalse
@@ -1664,6 +1665,7 @@
 % 第一引数のマクロ(|#1|)の置換テキストが、カテゴリコード11か12の文字トークン1文字であった
 % 場合に第二引数の内容に展開され、そうでない場合は第三引数の内容に展開されます。
 % \changes{v1.6c}{2016/06/06}{マクロ追加}
+% \changes{v1.6d}{2016/06/19}{アクセント付き文字をさらに修正(forum:1951)}
 %    \begin{macrocode}
 \def\pltx@mark{\pltx@mark@}
 \let\pltx@scanstop\relax
