@@ -37,7 +37,7 @@
 \long\def\pltx@cond#1\fi{%
   #1\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
 \long\def\pltx@isletter#1{%
-  \expandafter\pltx@isletter@i\romannumeral-`0#1\pltx@scanstop}
+  \expandafter\pltx@isletter@i#1\pltx@scanstop}
 \long\def\pltx@isletter@i#1\pltx@scanstop{%
   \pltx@cond\ifx\pltx@mark#1\pltx@mark\fi{\@firstoftwo}%
     {\pltx@isletter@ii\pltx@scanstop#1\pltx@scanstop{}#1\pltx@mark}}

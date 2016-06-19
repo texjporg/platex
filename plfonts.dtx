@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{2030}
+% \CheckSum{2029}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -1670,7 +1670,7 @@
 \long\def\pltx@cond#1\fi{%
   #1\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
 \long\def\pltx@isletter#1{%
-  \expandafter\pltx@isletter@i\romannumeral-`0#1\pltx@scanstop}
+  \expandafter\pltx@isletter@i#1\pltx@scanstop}
 \long\def\pltx@isletter@i#1\pltx@scanstop{%
   \pltx@cond\ifx\pltx@mark#1\pltx@mark\fi{\@firstoftwo}%
     {\pltx@isletter@ii\pltx@scanstop#1\pltx@scanstop{}#1\pltx@mark}}
