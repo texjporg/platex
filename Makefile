@@ -71,7 +71,7 @@ nidanfloat.sty: $(NIDAN_SRC)
 	rm nidanfloat.log
 
 tascmac.sty: $(ASCMAC_SRC)
-	rm -f $(ASCNAC)
+	rm -f $(ASCMAC)
 	platex $(KANJI) ascmac.ins
 	rm ascmac.log
 
