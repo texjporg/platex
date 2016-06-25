@@ -1,8 +1,10 @@
 %#!ptex2pdf -l text_composite.tex
+\RequirePackage{exppl2e}
 \documentclass{jarticle}
+\usepackage{lmodern}
 %\DeclareTextComposite{\"}{OT1}{圏}{`点}% invalid
 \usepackage[utf8x]{inputenc}
-\usepackage[T1]{fontenc}
+\usepackage[dvipdfmx]{hyperref}
 \DeclareTextCompositeCommand{\"}{OT1}{圏}{テン}
 \DeclareTextCompositeCommand{\"}{T1}{圏}{テン}
 \def\test{あ\AA あ\'eあ\'圏い\"圏うa\"圏a\AA a（\AA）\'e}
@@ -13,6 +15,8 @@
   \advance\@tempcnta1
 \repeat
 \begin{document}
+\fontencoding{T1}\selectfont
+\section{G\"odel \AA ngstr\o m あいう(T1)}
 \xkanjiskip15pt
 \ybaselineshift10pt
 \test\par
@@ -21,5 +25,23 @@
 
 \mathsurround20pt
 \test
+
+\edef\XA{\"o.\'o.\AA}
+{\ttfamily\meaning\XA}
+
+
+\fontencoding{OT1}\selectfont
+\section{G\"odel \AA ngstr\o m あいう(OT1)}
+\xkanjiskip15pt
+\ybaselineshift10pt
+\test\par
+\ybaselineshift0pt
+\test
+
+\mathsurround20pt
+\test
+
+\edef\XA{\"o.\'o.\AA}
+{\ttfamily \meaning\XA}
 
 \end{document}

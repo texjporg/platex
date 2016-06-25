@@ -107,4 +107,37 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \section{PDFのブックマークとアクセント文字}
+%
+% 
+% \begin{macro}{\pltx@isletter}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\pltx@letter}
+%<platexrelease>                   {Support PD1 encoding}%
+%<*pldefs|platexrelease>
+\def\pltx@pdfencA{PD1}
+\def\pltx@composite@chkenc{%
+  \ifx\pltx@pdfencA\f@encoding
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi}
+\long\def\pltx@isletter@iv#1#2#3\pltx@mark{%
+  \pltx@cond\ifx\pltx@mark#3\pltx@mark\fi{%
+    \pltx@cond{\ifnum0\ifcat A\noexpand#21\fi\ifcat=\noexpand#21\fi>\z@}\fi
+      {\@firstoftwo}{\pltx@composite@chkenc}%
+  }{\pltx@composite@chkenc}}
+%</pldefs|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/06/19}{\pltx@isletter}
+%<platexrelease>                   {Support PD1 encoding}%
+%<platexrelease> \long\def\pltx@isletter@iv#1#2#3\pltx@mark{%
+%<platexrelease>  \pltx@cond\ifx\pltx@mark#3\pltx@mark\fi{%
+%<platexrelease>    \pltx@cond{\ifnum0\ifcat A\noexpand#21\fi\ifcat=\noexpand#21\fi>\z@}\fi
+%<platexrelease>      {\@firstoftwo}{\@secondoftwo}%
+%<platexrelease>  }{\@secondoftwo}}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+
 \endinput
