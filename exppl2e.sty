@@ -1,0 +1,110 @@
+% \iffalse meta-comment
+%
+% This is file `exppl2e.sty', for experimental pLaTeX2e.
+%
+% Copyright (c) 2010 ASCII MEDIA WORKS
+% Copyright (c) 2016 Japanese TeX Development Community
+%
+% This file is part of the pLaTeX2e system (community edition).
+% -------------------------------------------------------------
+%
+% ======================================================================
+%   開発者およびテスト協力者の方へ (2016-06-25 aminophen)
+%
+% コードの不用意な改変は即エンバグにつながり、利用者の多い (u)pLaTeX では
+% 特に影響が大きいという思われます。その一方で、unstable なものもなるべく
+% 手軽にテストして頂きたいとも考えます。
+% この exppl2e.sty は、カーネル (stable) に将来含めることを想定した実験的
+% コードを配布することを目的に作成しました。開発の便宜のため、dtx ファイル
+% 互換ドキュメントもパッケージコードと同じく含められるようにしてあります。
+%   \RequirePackage{exppl2e}
+%   \documentclass{article}
+% のようにして、テストをよろしくお願いします。一方で
+%   platex exppl2e.sty
+% を実行すると、dtx ドキュメントと同様に処理することができます。
+% ========================================================================
+%
+%%%%%%%% ^^A driver-like trick using catcode difference
+%
+% This file `exppl2e.sty' is a normal LaTeX package, so
+%   \RequirePackage{exppl2e}
+% and
+%   \usepackage{exppl2e}
+% works. However, it can also be typeset alone:
+%   platex exppl2e.sty
+% for convenience.
+%
+\ifx\undefined\@undefined\relax
+% case 1: This file must be a normal package
+  \NeedsTeXFormat{pLaTeX2e}
+  \ProvidesPackage{exppl2e}
+                [2016/06/25 v1.0 Experimental pLaTeX2e features]
+  \PackageWarningNoLine{exppl2e}{%
+      This is the unstable, experimental part of pLaTeX2e.\MessageBreak
+      This package may contain:\MessageBreak
+       * future patches to pLaTeX\MessageBreak
+       * experimental new features\MessageBreak
+      Please note that these can be removed without any\MessageBreak
+      announcement at some point in the future, and may\MessageBreak
+      also have some critical bugs. We appreciate any\MessageBreak
+      reports and comments. Thank you for your cooperation}
+  \RequirePackage[latest]{platexrelease}
+\else
+% case 2: This file pretends to be a document
+  \documentclass{jltxdoc}
+  \title{Experimental p\LaTeXe}
+  \author{Japanese \TeX\ Development Community}
+  \begin{document}
+    \newcommand\Lpack[1]{\textsf{#1}}
+    \maketitle
+    \DocInput{exppl2e.sty}
+  \end{document}
+\fi % ^^A   In case 2, this \fi comes after \end{document}
+%     ^^A   so it has no effect.
+% \fi ^^A   This \fi corresponds to \iffalse, and another
+%     ^^A   \fi is required for \ifx, see below;)
+%
+%%%%%%%% ^^A trick end
+%
+% \fi
+%
+%
+% ここからp\LaTeXe{}のexperimentalコード本体です。
+%
+%
+% \section{出力ルーチン}
+%
+% \begin{macro}{\AtBeginDvi}
+% p\LaTeX{}の出力ルーチンの|\@outputpage|では、|\shipout|するvboxの中身に
+% |\yoko|を指定しています。このため、|\AtBeginDocument{\AtBeginDvi{}}|という
+% コードを書くと\texttt{Incompatible direction list can't be unboxed.}という
+% エラーが出てしまいます。
+%
+% そこで、コミュニティ版p\LaTeX{}では「|\shipout|で|\yoko|が指定されている」
+% ことを根拠として
+% \begin{center}
+% |\@begindvibox|は（空でない限り）常に横組でなければならない
+% \end{center}
+% と仮定します。この仮定に従い、|\AtBeginDvi|を再定義します。
+% \changes{v???}{????/??/??}{\cs{@begindvibox}を常に横組に}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\AtBeginDvi}
+%<platexrelease>                   {Fix for incompatible direction}%
+%<*plcore|platexrelease>
+\def\AtBeginDvi#1{%
+  \global \setbox \@begindvibox
+    \vbox{\yoko \unvbox \@begindvibox #1}%
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\AtBeginDvi}
+%<platexrelease>                   {Fix for incompatible direction}%
+%<platexrelease>\def \AtBeginDvi #1{%
+%<platexrelease>  \global \setbox \@begindvibox
+%<platexrelease>    \vbox{\unvbox \@begindvibox #1}%
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+\endinput
