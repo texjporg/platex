@@ -160,9 +160,16 @@ of this package available from CTAN}
 %%   Grave accent  \`     Left brace    \{     Vertical bar  \|
 %%   Right brace   \}     Tilde         \~}
 %%
-\plIncludeInRelease{2016/06/10}{\@text@composite}
-                   {Fix for non-zero baselineshift}%
+\plIncludeInRelease{2016/06/10}{\g@tlastchart@}
+                   {Macro added}%
 \def\g@tlastchart@#1{#1\ifx\lastnodechar\@undefined\m@ne\else\lastnodechar\fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\g@tlastchart@}
+                   {Macro added}%
+\let\g@tlastchart@\@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/06/10}{\pltx@isletter}
+                   {Macro added}%
 \def\pltx@mark{\pltx@mark@}
 \let\pltx@scanstop\relax
 \long\def\pltx@cond#1\fi{%
@@ -181,9 +188,34 @@ of this package available from CTAN}
     \pltx@cond{\ifnum0\ifcat A\noexpand#21\fi\ifcat=\noexpand#21\fi>\z@}\fi
       {\@firstoftwo}{\@secondoftwo}%
   }{\@secondoftwo}}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\pltx@isletter}
+                   {Macro added}%
+\let\pltx@isletter\@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/06/10}{\@text@composite}
+                   {Wrong fix for non-zero baselineshift}%
 \def\@text@composite#1#2#3\@text@composite{%
    \expandafter\@text@composite@x
       \csname\string#1-\string#2\endcsname}
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\@text@composite}
+                   {Wrong fix for non-zero baselineshift}%
+\def\@text@composite#1#2#3#{%
+  \begingroup
+  \setbox\z@=\hbox\bgroup%
+  \ybaselineshift\z@\tbaselineshift\z@
+  \expandafter\@text@composite@x
+  \csname\string#1-\string#2\endcsname}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@text@composite}
+                   {Wrong fix for non-zero baselineshift}%
+\def\@text@composite#1#2#3\@text@composite{%
+   \expandafter\@text@composite@x
+      \csname\string#1-\string#2\endcsname}
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/06/10}{\@text@composite@x}
+                   {Fix for non-zero baselineshift}%
 \def\@text@composite@x#1#2{%
   \ifx#1\relax
     #2%
@@ -229,16 +261,8 @@ of this package available from CTAN}
   \fi
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{2016/04/17}{\@text@composite}
+\plIncludeInRelease{2016/04/17}{\@text@composite@x}
                    {Fix for non-zero baselineshift}%
-\let\g@tlastchart@\@undefined
-\let\pltx@isletter\@undefined
-\def\@text@composite#1#2#3#{%
-  \begingroup
-  \setbox\z@=\hbox\bgroup%
-  \ybaselineshift\z@\tbaselineshift\z@
-  \expandafter\@text@composite@x
-  \csname\string#1-\string#2\endcsname}
 \def\@text@composite@x#1#2{%
   \ifx#1\relax
     \expandafter\@secondoftwo
@@ -260,13 +284,8 @@ of this package available from CTAN}
     \box\z@
   \endgroup}
 \plEndIncludeInRelease
-\plIncludeInRelease{0000/00/00}{\@text@composite}
+\plIncludeInRelease{0000/00/00}{\@text@composite@x}
                    {Fix for non-zero baselineshift}%
-\let\g@tlastchart@\@undefined
-\let\pltx@isletter\@undefined
-\def\@text@composite#1#2#3\@text@composite{%
-   \expandafter\@text@composite@x
-      \csname\string#1-\string#2\endcsname}
 \def\@text@composite@x#1{%
    \ifx#1\relax
       \expandafter\@secondoftwo
