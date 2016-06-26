@@ -2,7 +2,6 @@
 %
 % This is file `exppl2e.sty', for experimental pLaTeX2e.
 %
-% Copyright (c) 2010 ASCII MEDIA WORKS
 % Copyright (c) 2016 Japanese TeX Development Community
 %
 % This file is part of the pLaTeX2e system (community edition).
@@ -22,6 +21,14 @@
 % のようにして、テストをよろしくお願いします。一方で
 %   platex exppl2e.sty
 % を実行すると、dtx ドキュメントと同様に処理することができます。
+%
+% このファイルのコードを実際にカーネルに導入するには、単純に dtx ファイル
+% へとカット・ペーストします。ペーストした dtx ファイルから ltx / sty ファ
+% イル等を生成したあとには、必ず
+%   * フォーマット作成に使われる ltx ファイルが意図どおり変更されたか
+%   * platexrelease.sty パッケージに新たなブロックが一つだけ追加されたか
+%     （例外的に 0000/00/00 の日付が含まれる場合はブロック二つ）
+% を確認します。
 % ========================================================================
 %
 %%%%%%%% ^^A driver-like trick using catcode difference
@@ -34,6 +41,7 @@
 %   platex exppl2e.sty
 % for convenience.
 %
+%<*hack>
 \ifx\undefined\@undefined\relax
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
@@ -55,14 +63,13 @@
   \title{Experimental p\LaTeXe}
   \author{Japanese \TeX\ Development Community}
   \begin{document}
-    \newcommand\Lpack[1]{\textsf{#1}}
     \maketitle
     \DocInput{exppl2e.sty}
   \end{document}
-\fi % ^^A   In case 2, this \fi comes after \end{document}
-%     ^^A   so it has no effect.
-% \fi ^^A   This \fi corresponds to \iffalse, and another
-%     ^^A   \fi is required for \ifx, see below;)
+\fi %     ^^A   In case 2, this \fi comes after \end{document}
+%</hack>  ^^A   so it has no effect.
+% \fi     ^^A   This \fi corresponds to \iffalse, and another
+%         ^^A   \fi is required for \ifx, see below;)
 %
 %%%%%%%% ^^A trick end
 %
@@ -107,14 +114,19 @@
 %    \end{macrocode}
 % \end{macro}
 %
+%
 % \section{PDFのブックマークとアクセント文字}
 %
-% 
 % \begin{macro}{\pltx@isletter}
+% \changes{v???}{????/??/??}{PDFのしおりにアクセント文字が含まれる場合に対応}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{????/??/??}{\pltx@isletter}
 %<platexrelease>                   {Support PD1 encoding}%
 %<*pldefs|platexrelease>
+\def\pltx@mark{\pltx@mark@}
+\let\pltx@scanstop\relax
+\long\def\pltx@cond#1\fi{%
+  #1\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
 \def\pltx@pdfencA{PD1}
 \def\pltx@composite@chkenc{%
   \ifx\pltx@pdfencA\f@encoding
@@ -122,6 +134,15 @@
   \else
     \expandafter\@secondoftwo
   \fi}
+\long\def\pltx@isletter#1{%
+  \expandafter\pltx@isletter@i#1\pltx@scanstop}
+\long\def\pltx@isletter@i#1\pltx@scanstop{%
+  \pltx@cond\ifx\pltx@mark#1\pltx@mark\fi{\@firstoftwo}%
+    {\pltx@isletter@ii\pltx@scanstop#1\pltx@scanstop{}#1\pltx@mark}}
+\long\def\pltx@isletter@ii#1\pltx@scanstop#{%
+  \pltx@cond\ifx\pltx@mark#1\pltx@mark\fi%
+    {\pltx@isletter@iii}{\pltx@isletter@iv}}
+\long\def\pltx@isletter@iii#1\pltx@mark{\@secondoftwo}
 \long\def\pltx@isletter@iv#1#2#3\pltx@mark{%
   \pltx@cond\ifx\pltx@mark#3\pltx@mark\fi{%
     \pltx@cond{\ifnum0\ifcat A\noexpand#21\fi\ifcat=\noexpand#21\fi>\z@}\fi
@@ -129,9 +150,22 @@
   }{\pltx@composite@chkenc}}
 %</pldefs|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2016/06/19}{\pltx@isletter}
-%<platexrelease>                   {Support PD1 encoding}%
-%<platexrelease> \long\def\pltx@isletter@iv#1#2#3\pltx@mark{%
+%<platexrelease>\plIncludeInRelease{2016/06/10}{\pltx@isletter}
+%<platexrelease>                   {Added \pltx@isletter}%
+%<platexrelease>\def\pltx@mark{\pltx@mark@}
+%<platexrelease>\let\pltx@scanstop\relax
+%<platexrelease>\long\def\pltx@cond#1\fi{%
+%<platexrelease>  #1\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
+%<platexrelease>\long\def\pltx@isletter#1{%
+%<platexrelease>  \expandafter\pltx@isletter@i#1\pltx@scanstop}
+%<platexrelease>\long\def\pltx@isletter@i#1\pltx@scanstop{%
+%<platexrelease>  \pltx@cond\ifx\pltx@mark#1\pltx@mark\fi{\@firstoftwo}%
+%<platexrelease>    {\pltx@isletter@ii\pltx@scanstop#1\pltx@scanstop{}#1\pltx@mark}}
+%<platexrelease>\long\def\pltx@isletter@ii#1\pltx@scanstop#{%
+%<platexrelease>  \pltx@cond\ifx\pltx@mark#1\pltx@mark\fi%
+%<platexrelease>    {\pltx@isletter@iii}{\pltx@isletter@iv}}
+%<platexrelease>\long\def\pltx@isletter@iii#1\pltx@mark{\@secondoftwo}
+%<platexrelease>\long\def\pltx@isletter@iv#1#2#3\pltx@mark{%
 %<platexrelease>  \pltx@cond\ifx\pltx@mark#3\pltx@mark\fi{%
 %<platexrelease>    \pltx@cond{\ifnum0\ifcat A\noexpand#21\fi\ifcat=\noexpand#21\fi>\z@}\fi
 %<platexrelease>      {\@firstoftwo}{\@secondoftwo}%
@@ -141,6 +175,7 @@
 % \end{macro}
 %
 % \begin{macro}{\@text@composite@x}
+% \changes{v???}{????/??/??}{v1.6eでいったんパッチを除去したコードを再導入}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{????/??/??}{\@text@composite@x}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
