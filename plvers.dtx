@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{189}
+% \CheckSum{196}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -63,6 +63,7 @@
 % \changes{v1.0w}{2016/05/12}{起動時の文字列に入れるBabelのバージョンを
 %    元の\LaTeX{}のバナーから取得するコードを\file{platex.ini}から取り入れた}
 % \changes{v1.0x}{2016/06/19}{パッチレベルを\file{plvers.dtx}で設定}
+% \changes{v1.0y}{2016/06/27}{platex.cfgの読み込みを追加}
 % \fi
 %
 % \iffalse
@@ -277,6 +278,19 @@
 %</plcore|platexrelease>
 %    \end{macrocode}
 % \end{macro}
+%
+% 起動時にplatex.cfgがある場合，それを読み込むようにします．
+% \changes{v1.0y}{2016/06/27}{マクロ追加}
+%    \begin{macrocode}
+%<*plfinal>
+\everyjob\expandafter{%
+  \the\everyjob
+  \IfFileExists{platex.cfg}{%
+    \typeout{Loading platex.cfg.}%
+    \input{platex.cfg}}{}%
+}
+%</plfinal>
+%    \end{macrocode}
 %
 % \LaTeXe{}が提供するlatexreleaseパッケージが読み込まれていて、
 % かつp\LaTeXe{}が提供するplatexreleaseパッケージが読み込まれていない
