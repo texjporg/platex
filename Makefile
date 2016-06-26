@@ -111,10 +111,16 @@ ascmac.pdf: $(ASCMAC_SRC)
 	dvipdfmx $(FONTMAP) ascmac.dvi
 	rm ascmac.aux ascmac.log ascmac.toc ascmac.dvi
 
+exppl2e.pdf:
+	platex $(KANJI) exppl2e.sty
+	platex $(KANJI) exppl2e.sty
+	dvipdfmx $(FONTMAP) exppl2e.dvi
+	rm exppl2e.aux exppl2e.log exppl2e.toc exppl2e.dvi
+
 .PHONY: clean
 clean:
 	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
-	$(NIDAN) $(ASCMAC) \
+	$(NIDAN) $(ASCMAC) exppl2e.pdf \
 	platex.pdf platexrelease.pdf pldoc.pdf \
 	nidanfloat.pdf ascmac.pdf \
 	jltxdoc.cls pldoc.tex Xins.ins
