@@ -112,7 +112,7 @@
 % 
 % \begin{macro}{\pltx@isletter}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\pltx@letter}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\pltx@isletter}
 %<platexrelease>                   {Support PD1 encoding}%
 %<*pldefs|platexrelease>
 \def\pltx@pdfencA{PD1}
@@ -139,5 +139,68 @@
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
-
+%
+% \begin{macro}{\@text@composite@x}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\@text@composite@x}
+%<platexrelease>                   {Fix for non-zero baselineshift}%
+%<*pldefs|platexrelease>
+\def\@text@composite@x#1#2{%
+  \ifx#1\relax
+    #2%
+  \else\pltx@isletter{#1}{#1}{%
+    \begingroup
+    \setbox\z@\hbox\bgroup%
+      \ybaselineshift\z@\tbaselineshift\z@
+      #1%
+      \g@tlastchart@\@tempcntb
+      \xdef\pltx@composite@temp{\noexpand\@tempcntb=\the\@tempcntb\relax}%
+      \aftergroup\pltx@composite@temp
+    \egroup
+%    \end{macrocode}
+%    \begin{macrocode}
+    \ifnum\@tempcntb<\z@
+      \@tempdima=\iftdir
+          \ifmdir
+            \ifmmode\tbaselineshift\else\ybaselineshift\fi
+          \else
+            \tbaselineshift
+          \fi
+        \else
+          \ybaselineshift
+        \fi
+      \@tempcntb=\@cclvi
+    \else\@tempdima=\z@
+    \fi
+%    \end{macrocode}
+% アクセントが付く「本体の文字」が欧文文字と推測される場合には、
+% 一旦数式モードに入ることによって\cs{xkanjiskip}が前後に入るようにします。
+% 必要なら、数式モードの前後に\cs{null}を補って\cs{xkanjiskip}の挿入を抑制します。
+%    \begin{macrocode}
+    \ifnum\@tempcntb<\@cclvi
+      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
+        \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
+      \fi\fi
+      \begingroup\mathsurround\z@$%
+        \ifx\textbaselineshiftfactor\@undefined\else
+          \textbaselineshiftfactor\z@\fi
+        \box\z@
+      $\endgroup%
+      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
+        \ifnum\xspcode\@tempcntb<2\hbox{}\fi
+      \fi\fi
+%    \end{macrocode}
+%    \begin{macrocode}
+    \else
+      \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
+      \else\lower\@tempdima\box\z@\fi
+    \fi
+    \endgroup}%
+  \fi
+}
+%</pldefs|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
 \endinput

@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{2044}
+% \CheckSum{2057}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -72,13 +72,15 @@
 % \changes{v1.6c}{2016/06/06}{v1.6aでの修正で\'e など全てのアクセント付き文字で
 %    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
 % \changes{v1.6d}{2016/06/19}{アクセント付き文字をさらに修正(forum:1951)}
+% \changes{v1.6e}{2016/06/26}{v1.6a以降の修正で全てのアクセント付き文字で
+%    トラブルが相次いだため、いったんパッチを除去。}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2016/06/19 v1.6d pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2016/06/26 v1.6e pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -1640,7 +1642,7 @@
 %    \begin{macrocode}
 %<*pldefs>
 \ProvidesFile{pldefs.ltx}
-      [2016/06/19 v1.6d pLaTeX Kernel (Default settings)] 
+      [2016/06/26 v1.6e pLaTeX Kernel (Default settings)] 
 %</pldefs>
 %    \end{macrocode}
 %
@@ -1740,64 +1742,65 @@
 %    \cs{AA}など一部の合成文字がおかしくなることへの対応。}
 % \changes{v1.6c}{2016/06/06}{v1.6aでの修正で\'e など全てのアクセント付き文字で
 %    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
+% \changes{v1.6e}{2016/06/26}{v1.6a以降の修正で全てのアクセント付き文字で
+%    トラブルが相次いだため、いったんパッチを除去。}
 %    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2016/06/27}{\@text@composite@x}
+%<platexrelease>                   {Fix for non-zero baselineshift}%
+%<platexrelease>\def\@text@composite@x#1{%
+%<platexrelease>   \ifx#1\relax
+%<platexrelease>      \expandafter\@secondoftwo
+%<platexrelease>   \else
+%<platexrelease>      \expandafter\@firstoftwo
+%<platexrelease>   \fi
+%<platexrelease>   #1}
+%<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/06/10}{\@text@composite@x}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
-%<*pldefs|platexrelease>
-\def\@text@composite@x#1#2{%
-  \ifx#1\relax
-    #2%
-  \else\pltx@isletter{#1}{#1}{%
-    \begingroup
-    \setbox\z@\hbox\bgroup%
-      \ybaselineshift\z@\tbaselineshift\z@
-      #1%
-      \g@tlastchart@\@tempcntb
-      \xdef\pltx@composite@temp{\noexpand\@tempcntb=\the\@tempcntb\relax}%
-      \aftergroup\pltx@composite@temp
-    \egroup
-%    \end{macrocode}
-%    \begin{macrocode}
-    \ifnum\@tempcntb<\z@
-      \@tempdima=\iftdir
-          \ifmdir
-            \ifmmode\tbaselineshift\else\ybaselineshift\fi
-          \else
-            \tbaselineshift
-          \fi
-        \else
-          \ybaselineshift
-        \fi
-      \@tempcntb=\@cclvi
-    \else\@tempdima=\z@
-    \fi
-%    \end{macrocode}
-% アクセントが付く「本体の文字」が欧文文字と推測される場合には、
-% 一旦数式モードに入ることによって\cs{xkanjiskip}が前後に入るようにします。
-% 必要なら、数式モードの前後に\cs{null}を補って\cs{xkanjiskip}の挿入を抑制します。
-%    \begin{macrocode}
-    \ifnum\@tempcntb<\@cclvi
-      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
-        \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
-      \fi\fi
-      \begingroup\mathsurround\z@$%
-        \ifx\textbaselineshiftfactor\@undefined\else
-          \textbaselineshiftfactor\z@\fi
-        \box\z@
-      $\endgroup%
-      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
-        \ifnum\xspcode\@tempcntb<2\hbox{}\fi
-      \fi\fi
-%    \end{macrocode}
-%    \begin{macrocode}
-    \else
-      \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
-      \else\lower\@tempdima\box\z@\fi
-    \fi
-    \endgroup}%
-  \fi
-}
-%</pldefs|platexrelease>
+%<platexrelease>\def\@text@composite@x#1#2{%
+%<platexrelease>  \ifx#1\relax
+%<platexrelease>    #2%
+%<platexrelease>  \else\pltx@isletter{#1}{#1}{%
+%<platexrelease>    \begingroup
+%<platexrelease>    \setbox\z@\hbox\bgroup%
+%<platexrelease>      \ybaselineshift\z@\tbaselineshift\z@
+%<platexrelease>      #1%
+%<platexrelease>      \g@tlastchart@\@tempcntb
+%<platexrelease>      \xdef\pltx@composite@temp{\noexpand\@tempcntb=\the\@tempcntb\relax}%
+%<platexrelease>      \aftergroup\pltx@composite@temp
+%<platexrelease>    \egroup
+%<platexrelease>    \ifnum\@tempcntb<\z@
+%<platexrelease>      \@tempdima=\iftdir
+%<platexrelease>          \ifmdir
+%<platexrelease>            \ifmmode\tbaselineshift\else\ybaselineshift\fi
+%<platexrelease>          \else
+%<platexrelease>            \tbaselineshift
+%<platexrelease>          \fi
+%<platexrelease>        \else
+%<platexrelease>          \ybaselineshift
+%<platexrelease>        \fi
+%<platexrelease>      \@tempcntb=\@cclvi
+%<platexrelease>    \else\@tempdima=\z@
+%<platexrelease>    \fi
+%<platexrelease>    \ifnum\@tempcntb<\@cclvi
+%<platexrelease>      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
+%<platexrelease>        \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
+%<platexrelease>      \fi\fi
+%<platexrelease>      \begingroup\mathsurround\z@$%
+%<platexrelease>        \ifx\textbaselineshiftfactor\@undefined\else
+%<platexrelease>          \textbaselineshiftfactor\z@\fi
+%<platexrelease>        \box\z@
+%<platexrelease>      $\endgroup%
+%<platexrelease>      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
+%<platexrelease>        \ifnum\xspcode\@tempcntb<2\hbox{}\fi
+%<platexrelease>      \fi\fi
+%<platexrelease>    \else
+%<platexrelease>      \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
+%<platexrelease>      \else\lower\@tempdima\box\z@\fi
+%<platexrelease>    \fi
+%<platexrelease>    \endgroup}%
+%<platexrelease>  \fi
+%<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/04/17}{\@text@composite@x}
 %<platexrelease>                   {Fix for non-zero baselineshift}%

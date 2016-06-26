@@ -214,6 +214,16 @@ of this package available from CTAN}
    \expandafter\@text@composite@x
       \csname\string#1-\string#2\endcsname}
 \plEndIncludeInRelease
+\plIncludeInRelease{2016/06/27}{\@text@composite@x}
+                   {Fix for non-zero baselineshift}%
+\def\@text@composite@x#1{%
+   \ifx#1\relax
+      \expandafter\@secondoftwo
+   \else
+      \expandafter\@firstoftwo
+   \fi
+   #1}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/06/10}{\@text@composite@x}
                    {Fix for non-zero baselineshift}%
 \def\@text@composite@x#1#2{%
