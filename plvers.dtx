@@ -279,14 +279,16 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% 起動時にplatex.cfgがある場合，それを読み込むようにします．
-% \changes{v1.0y}{2016/06/27}{マクロ追加}
+% 起動時にplatex.cfgがある場合、それを読み込むようにします。
+% \changes{v1.0y}{2016/06/27}{platex.cfgの読み込みを追加}
 %    \begin{macrocode}
 %<*plfinal>
 \everyjob\expandafter{%
   \the\everyjob
   \IfFileExists{platex.cfg}{%
-    \typeout{Loading platex.cfg.}%
+    \typeout{*************************^^J%
+             * Loading platex.cfg.^^J%
+             *************************}%
     \input{platex.cfg}}{}%
 }
 %</plfinal>
