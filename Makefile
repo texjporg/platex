@@ -1,7 +1,7 @@
 TARGET1 = platex.ltx jarticle.cls pl209.def platexrelease.sty \
 	nidanfloat.sty tascmac.sty
 TARGET2 = platex.pdf platexrelease.pdf pldoc.pdf \
-	nidanfloat.pdf ascmac.pdf
+	nidanfloat.pdf ascmac.pdf exppl2e.pdf
 KANJI = -kanji=jis
 FONTMAP = -f ipaex.map -f ptex-ipaex.map
 
@@ -111,16 +111,16 @@ ascmac.pdf: $(ASCMAC_SRC)
 	dvipdfmx $(FONTMAP) ascmac.dvi
 	rm ascmac.aux ascmac.log ascmac.toc ascmac.dvi
 
-exppl2e.pdf:
+exppl2e.pdf: exppl2e.sty
 	platex $(KANJI) exppl2e.sty
 	platex $(KANJI) exppl2e.sty
 	dvipdfmx $(FONTMAP) exppl2e.dvi
-	rm exppl2e.aux exppl2e.log exppl2e.toc exppl2e.dvi
+	rm exppl2e.aux exppl2e.log exppl2e.dvi
 
 .PHONY: clean
 clean:
 	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
-	$(NIDAN) $(ASCMAC) exppl2e.pdf \
+	$(NIDAN) $(ASCMAC) \
 	platex.pdf platexrelease.pdf pldoc.pdf \
-	nidanfloat.pdf ascmac.pdf \
+	nidanfloat.pdf ascmac.pdf exppl2e.pdf \
 	jltxdoc.cls pldoc.tex Xins.ins

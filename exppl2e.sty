@@ -7,29 +7,17 @@
 % This file is part of the pLaTeX2e system (community edition).
 % -------------------------------------------------------------
 %
-% ======================================================================
-%   開発者およびテスト協力者の方へ (2016-06-25 aminophen)
+% ====================================================================
+%   開発者の方へ (2016-06-29 aminophen)
 %
-% コードの不用意な改変は即エンバグにつながり、利用者の多い (u)pLaTeX では
-% 特に影響が大きいという思われます。その一方で、unstable なものもなるべく
-% 手軽にテストして頂きたいとも考えます。
-% この exppl2e.sty は、カーネル (stable) に将来含めることを想定した実験的
-% コードを配布することを目的に作成しました。開発の便宜のため、dtx ファイル
-% 互換ドキュメントもパッケージコードと同じく含められるようにしてあります。
-%   \RequirePackage{exppl2e}
-%   \documentclass{article}
-% のようにして、テストをよろしくお願いします。一方で
-%   platex exppl2e.sty
-% を実行すると、dtx ドキュメントと同様に処理することができます。
-%
-% このファイルのコードを実際にカーネルに導入するには、単純に dtx ファイル
-% へとカット・ペーストします。ペーストした dtx ファイルから ltx / sty ファ
-% イル等を生成したあとには、必ず
+% このファイルのコードを実際にカーネルに取り入れるとき、単純にカット・
+% ペーストで dtx ファイルへ挿入します。ペーストした dtx ファイルから
+% ltx / sty ファイル等を生成したあとには、必ず
 %   * フォーマット作成に使われる ltx ファイルが意図どおり変更されたか
-%   * platexrelease.sty パッケージに新たなブロックが一つだけ追加されたか
-%     （例外的に 0000/00/00 の日付が含まれる場合はブロック二つ）
+%   * platexrelease.sty に新たなブロックが一つだけ追加されたか
+%     （例外的に 0000/00/00 の日付が含まれる場合は、ブロックが二つか）
 % を確認します。
-% ========================================================================
+% ====================================================================
 %
 %%%%%%%% ^^A driver-like trick using catcode difference
 %
@@ -46,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2016/06/25 v1.0 Experimental pLaTeX2e features]
+                [2016/06/29 v1.0b Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -75,6 +63,62 @@
 %
 % \fi
 %
+%
+% \emph{注意}：これはExperimentalなp\LaTeXe{}、すなわちunstableな
+% 実験的p\LaTeX{}コードを提供するパッケージです。
+%
+%
+% \section{このパッケージの目的}
+%
+% コードの不用意な改変は即エンバグにつながり、利用者の多いp\LaTeX{}や
+% up\LaTeX{}では特に影響が大きいと思われます。その一方で、unstableなもの
+% もなるべく手軽にテストして頂きたいとも考えます。
+%
+% このパッケージ\file{exppl2e.sty}は、カーネル(stable)に将来含める
+% ことを想定したunstableな実験的コードを配布することを目的に作成しました。
+% テストをよろしくお願いします。
+%
+%
+% \section{実験的コードの読みこみかた}
+%
+% デフォルトの配布では、実験的なコードは無効化されています。
+% 実験的なp\LaTeXe{}を試したい場合は、以下のいずれかの方法を使います：
+%
+% \subsection{少しだけ試してみたい場合}
+%
+% パッケージ\file{exppl2e.sty}を読み込みます。ただし、|\usepackage|命令
+% を使うのではなく、文書クラスより\emph{前}に読み込んでおくのが無難です。
+% \begin{verbatim}
+%   \RequirePackage{exppl2e}
+%   \documentclass{article}
+% \end{verbatim}
+%
+% \subsection{常に実験的コードを使用したい場合}
+%
+% このパッケージと一緒にインストールされる新しいp\LaTeX{}は、お使いの
+% \texttt{platex}などのプログラムが見つけることのできる場所（簡単なの
+% はカレントディレクトリ、あるいは|$TEXMFLOCAL/tex|以下の適切な場所）
+% に\file{platex.cfg}というファイルがあれば、起動時にそれを読み込み
+% ます。この機能を利用すると、以下の内容の\file{platex.cfg}を用意し
+% ておくだけで、自動的に毎回\file{exppl2e.sty}が読み込まれます。
+% \begin{verbatim}
+% \RequirePackage{exppl2e}
+% \end{verbatim}
+%
+%
+% \section{このドキュメントについて}
+%
+% コミュニティ版p\LaTeX{}が配布するほかのltxファイルとは異なり、
+% 実質的には\file{exppl2e.ltx}はdtxファイルと同等です。すなわち、
+% コードと一緒にdtx互換ドキュメントが含まれています。このドキュメント
+% を組版するには
+% \begin{verbatim}
+%   # platex exppl2e.ltx
+% \end{verbatim}
+% を実行します。
+%
+%
+% \section{コード}
 %
 % ここからp\LaTeXe{}のexperimentalコード本体です。
 %
