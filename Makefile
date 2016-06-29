@@ -97,7 +97,7 @@ pldoc.pdf: $(PLDOC_SRC)
 	dvipdfmx $(FONTMAP) pldoc.dvi
 	rm *.aux *.log pldoc.toc pldoc.idx pldoc.ind pldoc.ilg
 	rm pldoc.glo pldoc.gls *.dvi pldoc.tex Xins.ins
-	rm *.cfg pldoc.dic mkpldoc.sh dstcheck.pl
+	rm ltxdoc.cfg pldoc.dic mkpldoc.sh dstcheck.pl
 
 nidanfloat.pdf: $(NIDAN_SRC)
 	platex $(KANJI) nidanfloat.dtx
