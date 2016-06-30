@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{1269}
+% \CheckSum{1292}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -59,13 +59,14 @@
 % \changes{v1.2d}{2016/04/01}{multicolパッケージを使うとトンボの下端が縮む問題を修正}
 % \changes{v1.2e}{2016/05/20}{\file{fltrace}パッケージのp\LaTeX{}版
 %    として\file{pfltrace}パッケージを新設}
+% \changes{v1.2f}{2016/06/30}{\cs{@begindvibox}を常に横組に}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2016/05/20 v1.2e pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2016/06/30 v1.2f pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -760,6 +761,39 @@
   \stepcounter{page}%
   \let\firstmark\botmark
 }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\AtBeginDvi}
+% p\LaTeX{}の出力ルーチンの|\@outputpage|では、|\shipout|するvboxの中身に
+% |\yoko|を指定しています。このため、|\AtBeginDocument{\AtBeginDvi{}}|という
+% コードを書くと\texttt{Incompatible direction list can't be unboxed.}という
+% エラーが出てしまいます。
+%
+% そこで、コミュニティ版p\LaTeX{}では「|\shipout|で|\yoko|が指定されている」
+% ことを根拠として
+% \begin{center}
+% |\@begindvibox|は（空でない限り）常に横組でなければならない
+% \end{center}
+% と仮定します。この仮定に従い、|\AtBeginDvi|を再定義します。
+% \changes{v1.2f}{2016/06/30}{\cs{@begindvibox}を常に横組に}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2016/07/01}{\AtBeginDvi}
+%<platexrelease>                   {Fix for incompatible direction}%
+%<*plcore|platexrelease>
+\def \AtBeginDvi #1{%
+  \global \setbox \@begindvibox
+    \vbox{\yoko \unvbox \@begindvibox #1}%
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\AtBeginDvi}
+%<platexrelease>                   {Fix for incompatible direction}%
+%<platexrelease>\def \AtBeginDvi #1{%
+%<platexrelease>  \global \setbox \@begindvibox
+%<platexrelease>    \vbox{\unvbox \@begindvibox #1}%
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 %

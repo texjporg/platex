@@ -34,7 +34,7 @@
 \edef\p@known@latexreleaseversion
    {2016/03/31}
 \edef\platexreleaseversion
-   {2016/06/10}
+   {2016/07/01}
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
   {\@plIncludeInRelease{#1}[#1]}}
@@ -76,7 +76,7 @@
 %%
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{platexrelease}
-                [2016/06/08 v1.0d latexrelease support for pLaTeX Kernel]
+                [2016/06/30 v1.0e latexrelease support for pLaTeX Kernel]
 \RequirePackageWithOptions{latexrelease}
 \ifnum\expandafter\@parse@version\latexreleaseversion//00\@nil
   >\expandafter\@parse@version\p@known@latexreleaseversion//00\@nil
@@ -132,7 +132,7 @@ of this package available from CTAN}
 \fi
 \let\pfmtversion\requestedplpatchdate
 \let\currentpLaTeXdate\requestedpLaTeXdate
-\plIncludeInRelease{2016/06/10}{\PackageWarning}{pLaTeX Info}%
+\plIncludeInRelease{2016/07/01}{\PackageWarning}{pLaTeX Info}%
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\PackageWarning}{pLaTeX Info}%
   \PackageWarningNoLine{platexrelease}{%
@@ -214,7 +214,7 @@ of this package available from CTAN}
    \expandafter\@text@composite@x
       \csname\string#1-\string#2\endcsname}
 \plEndIncludeInRelease
-\plIncludeInRelease{2016/06/27}{\@text@composite@x}
+\plIncludeInRelease{2016/07/01}{\@text@composite@x}
                    {Fix for non-zero baselineshift}%
 \def\@text@composite@x#1{%
    \ifx#1\relax
