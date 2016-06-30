@@ -441,6 +441,20 @@ of this package available from CTAN}
   \fi
 }
 \plEndIncludeInRelease
+\plIncludeInRelease{2016/07/01}{\AtBeginDvi}
+                   {Fix for incompatible direction}%
+\def \AtBeginDvi #1{%
+  \global \setbox \@begindvibox
+    \vbox{\yoko \unvbox \@begindvibox #1}%
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\AtBeginDvi}
+                   {Fix for incompatible direction}%
+\def \AtBeginDvi #1{%
+  \global \setbox \@begindvibox
+    \vbox{\unvbox \@begindvibox #1}%
+}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@makefnmark}
                    {Remove extra \xkanjiskip}%
 \renewcommand\@makefnmark{%

@@ -778,6 +778,7 @@
 % と仮定します。この仮定に従い、|\AtBeginDvi|を再定義します。
 % \changes{v1.2f}{2016/06/30}{\cs{@begindvibox}を常に横組に}
 %    \begin{macrocode}
+%</plcore>
 %<platexrelease>\plIncludeInRelease{2016/07/01}{\AtBeginDvi}
 %<platexrelease>                   {Fix for incompatible direction}%
 %<*plcore|platexrelease>
@@ -794,6 +795,7 @@
 %<platexrelease>    \vbox{\unvbox \@begindvibox #1}%
 %<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %
