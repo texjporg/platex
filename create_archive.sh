@@ -59,7 +59,7 @@ ls $TMP/$PROJECT/*.cls | grep -v plnews.cls | xargs rm
 rm $TMP/$PROJECT/*.clo
 rm $TMP/$PROJECT/*.fd
 rm $TMP/$PROJECT/*.ltx
-rm $TMP/$PROJECT/*.sty
+ls $TMP/$PROJECT/*.sty | grep -v exppl2e.sty | xargs rm
 perl -pi.bak -e "s/\\\$RELEASEDATE/$RELEASEDATE/g" $TMP/$PROJECT/README.md
 rm -f $TMP/$PROJECT/README.md.bak
 
