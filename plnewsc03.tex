@@ -1,0 +1,78 @@
+%% <2016/07/01>
+\documentclass{plnews}
+
+\publicationyear{2016}% 発行年
+\publicationmonth{07}% 発行月
+\publicationissue{c3}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\pTeX{p\kern-.15em\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+
+\begin{document}
+
+\maketitle
+
+\section{この文書について}
+この文書はコミュニティ版\pLaTeXe\ \texttt{<2016/07/01>}について、
+\pLaTeXe\ \texttt{<2016/06/10>}からの更新箇所をまとめたものです。
+
+
+\section{アクセント文字の修正パッチを一旦撤去}
+コミュニティ版\pLaTeX{}で「縦組で『\AA{}』等の一部の合成文字が乱れるバグの
+修正」を導入しましたが、この変更で「全てのアクセント文字」についてトラブルが
+相次いでしまいました。このため、コミュニティ版に加えたアクセント文字のパッチを
+一旦撤去し、元の\LaTeX{}の定義をそのまま使うようにしました。結果的に、従来の
+アスキー版と同じく
+\begin{itemize}
+\item ベースライン補正量がゼロでない場合（特に縦組）で「\AA」などの
+一部のアクセント合成文字が乱れる
+\item アクセント合成文字の前後に正しく|\xkanjiskip|アキが入らない
+\end{itemize}
+という問題が残っています。これらは、将来のp\LaTeX{}では改善したいと考えてい
+ます。撤去したパッチは、後述の開発版のテストに移動しました。
+
+
+\section{\texttt{\string\@begindvibox}を常に横組に}
+アスキー版p\LaTeX{}では、縦組の文書クラスを使用時に
+|\AtBeginDocument{\AtBeginDvi{}}|というコードを書くと
+\begin{verbatim}
+Incompatible direction list can't be unboxed.
+\end{verbatim}
+というエラーが出てしまいます。例として、2016年6月以降のgraphics/colorパッ
+ケージのdvipsオプションが挙げられます。これに対処するため、コミュニティ版
+p\LaTeX{}では|\@begindvibox|を（空でない限り）常に横組に固定することと
+しました(forum:1956)。
+
+
+\section{起動時に\file{platex.cfg}を読み込む機能を追加}
+今回のp\LaTeX{}から、起動時に\file{platex.cfg}というファイルが見つかれば
+それを読み込みます。たとえば、|~/texmf/tex/platex/config|ディレクトリに
+\begin{verbatim}
+\RequirePackage{exppl2e}
+\end{verbatim}
+という内容の\file{platex.cfg}を置いておけば、p\LaTeX{}の起動直後に
+\file{exppl2e}パッケージ（後述）が読み込まれます。up\LaTeX{}の場合は
+\file{uplatex.cfg}を使用します。
+
+
+\section{開発版のテストのお願い}
+今後p\LaTeX{}に導入するかもしれない修正パッチや仕様変更を手軽に試していただく
+ため、\file{exppl2e}パッケージ（EXPerimentalなPLatex2E）を用意しました。
+少しだけ試したい場合は、\TeX{}ファイルの冒頭（|\documentclass|より前）で
+\begin{verbatim}
+\RequirePackage{exppl2e}
+\end{verbatim}
+と書きます。先述の「起動時に\file{platex.cfg}を読み込む機能」を用いると、
+この手続きを自動化することもできます（この方法をお勧めします）。
+
+現在は、今回の版で撤去したアクセント文字に関するパッチが入っています。バグ報告
+やご意見を歓迎します。\TeX\ ForumやGitHubのIssueシステムが利用できます。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
