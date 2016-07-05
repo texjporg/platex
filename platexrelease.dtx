@@ -34,6 +34,8 @@
 % \changes{v1.0d}{2016/06/08}{p\LaTeX\ \texttt{!<2016/04/17!>}版と
 %      p\LaTeX\ \texttt{!<2016/05/07!>}版に警告}
 % \changes{v1.0e}{2016/06/30}{p\LaTeX\ \texttt{!<2016/06/10!>}版に警告}
+% \changes{v1.0f}{2016/07/05}{古いplatexreleaseの警告に\cs{pfmtversion}で
+%      なく\cs{platexreleaseversion}を使用(\LaTeXe\ r1207)}
 % \fi
 %
 % \iffalse
@@ -42,7 +44,7 @@
 \ProvidesFile{platexrelease.dtx}
 %</driver>
 %<platexrelease>\ProvidesPackage{platexrelease}
-                [2016/06/30 v1.0e latexrelease support for pLaTeX Kernel]
+                [2016/07/05 v1.0f latexrelease support for pLaTeX Kernel]
 %<*driver>
 \documentclass{jltxdoc}
 \GetFileInfo{platexrelease.dtx}
@@ -265,12 +267,14 @@
 %
 % より新しいフォーマットに対しては、より新しいバージョンの
 % \Lpack{platexrelease}が提供されているはずです。
+% \changes{v1.0f}{2016/07/05}{古いplatexreleaseの警告に\cs{pfmtversion}で
+%      なく\cs{platexreleaseversion}を使用(\LaTeXe\ r1207)}
 %    \begin{macrocode}
 \ifnum\currentpLaTeXdate
   >\expandafter\@parse@version\platexreleaseversion//00\@nil
 \PackageWarningNoLine{platexrelease}{%
 The current package is for an older pLaTeX format:\MessageBreak
-pLaTeX \pfmtversion\space\MessageBreak
+pLaTeX \platexreleaseversion\space\MessageBreak
 Obtain a newer version of this package!}
 \expandafter\endinput
 \fi

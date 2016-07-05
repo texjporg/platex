@@ -76,7 +76,7 @@
 %%
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{platexrelease}
-                [2016/06/30 v1.0e latexrelease support for pLaTeX Kernel]
+                [2016/07/05 v1.0f latexrelease support for pLaTeX Kernel]
 \RequirePackageWithOptions{latexrelease}
 \ifnum\expandafter\@parse@version\latexreleaseversion//00\@nil
   >\expandafter\@parse@version\p@known@latexreleaseversion//00\@nil
@@ -117,7 +117,7 @@
   >\expandafter\@parse@version\platexreleaseversion//00\@nil
 \PackageWarningNoLine{platexrelease}{%
 The current package is for an older pLaTeX format:\MessageBreak
-pLaTeX \pfmtversion\space\MessageBreak
+pLaTeX \platexreleaseversion\space\MessageBreak
 Obtain a newer version of this package!}
 \expandafter\endinput
 \fi
