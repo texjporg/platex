@@ -229,9 +229,9 @@
 % ただし、\TeX\ LiveやW32\TeX{}ではこの処理を簡単にする|fmtutil|あるいは
 % |fmtutil-sys|というプログラムが用意されています。
 % 以下を実行すれば、フォーマットファイル\file{platex.fmt}が作成されます。
-% \begin{verbatim}
+%\begin{verbatim}
 %   fmtutil --byfmt platex
-% \end{verbatim}
+%\end{verbatim}
 %
 % 次のリストが、``platex.ltx''の内容です。
 % ただし、このバージョンでは、\LaTeX{}からp\LaTeXe{}への拡張を
@@ -459,11 +459,11 @@
 % あるいは、次のような内容のファイル\file{fmt.ins}を作成し、
 % |platex fmt.ins|することでも\file{platex.ltx}を作ることができます。
 %
-% \begin{verbatim}
+%\begin{verbatim}
 %   \def\batchfile{fmt.ins}
 %   \input docstrip.tex
 %   \generateFile{platex.ltx}{t}{\from{platex.dtx}{plcore}}
-% \end{verbatim}
+%\end{verbatim}
 %
 %
 % \section{文書ファイル}\label{app:pldoc}
@@ -673,9 +673,9 @@
 % このシェルスクリプト\footnote{このシェルスクリプトはUNIX用です。
 % しかしrmコマンドをdeleteコマンドにするなどすれば、簡単にDOSなどのバッチ
 % ファイルに修正することができます。}の使用方法は次のとおりです。
-% \begin{verbatim}
+%\begin{verbatim}
 %    sh mkpldoc.sh
-% \end{verbatim}
+%\end{verbatim}
 %
 % \subsubsection{\file{mkpldoc.sh}の内容}
 % まず、以前に\file{pldoc.tex}を処理したときに作成された、
@@ -750,9 +750,9 @@ platex pldoc.tex
 %
 % このperlスクリプトの使用方法は次のとおりです。
 %
-% \begin{verbatim}
+%\begin{verbatim}
 %    perl dstcheck.pl file-name
-% \end{verbatim}
+%\end{verbatim}
 %
 % \subsubsection{\file{dstcheck.pl}の内容}
 % 最初に、このperlスクリプトが何をするのかを簡単に記述したコメントを

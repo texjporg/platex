@@ -149,11 +149,11 @@
 %
 % \subsection{フロートリストへの登録}
 % 二段抜きフロートの定義は、クラスファイルで、つぎのようにして行なわれる。
-% \begin{verbatim}
+%\begin{verbatim}
 %    \newenvironment{figure*}
 %                   {\@dblfloat{figure}}
 %                   {\end@dblfloat}
-% \end{verbatim}
+%\end{verbatim}
 % 文章中で|figure*|環境で囲まれた部分は、フロート保持用のリストに登録される。
 % この節では、段抜きフロートをページ下部にも置けるようにするために拡張した
 % マクロについて説明をする。
@@ -754,9 +754,9 @@
 %    \end{macrocode}
 % \changes{v2.5}{2001/09/14}{\cs{vsplit}時、infiniteエラーになるのを修正}
 % |\@leftcolumn|を作成するときに用いていた|\vss|が
-% \begin{verbatim}
+%\begin{verbatim}
 % ! Infinite glue shrinkage found in box being split.
-% \end{verbatim}
+%\end{verbatim}
 % のエラーを起こすことがあるので削除した。
 %    \begin{macrocode}
         \setbox\@leftcolumn=\vbox to\@fixht{\unvbox\z@}%
