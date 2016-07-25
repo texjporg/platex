@@ -29,9 +29,8 @@
 %%   Grave accent  \`     Left brace    \{     Vertical bar  \|
 %%   Right brace   \}     Tilde         \~}
 %%
-
 \NeedsTeXFormat{pLaTeX2e}
-\ProvidesClass{jltxdoc}[1997/07/29 v1.0b Standard pLaTeX file]
+\ProvidesClass{jltxdoc}[2016/07/25 v1.0c Standard pLaTeX file]
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{ltxdoc}}
 \ProcessOptions
 \LoadClass{ltxdoc}
@@ -76,6 +75,10 @@
 \def\DisableCrossrefs{\@bsphack\scan@allowedfalse\@esphack}
 \def\EnableCrossrefs{\@bsphack\scan@allowedtrue
    \def\DisableCrossrefs{\@bsphack\scan@allowedfalse\@esphack}\@esphack}
+\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+  \bgroup \let\do\do@noligs \verbatim@nolig@list
+    \ttfamily \verb@eol@error \let\do\@makeother \dospecials
+    \@ifstar{\@sverb}{\@vobeyspaces \frenchspacing \@sverb}}
 \xspcode"5C=3 %% \
 \xspcode"22=3 %% "
 \endinput

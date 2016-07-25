@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{150}
+% \CheckSum{174}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -38,9 +38,8 @@
 % \fi
 %
 % \iffalse
-%<class>
 %<class>\NeedsTeXFormat{pLaTeX2e}
-%<class>\ProvidesClass{jltxdoc}[1997/07/29 v1.0b Standard pLaTeX file]
+%<class>\ProvidesClass{jltxdoc}[2016/07/25 v1.0c Standard pLaTeX file]
 %<*driver>
 \documentclass{jltxdoc}
 \GetFileInfo{jltxdoc.cls}
@@ -181,6 +180,25 @@
    \def\DisableCrossrefs{\@bsphack\scan@allowedfalse\@esphack}\@esphack}
 %    \end{macrocode}
 % \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\verb}
+% p\LaTeX{}では、|\verb|コマンドを修正して直前に|\xkanjiskip|が入るように
+% しています。しかし、\file{ltxdoc.cls}が読み込む\file{doc.sty}が上書き
+% してしまいますので、これを再々定義します。\file{doc.sty}での定義は
+%\begin{verbatim}
+%   \def\verb{\relax\ifmmode\hbox\else\leavevmode\null\fi
+%     \bgroup \let\do\do@noligs \verbatim@nolig@list
+%       \ttfamily \verb@eol@error \let\do\@makeother \dospecials
+%       \@ifstar{\@sverb}{\@vobeyspaces \frenchspacing \@sverb}}
+%\end{verbatim}
+% となっていますので、|\null|を外します。
+%    \begin{macrocode}
+\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+  \bgroup \let\do\do@noligs \verbatim@nolig@list
+    \ttfamily \verb@eol@error \let\do\@makeother \dospecials
+    \@ifstar{\@sverb}{\@vobeyspaces \frenchspacing \@sverb}}
+%    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\xspcode}
