@@ -35,6 +35,7 @@
 % \changes{v1.0a}{1997/01/23}{\LaTeX \texttt{!<1996/12/01!>}への対応に
 %     合わせて修正}
 % \changes{v1.0b}{1997/07/29}{\cs{}と\texttt{"}の\cs{xspcode}を変更}
+% \changes{v1.0c}{2016/07/25}{docパッケージが上書きする\cs{verb}を再々定義}
 % \fi
 %
 % \iffalse
@@ -193,6 +194,7 @@
 %       \@ifstar{\@sverb}{\@vobeyspaces \frenchspacing \@sverb}}
 %\end{verbatim}
 % となっていますので、|\null|を外します。
+% \changes{v1.0c}{2016/07/25}{docパッケージが上書きする\cs{verb}を再々定義}
 %    \begin{macrocode}
 \def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
   \bgroup \let\do\do@noligs \verbatim@nolig@list
