@@ -1,5 +1,5 @@
 TARGET1 = platex.ltx jarticle.cls pl209.def platexrelease.sty \
-	nidanfloat.sty tascmac.sty
+	nidanfloat.sty tascmac.sty jltxdoc.cls
 TARGET2 = platex.pdf platexrelease.pdf pldoc.pdf \
 	nidanfloat.pdf ascmac.pdf exppl2e.pdf
 TARGET3 = platex.dvi platexrelease.dvi pldoc.dvi \
@@ -78,6 +78,11 @@ tascmac.sty: $(ASCMAC_SRC)
 	platex $(KANJI) ascmac.ins
 	rm ascmac.log
 
+jltxdoc.cls: jltxdoc.dtx
+	rm -f jltxdoc.cls pldoc.tex Xins.ins
+	platex $(KANJI) pldocs.ins
+	rm pldoc.tex Xins.ins
+
 platex.dvi: $(INTRODOC_SRC)
 	platex $(KANJI) platex.dtx
 	mendex -f -s gglo.ist -o platex.gls platex.glo
@@ -93,6 +98,7 @@ platexrelease.dvi: $(PLRELDOC_SRC)
 pldoc.dvi: $(PLDOC_SRC)
 	rm -f jltxdoc.cls pldoc.tex Xins.ins
 	platex $(KANJI) pldocs.ins
+	rm -f mkpldoc.sh dstcheck.pl
 	platex $(KANJI) Xins.ins
 	sh mkpldoc.sh
 	rm *.aux *.log pldoc.toc pldoc.idx pldoc.ind pldoc.ilg
