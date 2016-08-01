@@ -122,6 +122,7 @@
 %
 % ここからp\LaTeXe{}のexperimentalコード本体です。
 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \section{PDFのブックマークとアクセント文字}
 %
@@ -243,6 +244,65 @@
 }
 %</pldefs|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \section{脚注の合印直後での改行を許可}
+%
+% \begin{macro}{\@footnotetext}
+% インサートボックス|\footins|に脚注のテキストを入れます。
+%
+% p\TeX{}では|\insert|の直後に和文文字が来た場合、そこでの改行は許されない
+% という挙動になっています。このため、従来は脚注番号（合印）の直後の改行が
+% 抑制されていました。しかし、|\hbox|の直後に和文文字が来た場合は、そこで
+% の改行は許されますから、最後に|\null|を追加します。
+%
+% \changes{v1.0a}{1995/04/07}{組方向の判定をボックスの外でするようにした}
+% \changes{v????}{????/??/??}{脚注の合印直後での改行が禁止されてしまう
+%    問題に対処}
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{????/??/??}{\@footnotetext}
+%<platexrelease>                   {Allow break after \footnote}%
+%<*plcore|platexrelease>
+\long\def\@footnotetext#1{%
+  \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
+  \insert\footins{\@tempa%
+    \reset@font\footnotesize
+    \interlinepenalty\interfootnotelinepenalty
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+    \protected@edef\@currentlabel{%
+       \csname p@footnote\endcsname\@thefnmark
+    }%
+    \color@begingroup
+      \@makefntext{%
+        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
+    \color@endgroup}\null}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@footnotetext}
+%<platexrelease>                   {Allow break after \footnote}%
+%<platexrelease>\long\def\@footnotetext#1{%
+%<platexrelease>  \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
+%<platexrelease>  \insert\footins{\@tempa%
+%<platexrelease>    \reset@font\footnotesize
+%<platexrelease>    \interlinepenalty\interfootnotelinepenalty
+%<platexrelease>    \splittopskip\footnotesep
+%<platexrelease>    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+%<platexrelease>    \hsize\columnwidth \@parboxrestore
+%<platexrelease>    \protected@edef\@currentlabel{%
+%<platexrelease>       \csname p@footnote\endcsname\@thefnmark
+%<platexrelease>    }%
+%<platexrelease>    \color@begingroup
+%<platexrelease>      \@makefntext{%
+%<platexrelease>        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
+%<platexrelease>    \color@endgroup}}
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %
