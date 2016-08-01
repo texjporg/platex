@@ -2,9 +2,12 @@ TARGET1 = platex.ltx jarticle.cls pl209.def platexrelease.sty \
 	nidanfloat.sty tascmac.sty
 TARGET2 = platex.pdf platexrelease.pdf pldoc.pdf \
 	nidanfloat.pdf ascmac.pdf exppl2e.pdf
+TARGET3 = platex.dvi platexrelease.dvi pldoc.dvi \
+	nidanfloat.dvi ascmac.dvi exppl2e.dvi
 KANJI = -kanji=jis
 FONTMAP = -f ipaex.map -f ptex-ipaex.map
 
+default: $(TARGET1) $(TARGET3)
 all: $(TARGET1) $(TARGET2)
 
 PLFMT = platex.ltx plcore.ltx kinsoku.tex pldefs.ltx \
@@ -75,52 +78,61 @@ tascmac.sty: $(ASCMAC_SRC)
 	platex $(KANJI) ascmac.ins
 	rm ascmac.log
 
-platex.pdf: $(INTRODOC_SRC)
+platex.dvi: $(INTRODOC_SRC)
 	platex $(KANJI) platex.dtx
 	mendex -f -s gglo.ist -o platex.gls platex.glo
 	platex $(KANJI) platex.dtx
-	dvipdfmx $(FONTMAP) platex.dvi
-	rm platex.aux platex.log platex.dvi
+	rm platex.aux platex.log
 	rm platex.glo platex.gls platex.ilg
 
-platexrelease.pdf: $(PLRELDOC_SRC)
+platexrelease.dvi: $(PLRELDOC_SRC)
 	platex $(KANJI) platexrelease.dtx
 	platex $(KANJI) platexrelease.dtx
-	dvipdfmx $(FONTMAP) platexrelease.dvi
-	rm platexrelease.aux platexrelease.log platexrelease.dvi
+	rm platexrelease.aux platexrelease.log
 
-pldoc.pdf: $(PLDOC_SRC)
+pldoc.dvi: $(PLDOC_SRC)
 	rm -f jltxdoc.cls pldoc.tex Xins.ins
 	platex $(KANJI) pldocs.ins
 	platex $(KANJI) Xins.ins
 	sh mkpldoc.sh
-	dvipdfmx $(FONTMAP) pldoc.dvi
 	rm *.aux *.log pldoc.toc pldoc.idx pldoc.ind pldoc.ilg
-	rm pldoc.glo pldoc.gls *.dvi pldoc.tex Xins.ins
+	rm pldoc.glo pldoc.gls pldoc.tex Xins.ins
 	rm ltxdoc.cfg pldoc.dic mkpldoc.sh dstcheck.pl
 
-nidanfloat.pdf: $(NIDAN_SRC)
+nidanfloat.dvi: $(NIDAN_SRC)
 	platex $(KANJI) nidanfloat.dtx
 	platex $(KANJI) nidanfloat.dtx
+	rm nidanfloat.aux nidanfloat.log
+
+ascmac.dvi: $(ASCMAC_SRC)
+	platex $(KANJI) ascmac.dtx
+	platex $(KANJI) ascmac.dtx
+	rm ascmac.aux ascmac.log ascmac.toc
+
+exppl2e.dvi: exppl2e.sty
+	platex $(KANJI) exppl2e.sty
+	platex $(KANJI) exppl2e.sty
+	rm exppl2e.aux exppl2e.log
+
+platex.pdf: platex.dvi
+	dvipdfmx $(FONTMAP) platex.dvi
+platexrelease.pdf: platexrelease.dvi
+	dvipdfmx $(FONTMAP) platexrelease.dvi
+pldoc.pdf: pldoc.dvi
+	dvipdfmx $(FONTMAP) pldoc.dvi
+nidanfloat.pdf: nidanfloat.dvi
 	dvipdfmx $(FONTMAP) nidanfloat.dvi
-	rm nidanfloat.aux nidanfloat.log nidanfloat.dvi
-
-ascmac.pdf: $(ASCMAC_SRC)
-	platex $(KANJI) ascmac.dtx
-	platex $(KANJI) ascmac.dtx
+ascmac.pdf: ascmac.dvi
 	dvipdfmx $(FONTMAP) ascmac.dvi
-	rm ascmac.aux ascmac.log ascmac.toc ascmac.dvi
-
-exppl2e.pdf: exppl2e.sty
-	platex $(KANJI) exppl2e.sty
-	platex $(KANJI) exppl2e.sty
+exppl2e.pdf: exppl2e.dvi
 	dvipdfmx $(FONTMAP) exppl2e.dvi
-	rm exppl2e.aux exppl2e.log exppl2e.dvi
 
 .PHONY: clean
 clean:
 	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
 	$(NIDAN) $(ASCMAC) \
+	platex.dvi platexrelease.dvi pldoc.dvi \
+	nidanfloat.dvi ascmac.dvi exppl2e.dvi \
 	platex.pdf platexrelease.pdf pldoc.pdf \
 	nidanfloat.pdf ascmac.pdf exppl2e.pdf \
 	jltxdoc.cls pldoc.tex Xins.ins
