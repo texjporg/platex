@@ -1,0 +1,30 @@
+%#!ptex2pdf -l footnote
+\documentclass[twocolumn]{jarticle}
+\textwidth42zw
+\columnsep2zw
+\parindent0zw
+\begin{document}
+
+「＊」のある行は望ましくない出力
+（本来は起きないが，わざと例示している）
+
+１あああああああああああああああああああ\par
+１＊ああああああああああああああああああ\footnote[1]{いいいいい}\hskip0pt，ううううう\par
+１１ああああああああああああああああああ\footnote[1]{いいいいい}，ううううう\par
+１２ああああああああああああああああああ\footnotemark[1]，ううううう\par
+１３ああああああああああああああああああ\footnotetext[1]{いいいいい}，ううううう\par
+２あああああああああああああああああああ）\footnote[1]{いいいいい}うううううううう\par
+２＊ああああああああああああああああ）\footnote[1]{いいいいい}\nobreak （ううううううう\par
+２１ああああああああああああああああ）\footnote[1]{いいいいい}（ううううううう\par
+２２ああああああああああああああああ）\footnotemark[1]（うううううう\par
+２３ああああああああああああああああ）\footnotetext[1]{いいいいい}（ううううううう\par
+２４ああああああああああああああああああ）\footnote[1]{いいいいい}うううううううう\par
+２５ああああああああああああああああああ）\footnotemark[1]ううううううう\par
+３あああああああああああああああああああ\footnote[1]{いいいいい}\\うううううううう\par
+４ああああああああああああああああああ（\footnote[1]{いいいいい}うううううううう\par
+４＊あああああああああああああああああ（\hskip0pt\footnotetext[1]{いいいいい}うううううううう\par
+４１あああああああああああああああああ（\footnotetext[1]{いいいいい}うううううううう\par
+４２あああああああああああああああああ（\footnotemark[1]うううううううう\par
+
+\end{document}
+

@@ -147,7 +147,8 @@ pythontex-files-*/
 # xypic precompiled matrices
 *.xyc
 
-# WinEdt
+# WinEdt, Emacs
+*~
 *.bak
 *.sav
 
