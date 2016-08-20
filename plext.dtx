@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{1845}
+% \CheckSum{1848}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -47,6 +47,11 @@
 % \changes{v1.1i}{2001/05/10}{縦組でzを指定するとエラーになるのを修正。
 %    ありがとう、大石さん}
 % \changes{v1.2}{2001/09/26}{タグ名をplcoreからpackageに変更した}
+% \changes{v1.2a}{2016/08/20}{tabular環境前の余分な\cs{xkanjiskip}を削除}
+% \changes{v1.2a}{2016/08/20}{tabular環境後の余分な\cs{xkanjiskip}を削除}
+% \changes{v1.2a}{2016/08/20}{\cs{parbox}前後の余分な\cs{xkanjiskip}を削除}
+% \changes{v1.2a}{2016/08/20}{横組で\texttt{<t>}を指定した場合に
+%    \cs{@arstrutbox}を余計に\cs{hbox}に入れていたのを修正}
 % \fi
 %
 % \iffalse
@@ -55,7 +60,7 @@
 \ProvidesFile{plext.dtx}
 %</driver>
 %<package>\ProvidesPackage{plext}
-   [2001/09/26 v1.2 pLaTeX package file]
+   [2016/08/20 v1.2a pLaTeX package file (community edition)]
 %<*driver>
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -164,8 +169,8 @@
 % tabular環境にはアスタリスク形式があります。
 %    \begin{macrocode}
 \def\array{\let\@acol\@arrayacol \let\@classz\@arrayclassz
- \let\@classiv\@arrayclassiv
- \let\\\@arraycr\let\@halignto\@empty\X@tabarray}
+  \let\@classiv\@arrayclassiv
+  \let\\\@arraycr\let\@halignto\@empty\X@tabarray}
 %
 \def\tabular{\let\@halignto\@empty\X@tabular}
 \@namedef{tabular*}{\@ifnextchar<%>
@@ -194,9 +199,10 @@
 % \begin{macro}{\p@tabular}
 % アスタリスク形式の場合は、組方向オプションの後ろに幅を指定します。
 % \changes{v1.1d}{1995/11/10}{\cs{@tabular} to \cs{p@tabular}}
+% \changes{v1.2a}{2016/08/20}{tabular環境前の余分な\cs{xkanjiskip}を削除}
 %    \begin{macrocode}
 \def\@stabular<#1>#2{\def\@halignto{to#2}\p@tabular<#1>}
-\def\p@tabular<#1>{\leavevmode \hbox \bgroup $\let\@acol\@tabacol
+\def\p@tabular<#1>{\leavevmode \null\hbox \bgroup $\let\@acol\@tabacol
    \let\@classz\@tabclassz
    \let\@classiv\@tabclassiv \let\\\@tabularcr\p@tabarray<#1>}
 %    \end{macrocode}
@@ -215,6 +221,8 @@
 % \begin{macro}{\p@array}
 % tabular環境とarray環境の内部形式です。
 % \changes{v1.1d}{1995/11/10}{\cs{@array} to \cs{p@array}}
+% \changes{v1.2a}{2016/08/20}{横組で\texttt{<t>}を指定した場合に
+%    \cs{@arstrutbox}を余計に\cs{hbox}に入れていたのを修正}
 %    \begin{macrocode}
 \def\p@array<#1>[#2]#3{\setbox\@arstrutbox\hbox{%
   \iftdir
@@ -229,9 +237,9 @@
              \@depth\arraystretch\dp\tstrutbox \@width\z@
     \fi\fi
   \else
-    \if #1t\relax\hbox{\tate
+    \if #1t\relax\tate
        \vrule\@height\arraystretch\ht\tstrutbox
-             \@depth\arraystretch\dp\tstrutbox \@width\z@}%
+             \@depth\arraystretch\dp\tstrutbox \@width\z@
     \else
        \vrule\@height\arraystretch\ht\strutbox
              \@depth\arraystretch\dp\strutbox \@width\z@
@@ -257,9 +265,10 @@
 % array環境とtabular環境の終了コマンドです。
 % |\@end@alignbox|は|\p@array|から呼び出される|\fork@array@option|によって
 % 設定されます。
+% \changes{v1.2a}{2016/08/20}{tabular環境後の余分な\cs{xkanjiskip}を削除}
 %    \begin{macrocode}
 \def\endarray{\crcr\egroup\egroup\@end@alignbox}
-\def\endtabular{\crcr\egroup\egroup\@end@alignbox $\egroup}
+\def\endtabular{\crcr\egroup\egroup\@end@alignbox $\egroup\null}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 %    \end{macrocode}
 % \end{macro}
@@ -778,9 +787,10 @@
 % \changes{v1.1g}{1996/01/12}{\break Grouping \cs{@iiiparbox}}
 % minipage環境と同じようにグルーピングをします。
 % この括弧と対になるのは、このマクロの最後の\cs{egroup}です。
+% \changes{v1.2a}{2016/08/20}{\cs{parbox}前後の余分な\cs{xkanjiskip}を削除}
 %    \begin{macrocode}
 \long\def\@iiiparbox<#1>#2#3[#4]#5#6{%
-  \leavevmode\bgroup
+  \leavevmode\null\bgroup
   \setlength\@tempdima{#5}%
   \fork@parbox@option<#1>[#2]%
 \if@rotsw
@@ -797,7 +807,7 @@
     \@begin@parbox\@parboxto{\box@dir\adjustbaseline
        \let\hss\vss\let\unhbox\unvbox
        \csname bm@#4\endcsname}\@end@parbox
-  \@end@tempboxa\egroup}
+  \@end@tempboxa\egroup\null}
 %    \end{macrocode}
 % \end{macro}
 %
