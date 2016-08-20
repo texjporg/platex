@@ -251,31 +251,41 @@
 %
 % \section{脚注の合印直後での改行を許可}
 %
-% インサートボックス|\footins|に脚注のテキストを入れます。
-%
-% \changes{v1.0a}{1995/04/07}{組方向の判定をボックスの外でするようにした}
-% \changes{v????}{????/??/??}{脚注の合印直後での改行が禁止されてしまう
-%    問題に対処}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\@footnotetext}
-%<platexrelease>                   {Allow break after \footnote}%
-%<*plcore|platexrelease>
-%    \end{macrocode}
 % \begin{macro}{\pltx@foot@penalty}
+% 閉じ括弧類の直後に|\footnotetext|が続いた場合、|\footnotetext|の前での改行は
+% 望ましくありません。このような場合に対処するために、|\pltx@foot@penalty|という
+% カウンタを用意しました。|\footnotetext|の最初で「直前のペナルティ値」
+% としてこのカウンタが初期化されます。
+% |\footnotemark|,~|\footnote|では使わないので0に設定しています。
+% \changes{v????}{????/??/??}{カウンタ\cs{pltx@foot@penalty}を追加}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\pltx@foot@penalty}
+%<platexrelease>                   {Add new counter \pltx@foot@penalty}%
+%<*plcore|platexrelease>
+\ifx\@undefined\pltx@foot@penalty \newcount\pltx@foot@penalty \fi
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\pltx@foot@penalty}
+%<platexrelease>                   {Add new counter \pltx@foot@penalty}%
+%<platexrelease>\let\pltx@foot@penalty\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\footnotetext}
 % \begin{macro}{\footnotemark}
 % \begin{macro}{\footnote}
-% 閉じ括弧類の直後に |\footnotetext| が続いた場合、|\footnotetext| の前での改行は
-% 望ましくありません。このような場合に対処するために、|\pltx@foot@penalty| という
-% カウンタを用意しました。|\footnotetext| の最初で「直前のペナルティ値」
-% としてこのカウンタが初期化されます。
-% |\footntoemark|,~|\footnote| では使わないので0に設定しています。
-%
 % また、合印の前の文字と合印の間は原則ベタ組です（但し、JIS~X~4051には例外有り）。
-% そのため、合印を出力する |\footntoemark|,~|\footnote| の最初で |\inhibitglue| を
-% 実行しておくことにします（|\@makefnmark| の中に置いても効力がありません）。
+% そのため、合印を出力する|\footnotemark|,~|\footnote|の最初で|\inhibitglue|を
+% 実行しておくことにします（|\@makefnmark|の中に置いても効力がありません）。
+% \changes{v????}{????/??/??}{閉じ括弧類の直後に\cs{footnotetext}が続く
+%    場合に改行が起きることがある問題に対処}
 %    \begin{macrocode}
-\ifx\undefined\pltx@foot@penalty \newcount\pltx@foot@penalty\fi
+%<platexrelease>\plIncludeInRelease{????/??/??}{\footnotetext}
+%<platexrelease>                   {Disable break before \footnotetext}%
+%<*plcore|platexrelease>
+%    \end{macrocode}
+%    \begin{macrocode}
 \def\footnote{\inhibitglue\pltx@foot@penalty\z@
      \@ifnextchar[\@xfootnote{\stepcounter\@mpfn
      \protected@xdef\@thefnmark{\thempfn}%
@@ -290,13 +300,39 @@
        {\protected@xdef\@thefnmark{\thempfn}%
     \@footnotetext}}
 %    \end{macrocode}
-% \end{macro}
+%    \begin{macrocode}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\footnotetext}
+%<platexrelease>                   {Disable break before \footnotetext}%
+%<platexrelease>\def\footnote{\@ifnextchar[\@xfootnote{\stepcounter\@mpfn
+%<platexrelease>     \protected@xdef\@thefnmark{\thempfn}%
+%<platexrelease>     \@footnotemark\@footnotetext}}
+%<platexrelease>\def\footnotemark{%
+%<platexrelease>   \@ifnextchar[\@xfootnotemark
+%<platexrelease>     {\stepcounter{footnote}%
+%<platexrelease>      \protected@xdef\@thefnmark{\thefootnote}%
+%<platexrelease>      \@footnotemark}}
+%<platexrelease>\def\footnotetext{%
+%<platexrelease>     \@ifnextchar [\@xfootnotenext
+%<platexrelease>       {\protected@xdef\@thefnmark{\thempfn}%
+%<platexrelease>    \@footnotetext}}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
 % \end{macro}
 % \end{macro}
 % \end{macro}
 %
 % \begin{macro}{\@footnotetext}
-% |\footnotetext|,~|\footnote| の直後で改行を可能にします。
+% インサートボックス|\footins|に脚注のテキストを入れます。
+% |\footnotetext|,~|\footnote|の直後で改行を可能にします。
+%
+% \changes{v1.0a}{1995/04/07}{組方向の判定をボックスの外でするようにした}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\@footnotetext}
+%<platexrelease>                   {Allow break after \footnote}%
+%<*plcore|platexrelease>
+%    \end{macrocode}
 %    \begin{macrocode}
 \long\def\@footnotetext#1{%
   \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
@@ -318,8 +354,10 @@
 % という挙動になっています。このため、従来は脚注番号（合印）の直後の改行が
 % 抑制されていました。しかし、|\hbox|の直後に和文文字が来た場合は、そこで
 % の改行は許されますから、最後に|\null|を追加します。
-% また、|\pltx@foot@penalty| の値が0ではなかった場合、
+% また、|\pltx@foot@penalty|の値が0ではなかった場合、
 % 脚注の前にペナルティがあったということですから、復活させておきます。
+% \changes{v????}{????/??/??}{脚注の合印直後での改行が禁止されてしまう
+%    問題に対処}
 %    \begin{macrocode}
     \color@endgroup}\null
     \ifnum\pltx@foot@penalty=\z@\else\penalty\pltx@foot@penalty\fi}
@@ -344,16 +382,6 @@
 %<platexrelease>      \@makefntext{%
 %<platexrelease>        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
 %<platexrelease>    \color@endgroup}}
-%<platexrelease>\def\footnote{\@ifnextchar[\@xfootnote{\stepcounter\@mpfn
-%<platexrelease>     \protected@xdef\@thefnmark{\thempfn}%
-%<platexrelease>     \@footnotemark\@footnotetext}}
-%<platexrelease>\def\footnotemark{\@ifnextchar[\@xfootnotemark
-%<platexrelease>     {\stepcounter{footnote}%
-%<platexrelease>      \protected@xdef\@thefnmark{\thefootnote}%
-%<platexrelease>      \@footnotemark}}
-%<platexrelease>\def\footnotetext{\@ifnextchar [\@xfootnotenext
-%<platexrelease>       {\protected@xdef\@thefnmark{\thempfn}%
-%<platexrelease>    \@footnotetext}}
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
