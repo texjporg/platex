@@ -23,31 +23,52 @@
 %%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{tascmac}
-  [2016/04/15 v2.0b
+  [2016/08/21 v2.0c
   ascmac package (community edition)
   ]
 %%
-%% Actually `tascmac' requires pLaTeX2e, but LuaTeX-ja can handle the
-%% code properly; so \NeedsTeXFormat{LaTeX2e} on purpose.
-%% Check is included below:
+%% Originally `ascmac' and `tascmac' can be used only in
+%% pLaTeX, upLaTeX or LuaLaTeX with LuaTeX-ja support.
+%% We (texjporg) started to support other engines, such as
+%% pdfLaTeX, XeLaTeX and LuaLaTeX (even without LuaTeX-ja).
 %%
+\newif\ifascmac@ptex \ascmac@ptextrue
 \ifx\kanjiskip\@undefined
   \@ifpackageloaded{luatexja}{%
     \PackageInfo{tascmac}{%
       Patch from LuaTeX-ja will be applied}%
   }{%
-    \PackageError{tascmac}{%
-      `ascmac' and `tascmac' can be used only in pLaTeX,\MessageBreak
-      upLaTeX or LuaLaTeX with LuaTeX-ja support.\MessageBreak
-      Consider using `bxascmac' instead.\MessageBreak
-      See https://github.com/zr-tex8r/BXptool for detail}{}%
+    \PackageInfo{tascmac}{%
+      Assuming pdfLaTeX, XeLaTeX or LuaLaTeX}%
+    \ascmac@ptexfalse
   }%
+\fi
+\chardef\ascmac@q@catcode=\catcode`\Q\relax
+\ifascmac@ptex
+  \catcode`\Q=9\relax
+\else
+  \catcode`\Q=14\relax
+\fi
+%%
+%% Use Type1 font for ascgrp (pdfLaTeX, LuaLaTeX)
+\ifascmac@ptex\else
+  \ifdefined\pdfextension
+    % LuaTeX (>=0.85)
+    \pdfextension mapline{+ascgrp <ascgrp.pfb}
+    \pdfextension mapline{+ascii10 <ascii10.pfb}
+    \pdfextension mapline{+ascii36 <ascii36.pfb}
+  \else\ifdefined\pdfmapline
+    % pdfTeX, LuaTeX (<=0.81)
+    \pdfmapline{+ascgrp <ascgrp.pfb}
+    \pdfmapline{+ascii10 <ascii10.pfb}
+    \pdfmapline{+ascii36 <ascii36.pfb}
+  \fi\fi
 \fi
 %%
 %% ascmac.sty 10/28 '88
 %% ASCII special macros
-\newdimen\@savetbaselineshift
-\newdimen\@saveybaselineshift
+Q \ifx\@savetbaselineshift\@undefined \newdimen\@savetbaselineshift \fi
+Q \ifx\@saveybaselineshift\@undefined \newdimen\@saveybaselineshift \fi
 %%
 %% ASCII logo
 \def\@@ASCII#1#2#3{\shortstack{#1 ASCII \\[#3]
@@ -64,8 +85,8 @@
 \newbox\scb@x \newbox\scscb@x
 \newdimen\@bw\newbox\@nbox\newbox\@nbody
 \def\boxnote{\par\vspace{.3\baselineskip}%
-  \@saveybaselineshift\ybaselineshift\ybaselineshift\z@
-  \@savetbaselineshift\tbaselineshift\tbaselineshift\z@
+Q \@saveybaselineshift\ybaselineshift\ybaselineshift\z@
+Q \@savetbaselineshift\tbaselineshift\tbaselineshift\z@
   \setbox\@nbox=\hbox{\@ascgrp\vrule width1.08pt depth35pt b\hss a\hss b}
   \@whiledim \wd\@nbox<\hsize \do{
   \setbox\@nbox=\hbox{\@ascgrp\unhbox\@nbox \hss a\hss b}}
@@ -73,7 +94,8 @@
   \vrule width1.08pt depth35pt}
   \@bw=\wd\@nbox\advance\@bw -40pt
   \begin{lrbox}{\@nbody}\begin{minipage}{\@bw}% (KN:1998/02/27)
-    \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift}%
+Q   \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift
+}%
 \def\endboxnote{\end{minipage}\end{lrbox}%
   \vbox{\parindent=0pt\offinterlineskip\copy\@nbox
   \hbox to\wd\@nbox{\vrule width1.08pt\hfil\box\@nbody\hfil\vrule width1.08pt}
@@ -87,8 +109,8 @@
   \vrule\@width\z@\@height\z@\@depth.5\dimen\z@}}
 \def\@vrf@#1#2{\vskip#1\leaders\vrule width#2\vfil\vskip#1}
 \def\screen{%
-  \@saveybaselineshift\ybaselineshift \ybaselineshift\z@
-  \@savetbaselineshift\tbaselineshift \tbaselineshift\z@
+Q \@saveybaselineshift\ybaselineshift \ybaselineshift\z@
+Q \@savetbaselineshift\tbaselineshift \tbaselineshift\z@
   \@ifnextchar[{\@screen}{\@screen[0]}}
 \def\@screen[#1]{\ifcase#1\def\@r{20}\def\@s{9.8pt}\def\@sx{10pt}\or
   \def\@r{18}\def\@s{8.8pt}\def\@sx{9pt}\or
@@ -101,7 +123,8 @@
   \def\@r{4}\def\@s{1.8pt}\def\@sx{2pt}\fi
   \par\vspace{.3\baselineskip}\@scw\linewidth \advance\@scw -\@r pt
   \setbox\scb@x=\hbox to\@scw\bgroup\begin{minipage}{\@scw}% (KN:1998/02/27)
-    \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift}%
+Q   \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift
+}%
 \def\endscreen{\end{minipage}\egroup%
   \setbox\scscb@x=\hbox to\linewidth{\hfil\vbox{\offinterlineskip%
   \thinlines\setlength{\unitlength}{1pt}\hrule\kern\@s%
@@ -117,17 +140,18 @@
 \def\@hleader{\leaders\hrule height .8pt\hfil}
 \def\itembox{\@ifnextchar[{\@itembox}{\@itembox[c]}}
 \def\@itembox[#1]#2{%
-  \@saveybaselineshift\ybaselineshift\ybaselineshift\z@
-  \@savetbaselineshift\tbaselineshift\tbaselineshift\z@
+Q \@saveybaselineshift\ybaselineshift\ybaselineshift\z@
+Q \@savetbaselineshift\tbaselineshift\tbaselineshift\z@
   \par\vspace{.3\baselineskip}%
   \setbox\@iboxstr=\hbox{%
-  \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift #2}%
+Q \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift
+  #2}%
   \@itemh\ht\@iboxstr\advance\@itemh\dp\@iboxstr
   \vspace{.5\@itemh}\bgroup\@scw\linewidth
   \advance\@scw-20pt\@iboxpos={#1}%
   \setbox\scb@x=\hbox to\@scw\bgroup\begin{minipage}{\@scw}%
-  \ybaselineshift\@saveybaselineshift
-  \tbaselineshift\@savetbaselineshift% (KN:1998/02/27)
+Q \ybaselineshift\@saveybaselineshift
+Q \tbaselineshift\@savetbaselineshift% (KN:1998/02/27)
   \vspace*{.5\@itemh}}%
 \def\enditembox{\end{minipage}\egroup%
   \setbox\scscb@x=\hbox to\linewidth{\hfil\vbox{\offinterlineskip%
@@ -144,10 +168,11 @@
 %% \keytop
 \def\keytop{\@ifnextchar[{\@keytop}{\@keytop[d]}}
 \def\@keytop[#1]#2{%
-  {\setbox0=\hbox{\shortstack{#2}}\ybaselineshift\z@\tbaselineshift\z@%
+  {\setbox0=\hbox{\shortstack{#2}}%
+Q \ybaselineshift\z@ \tbaselineshift\z@
   \dimen0=\wd0\advance\dimen0 5pt\dimen1=\dp0\advance\dimen1 2.5pt%
   \setbox\scscb@x=\hbox to\dimen0{%
-  \iftdir\tate\else\yoko\fi
+Q \iftdir\tate\else\yoko\fi
   \@scw\wd0\hfil\vtop{\offinterlineskip
   \thinlines\setlength{\unitlength}{1pt}\hrule\kern2.3pt\@hobox{tl}{tr}5%
   \kern-2.4pt\box0\@hobox{bl}{br}5\kern-.4pt\hrule}\hfil}%
@@ -159,19 +184,26 @@
   \boxmaxdepth=\dimen1\fi\fi \mbox{}\vbox{\box0}\fi}}
 %%
 %% \yen
-\def\yen{\leavevmode\hbox{\iftdir\yoko\fi
+\def\yen{\leavevmode\hbox{%
+Q \iftdir\yoko\fi
   \setbox0=\hbox{Y}Y\kern-.97\wd0\vbox{\hrule height.1ex width.98\wd0
   \kern.33ex\hrule height.1ex width.98\wd0\kern.45ex}}}
 %%
 %% return-key
-\def\return{\leavevmode\hbox{\iftdir\yoko\fi\@ascgrp\char"20}}
-\def\Return{\leavevmode\hbox{\iftdir\yoko\fi\@ascgrp @}}
+\def\return{\leavevmode\hbox{%
+Q \iftdir\yoko\fi
+  \@ascgrp\char"20}}
+\def\Return{\leavevmode\hbox{%
+Q \iftdir\yoko\fi
+  \@ascgrp @}}
 %%
 %% \mask
 \newbox\@bwsp \newbox\@@bwsp\newcount\@bcal
 \def\setdim@#1#2{\@bcal=#2\divide#1\@bcal\multiply#1\@bcal\advance#1 1.001#2}
 \def\mask#1#2{{\setbox\@bwsp=\hbox{#1}%
-  \setbox0=\hbox{\ybaselineshift\z@\tbaselineshift\z@ \@ascgrp#2}%
+  \setbox0=\hbox{%
+Q \ybaselineshift\z@\tbaselineshift\z@
+  \@ascgrp#2}%
   \dimen0=\wd\@bwsp\dimen1=\ht\@bwsp\advance\dimen1\dp\@bwsp\dimen2=-\dimen1
   \setdim@{\dimen0}{\wd0}\setdim@{\dimen1}{\ht0}%
   \setbox\@@bwsp=\hbox to\dimen0{\leaders
@@ -185,7 +217,9 @@
 %% \maskbox{width}{height}{mask_char}{pos}{body}
 \def\@setdim#1#2{\@bcal=#2\divide#1\@bcal\multiply#1\@bcal\advance#1 .001#2}
 \def\Maskbox#1#2#3#4#5#6{{%
-  \setbox0=\hbox{\ybaselineshift\z@\tbaselineshift\z@ \@ascgrp#3}%
+  \setbox0=\hbox{%
+Q \ybaselineshift\z@\tbaselineshift\z@
+  \@ascgrp#3}%
   \dimen0=#1\@setdim{\dimen0}{\wd0}\dimen1=#2\@setdim{\dimen1}{\ht0}%
   \ifx#4c\skip0=0pt plus1fil\skip1=\skip0\fi
   \ifx#4r\skip0=0pt plus1fil\skip1=0pt\fi
@@ -202,12 +236,13 @@
 %% shadebox environment
 \newdimen\shaderule\shaderule 5pt
 \def\shadebox{\par\vspace{.3\baselineskip}%
-  \@saveybaselineshift\ybaselineshift\ybaselineshift\z@
-  \@savetbaselineshift\tbaselineshift\tbaselineshift\z@
+Q \@saveybaselineshift\ybaselineshift\ybaselineshift\z@
+Q \@savetbaselineshift\tbaselineshift\tbaselineshift\z@
   \dimen0\linewidth \advance\dimen0-20pt
   \advance\dimen0-2\fboxrule \advance\dimen0-\shaderule
   \setbox\@tempboxa=\hbox\bgroup\minipage{\dimen0}%
-    \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift}
+Q   \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift
+}
 \def\endshadebox{\endminipage\egroup\dimen0=10pt
   \setbox\@tempboxa=\hbox{\kern\dimen0\unhbox\@tempboxa\kern\dimen0}%
   \setbox0=\vbox{\hrule \@height \fboxrule
@@ -218,6 +253,8 @@
   \hbox{\hbox to \shaderule{\copy0\hss}\kern 0pt
   \vrule width\wd0 height0pt depth\shaderule\hskip-\shaderule
   \vrule width\shaderule height\dimen0}}
+%%
+\catcode`\Q=\ascmac@q@catcode\relax
 %%
 \endinput
 %%

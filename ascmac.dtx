@@ -8,7 +8,7 @@
 %
 % \fi
 %
-% \CheckSum{830}
+% \CheckSum{872}
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -27,6 +27,8 @@
 %
 % \iffalse
 %
+% 2016/08/21 v2.0c
+%     - Support pdfLaTeX, XeLaTeX and LuaLaTeX.
 % 2016/04/15 v2.0b
 %     - Simplify \@keytop.
 % 2016/03/13 v2.0a
@@ -76,7 +78,7 @@
 %</driver>
 %<tascmac>\ProvidesPackage{tascmac}
 %<ascmac>\ProvidesPackage{ascmac}
-  [2016/04/15 v2.0b
+  [2016/08/21 v2.0c
 %<driver|tascmac>  ascmac package (community edition)
 %<ascmac>  ascmac wrapper (community edition)
   ]
@@ -98,7 +100,7 @@
 %
 % \section{はじめに}
 %
-% \textsf{ascmac}パッケージは、p\LaTeXe{}の標準機能の範囲で、図や罫線で
+% \textsf{ascmac}パッケージは、\LaTeXe{}の標準機能の範囲で、図や罫線で
 % 囲んだボックスを出力する命令などを提供します。\textsf{ascmac}パッケージ
 % の実体は\textsf{tascmac}パッケージですが、これはもともと古いp\LaTeX{}で
 % 配布されていた横組専用\textsf{ascmac}パッケージと、それを縦組に対応させ
@@ -108,6 +110,7 @@
 % から派生して、日本語\TeX{}開発コミュニティによって開発されているバージョン
 % のために新たに書かれました。コミュニティ版では、オリジナルのアスキー版の
 % コードを元に、いくつかのバグ修正と他のパッケージとの互換性を改善しました。
+% また、v2.0c以降ではpdf\LaTeX{}などのエンジンもサポートしました。
 %
 % \section{使いかた}
 %
@@ -295,37 +298,75 @@
 %</ascmac>
 %    \end{macrocode}
 %
-% \textsf{tascmac}パッケージの動作条件は、p\LaTeXe{}です。
+% 従来、\textsf{tascmac}パッケージの動作条件は、p\LaTeXe{}でした。
+% しかし、community editionでは、バージョンv2.0c以降でほかのエンジンも
+% サポートすることにしました。
 %    \begin{macrocode}
 %<*tascmac>
 %%
-%% Actually `tascmac' requires pLaTeX2e, but LuaTeX-ja can handle the
-%% code properly; so \NeedsTeXFormat{LaTeX2e} on purpose.
-%% Check is included below:
+%% Originally `ascmac' and `tascmac' can be used only in
+%% pLaTeX, upLaTeX or LuaLaTeX with LuaTeX-ja support.
+%% We (texjporg) started to support other engines, such as
+%% pdfLaTeX, XeLaTeX and LuaLaTeX (even without LuaTeX-ja).
 %%
+\newif\ifascmac@ptex \ascmac@ptextrue
 \ifx\kanjiskip\@undefined
   \@ifpackageloaded{luatexja}{%
     \PackageInfo{tascmac}{%
       Patch from LuaTeX-ja will be applied}%
   }{%
-    \PackageError{tascmac}{%
-      `ascmac' and `tascmac' can be used only in pLaTeX,\MessageBreak
-      upLaTeX or LuaLaTeX with LuaTeX-ja support.\MessageBreak
-      Consider using `bxascmac' instead.\MessageBreak
-      See https://github.com/zr-tex8r/BXptool for detail}{}%
+    \PackageInfo{tascmac}{%
+      Assuming pdfLaTeX, XeLaTeX or LuaLaTeX}%
+    \ascmac@ptexfalse
   }%
+\fi
+%    \end{macrocode}
+%
+% (u)p\LaTeXe{}とLua\TeX-ja以外をサポートするためのトリックです。
+% 「Q」という文字のカテゴリーコードをこのパッケージを読んでいる間だけ
+% 変更し、(u)p\LaTeXe{}またはLua\TeX-jaでは無視する文字に、それ以外では
+% コメント文字（|%|と同じ）にします。
+% \changes{2016/08/21}{v2.0c}{pdf\LaTeX{}などをサポート}
+%    \begin{macrocode}
+\chardef\ascmac@q@catcode=\catcode`\Q\relax
+\ifascmac@ptex
+  \catcode`\Q=9\relax
+\else
+  \catcode`\Q=14\relax
+\fi
+%    \end{macrocode}
+%
+% pdf\LaTeX{}やLua\LaTeX{}のプリミティブを使って、ascgrpのType1フォントを
+% 使用できるように設定します。
+% \changes{2016/08/21}{v2.0c}{pdf\LaTeX{}でascgrpのType1フォントを使用}
+%    \begin{macrocode}
+%%
+%% Use Type1 font for ascgrp (pdfLaTeX, LuaLaTeX)
+\ifascmac@ptex\else
+  \ifdefined\pdfextension
+    % LuaTeX (>=0.85)
+    \pdfextension mapline{+ascgrp <ascgrp.pfb}
+    \pdfextension mapline{+ascii10 <ascii10.pfb}
+    \pdfextension mapline{+ascii36 <ascii36.pfb}
+  \else\ifdefined\pdfmapline
+    % pdfTeX, LuaTeX (<=0.81)
+    \pdfmapline{+ascgrp <ascgrp.pfb}
+    \pdfmapline{+ascii10 <ascii10.pfb}
+    \pdfmapline{+ascii36 <ascii36.pfb}
+  \fi\fi
 \fi
 %    \end{macrocode}
 %
 % \begin{macro}{\@savetbaselineshift}
 % \begin{macro}{\@saveybaselineshift}
 % |\tbaselineshift| と |\ybaselineshift| を一時退避するための準備です。
+% \changes{2016/08/21}{v2.0c}{定義済みの場合はあえて定義しないようにした}
 %    \begin{macrocode}
 %%
 %% ascmac.sty 10/28 '88
 %% ASCII special macros
-\newdimen\@savetbaselineshift
-\newdimen\@saveybaselineshift
+Q \ifx\@savetbaselineshift\@undefined \newdimen\@savetbaselineshift \fi
+Q \ifx\@saveybaselineshift\@undefined \newdimen\@saveybaselineshift \fi
 %%
 %    \end{macrocode}
 % \end{macro}
@@ -365,8 +406,8 @@
 % |boxnote| 環境を定義します。
 %    \begin{macrocode}
 \def\boxnote{\par\vspace{.3\baselineskip}%
-  \@saveybaselineshift\ybaselineshift\ybaselineshift\z@
-  \@savetbaselineshift\tbaselineshift\tbaselineshift\z@
+Q \@saveybaselineshift\ybaselineshift\ybaselineshift\z@
+Q \@savetbaselineshift\tbaselineshift\tbaselineshift\z@
   \setbox\@nbox=\hbox{\@ascgrp\vrule width1.08pt depth35pt b\hss a\hss b}
   \@whiledim \wd\@nbox<\hsize \do{
   \setbox\@nbox=\hbox{\@ascgrp\unhbox\@nbox \hss a\hss b}}
@@ -374,7 +415,8 @@
   \vrule width1.08pt depth35pt}
   \@bw=\wd\@nbox\advance\@bw -40pt
   \begin{lrbox}{\@nbody}\begin{minipage}{\@bw}% (KN:1998/02/27)
-    \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift}%
+Q   \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift
+}%
 %    \end{macrocode}
 %
 %    \begin{macrocode}
@@ -404,8 +446,8 @@
 % |screen| 環境を定義します。
 %    \begin{macrocode}
 \def\screen{%
-  \@saveybaselineshift\ybaselineshift \ybaselineshift\z@
-  \@savetbaselineshift\tbaselineshift \tbaselineshift\z@
+Q \@saveybaselineshift\ybaselineshift \ybaselineshift\z@
+Q \@savetbaselineshift\tbaselineshift \tbaselineshift\z@
   \@ifnextchar[{\@screen}{\@screen[0]}}
 %    \end{macrocode}
 %
@@ -421,7 +463,8 @@
   \def\@r{4}\def\@s{1.8pt}\def\@sx{2pt}\fi
   \par\vspace{.3\baselineskip}\@scw\linewidth \advance\@scw -\@r pt
   \setbox\scb@x=\hbox to\@scw\bgroup\begin{minipage}{\@scw}% (KN:1998/02/27)
-    \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift}%
+Q   \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift
+}%
 %    \end{macrocode}
 %
 %    \begin{macrocode}
@@ -453,17 +496,18 @@
 %    \begin{macrocode}
 \def\itembox{\@ifnextchar[{\@itembox}{\@itembox[c]}}
 \def\@itembox[#1]#2{%
-  \@saveybaselineshift\ybaselineshift\ybaselineshift\z@
-  \@savetbaselineshift\tbaselineshift\tbaselineshift\z@
+Q \@saveybaselineshift\ybaselineshift\ybaselineshift\z@
+Q \@savetbaselineshift\tbaselineshift\tbaselineshift\z@
   \par\vspace{.3\baselineskip}%
   \setbox\@iboxstr=\hbox{%
-  \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift #2}%
+Q \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift
+  #2}%
   \@itemh\ht\@iboxstr\advance\@itemh\dp\@iboxstr
   \vspace{.5\@itemh}\bgroup\@scw\linewidth
   \advance\@scw-20pt\@iboxpos={#1}%
   \setbox\scb@x=\hbox to\@scw\bgroup\begin{minipage}{\@scw}%
-  \ybaselineshift\@saveybaselineshift
-  \tbaselineshift\@savetbaselineshift% (KN:1998/02/27)
+Q \ybaselineshift\@saveybaselineshift
+Q \tbaselineshift\@savetbaselineshift% (KN:1998/02/27)
   \vspace*{.5\@itemh}}%
 %    \end{macrocode}
 %
@@ -490,10 +534,11 @@
 %% \keytop
 \def\keytop{\@ifnextchar[{\@keytop}{\@keytop[d]}}
 \def\@keytop[#1]#2{%
-  {\setbox0=\hbox{\shortstack{#2}}\ybaselineshift\z@\tbaselineshift\z@%
+  {\setbox0=\hbox{\shortstack{#2}}%
+Q \ybaselineshift\z@ \tbaselineshift\z@
   \dimen0=\wd0\advance\dimen0 5pt\dimen1=\dp0\advance\dimen1 2.5pt%
   \setbox\scscb@x=\hbox to\dimen0{%
-  \iftdir\tate\else\yoko\fi
+Q \iftdir\tate\else\yoko\fi
   \@scw\wd0\hfil\vtop{\offinterlineskip
   \thinlines\setlength{\unitlength}{1pt}\hrule\kern2.3pt\@hobox{tl}{tr}5%
   \kern-2.4pt\box0\@hobox{bl}{br}5\kern-.4pt\hrule}\hfil}%
@@ -515,7 +560,8 @@
 % 円記号です。
 %    \begin{macrocode}
 %% \yen
-\def\yen{\leavevmode\hbox{\iftdir\yoko\fi
+\def\yen{\leavevmode\hbox{%
+Q \iftdir\yoko\fi
   \setbox0=\hbox{Y}Y\kern-.97\wd0\vbox{\hrule height.1ex width.98\wd0
   \kern.33ex\hrule height.1ex width.98\wd0\kern.45ex}}}
 %    \end{macrocode}
@@ -527,8 +573,12 @@
 % 改行記号です。
 %    \begin{macrocode}
 %% return-key
-\def\return{\leavevmode\hbox{\iftdir\yoko\fi\@ascgrp\char"20}}
-\def\Return{\leavevmode\hbox{\iftdir\yoko\fi\@ascgrp @}}
+\def\return{\leavevmode\hbox{%
+Q \iftdir\yoko\fi
+  \@ascgrp\char"20}}
+\def\Return{\leavevmode\hbox{%
+Q \iftdir\yoko\fi
+  \@ascgrp @}}
 %%
 %    \end{macrocode}
 % \end{macro}
@@ -548,7 +598,9 @@
 % |\mask| 命令を定義します。
 %    \begin{macrocode}
 \def\mask#1#2{{\setbox\@bwsp=\hbox{#1}%
-  \setbox0=\hbox{\ybaselineshift\z@\tbaselineshift\z@ \@ascgrp#2}%
+  \setbox0=\hbox{%
+Q \ybaselineshift\z@\tbaselineshift\z@
+  \@ascgrp#2}%
   \dimen0=\wd\@bwsp\dimen1=\ht\@bwsp\advance\dimen1\dp\@bwsp\dimen2=-\dimen1
   \setdim@{\dimen0}{\wd0}\setdim@{\dimen1}{\ht0}%
   \setbox\@@bwsp=\hbox to\dimen0{\leaders
@@ -573,7 +625,9 @@
 % |\maskbox| 命令と |\Maskbox| 命令を定義します。
 %    \begin{macrocode}
 \def\Maskbox#1#2#3#4#5#6{{%
-  \setbox0=\hbox{\ybaselineshift\z@\tbaselineshift\z@ \@ascgrp#3}%
+  \setbox0=\hbox{%
+Q \ybaselineshift\z@\tbaselineshift\z@
+  \@ascgrp#3}%
   \dimen0=#1\@setdim{\dimen0}{\wd0}\dimen1=#2\@setdim{\dimen1}{\ht0}%
   \ifx#4c\skip0=0pt plus1fil\skip1=\skip0\fi
   \ifx#4r\skip0=0pt plus1fil\skip1=0pt\fi
@@ -601,12 +655,13 @@
 % |shadebox| 環境を定義します。
 %    \begin{macrocode}
 \def\shadebox{\par\vspace{.3\baselineskip}%
-  \@saveybaselineshift\ybaselineshift\ybaselineshift\z@
-  \@savetbaselineshift\tbaselineshift\tbaselineshift\z@
+Q \@saveybaselineshift\ybaselineshift\ybaselineshift\z@
+Q \@savetbaselineshift\tbaselineshift\tbaselineshift\z@
   \dimen0\linewidth \advance\dimen0-20pt
   \advance\dimen0-2\fboxrule \advance\dimen0-\shaderule
   \setbox\@tempboxa=\hbox\bgroup\minipage{\dimen0}%
-    \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift}
+Q   \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift
+}
 %    \end{macrocode}
 %
 %    \begin{macrocode}
@@ -621,9 +676,16 @@
   \vrule width\wd0 height0pt depth\shaderule\hskip-\shaderule
   \vrule width\shaderule height\dimen0}}
 %%
-%</tascmac>
 %    \end{macrocode}
 % \end{environment}
+%
+% トリックに使用した「Q」という文字のカテゴリーコードを元に戻します。
+% \changes{2016/08/21}{v2.0c}{pdf\LaTeX{}などをサポート}
+%    \begin{macrocode}
+\catcode`\Q=\ascmac@q@catcode\relax
+%%
+%</tascmac>
+%    \end{macrocode}
 %
 % \Finale
 %
