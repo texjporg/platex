@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2016/08/02 v1.0c Experimental pLaTeX2e features]
+                [2016/08/22 v1.0d Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -273,17 +273,15 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\footnotetext}
 % \begin{macro}{\footnotemark}
 % \begin{macro}{\footnote}
 % また、合印の前の文字と合印の間は原則ベタ組です（但し、JIS~X~4051には例外有り）。
 % そのため、合印を出力する|\footnotemark|,~|\footnote|の最初で|\inhibitglue|を
 % 実行しておくことにします（|\@makefnmark|の中に置いても効力がありません）。
-% \changes{v????}{????/??/??}{閉じ括弧類の直後に\cs{footnotetext}が続く
-%    場合に改行が起きることがある問題に対処}
+% \changes{v????}{????/??/??}{合印の前の文字と合印の間をベタ組に}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\footnotetext}
-%<platexrelease>                   {Disable break before \footnotetext}%
+%<platexrelease>\plIncludeInRelease{????/??/??}{\footnote}
+%<platexrelease>                   {Append \inhibitglue in \footnotemark}%
 %<*plcore|platexrelease>
 %    \end{macrocode}
 %    \begin{macrocode}
@@ -296,6 +294,35 @@
      {\stepcounter{footnote}%
       \protected@xdef\@thefnmark{\thefootnote}%
       \@footnotemark}}
+%    \end{macrocode}
+%    \begin{macrocode}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\footnote}
+%<platexrelease>                   {Append \inhibitglue in \footnotemark}%
+%<platexrelease>\def\footnote{\@ifnextchar[\@xfootnote{\stepcounter\@mpfn
+%<platexrelease>     \protected@xdef\@thefnmark{\thempfn}%
+%<platexrelease>     \@footnotemark\@footnotetext}}
+%<platexrelease>\def\footnotemark{%
+%<platexrelease>   \@ifnextchar[\@xfootnotemark
+%<platexrelease>     {\stepcounter{footnote}%
+%<platexrelease>      \protected@xdef\@thefnmark{\thefootnote}%
+%<platexrelease>      \@footnotemark}}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\footnotetext}
+% |\footnotetext|の直前のペナルティ値を保持します。
+% \changes{v????}{????/??/??}{閉じ括弧類の直後に\cs{footnotetext}が続く
+%    場合に改行が起きることがある問題に対処}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\footnotetext}
+%<platexrelease>                   {Preserve penalty before \footnotetext}%
+%<*plcore|platexrelease>
+%    \end{macrocode}
+%    \begin{macrocode}
 \def\footnotetext{\pltx@foot@penalty\lastpenalty\unpenalty%
      \@ifnextchar [\@xfootnotenext
        {\protected@xdef\@thefnmark{\thempfn}%
@@ -305,23 +332,13 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\footnotetext}
-%<platexrelease>                   {Disable break before \footnotetext}%
-%<platexrelease>\def\footnote{\@ifnextchar[\@xfootnote{\stepcounter\@mpfn
-%<platexrelease>     \protected@xdef\@thefnmark{\thempfn}%
-%<platexrelease>     \@footnotemark\@footnotetext}}
-%<platexrelease>\def\footnotemark{%
-%<platexrelease>   \@ifnextchar[\@xfootnotemark
-%<platexrelease>     {\stepcounter{footnote}%
-%<platexrelease>      \protected@xdef\@thefnmark{\thefootnote}%
-%<platexrelease>      \@footnotemark}}
+%<platexrelease>                   {Preserve penalty before \footnotetext}%
 %<platexrelease>\def\footnotetext{%
 %<platexrelease>     \@ifnextchar [\@xfootnotenext
 %<platexrelease>       {\protected@xdef\@thefnmark{\thempfn}%
 %<platexrelease>    \@footnotetext}}
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
-% \end{macro}
-% \end{macro}
 % \end{macro}
 %
 % \begin{macro}{\@footnotetext}
