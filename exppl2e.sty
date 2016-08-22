@@ -263,6 +263,7 @@
 %<platexrelease>                   {Add new counter \pltx@foot@penalty}%
 %<*plcore|platexrelease>
 \ifx\@undefined\pltx@foot@penalty \newcount\pltx@foot@penalty \fi
+\pltx@foot@penalty\z@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\pltx@foot@penalty}
@@ -286,11 +287,11 @@
 %<*plcore|platexrelease>
 %    \end{macrocode}
 %    \begin{macrocode}
-\def\footnote{\inhibitglue\pltx@foot@penalty\z@
+\def\footnote{\inhibitglue
      \@ifnextchar[\@xfootnote{\stepcounter\@mpfn
      \protected@xdef\@thefnmark{\thempfn}%
      \@footnotemark\@footnotetext}}
-\def\footnotemark{\inhibitglue\pltx@foot@penalty\z@%
+\def\footnotemark{\inhibitglue
    \@ifnextchar[\@xfootnotemark
      {\stepcounter{footnote}%
       \protected@xdef\@thefnmark{\thefootnote}%
@@ -360,7 +361,10 @@
 %    問題に対処}
 %    \begin{macrocode}
     \color@endgroup}\null
-    \ifnum\pltx@foot@penalty=\z@\else\penalty\pltx@foot@penalty\fi}
+    \ifnum\pltx@foot@penalty=\z@\else
+      \penalty\pltx@foot@penalty
+      \pltx@foot@penalty\z@
+    \fi}
 %    \end{macrocode}
 %    \begin{macrocode}
 %</plcore|platexrelease>
