@@ -34,7 +34,7 @@
 \edef\p@known@latexreleaseversion
    {2016/03/31}
 \edef\platexreleaseversion
-   {2016/07/01}
+   {2016/09/03}
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
   {\@plIncludeInRelease{#1}[#1]}}
@@ -466,6 +466,92 @@ of this package available from CTAN}
 \renewcommand\@makefnmark{\hbox{%
   \ifydir \@textsuperscript{\normalfont\@thefnmark}%
   \else\hbox{\yoko\@textsuperscript{\normalfont\@thefnmark}}\fi}}
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/09/03}{\pltx@foot@penalty}
+                   {Add new counter \pltx@foot@penalty}%
+\ifx\@undefined\pltx@foot@penalty \newcount\pltx@foot@penalty \fi
+\pltx@foot@penalty\z@
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\pltx@foot@penalty}
+                   {Add new counter \pltx@foot@penalty}%
+\let\pltx@foot@penalty\@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/09/03}{\footnote}
+                   {Append \inhibitglue in \footnotemark}%
+\def\footnote{\inhibitglue
+     \@ifnextchar[\@xfootnote{\stepcounter\@mpfn
+     \protected@xdef\@thefnmark{\thempfn}%
+     \@footnotemark\@footnotetext}}
+\def\footnotemark{\inhibitglue
+   \@ifnextchar[\@xfootnotemark
+     {\stepcounter{footnote}%
+      \protected@xdef\@thefnmark{\thefootnote}%
+      \@footnotemark}}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\footnote}
+                   {Append \inhibitglue in \footnotemark}%
+\def\footnote{\@ifnextchar[\@xfootnote{\stepcounter\@mpfn
+     \protected@xdef\@thefnmark{\thempfn}%
+     \@footnotemark\@footnotetext}}
+\def\footnotemark{%
+   \@ifnextchar[\@xfootnotemark
+     {\stepcounter{footnote}%
+      \protected@xdef\@thefnmark{\thefootnote}%
+      \@footnotemark}}
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/09/03}{\footnotetext}
+                   {Preserve penalty before \footnotetext}%
+\def\footnotetext{\pltx@foot@penalty\lastpenalty\unpenalty%
+     \@ifnextchar [\@xfootnotenext
+       {\protected@xdef\@thefnmark{\thempfn}%
+    \@footnotetext}}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\footnotetext}
+                   {Preserve penalty before \footnotetext}%
+\def\footnotetext{%
+     \@ifnextchar [\@xfootnotenext
+       {\protected@xdef\@thefnmark{\thempfn}%
+    \@footnotetext}}
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/09/03}{\@footnotetext}
+                   {Allow break after \footnote}%
+\long\def\@footnotetext#1{%
+  \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
+  \insert\footins{\@tempa%
+    \reset@font\footnotesize
+    \interlinepenalty\interfootnotelinepenalty
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+    \protected@edef\@currentlabel{%
+       \csname p@footnote\endcsname\@thefnmark
+    }%
+    \color@begingroup
+      \@makefntext{%
+        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
+    \color@endgroup}\null
+    \ifnum\pltx@foot@penalty=\z@\else
+      \penalty\pltx@foot@penalty
+      \pltx@foot@penalty\z@
+    \fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@footnotetext}
+                   {Allow break after \footnote}%
+\long\def\@footnotetext#1{%
+  \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
+  \insert\footins{\@tempa%
+    \reset@font\footnotesize
+    \interlinepenalty\interfootnotelinepenalty
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+    \protected@edef\@currentlabel{%
+       \csname p@footnote\endcsname\@thefnmark
+    }%
+    \color@begingroup
+      \@makefntext{%
+        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
+    \color@endgroup}}
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@tabular}
                    {Remove extra \xkanjiskip}%

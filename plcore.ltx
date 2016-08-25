@@ -34,7 +34,7 @@
 %%
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2016/07/01}
+   {2016/09/03}
 \def\ppatch@level{0}
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
@@ -964,6 +964,21 @@
 \renewcommand\@makefnmark{%
   \ifydir \hbox{}\hbox{\@textsuperscript{\normalfont\@thefnmark}}\hbox{}%
   \else\hbox{\yoko\@textsuperscript{\normalfont\@thefnmark}}\fi}
+\ifx\@undefined\pltx@foot@penalty \newcount\pltx@foot@penalty \fi
+\pltx@foot@penalty\z@
+\def\footnote{\inhibitglue
+     \@ifnextchar[\@xfootnote{\stepcounter\@mpfn
+     \protected@xdef\@thefnmark{\thempfn}%
+     \@footnotemark\@footnotetext}}
+\def\footnotemark{\inhibitglue
+   \@ifnextchar[\@xfootnotemark
+     {\stepcounter{footnote}%
+      \protected@xdef\@thefnmark{\thefootnote}%
+      \@footnotemark}}
+\def\footnotetext{\pltx@foot@penalty\lastpenalty\unpenalty%
+     \@ifnextchar [\@xfootnotenext
+       {\protected@xdef\@thefnmark{\thempfn}%
+    \@footnotetext}}
 \long\def\@footnotetext#1{%
   \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
   \insert\footins{\@tempa%
@@ -978,7 +993,11 @@
     \color@begingroup
       \@makefntext{%
         \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
-    \color@endgroup}}
+    \color@endgroup}\null
+    \ifnum\pltx@foot@penalty=\z@\else
+      \penalty\pltx@foot@penalty
+      \pltx@foot@penalty\z@
+    \fi}
 \def\@footnotemark{\leavevmode
   \ifhmode\edef\@x@sf{\the\spacefactor}\nobreak\fi
   \ifydir\@makefnmark
