@@ -1101,14 +1101,6 @@
   }
   \expandafter
 \endgroup \platexTMP
-\everyjob\expandafter{%
-  \the\everyjob
-  \IfFileExists{platex.cfg}{%
-    \typeout{*************************^^J%
-             * Loading platex.cfg.^^J%
-             *************************}%
-    \input{platex.cfg}}{}%
-}
 \AtBeginDocument{%
   \@ifpackageloaded{latexrelease}{%
     \@ifpackageloaded{platexrelease}{}{%

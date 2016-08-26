@@ -41,11 +41,18 @@
 \makeatletter
 \input plcore.ltx
 \the\everyjob
+\everyjob\expandafter{%
+  \the\everyjob
+  \IfFileExists{platex.cfg}{%
+    \typeout{*************************^^J%
+             * Loading platex.cfg.^^J%
+             *************************}%
+    \input{platex.cfg}}{}%
+}
 \let\dump\orgdump
 \let\orgdump\@undefined
 \makeatother
 \dump
-\endinput
 \endinput
 %%
 %% End of file `platex.ltx'.

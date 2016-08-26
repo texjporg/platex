@@ -10,7 +10,7 @@
 %
 % \fi
 %
-% \CheckSum{381}
+% \CheckSum{388}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -57,13 +57,15 @@
 % \changes{v1.0j}{2016/05/20}{pfltraceの説明を追加}
 % \changes{v1.0k}{2016/05/21}{変更履歴も出力するようにした}
 % \changes{v1.0l}{2016/06/19}{パッチレベルを\file{plvers.dtx}から取得}
+% \changes{v1.0m}{2016/08/26}{\file{platex.cfg}の読み込みを
+%    \file{plcore.ltx}から\file{platex.ltx}へ移動}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2016/06/19 v1.0l pLaTeX document file]
+\ProvidesFile{platex.dtx}[2016/08/26 v1.0m pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -240,15 +242,25 @@
 % したがって\file{platex.ltx}はとても短いものとなっています。
 % \file{latex.ltx}には\LaTeX{}のコマンドが、
 % \file{plcore.ltx}にはp\LaTeXe{}で拡張したコマンドが定義されています。
-% \changes{v1.0g}{2016/05/07}{フォーマット作成時に\LaTeX{}のバナーを一旦保存}
-% \changes{v1.0i}{2016/05/12}{一時コマンド\cs{orgdump}を最終的に未定義へ}
-%
 %    \begin{macrocode}
 %<*plcore>
+%    \end{macrocode}
+%
+% \file{latex.ltx}の末尾で使われている|\dump|をいったん無効化します。
+%    \begin{macrocode}
 \let\orgdump\dump
 \let\dump\relax
+%    \end{macrocode}
+%
+% \file{latex.ltx}を読み込み、起動時のバナーを保存します。
+% \changes{v1.0g}{2016/05/07}{フォーマット作成時に\LaTeX{}のバナーを一旦保存}
+%    \begin{macrocode}
 \input latex.ltx
 \edef\platexBANNER{\the\everyjob}% save LaTeX banner
+%    \end{macrocode}
+%
+% \file{plcore.ltx}を読み込み、このp\LaTeX{}のバージョンを表示します。
+%    \begin{macrocode}
 \typeout{**************************^^J%
          *^^J%
          * making pLaTeX format^^J%
@@ -257,11 +269,35 @@
 \makeatletter
 \input plcore.ltx
 \the\everyjob
+%    \end{macrocode}
+%
+% 起動時に\file{platex.cfg}がある場合、それを読み込むようにします。
+% バージョン2016/07/01ではコードを\file{plcore.ltx}に入れていました
+% が、\file{platex.ltx}へ移動しました。
+% \changes{v1.0m}{2016/08/26}{\file{platex.cfg}の読み込みを
+%    \file{plcore.ltx}から\file{platex.ltx}へ移動}
+%    \begin{macrocode}
+\everyjob\expandafter{%
+  \the\everyjob
+  \IfFileExists{platex.cfg}{%
+    \typeout{*************************^^J%
+             * Loading platex.cfg.^^J%
+             *************************}%
+    \input{platex.cfg}}{}%
+}
+%    \end{macrocode}
+%
+% フォーマットファイルにダンプします。
+% \changes{v1.0i}{2016/05/12}{一時コマンド\cs{orgdump}を最終的に未定義へ}
+%    \begin{macrocode}
 \let\dump\orgdump
 \let\orgdump\@undefined
 \makeatother
 \dump
-%<plcore>\endinput
+%\endinput
+%    \end{macrocode}
+%
+%    \begin{macrocode}
 %</plcore>
 %    \end{macrocode}
 %
