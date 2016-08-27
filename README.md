@@ -1,5 +1,7 @@
 # platex
 
+[![Build Status](https://travis-ci.org/texjporg/platex.svg?branch=master)](https://travis-ci.org/texjporg/platex)
+
 The bundle provides pLaTeX2e and miscellaneous macros for pTeX and e-pTeX.
 
 The bundle is a community edition forked from the original ASCII edition
