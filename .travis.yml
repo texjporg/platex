@@ -1,12 +1,18 @@
 os:
   - osx
+  - linux
+dist: trusty
+sudo: required
+before_install:
+  - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/install-tex.sh
+  - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/tlmgr.sh
+  - chmod +x install-tex.sh tlmgr.sh
 install:
-  - curl -L -O http://mirrors.concertpass.com/tex-archive/systems/mac/mactex/BasicTeX.pkg
-  - sudo installer -pkg BasicTeX.pkg -target /
-  - rm BasicTeX.pkg
-  - export PATH=$PATH:/usr/texbin
-  - sudo tlmgr update --self --all
-  - sudo tlmgr install collection-langjapanese collection-fontsrecommended
+  - . ./install-tex.sh
+  - ./tlmgr.sh update --self --all
+  - ./tlmgr.sh install collection-langjapanese collection-fontsrecommended
 script:
-  - make clean
+  - make
+  - rm -f *.dvi
+  - fmtutil --byfmt platex
   - make all
