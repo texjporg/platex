@@ -975,10 +975,11 @@
      {\stepcounter{footnote}%
       \protected@xdef\@thefnmark{\thefootnote}%
       \@footnotemark}}
-\def\footnotetext{\pltx@foot@penalty\lastpenalty\unpenalty%
-     \@ifnextchar [\@xfootnotenext
-       {\protected@xdef\@thefnmark{\thempfn}%
-    \@footnotetext}}
+\def\footnotetext{%
+  \ifhmode\pltx@foot@penalty\lastpenalty\unpenalty\fi%
+  \@ifnextchar [\@xfootnotenext
+    {\protected@xdef\@thefnmark{\thempfn}%
+     \@footnotetext}}
 \long\def\@footnotetext#1{%
   \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
   \insert\footins{\@tempa%
