@@ -8,6 +8,7 @@ KANJI = -kanji=jis
 FONTMAP = -f ipaex.map -f ptex-ipaex.map
 
 default: $(TARGET1) $(TARGET3)
+strip: $(TARGET1)
 all: $(TARGET1) $(TARGET2)
 
 PLFMT = platex.ltx plcore.ltx kinsoku.tex pldefs.ltx \
@@ -133,8 +134,18 @@ ascmac.pdf: ascmac.dvi
 exppl2e.pdf: exppl2e.dvi
 	dvipdfmx $(FONTMAP) exppl2e.dvi
 
-.PHONY: clean
+.PHONY: clean cleanstrip cleanall cleandoc
 clean:
+	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
+	$(NIDAN) $(ASCMAC) \
+	platex.dvi platexrelease.dvi pldoc.dvi \
+	nidanfloat.dvi ascmac.dvi exppl2e.dvi \
+	jltxdoc.cls pldoc.tex Xins.ins
+cleanstrip:
+	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
+	$(NIDAN) $(ASCMAC) \
+	jltxdoc.cls pldoc.tex Xins.ins
+cleanall:
 	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
 	$(NIDAN) $(ASCMAC) \
 	platex.dvi platexrelease.dvi pldoc.dvi \
@@ -142,3 +153,9 @@ clean:
 	platex.pdf platexrelease.pdf pldoc.pdf \
 	nidanfloat.pdf ascmac.pdf exppl2e.pdf \
 	jltxdoc.cls pldoc.tex Xins.ins
+cleandoc:
+	rm -f \
+	platex.dvi platexrelease.dvi pldoc.dvi \
+	nidanfloat.dvi ascmac.dvi exppl2e.dvi \
+	platex.pdf platexrelease.pdf pldoc.pdf \
+	nidanfloat.pdf ascmac.pdf exppl2e.pdf
