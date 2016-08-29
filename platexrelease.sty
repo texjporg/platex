@@ -437,10 +437,11 @@ of this package available from CTAN}
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/09/03}{\footnotetext}
                    {Preserve penalty before \footnotetext}%
-\def\footnotetext{\pltx@foot@penalty\lastpenalty\unpenalty%
-     \@ifnextchar [\@xfootnotenext
-       {\protected@xdef\@thefnmark{\thempfn}%
-    \@footnotetext}}
+\def\footnotetext{%
+  \ifhmode\pltx@foot@penalty\lastpenalty\unpenalty\fi%
+  \@ifnextchar [\@xfootnotenext
+    {\protected@xdef\@thefnmark{\thempfn}%
+     \@footnotetext}}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\footnotetext}
                    {Preserve penalty before \footnotetext}%
