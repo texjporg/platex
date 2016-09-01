@@ -49,13 +49,15 @@
 %    場合に改行が起きることがある問題に対処}
 % \changes{v1.2g}{2016/08/25}{脚注の合印直後での改行が禁止されてしまう
 %    問題に対処}
+% \changes{v1.2h}{2016/09/01}{縦組でlongtableパッケージを使って表組の途中で改ページ
+%    するとき無限ループが起こる問題に対処(Issue 21)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2016/08/25 v1.2g pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2016/09/01 v1.2h pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -248,7 +250,7 @@
 % このマクロが組み立てる部分の中心となります。
 % \file{ltoutput.dtx}で定義されているものです。
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2016/04/17}{\@makecol}{\@makecol}%
+%<platexrelease>\plIncludeInRelease{2016/09/03}{\@makecol}{\@makecol}%
 %<*plcore|platexrelease>
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%
@@ -268,13 +270,19 @@
 % 0ptになってしまい、結果としてフッタの位置がくるってしまっていた。
 % 0の|\hskip|を発生させると|\wd\@outputbox|の値が期待したものとなるので、
 % 縦組の場合はその方法で対処する。
+%
+% ただし、0の|\hskip|を発生させるとき、水平モードに入ってしまうと、たとえば
+% longtableパッケージを使用して表組途中で改ページするときに|\par -> {\vskip}|の
+% 無限ループが起きてしまいます。そこで、|\vbox|の中で発生させます。
 % \changes{v1.1j}{2001/05/10}{\cs{@makecol}で組み立てられる
 %    \cs{@outputbox}の大きさが、縦組で中身が空のボックスだけの場合も適正になる
 %    ように修正}
 % \changes{v1.2b}{2016/01/26}{\cs{@outputbox}の深さが他のものの位置に影響を与えない
 %    ようにする\texttt{\cs{vskip}~-\cs{dimen@}}が縦組モードでは無効になっていたので修正}
+% \changes{v1.2h}{2016/09/01}{縦組でlongtableパッケージを使って表組の途中で改ページ
+%    するとき無限ループが起こる問題に対処(Issue 21)}
 %    \begin{macrocode}
-       \iftdir\hskip\z@\fi
+       \iftdir\vbox{\hskip\z@}\fi
        \vskip -\dimen@
        \@textbottom
        \ifvoid\footins\else % for pLaTeX
@@ -290,6 +298,36 @@
    \global \maxdepth \@maxdepth
 }
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\@makecol}{\@makecol}%
+%<platexrelease>\gdef\@makecol{%
+%<platexrelease>   \setbox\@outputbox\box\@cclv%
+%<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
+%<platexrelease>   \global \let \@midlist \@empty
+%<platexrelease>   \@combinefloats
+%<platexrelease>   \ifvbox\@kludgeins
+%<platexrelease>     \@makespecialcolbox
+%<platexrelease>   \else
+%<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
+%<platexrelease>%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+%<platexrelease>       \@texttop
+%<platexrelease>       \dimen@ \dp\@outputbox
+%<platexrelease>       \unvbox \@outputbox
+%<platexrelease>       \iftdir\hskip\z@\fi
+%<platexrelease>       \vskip -\dimen@
+%<platexrelease>       \@textbottom
+%<platexrelease>       \ifvoid\footins\else % for pLaTeX
+%<platexrelease>         \vskip \skip\footins
+%<platexrelease>         \color@begingroup
+%<platexrelease>            \normalcolor
+%<platexrelease>            \footnoterule
+%<platexrelease>            \unvbox \footins
+%<platexrelease>         \color@endgroup
+%<platexrelease>       \fi
+%<platexrelease>       }%
+%<platexrelease>   \fi
+%<platexrelease>   \global \maxdepth \@maxdepth
+%<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@makecol}{\@makecol}%
 %<platexrelease>\gdef\@makecol{%

@@ -699,7 +699,7 @@
        \@texttop
        \dimen@ \dp\@outputbox
        \unvbox \@outputbox
-       \iftdir\hskip\z@\fi
+       \iftdir\vbox{\hskip\z@}\fi
        \vskip -\dimen@
        \@textbottom
        \ifvoid\footins\else % for pLaTeX

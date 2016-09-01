@@ -275,6 +275,35 @@ of this package available from CTAN}
 \let\eminnershape\@undefined
 \plEndIncludeInRelease
 %% File: plcore.dtx
+\plIncludeInRelease{2016/09/03}{\@makecol}{\@makecol}%
+\gdef\@makecol{%
+   \setbox\@outputbox\box\@cclv%
+   \xdef\@freelist{\@freelist\@midlist}%
+   \global \let \@midlist \@empty
+   \@combinefloats
+   \ifvbox\@kludgeins
+     \@makespecialcolbox
+   \else
+     \setbox\@outputbox \vbox to\@colht {%
+       \@texttop
+       \dimen@ \dp\@outputbox
+       \unvbox \@outputbox
+       \iftdir\vbox{\hskip\z@}\fi
+       \vskip -\dimen@
+       \@textbottom
+       \ifvoid\footins\else % for pLaTeX
+         \vskip \skip\footins
+         \color@begingroup
+            \normalcolor
+            \footnoterule
+            \unvbox \footins
+         \color@endgroup
+       \fi
+       }%
+   \fi
+   \global \maxdepth \@maxdepth
+}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@makecol}{\@makecol}%
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%
@@ -285,6 +314,7 @@ of this package available from CTAN}
      \@makespecialcolbox
    \else
      \setbox\@outputbox \vbox to\@colht {%
+%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
        \@texttop
        \dimen@ \dp\@outputbox
        \unvbox \@outputbox
