@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2016/08/22 v1.0d Experimental pLaTeX2e features]
+                [2016/09/03 v1.0e Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -251,162 +251,178 @@
 %
 % \section{脚注の合印直後での改行を許可}
 %
-% \begin{macro}{\pltx@foot@penalty}
-% 閉じ括弧類の直後に|\footnotetext|が続いた場合、|\footnotetext|の前での改行は
-% 望ましくありません。このような場合に対処するために、|\pltx@foot@penalty|という
-% カウンタを用意しました。|\footnotetext|の最初で「直前のペナルティ値」
-% としてこのカウンタが初期化されます。
-% |\footnotemark|,~|\footnote|では使わないので0に設定しています。
-% \changes{v????}{????/??/??}{カウンタ\cs{pltx@foot@penalty}を追加}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\pltx@foot@penalty}
-%<platexrelease>                   {Add new counter \pltx@foot@penalty}%
-%<*plcore|platexrelease>
-\ifx\@undefined\pltx@foot@penalty \newcount\pltx@foot@penalty \fi
-\pltx@foot@penalty\z@
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\pltx@foot@penalty}
-%<platexrelease>                   {Add new counter \pltx@foot@penalty}%
-%<platexrelease>\let\pltx@foot@penalty\@undefined
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
+% p\LaTeXe{}カーネル(2016/09/03)に導入したため削除。
 %
-% \begin{macro}{\footnotemark}
-% \begin{macro}{\footnote}
-% また、合印の前の文字と合印の間は原則ベタ組です（但し、JIS~X~4051には例外有り）。
-% そのため、合印を出力する|\footnotemark|,~|\footnote|の最初で|\inhibitglue|を
-% 実行しておくことにします（|\@makefnmark|の中に置いても効力がありません）。
-% \changes{v????}{????/??/??}{合印の前の文字と合印の間をベタ組に}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \section{支柱}
+%
+% \subsubsection{支柱}
+% 行間の調整などに用いる支柱です。
+% 支柱のもととなるボックスの大きさは、フォントサイズが変更されるたびに、
+% |\set@fontsize|コマンドによって変化します。
+%
+% フォントサイズが変更されたときに、|\set@fontsize|コマンドで更新されます。
+%
+% 従来、横組ボックス用の支柱は|\strutbox|で、高さと深さが7対3となっていました。
+% これはp\LaTeX{}単体では問題になりませんでしたが、海外製の\LaTeX{}パッケージを
+% 縦組で使用した場合に、意図しない幅や高さが取得されることがありました。
+% この不都合を回避するため、コミュニティ版p\LaTeX{}では次の方法をとります。
+% \begin{itemize}
+% \item |\ystrutbox|（新設）：高さと深さが7対3の横組ボックス用の支柱
+% \item |\tstrutbox|：高さと深さが5対5の縦組ボックス用の支柱
+% \item |\zstrutbox|：高さと深さが7対3の縦組ボックス用の支柱
+% \item |\strutbox|（仕様変更）：縦横のディレクションに応じて
+%                     |\tstrutbox|または|\ystrutbox|に展開されるマクロ
+% \end{itemize}
+% すなわち、従来のp\LaTeX{}における|\strutbox|と同じ挙動を示すのが、
+% 新設された|\ystrutbox|ということになります。
+%
+% \begin{macro}{\tstrutbox}
+% \begin{macro}{\zstrutbox}
+% |\tstrutbox|は高さと深さが5対5、
+% |\zstrutbox|は高さと深さが7対3の支柱ボックスとなります。
+% これらは縦組ボックスの行間の調整などに使います。
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\footnote}
-%<platexrelease>                   {Append \inhibitglue in \footnotemark}%
-%<*plcore|platexrelease>
-%    \end{macrocode}
-%    \begin{macrocode}
-\def\footnote{\inhibitglue
-     \@ifnextchar[\@xfootnote{\stepcounter\@mpfn
-     \protected@xdef\@thefnmark{\thempfn}%
-     \@footnotemark\@footnotetext}}
-\def\footnotemark{\inhibitglue
-   \@ifnextchar[\@xfootnotemark
-     {\stepcounter{footnote}%
-      \protected@xdef\@thefnmark{\thefootnote}%
-      \@footnotemark}}
-%    \end{macrocode}
-%    \begin{macrocode}
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\footnote}
-%<platexrelease>                   {Append \inhibitglue in \footnotemark}%
-%<platexrelease>\def\footnote{\@ifnextchar[\@xfootnote{\stepcounter\@mpfn
-%<platexrelease>     \protected@xdef\@thefnmark{\thempfn}%
-%<platexrelease>     \@footnotemark\@footnotetext}}
-%<platexrelease>\def\footnotemark{%
-%<platexrelease>   \@ifnextchar[\@xfootnotemark
-%<platexrelease>     {\stepcounter{footnote}%
-%<platexrelease>      \protected@xdef\@thefnmark{\thefootnote}%
-%<platexrelease>      \@footnotemark}}
-%<platexrelease>\plEndIncludeInRelease
+\newbox\tstrutbox
+\newbox\zstrutbox
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
 %
-% \begin{macro}{\footnotetext}
-% |\footnotetext|の直前のペナルティ値を保持します。
-% \changes{v????}{????/??/??}{閉じ括弧類の直後に\cs{footnotetext}が続く
-%    場合に改行が起きることがある問題に対処}
+% \begin{macro}{\ystrutbox}
+% |\ystrutbox|は高さと深さが7対3の横組ボックス用の支柱です。
+% \changes{v????}{????/??/??}{\cs{ystrutbox}を追加}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\footnotetext}
-%<platexrelease>                   {Preserve penalty before \footnotetext}%
+%<platexrelease>\plIncludeInRelease{????/??/??}{\ystrutbox}
+%<platexrelease>                   {Add \ystrutbox}%
 %<*plcore|platexrelease>
-%    \end{macrocode}
-%    \begin{macrocode}
-\def\footnotetext{%
-  \ifhmode\pltx@foot@penalty\lastpenalty\unpenalty\fi%
-  \@ifnextchar [\@xfootnotenext
-    {\protected@xdef\@thefnmark{\thempfn}%
-     \@footnotetext}}
-%    \end{macrocode}
-%    \begin{macrocode}
+\newbox\ystrutbox
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\footnotetext}
-%<platexrelease>                   {Preserve penalty before \footnotetext}%
-%<platexrelease>\def\footnotetext{%
-%<platexrelease>     \@ifnextchar [\@xfootnotenext
-%<platexrelease>       {\protected@xdef\@thefnmark{\thempfn}%
-%<platexrelease>    \@footnotetext}}
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\ystrutbox}
+%<platexrelease>                   {Add \ystrutbox}%
+%<platexrelease>\let\ystrutbox\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\@footnotetext}
-% インサートボックス|\footins|に脚注のテキストを入れます。
-% コミュニティ版p\LaTeX{}では|\footnotetext|,~|\footnote|の直後で
-% 改行を可能にします。jsclassesではこの変更に加え、脚注で|\verb|が
-% 使えるように再定義されます。
+% \begin{macro}{\strut}
+% ディレクションに応じて|\ystrutbox|と|\tstrutbox|を使い分けます。
+% ^^A |\strutbox|は|\yoko|ディレクションで組まれていますので、
+% ^^A 縦組ボックス内で|\unhcopy|をするとエラーとなります。
+% 元々このマクロは\file{ltplain.dtx}で定義されています。
 %
-% \changes{v1.0a}{1995/04/07}{組方向の判定をボックスの外でするようにした}
+% \changes{v1.1c}{1995/08/24}{``\cs{centerling}~\cs{strut}''の幅がゼロに
+% なってしまうのを修正}
+% \changes{v1.3h}{1999/08/09}{縦組のとき、幅のあるボックスになってしまう
+% のを修正}
+% \changes{v????}{????/??/??}{\cs{strutbox}の代わりに\cs{ystrutbox}を使用}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\@footnotetext}
-%<platexrelease>                   {Allow break after \footnote}%
+%<platexrelease>\plIncludeInRelease{????/??/??}{\strut}
+%<platexrelease>                   {Use \ystrutbox}%
 %<*plcore|platexrelease>
-%    \end{macrocode}
-%    \begin{macrocode}
-\long\def\@footnotetext#1{%
-  \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
-  \insert\footins{\@tempa%
-    \reset@font\footnotesize
-    \interlinepenalty\interfootnotelinepenalty
-    \splittopskip\footnotesep
-    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
-    \hsize\columnwidth \@parboxrestore
-    \protected@edef\@currentlabel{%
-       \csname p@footnote\endcsname\@thefnmark
-    }%
-    \color@begingroup
-      \@makefntext{%
-        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
-%    \end{macrocode}
-%
-% p\TeX{}では|\insert|の直後に和文文字が来た場合、そこでの改行は許されない
-% という挙動になっています。このため、従来は脚注番号（合印）の直後の改行が
-% 抑制されていました。しかし、|\hbox|の直後に和文文字が来た場合は、そこで
-% の改行は許されますから、最後に|\null|を追加します。
-% また、|\pltx@foot@penalty|の値が0ではなかった場合、
-% 脚注の前にペナルティがあったということですから、復活させておきます。
-% \changes{v????}{????/??/??}{脚注の合印直後での改行が禁止されてしまう
-%    問題に対処}
-%    \begin{macrocode}
-    \color@endgroup}\null
-    \ifnum\pltx@foot@penalty=\z@\else
-      \penalty\pltx@foot@penalty
-      \pltx@foot@penalty\z@
-    \fi}
-%    \end{macrocode}
-%    \begin{macrocode}
+\def\strut{\relax
+  \ifydir
+    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi
+  \else
+    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
+  \fi}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\@footnotetext}
-%<platexrelease>                   {Allow break after \footnote}%
-%<platexrelease>\long\def\@footnotetext#1{%
-%<platexrelease>  \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
-%<platexrelease>  \insert\footins{\@tempa%
-%<platexrelease>    \reset@font\footnotesize
-%<platexrelease>    \interlinepenalty\interfootnotelinepenalty
-%<platexrelease>    \splittopskip\footnotesep
-%<platexrelease>    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
-%<platexrelease>    \hsize\columnwidth \@parboxrestore
-%<platexrelease>    \protected@edef\@currentlabel{%
-%<platexrelease>       \csname p@footnote\endcsname\@thefnmark
-%<platexrelease>    }%
-%<platexrelease>    \color@begingroup
-%<platexrelease>      \@makefntext{%
-%<platexrelease>        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
-%<platexrelease>    \color@endgroup}}
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\strut}
+%<platexrelease>                   {Use \ystrutbox}%
+%<platexrelease>\def\strut{\relax
+%<platexrelease>  \ifydir
+%<platexrelease>    \ifmmode\copy\strutbox\else\unhcopy\strutbox\fi
+%<platexrelease>  \else
+%<platexrelease>    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
+%<platexrelease>  \fi}
 %<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tstrut}
+% \begin{macro}{\zstrut}
+%    \begin{macrocode}
+\def\tstrut{\relax\hbox{\tate
+   \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi}}
+\def\zstrut{\relax\hbox{\tate
+   \ifmmode\copy\zstrutbox\else\unhcopy\zstrutbox\fi}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\ystrut}
+% \changes{v????}{????/??/??}{\cs{ystrut}を追加}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\ystrut}
+%<platexrelease>                   {Add \ystrut}%
+%<*plcore|platexrelease>
+\def\ystrut{\relax\hbox{\yoko
+    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi}}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\ystrut}
+%<platexrelease>                   {Add \ystrut}%
+%<platexrelease>\let\ystrut\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%
+%^^A=================================================================
+%^^A メモ：|\set@fontsize|のplatexreleaseガード、traceガードは未完成
+%^^A=================================================================
+%
+% \begin{macro}{\set@fontsize}
+% |\fontsize|コマンドの内部形式です。
+% ベースラインの設定と、支柱の設定を行ないます。
+%    \begin{macrocode}
+\def\set@fontsize#1#2#3{%
+    \@defaultunits\@tempdimb#2pt\relax\@nnil
+    \edef\f@size{\strip@pt\@tempdimb}%
+    \@defaultunits\@tempskipa#3pt\relax\@nnil
+    \edef\f@baselineskip{\the\@tempskipa}%
+    \edef\f@linespread{#1}%
+    \let\baselinestretch\f@linespread
+    \def\size@update{%
+      \baselineskip\f@baselineskip\relax
+      \baselineskip\f@linespread\baselineskip
+      \normalbaselineskip\baselineskip
+%    \end{macrocode}
+% ここで、ベースラインシフトの調整と支柱を組み立てます。
+% \changes{v????}{????/??/??}{\cs{ystrutbox}を組み立てるように
+%    し、\cs{strutbox}を縦横両対応に}
+%    \begin{macrocode}
+      \adjustbaseline
+      \setbox\ystrutbox\hbox{\yoko
+          \vrule\@width\z@
+                \@height.7\baselineskip \@depth.3\baselineskip}%
+      \setbox\tstrutbox\hbox{\tate
+          \vrule\@width\z@
+                \@height.5\baselineskip \@depth.5\baselineskip}%
+      \setbox\zstrutbox\hbox{\tate
+          \vrule\@width\z@
+                \@height.7\baselineskip \@depth.3\baselineskip}%
+      \def\strutbox{\iftdir\tstrutbox\else\ystrutbox\fi}%
+%    \end{macrocode}
+% フォントサイズとベースラインに関する診断情報を出力します。
+%    \begin{macrocode}
+%<*trace>
+%     \ifnum \tracingfonts>\tw@
+%       \ifx\f@linespread\@empty
+%         \let\reserved@a\@empty
+%       \else
+%         \def\reserved@a{\f@linespread x}%
+%       \fi
+%       \@font@info{Changing size to\space
+%             \f@size/\reserved@a \f@baselineskip}%
+%       \aftergroup\type@restoreinfo
+%     \fi
+%</trace>
+        \let\size@update\relax}}
 %    \end{macrocode}
 % \end{macro}
 %
