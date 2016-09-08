@@ -946,7 +946,7 @@
     \color@begingroup
       \@makefntext{%
         \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
-    \color@endgroup}\null
+    \color@endgroup}\ifhmode\null\fi
     \ifnum\pltx@foot@penalty=\z@\else
       \penalty\pltx@foot@penalty
       \pltx@foot@penalty\z@

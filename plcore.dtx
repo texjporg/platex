@@ -51,6 +51,8 @@
 %    問題に対処}
 % \changes{v1.2h}{2016/09/01}{縦組でlongtableパッケージを使って表組の途中で改ページ
 %    するとき無限ループが起こる問題に対処(Issue 21)}
+% \changes{v1.2i}{2016/09/08}{v1.2gの修正で入れた\cs{null}がまずかったので
+%    水平モードのときだけ発行することにした(Issue 23)}
 % \fi
 %
 % \iffalse
@@ -981,8 +983,8 @@
 %
 % \changes{v1.0a}{1995/04/07}{組方向の判定をボックスの外でするようにした}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2016/09/03}{\@footnotetext}
-%<platexrelease>                   {Allow break after \footnote}%
+%<platexrelease>\plIncludeInRelease{2016/09/08}{\@footnotetext}
+%<platexrelease>                   {Allow break after \footnote (more fix)}%
 %<*plcore|platexrelease>
 %    \end{macrocode}
 %    \begin{macrocode}
@@ -1010,8 +1012,10 @@
 % 脚注の前にペナルティがあったということですから、復活させておきます。
 % \changes{v1.2g}{2016/08/25}{脚注の合印直後での改行が禁止されてしまう
 %    問題に対処}
+% \changes{v1.2i}{2016/09/08}{v1.2gの修正で入れた\cs{null}がまずかったので
+%    水平モードのときだけ発行することにした(Issue 23)}
 %    \begin{macrocode}
-    \color@endgroup}\null
+    \color@endgroup}\ifhmode\null\fi
     \ifnum\pltx@foot@penalty=\z@\else
       \penalty\pltx@foot@penalty
       \pltx@foot@penalty\z@
@@ -1019,6 +1023,28 @@
 %    \end{macrocode}
 %    \begin{macrocode}
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/09/03}{\@footnotetext}
+%<platexrelease>                   {Allow break after \footnote}%
+%<platexrelease>\long\def\@footnotetext#1{%
+%<platexrelease>  \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
+%<platexrelease>  \insert\footins{\@tempa%
+%<platexrelease>    \reset@font\footnotesize
+%<platexrelease>    \interlinepenalty\interfootnotelinepenalty
+%<platexrelease>    \splittopskip\footnotesep
+%<platexrelease>    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+%<platexrelease>    \hsize\columnwidth \@parboxrestore
+%<platexrelease>    \protected@edef\@currentlabel{%
+%<platexrelease>       \csname p@footnote\endcsname\@thefnmark
+%<platexrelease>    }%
+%<platexrelease>    \color@begingroup
+%<platexrelease>      \@makefntext{%
+%<platexrelease>        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
+%<platexrelease>    \color@endgroup}\null
+%<platexrelease>    \ifnum\pltx@foot@penalty=\z@\else
+%<platexrelease>      \penalty\pltx@foot@penalty
+%<platexrelease>      \pltx@foot@penalty\z@
+%<platexrelease>    \fi}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@footnotetext}
 %<platexrelease>                   {Allow break after \footnote}%

@@ -480,6 +480,28 @@ of this package available from CTAN}
        {\protected@xdef\@thefnmark{\thempfn}%
     \@footnotetext}}
 \plEndIncludeInRelease
+\plIncludeInRelease{2016/09/08}{\@footnotetext}
+                   {Allow break after \footnote (more fix)}%
+\long\def\@footnotetext#1{%
+  \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
+  \insert\footins{\@tempa%
+    \reset@font\footnotesize
+    \interlinepenalty\interfootnotelinepenalty
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+    \protected@edef\@currentlabel{%
+       \csname p@footnote\endcsname\@thefnmark
+    }%
+    \color@begingroup
+      \@makefntext{%
+        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
+    \color@endgroup}\ifhmode\null\fi
+    \ifnum\pltx@foot@penalty=\z@\else
+      \penalty\pltx@foot@penalty
+      \pltx@foot@penalty\z@
+    \fi}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/09/03}{\@footnotetext}
                    {Allow break after \footnote}%
 \long\def\@footnotetext#1{%
