@@ -19,6 +19,7 @@
 % \changes{v1.0e}{2016/06/30}{p\LaTeX\ \texttt{!<2016/06/10!>}版に警告}
 % \changes{v1.0f}{2016/07/05}{古いplatexreleaseの警告に\cs{pfmtversion}で
 %      なく\cs{platexreleaseversion}を使用(\LaTeXe\ r1207)}
+% \changes{v1.0g}{2016/09/08}{p\LaTeX\ \texttt{!<2016/09/03!>}版に警告}
 % \fi
 %
 % \iffalse
@@ -27,7 +28,7 @@
 \ProvidesFile{platexrelease.dtx}
 %</driver>
 %<platexrelease>\ProvidesPackage{platexrelease}
-                [2016/07/05 v1.0f latexrelease support for pLaTeX Kernel]
+                [2016/09/08 v1.0g latexrelease support for pLaTeX Kernel]
 %<*driver>
 \documentclass{jltxdoc}
 \GetFileInfo{platexrelease.dtx}
@@ -294,7 +295,17 @@ of this package available from CTAN}
 % \changes{v1.0d}{2016/06/08}{p\LaTeX\ \texttt{!<2016/04/17!>}版と
 %      p\LaTeX\ \texttt{!<2016/05/07!>}版に警告}
 % \changes{v1.0e}{2016/06/30}{p\LaTeX\ \texttt{!<2016/06/10!>}版に警告}
+% \changes{v1.0g}{2016/09/08}{p\LaTeX\ \texttt{!<2016/09/03!>}版に警告}
 %    \begin{macrocode}
+\plIncludeInRelease{2016/09/08}{\PackageWarning}{pLaTeX Info}%
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/09/03}{\PackageWarning}{pLaTeX Info}%
+  \PackageWarningNoLine{platexrelease}{%
+      You selected pLaTeX2e <\pfmtversion>, but\MessageBreak
+      this version of pLaTeX2e is known to have\MessageBreak
+      some critical bugs. We advise you to\MessageBreak
+      select another format date}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/07/01}{\PackageWarning}{pLaTeX Info}%
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\PackageWarning}{pLaTeX Info}%
