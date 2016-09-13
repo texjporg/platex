@@ -1,0 +1,113 @@
+%% <2016/09/08>
+\documentclass{plnews}
+\usepackage{plext}     %%%% exppl2e の説明用
+\usepackage{amsmath}   %%%% exppl2e の説明用
+
+\publicationyear{2016}% 発行年
+\publicationmonth{09}% 発行月
+\publicationissue{c4}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\pTeX{p\kern-.15em\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+
+\begin{document}
+
+\maketitle
+
+\section{この文書について}
+この文書はコミュニティ版\pLaTeXe\ \texttt{<2016/09/08>}について、
+\pLaTeXe\ \texttt{<2016/07/01>}からの更新箇所をまとめたものです。
+
+
+\section{脚注番号（合印）直後の改行許可}
+\pLaTeX{}では昔から、本文中に配置した脚注番号（合印といいます）の直後で改行が
+起きないという問題がありました。このため、行末付近に合印が来た場合、続く文字
+が版面をはみ出して|Overfull|警告を発してしまいました\footnote{コミュニティ版
+\pLaTeX{}に移行する直前まで（2013--2015年にかけて）、\pTeX{}の仕様変更のため
+合印前後にアキが入っており（\file{plnewsc01.tex}参照）、この関係で偶然にも
+一時的に改行が起きていましたが、これが2016年には元に戻ったのです。}。
+新しい版（2016/09/03以降）では、直後が句読点などでない場合には改行が可能なよ
+うに修正しました（このとき2016/09/03に混入したバグは2016/09/08で修正）。
+改行に際しては合印直前のペナルティ値も考慮されます(Issue 16)。
+
+
+\section{脚注番号（合印）直前をベタ組に}
+終わり括弧類や句点類の直後に脚注番号（合印）が続く場合、ここはベタ組にするの
+がよいとされています。そこで、|\footnote|と|\footnotemark|に|\inhibitglue|を
+追加しました。これは、奥村さんの\file{jsclasses}と同じ対処です(Issue 16)。
+
+
+\section{縦組で\file{longtable}使用時の無限ループ解消}
+\file{longtable}パッケージは、長い表組の途中で改ページする機能を提供するもの
+です。これを縦組で使うと、改ページが起きる表組があった場合に、
+《縦組モード》と表示したまま無限ループが起きてタイプセットが終了しませんでし
+た(qa:12116, qa:12127, qa:20273, qa:20298)。この現象を解消し、縦組でも
+\file{longtable}パッケージが機能するようにしました(Issue 21)。
+
+
+\section{\file{ascmac}パッケージのpdf\LaTeX{}等への対応}
+古いp\LaTeX~2.09では、\file{ascmac.sty}は横組専用・\file{tascmac.sty}は
+縦横両対応というようにパッケージが分かれていましたが、p\LaTeXe{}ではある時点
+で\file{tascmac.sty}に一本化していました。しかし、このためにpdf\LaTeX{}など
+で\file{ascmac}パッケージが使えなくなってしまいました（|\tbaselineshift|等を
+使用しているため）。今回、\file{tascmac.sty}にpdf\LaTeX{}などに対応したコード
+を追加し、再びサポートするように拡張しました。
+
+
+\section{開発版のテストのお願い}
+今後p\LaTeX{}に導入するかもしれない修正パッチや仕様変更のテストにご協力くだ
+さい。\TeX{}ファイルの冒頭（|\documentclass|より前）で
+\begin{verbatim}
+\RequirePackage{exppl2e}
+\end{verbatim}
+と書くことで、現在の開発版をテストすることができます。
+現在は、支柱コマンドで用いられる|\strutbox|の挙動に関するパッチ（次のページ
+参照）と、前回から引き続き「アクセント文字パッチ」も入っています。
+
+詳細は\file{exppl2e.pdf}を参照してください。バグ報告やご意見を歓迎します。
+\TeX\ ForumやGitHubのIssueシステムが利用できます。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+
+\clearpage
+\section{\texttt{\string\strutbox}パッチについて}
+現在の\pLaTeX{}では、主に縦組で海外製の\LaTeX{}パッケージを使用した場合に
+不可解な挙動が発生します。たとえば\file{amsmath}パッケージの|align|環境を
+使うと、数式の位置や数式番号がずれてしまいます。
+\begin{center}
+\setlength{\fboxsep}{10pt}
+\fbox{\begin{minipage}<t>{20zw}
+align環境、\texttt{\&}が1つ %% 少し上へ
+\begin{align}
+a_1 &= b_1+c_1\\
+a_2 &= b_2+c_2-d_2+e_2
+\end{align}
+align環境、\texttt{\&}なし %% 端に付く
+\begin{align}
+a_1=b_1+c_1
+\end{align}
+比較用のequation環境
+\begin{equation}
+a_1=b_1+c_1
+\end{equation}
+\end{minipage}}
+\end{center}
+これは、\file{amsmath}が使用している支柱の箱|\strutbox|が、\pLaTeX{}では
+横組専用の箱として組まれているためです。現在の\pLaTeX{}では、横組の支柱は
+|\strutbox|、縦組の支柱は|\tstrutbox|というように使い分けなければなりませ
+んが、\pLaTeX{}専用というわけではない海外製\LaTeX{}パッケージが、すべて
+これを考慮することは困難でしょう。ほかにも、\file{array}パッケージや
+\file{longtable}パッケージで作成する表の行の高さなどでも、支柱の寸法がおか
+しくなっています。
+
+このような場合に対処するため、たとえパッケージが|\strutbox|を呼び出しても、
+縦組ならば縦組用の支柱である|\tstrutbox|が返るようにする、というのが、今回
+検討している|\strutbox|パッチです。
+
+\end{document}
