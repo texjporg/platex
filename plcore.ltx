@@ -1010,26 +1010,24 @@
 \ifx\ppatch@level\@undefined % fallback if undefined in pLaTeX
   \def\ppatch@level{0}\fi
 \begingroup
-  \def\parse@BANNER#1{\expandafter\parse@@BANNER#1}
-  \def\parse@@BANNER#1#2#3#4{#2}
+  \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#1}
   \edef\platexTMP{%
     \ifnum\ppatch@level=0
       \everyjob{\noexpand\typeout{%
         \pfmtname\space<\pfmtversion>\space
-          (based on \parse@BANNER{\platexBANNER})}}%
+          (based on \expandafter\parse@@BANNER\platexBANNER)}}%
     \else
       \everyjob{\noexpand\typeout{%
         \pfmtname\space<\pfmtversion>+\ppatch@level\space
-          (based on \parse@BANNER{\platexBANNER})}}%
+          (based on \expandafter\parse@@BANNER\platexBANNER)}}%
     \fi
   }
 \expandafter
 \endgroup \platexTMP
 \begingroup
-  \def\parse@BANNER#1{\expandafter\parse@@BANNER#1}
-  \def\parse@@BANNER#1#2#3#4{#4}
+  \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#2}
   \edef\platexTMP{%
-    \the\everyjob\noexpand\typeout{\parse@BANNER{\platexBANNER}}%
+    \the\everyjob\noexpand\typeout{\expandafter\parse@@BANNER\platexBANNER}%
   }
   \everyjob=\expandafter{\platexTMP}%
   \edef\platexTMP{%

@@ -49,12 +49,13 @@
 % \changes{v1.0y}{2016/06/27}{\file{platex.cfg}の読み込みを追加}
 % \changes{v1.0z}{2016/08/26}{\file{platex.cfg}の読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
+% \changes{v1.1}{2016/09/14}{起動時のバナーを取得するコードを改良}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2016/08/26 v1.0z pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2016/09/14 v1.1 pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -173,26 +174,31 @@
 %
 % 起動時に表示される文字列です。
 % \LaTeX{}にパッチがあてられている場合は、それも表示します。
+%
+%\iffalse
+% この実装については\file{platex.dtx}のコメントを参照。(2016/09/14)
+%\fi
+%
 % \changes{v1.0v}{2016/05/07}{起動時の文字列を最新の\LaTeX{}に合わせた。}
 % \changes{v1.0w}{2016/05/12}{起動時の文字列に入れる\LaTeX{}のバージョンを
 %    元の\LaTeX{}のバナーから引き継ぐように改良}
+% \changes{v1.1}{2016/09/14}{起動時のバナーを取得するコードを改良}
 %    \begin{macrocode}
 \ifx\patch@level\@undefined % fallback if undefined in LaTeX
   \def\patch@level{0}\fi
 \ifx\ppatch@level\@undefined % fallback if undefined in pLaTeX
   \def\ppatch@level{0}\fi
 \begingroup
-  \def\parse@BANNER#1{\expandafter\parse@@BANNER#1}
-  \def\parse@@BANNER#1#2#3#4{#2}
+  \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#1}
   \edef\platexTMP{%
     \ifnum\ppatch@level=0
       \everyjob{\noexpand\typeout{%
         \pfmtname\space<\pfmtversion>\space
-          (based on \parse@BANNER{\platexBANNER})}}%
+          (based on \expandafter\parse@@BANNER\platexBANNER)}}%
     \else
       \everyjob{\noexpand\typeout{%
         \pfmtname\space<\pfmtversion>+\ppatch@level\space
-          (based on \parse@BANNER{\platexBANNER})}}%
+          (based on \expandafter\parse@@BANNER\platexBANNER)}}%
     \fi
   }
 \expandafter
@@ -200,16 +206,22 @@
 %    \end{macrocode}
 %
 % p\LaTeX{}は、独自のハイフネーション・パターンを定義していません。
-% 代わりに、\LaTeX{}が読み込んでいるBabelパッケージのものが適用されます。
-% 起動時の文字列にも\file{hyphen.cfg}のバージョンを反映します。
+% \TeX\ Liveの標準的インストールでは、代わりに\LaTeX{}が読み込んでいる
+% Babelパッケージのものが適用されるはずですから、起動時の文字列にも
+% \file{hyphen.cfg}のバージョンを反映します（Babelパッケージの
+% \file{hyphen.cfg}でない場合は、何も表示されず空行になるはずです）。
+%
+%\iffalse
+% この実装については\file{platex.dtx}のコメントを参照。(2016/09/14)
+%\fi
+%
 % \changes{v1.0w}{2016/05/12}{起動時の文字列に入れるBabelのバージョンを
 %    元の\LaTeX{}のバナーから取得するコードを\file{platex.ini}から取り入れた}
 %    \begin{macrocode}
 \begingroup
-  \def\parse@BANNER#1{\expandafter\parse@@BANNER#1}
-  \def\parse@@BANNER#1#2#3#4{#4}
+  \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#2}
   \edef\platexTMP{%
-    \the\everyjob\noexpand\typeout{\parse@BANNER{\platexBANNER}}%
+    \the\everyjob\noexpand\typeout{\expandafter\parse@@BANNER\platexBANNER}%
   }
   \everyjob=\expandafter{\platexTMP}%
   \edef\platexTMP{%

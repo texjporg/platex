@@ -42,13 +42,14 @@
 % \changes{v1.0l}{2016/06/19}{パッチレベルを\file{plvers.dtx}から取得}
 % \changes{v1.0m}{2016/08/26}{\file{platex.cfg}の読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
+% \changes{v1.0n}{2016/09/14}{\LaTeX{}のバナーの保存しかたを改良}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2016/08/26 v1.0m pLaTeX document file]
+\ProvidesFile{platex.dtx}[2016/09/14 v1.0n pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -235,11 +236,53 @@
 \let\dump\relax
 %    \end{macrocode}
 %
-% \file{latex.ltx}を読み込み、起動時のバナーを保存します。
+% \file{latex.ltx}を読み込み、起動時のバナーを保存します。\TeX\ Liveの標準的
+% インストールでは、この中でBabel由来のハイフネーション・パターン
+% \file{hyphen.cfg}が読み込まれ、そのバージョンも含めて保存されるはずです。
+%
+%\iffalse
+% 2016/05/07の実装では、\file{platex.ltx}のなかで
+%\begin{verbatim}
+% \edef\platexBANNER{\the\everyjob}
+%\end{verbatim}
+% としてバナーを保存し、この内容が
+%\begin{verbatim}
+%   \typeout{LaTeX2e version}\typeout{Babel version}
+%\end{verbatim}
+% という4つのトークンから成ると仮定して、\file{plcore.ltx}のなかで
+%\begin{verbatim}
+%   \def\parse@@BANNER#1#2#3#4{#2}
+%\end{verbatim}
+% のようにパースしていました。ところが、この「4つのトークンから成る」と
+% いう仮定はBabel由来の\file{hyphen.cfg}を使用した場合のみ成り立ち、
+% それ以外の特別な\file{hyphen.cfg}や\file{hyphen.ltx}を使用した場合に
+% エラーになってしまいます。
+% そこで、新たに2016/09/14の実装では、\file{platex.ltx}のなかで
+%\begin{verbatim}
+% \edef\platexBANNER{\the\everyjob\noexpand\typeout{}\relax}
+%\end{verbatim}
+% としてダミーを追加します（|\relax|はただの区切りトークンの役割）。
+% こうすると、|\platexBANNER|の内容は、Babelの\file{hyphen.cfg}のとき
+%\begin{verbatim}
+%   \typeout{LaTeX2e version}\typeout{Babel version}\typeout{}\relax
+%\end{verbatim}
+% となり、それ以外のとき
+%\begin{verbatim}
+%   \typeout{LaTeX2e version}\typeout{}\relax
+%\end{verbatim}
+% となるはずです。このように、少なくとも|\typeout|が2回含まれています
+% ので、\file{plcore.ltx}のなかで
+%\begin{verbatim}
+%   \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#1}
+%\end{verbatim}
+% とパースすることができるようになります。
+%\fi
+%
 % \changes{v1.0g}{2016/05/07}{フォーマット作成時に\LaTeX{}のバナーを一旦保存}
+% \changes{v1.0n}{2016/09/14}{\LaTeX{}のバナーの保存しかたを改良}
 %    \begin{macrocode}
 \input latex.ltx
-\edef\platexBANNER{\the\everyjob}% save LaTeX banner
+\edef\platexBANNER{\the\everyjob\noexpand\typeout{}\relax}% save LaTeX banner
 %    \end{macrocode}
 %
 % \file{plcore.ltx}を読み込み、このp\LaTeX{}のバージョンを表示します。
