@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2016/09/03 v1.0e Experimental pLaTeX2e features]
+                [2016/10/20 v1.0f Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -423,6 +423,107 @@
 %     \fi
 %</trace>
         \let\size@update\relax}}
+%    \end{macrocode}
+% \end{macro}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \section{e-p\TeX{}でのFAM256パッチの利用}
+%
+% \begin{macro}{\e@alloc@chardef}
+% \begin{macro}{\e@alloc@top}
+% \LaTeXe\ 2015/01/01以降、拡張レジスタがあれば利用するようになっています
+% ので、e-p\TeX{}の拡張レジスタを利用できるように設定します。
+% \changes{v????}{????/??/??}{FAM256パッチ適用e-p\TeX{}に対応}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}%
+%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+%<*plcore|platexrelease>
+%    \end{macrocode}
+%    \begin{macrocode}
+\ifx\omathchar\@undefined
+  \ifx\widowpenalties\@undefined
+%    \end{macrocode}
+% オリジナルの\TeX{}の場合（拡張なしのアスキーp\TeX{}の場合）。
+%    \begin{macrocode}
+    \mathchardef\e@alloc@top=255
+    \let\e@alloc@chardef\chardef
+  \else
+%    \end{macrocode}
+% e-\TeX{}拡張で$2^{15}$個のレジスタが利用できます。
+% ^^A 「FAM256なしのe-p\TeX{}」は事実上存在しないはずだが、一応。
+%    \begin{macrocode}
+    \mathchardef\e@alloc@top=32767
+    \let\e@alloc@chardef\mathchardef
+  \fi
+\else
+%    \end{macrocode}
+% FAM256パッチが適用されたe-p\TeX{}の場合は、$2^{16}$個のレジスタが利用できます。
+%    \begin{macrocode}
+  \ifx\enablecjktoken\@undefined % pTeX
+    \omathchardef\e@alloc@top=65535
+    \let\e@alloc@chardef\omathchardef
+  \else                          % upTeX
+    \chardef\e@alloc@top=65535
+    \let\e@alloc@chardef\chardef
+  \fi
+\fi
+%    \end{macrocode}
+%    \begin{macrocode}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2015/01/01}%
+%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+%<platexrelease>\ifx\widowpenalties\@undefined
+%<platexrelease>  \mathchardef\e@alloc@top=255
+%<platexrelease>  \let\e@alloc@chardef\chardef
+%<platexrelease>\else
+%<platexrelease>  \mathchardef\e@alloc@top=32767
+%<platexrelease>  \let\e@alloc@chardef\mathchardef
+%<platexrelease>\fi
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}%
+%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+%<platexrelease>\let\e@alloc@top\@undefined
+%<platexrelease>\let\e@alloc@chardef\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\e@mathgroup@top}
+% 2015/01/01以降の\LaTeXe{}カーネルは、Xe\TeX{}とLua\TeX{}に対して数式famの
+% 上限を16から256に増やしています（|\Umathcode| で判定）。
+% FAM256パッチが適用されたe-p\TeX{}でも同様に上限を16から256に増やします。
+% これで
+%\begin{verbatim}
+%  ! LaTeX Error: Too many math alphabets used in version normal.
+%\end{verbatim}
+% が出にくくなるはずです。
+% \changes{v????}{????/??/??}{FAM256パッチ適用e-p\TeX{}に対応}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}%
+%<platexrelease>                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+%<*plcore|platexrelease>
+%    \end{macrocode}
+%    \begin{macrocode}
+\ifx\omathchar\@undefined
+  \chardef\e@mathgroup@top=16 % LaTeX2e kernel standard
+\else
+  \mathchardef\e@mathgroup@top=256 % for e-pTeX FAM256 patched
+\fi
+%    \end{macrocode}
+%    \begin{macrocode}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2015/01/01}%
+%<platexrelease>                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+%<platexrelease>\chardef\e@mathgroup@top=16
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}%
+%<platexrelease>                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+%<platexrelease>\let\e@mathgroup@top\@undefined
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 %
