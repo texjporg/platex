@@ -451,7 +451,15 @@
   \else
 %    \end{macrocode}
 % e-\TeX{}拡張で$2^{15}$個のレジスタが利用できます。
-% ^^A 「FAM256なしのe-p\TeX{}」は事実上存在しないはずだが、一応。
+% ^^A 「FAM256なしのe-(u)p\TeX{}」は事実上存在しないはず。
+% ^^A ただし、たとえばe-(u)p\TeX{}をベースにした
+% ^^A p\TeX{}-ng (Asiatic pTeX)はe-\TeX{}拡張を持っていて、
+% ^^A FAM256パッチは適用されていないため、ここに該当する。
+% ^^A   cf: https://github.com/clerkma/ptex-ng
+% ^^A なお、p\TeX{}-ngはe-p\TeX{}と同様にpdf\TeX{}拡張の
+% ^^A 一部（e-p\TeX{}と範囲が一致しない）を持っていること、
+% ^^A また|\lastnodechar|などのe-p\TeX{}独自のプリミティブを
+% ^^A 持っていないことにも注意。
 %    \begin{macrocode}
     \mathchardef\e@alloc@top=32767
     \let\e@alloc@chardef\mathchardef
