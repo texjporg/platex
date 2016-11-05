@@ -1,0 +1,12 @@
+\documentclass{minimal}
+\begin{document}
+\typeout{\meaning\\}
+\makeatletter
+\setbox0=\vbox{a footnote\unskip\nobreak\hfil\break\null}
+
+\showboxdepth=10000
+\showboxbreadth=10000
+\nonstopmode
+\tracingonline1
+\showbox0
+\end{document}
