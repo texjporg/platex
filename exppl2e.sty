@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2016/10/20 v1.0f Experimental pLaTeX2e features]
+                [2016/11/06 v1.0g Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -531,6 +531,49 @@
 %<platexrelease>\plIncludeInRelease{0000/00/00}%
 %<platexrelease>                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
 %<platexrelease>\let\e@mathgroup@top\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \section{強制改行の直前の単語のハイフネーション}
+%
+% \begin{macro}{\@gnewline}
+% 従来，p\LaTeX では
+%\begin{verbatim}
+% あいうえお\\
+% ！かきくけこ
+%\end{verbatim}
+% のように行頭禁則文字の直前で強制改行を行えるようにするため
+% |\null|を|\@gnewline|マクロ内に挿入していました．
+%
+% しかし，これでは|\\|の直前の単語でハイフネーションが行われないという
+% 問題が発生します（\texttt{tests/hyphtest0.tex}を\texttt{latex}と
+% \texttt{platex}で処理してみてください）ので，
+% |\null|の代わりに|\break|を重ねる形で対応します．
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\@gnewline}
+%<platexrelease>                   {Hyphnation of a word before |\\|}%
+%<*pldefs|platexrelease>
+\def\@gnewline #1{%
+  \ifvmode
+    \@nolnerr
+  \else
+    \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \break
+    \ignorespaces
+  \fi}
+%</pldefs|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@gnewline}
+%<platexrelease>                   {Hyphnation of a word before |\\|}%
+%<platexrelease>\def\@gnewline #1{%
+%<platexrelease>  \ifvmode
+%<platexrelease>    \@nolnerr
+%<platexrelease>  \else
+%<platexrelease>    \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \null
+%<platexrelease>    \ignorespaces
+%<platexrelease>  \fi}
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
