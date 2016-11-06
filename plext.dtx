@@ -35,6 +35,8 @@
 % \changes{v1.2a}{2016/08/20}{\cs{parbox}前後の余分な\cs{xkanjiskip}を削除}
 % \changes{v1.2a}{2016/08/20}{横組で\texttt{<t>}を指定した場合に
 %    \cs{@arstrutbox}を余計に\cs{hbox}に入れていたのを修正}
+% \changes{v1.2b}{2016/11/07}{横組で段落の頭に\cs{rensuji}を使える
+%    ように\cs{leavevmode}を追加して修正}
 % \fi
 %
 % \iffalse
@@ -43,7 +45,7 @@
 \ProvidesFile{plext.dtx}
 %</driver>
 %<package>\ProvidesPackage{plext}
-   [2016/08/20 v1.2a pLaTeX package file (community edition)]
+   [2016/11/07 v1.2b pLaTeX package file (community edition)]
 %<*driver>
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -1083,13 +1085,16 @@
 % |\rensuji|は、|*|形式かどうかを調べます。
 % |\@rensuji|は、位置オプションを調べます。
 % |\@@rensuji|が|\rensuji|の内部形式です。
+% \changes{v1.2b}{2016/11/07}{横組で段落の頭に\cs{rensuji}を使える
+%    ように\cs{leavevmode}を追加して修正}
 %    \begin{macrocode}
 \DeclareRobustCommand\rensuji{%
   \@ifstar{\not@advancelinetrue\@rensuji}{\@rensuji}}
 \def\@rensuji{\@ifnextchar[{\@@rensuji}{\@@rensuji[c]}}
-\def\@@rensuji[#1]#2{\ifydir\hbox{#2}\else
-  \hskip\rensujiskip
+\def\@@rensuji[#1]#2{%
   \ifvmode\leavevmode\fi
+  \ifydir\hbox{#2}\else
+  \hskip\rensujiskip
   \ifnot@advanceline\not@advancelinefalse\else
     \setbox\z@\hbox{\yoko#2}%
     \@tempdima\ht\z@ \advance\@tempdima\dp\z@

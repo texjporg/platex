@@ -15,7 +15,7 @@
 %% File: plext.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plext}
-   [2016/08/20 v1.2a pLaTeX package file (community edition)]
+   [2016/11/07 v1.2b pLaTeX package file (community edition)]
 \newif\if@rotsw
 \def\array{\let\@acol\@arrayacol \let\@classz\@arrayclassz
   \let\@classiv\@arrayclassiv
@@ -482,9 +482,10 @@
 \DeclareRobustCommand\rensuji{%
   \@ifstar{\not@advancelinetrue\@rensuji}{\@rensuji}}
 \def\@rensuji{\@ifnextchar[{\@@rensuji}{\@@rensuji[c]}}
-\def\@@rensuji[#1]#2{\ifydir\hbox{#2}\else
-  \hskip\rensujiskip
+\def\@@rensuji[#1]#2{%
   \ifvmode\leavevmode\fi
+  \ifydir\hbox{#2}\else
+  \hskip\rensujiskip
   \ifnot@advanceline\not@advancelinefalse\else
     \setbox\z@\hbox{\yoko#2}%
     \@tempdima\ht\z@ \advance\@tempdima\dp\z@
