@@ -540,22 +540,22 @@
 % \section{強制改行の直前の単語のハイフネーション}
 %
 % \begin{macro}{\@gnewline}
-% 従来，p\LaTeX では
+% 従来、p\LaTeX では
 %\begin{verbatim}
 % あいうえお\\
 % ！かきくけこ
 %\end{verbatim}
 % のように行頭禁則文字の直前で強制改行を行えるようにするため
-% |\null|を|\@gnewline|マクロ内に挿入していました．
+% |\null|を|\@gnewline|マクロ内に挿入していました。
 %
-% しかし，これでは|\\|の直前の単語でハイフネーションが行われないという
+% しかし、これでは|\\|の直前の単語でハイフネーションが行われないという
 % 問題が発生します（\texttt{tests/hyphtest0.tex}を\texttt{latex}と
-% \texttt{platex}で処理してみてください）ので，
-% |\null|の代わりに|\break|を重ねる形で対応します．
+% \texttt{platex}で処理してみてください）ので、
+% |\null|の代わりに|\break|を重ねる形で対応します。
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{????/??/??}{\@gnewline}
-%<platexrelease>                   {Hyphnation of a word before |\\|}%
-%<*pldefs|platexrelease>
+%<platexrelease>                   {Hyphenation of a word before |\\|}%
+%<*plcore|platexrelease>
 \def\@gnewline #1{%
   \ifvmode
     \@nolnerr
@@ -563,10 +563,10 @@
     \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \break
     \ignorespaces
   \fi}
-%</pldefs|platexrelease>
+%</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@gnewline}
-%<platexrelease>                   {Hyphnation of a word before |\\|}%
+%<platexrelease>                   {Hyphenation of a word before |\\|}%
 %<platexrelease>\def\@gnewline #1{%
 %<platexrelease>  \ifvmode
 %<platexrelease>    \@nolnerr
