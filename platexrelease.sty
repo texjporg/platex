@@ -18,7 +18,7 @@
 \edef\p@known@latexreleaseversion
    {2016/03/31}
 \edef\platexreleaseversion
-   {2016/09/08}
+   {2016/11/29}
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
   {\@plIncludeInRelease{#1}[#1]}}
@@ -630,6 +630,57 @@ of this package available from CTAN}
   \relax
   \ifmmode\@@underline{#1}%
   \else $\@@underline{\hbox{#1}}\m@th$\relax\fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/11/29}%
+                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+\ifx\omathchar\@undefined
+  \ifx\widowpenalties\@undefined
+    \mathchardef\e@alloc@top=255
+    \let\e@alloc@chardef\chardef
+  \else
+    \mathchardef\e@alloc@top=32767
+    \let\e@alloc@chardef\mathchardef
+  \fi
+\else
+  \ifx\enablecjktoken\@undefined % pTeX
+    \omathchardef\e@alloc@top=65535
+    \let\e@alloc@chardef\omathchardef
+  \else                          % upTeX
+    \chardef\e@alloc@top=65535
+    \let\e@alloc@chardef\chardef
+  \fi
+\fi
+\plEndIncludeInRelease
+\plIncludeInRelease{2015/01/01}%
+                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+\ifx\widowpenalties\@undefined
+  \mathchardef\e@alloc@top=255
+  \let\e@alloc@chardef\chardef
+\else
+  \mathchardef\e@alloc@top=32767
+  \let\e@alloc@chardef\mathchardef
+\fi
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}%
+                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+\let\e@alloc@top\@undefined
+\let\e@alloc@chardef\@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/11/29}%
+                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+\ifx\omathchar\@undefined
+  \chardef\e@mathgroup@top=16 % LaTeX2e kernel standard
+\else
+  \mathchardef\e@mathgroup@top=256 % for e-pTeX FAM256 patched
+\fi
+\plEndIncludeInRelease
+\plIncludeInRelease{2015/01/01}%
+                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+\chardef\e@mathgroup@top=16
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}%
+                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+\let\e@mathgroup@top\@undefined
 \plEndIncludeInRelease
 \endinput
 %%

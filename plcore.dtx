@@ -53,13 +53,14 @@
 %    するとき無限ループが起こる問題に対処(Issue 21)}
 % \changes{v1.2i}{2016/09/08}{v1.2gの修正で入れた\cs{null}がまずかったので
 %    水平モードのときだけ発行することにした(Issue 23)}
+% \changes{v1.2j}{2016/11/09}{FAM256パッチ適用e-p\TeX{}に対応}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2016/09/01 v1.2h pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2016/11/09 v1.2j pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1290,6 +1291,114 @@
 %<platexrelease>  \relax
 %<platexrelease>  \ifmmode\@@underline{#1}%
 %<platexrelease>  \else $\@@underline{\hbox{#1}}\m@th$\relax\fi}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{e-p\TeX{}でのFAM256パッチの利用}
+%
+% \begin{macro}{\e@alloc@chardef}
+% \begin{macro}{\e@alloc@top}
+% \LaTeXe\ 2015/01/01以降、拡張レジスタがあれば利用するようになっています
+% ので、e-p\TeX{}の拡張レジスタを利用できるように設定します。
+% \changes{v1.2j}{2016/11/09}{FAM256パッチ適用e-p\TeX{}に対応}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2016/11/29}%
+%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+%<*plcore|platexrelease>
+%    \end{macrocode}
+%    \begin{macrocode}
+\ifx\omathchar\@undefined
+  \ifx\widowpenalties\@undefined
+%    \end{macrocode}
+% オリジナルの\TeX{}の場合（拡張なしのアスキーp\TeX{}の場合）。
+%    \begin{macrocode}
+    \mathchardef\e@alloc@top=255
+    \let\e@alloc@chardef\chardef
+  \else
+%    \end{macrocode}
+% e-\TeX{}拡張で$2^{15}$個のレジスタが利用できます。
+% ^^A 「FAM256なしのe-(u)p\TeX{}」は事実上存在しないはず。
+% ^^A ただし、たとえばe-(u)p\TeX{}をベースにした
+% ^^A p\TeX{}-ng (Asiatic pTeX)はe-\TeX{}拡張を持っていて、
+% ^^A FAM256パッチは適用されていないため、ここに該当する。
+% ^^A   cf: https://github.com/clerkma/ptex-ng
+% ^^A なお、p\TeX{}-ngはe-p\TeX{}と同様にpdf\TeX{}拡張の
+% ^^A 一部（e-p\TeX{}と範囲が一致しない）を持っていること、
+% ^^A また|\lastnodechar|などのe-p\TeX{}独自のプリミティブを
+% ^^A 持っていないことにも注意。
+%    \begin{macrocode}
+    \mathchardef\e@alloc@top=32767
+    \let\e@alloc@chardef\mathchardef
+  \fi
+\else
+%    \end{macrocode}
+% FAM256パッチが適用されたe-p\TeX{}の場合は、$2^{16}$個のレジスタが利用できます。
+%    \begin{macrocode}
+  \ifx\enablecjktoken\@undefined % pTeX
+    \omathchardef\e@alloc@top=65535
+    \let\e@alloc@chardef\omathchardef
+  \else                          % upTeX
+    \chardef\e@alloc@top=65535
+    \let\e@alloc@chardef\chardef
+  \fi
+\fi
+%    \end{macrocode}
+%    \begin{macrocode}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2015/01/01}%
+%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+%<platexrelease>\ifx\widowpenalties\@undefined
+%<platexrelease>  \mathchardef\e@alloc@top=255
+%<platexrelease>  \let\e@alloc@chardef\chardef
+%<platexrelease>\else
+%<platexrelease>  \mathchardef\e@alloc@top=32767
+%<platexrelease>  \let\e@alloc@chardef\mathchardef
+%<platexrelease>\fi
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}%
+%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+%<platexrelease>\let\e@alloc@top\@undefined
+%<platexrelease>\let\e@alloc@chardef\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\e@mathgroup@top}
+% 2015/01/01以降の\LaTeXe{}カーネルは、Xe\TeX{}とLua\TeX{}に対して数式famの
+% 上限を16から256に増やしています（|\Umathcode| で判定）。
+% FAM256パッチが適用されたe-p\TeX{}でも同様に上限を16から256に増やします。
+% これで
+%\begin{verbatim}
+%  ! LaTeX Error: Too many math alphabets used in version normal.
+%\end{verbatim}
+% が出にくくなるはずです。
+% \changes{v1.2j}{2016/11/09}{FAM256パッチ適用e-p\TeX{}に対応}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2016/11/29}%
+%<platexrelease>                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+%<*plcore|platexrelease>
+%    \end{macrocode}
+%    \begin{macrocode}
+\ifx\omathchar\@undefined
+  \chardef\e@mathgroup@top=16 % LaTeX2e kernel standard
+\else
+  \mathchardef\e@mathgroup@top=256 % for e-pTeX FAM256 patched
+\fi
+%    \end{macrocode}
+%    \begin{macrocode}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2015/01/01}%
+%<platexrelease>                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+%<platexrelease>\chardef\e@mathgroup@top=16
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}%
+%<platexrelease>                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+%<platexrelease>\let\e@mathgroup@top\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}

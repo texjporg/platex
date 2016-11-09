@@ -18,7 +18,7 @@
 %% File: plvers.dtx
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2016/09/08}
+   {2016/11/29}
 \def\ppatch@level{0}
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
@@ -1004,6 +1004,28 @@
   \relax
   \ifmmode\@@underline{#1}%
   \else \leavevmode\null$\@@underline{\hbox{#1}}\m@th$\null\relax\fi}
+\ifx\omathchar\@undefined
+  \ifx\widowpenalties\@undefined
+    \mathchardef\e@alloc@top=255
+    \let\e@alloc@chardef\chardef
+  \else
+    \mathchardef\e@alloc@top=32767
+    \let\e@alloc@chardef\mathchardef
+  \fi
+\else
+  \ifx\enablecjktoken\@undefined % pTeX
+    \omathchardef\e@alloc@top=65535
+    \let\e@alloc@chardef\omathchardef
+  \else                          % upTeX
+    \chardef\e@alloc@top=65535
+    \let\e@alloc@chardef\chardef
+  \fi
+\fi
+\ifx\omathchar\@undefined
+  \chardef\e@mathgroup@top=16 % LaTeX2e kernel standard
+\else
+  \mathchardef\e@mathgroup@top=256 % for e-pTeX FAM256 patched
+\fi
 %% File: plvers.dtx
 \ifx\patch@level\@undefined % fallback if undefined in LaTeX
   \def\patch@level{0}\fi
