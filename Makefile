@@ -86,7 +86,7 @@ jltxdoc.cls: jltxdoc.dtx
 
 platex.dvi: $(INTRODOC_SRC)
 	platex $(KANJI) platex.dtx
-	mendex -f -s gglo.ist -o platex.gls platex.glo
+	mendex -J -f -s gglo.ist -o platex.gls platex.glo
 	platex $(KANJI) platex.dtx
 	rm platex.aux platex.log
 	rm platex.glo platex.gls platex.ilg
