@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesClass{tbook}
-  [2006/06/27 v1.6
+  [2016/11/12 v1.7
  Standard pLaTeX class]
 \newcounter{@paper}
 \newif\if@landscape \@landscapefalse
@@ -319,7 +319,7 @@
     \def\@makefnmark{\hbox{\ifydir $\m@th^{\@thefnmark}$
       \else\hbox{\yoko$\m@th^{\@thefnmark}$}\fi}}%
     \long\def\@makefntext##1{\parindent 1zw\noindent
-       \hbox to 2zw{\hss\@makefnmark}##1}%
+       \hb@xt@ 2zw{\hss\@makefnmark}##1}%
     \if@twocolumn
       \ifnum \col@number=\@ne \@maketitle
       \else \twocolumn[\@maketitle]%
@@ -334,6 +334,7 @@
   \setcounter{footnote}{0}%
   \global\let\thanks\relax
   \global\let\maketitle\relax
+  \global\let\@maketitle\relax
   \global\let\p@thanks\relax
   \global\let\@thanks\@empty
   \global\let\@author\@empty
@@ -382,7 +383,7 @@
    \theparagraph・\rensuji{\@arabic\c@subparagraph}}
 \newcommand{\@chapapp}{\prechaptername}
 \newcommand{\@chappos}{\postchaptername}
-\newcommand\frontmatter{%
+\newcommand{\frontmatter}{%
   \if@openright \cleardoublepage \else \clearpage \fi
   \@mainmatterfalse\pagenumbering{roman}}
 \newcommand{\mainmatter}{%
@@ -639,7 +640,7 @@
       \else #1: #2\relax\par\fi
   \else
     \global \@minipagefalse
-    \hbox to\hsize{\hfil\box\@tempboxa\hfil}%
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
   \fi
   \vskip\belowcaptionskip}
 \setlength\arraycolsep{5\p@}
@@ -695,7 +696,7 @@
 \newdimen\toclineskip
 \setlength\toclineskip{2\p@}
 \newdimen\@lnumwidth
-\def\numberline#1{\hbox to\@lnumwidth{#1\hfil}}
+\def\numberline#1{\hb@xt@\@lnumwidth{#1\hfil}}
 \def\@dottedtocline#1#2#3#4#5{%
   \ifnum #1>\c@tocdepth \else
     \vskip\toclineskip \@plus.2\p@
@@ -736,7 +737,7 @@
     {\leavevmode\large\bfseries
      \setlength\@lnumwidth{4zw}%
      #1\hfil\nobreak
-     \hbox to\@pnumwidth{\hss#2}}\par
+     \hb@xt@\@pnumwidth{\hss#2}}\par
     \nobreak
     \global\@nobreaktrue
     \everypar{\global\@nobreakfalse\everypar{}}%
@@ -751,7 +752,7 @@
       \leavevmode\bfseries
       \setlength\@lnumwidth{4zw}%
       \advance\leftskip\@lnumwidth \hskip-\leftskip
-      #1\nobreak\hfil\nobreak\hbox to\@pnumwidth{\hss#2}\par
+      #1\nobreak\hfil\nobreak\hb@xt@\@pnumwidth{\hss#2}\par
       \penalty\@highpenalty
     \endgroup
   \fi}
@@ -763,8 +764,8 @@
 \newcommand{\listoffigures}{%
   \if@twocolumn\@restonecoltrue\onecolumn
   \else\@restonecolfalse\fi
-  \chapter*{\listfigurename
-  \@mkboth{\listfigurename}{\listfigurename}}%
+  \chapter*{\listfigurename}%
+  \@mkboth{\listfigurename}{\listfigurename}%
   \@starttoc{lof}%
   \if@restonecol\twocolumn\fi
 }
@@ -772,8 +773,8 @@
 \newcommand{\listoftables}{%
   \if@twocolumn\@restonecoltrue\onecolumn
   \else\@restonecolfalse\fi
-  \chapter*{\listtablename
-  \@mkboth{\listtablename}{\listtablename}}%
+  \chapter*{\listtablename}%
+  \@mkboth{\listtablename}{\listtablename}%
   \@starttoc{lot}%
   \if@restonecol\twocolumn\fi
 }
@@ -782,7 +783,7 @@
 \setlength\bibindent{1.5em}
 \newcommand{\newblock}{\hskip .11em\@plus.33em\@minus.07em}
 \newenvironment{thebibliography}[1]
-{\chapter*{\bibname\@mkboth{\bibname}{\bibname}}%
+{\chapter*{\bibname}\@mkboth{\bibname}{\bibname}%
    \list{\@biblabel{\@arabic\c@enumiv}}%
         {\settowidth\labelwidth{\@biblabel{#1}}%
          \leftmargin\labelwidth
@@ -802,11 +803,11 @@
 \let\@openbib@code\@empty
 \newenvironment{theindex}
   {\if@twocolumn\@restonecolfalse\else\@restonecoltrue\fi
-   \columnseprule\z@ \columnsep 35\p@
    \twocolumn[\@makeschapterhead{\indexname}]%
    \@mkboth{\indexname}{\indexname}%
    \thispagestyle{jpl@in}\parindent\z@
    \parskip\z@ \@plus .3\p@\relax
+   \columnseprule\z@ \columnsep 35\p@
    \let\item\@idxitem}
   {\if@restonecol\onecolumn\else\clearpage\fi}
 \newcommand{\@idxitem}{\par\hangindent 40\p@}
@@ -815,11 +816,11 @@
 \newcommand{\indexspace}{\par \vskip 10\p@ \@plus5\p@ \@minus3\p@\relax}
 \renewcommand{\footnoterule}{%
   \kern-3\p@
-  \hrule width .4\columnwidth
-  \kern 2.6\p@}
+  \hrule\@width.4\columnwidth
+  \kern2.6\p@}
 \@addtoreset{footnote}{chapter}
 \newcommand\@makefntext[1]{\parindent 1zw
-  \noindent\hbox to 2zw{\hss\@makefnmark}#1}
+  \noindent\hb@xt@ 2zw{\hss\@makefnmark}#1}
 \newif\if西暦 \西暦false
 \def\西暦{\西暦true}
 \def\和暦{\西暦false}
