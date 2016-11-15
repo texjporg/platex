@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesClass{jarticle}
-  [2016/11/12 v1.7
+  [2016/11/16 v1.7a
  Standard pLaTeX class]
 \newcounter{@paper}
 \newif\if@landscape \@landscapefalse
@@ -370,7 +370,9 @@
    \thesubsubsection.\@arabic\c@paragraph}
 \renewcommand{\thesubparagraph}{%
    \theparagraph.\@arabic\c@subparagraph}
-\newcommand{\part}{\par\addvspace{4ex}%
+\newcommand{\part}{%
+  \if@noskipsec \leavevmode \fi
+  \par\addvspace{4ex}%
   \@afterindenttrue
   \secdef\@part\@spart}
 \def\@part[#1]#2{%

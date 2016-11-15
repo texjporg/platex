@@ -67,6 +67,8 @@
 %                            arg (sync with classes.dtx v1.4c)}
 % \changes{v1.7}{2016/11/12}{\cs{columnsep}と\cs{columnseprule}の
 %    変更を後ろに移動(sync with classes.dtx v1.4f)}
+% \changes{v1.7a}{2016/11/16}{Check \texttt{@noskipsec} switch and
+%    possibly force horizontal mode (sync with classes.dtx v1.4a)}
 % \fi
 %
 % \iffalse
@@ -96,7 +98,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2016/11/12 v1.7
+  [2016/11/16 v1.7a
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -2072,6 +2074,8 @@
 % ここでグループを閉じ、\Lcount{footnote}カウンタをリセットし、
 % |\thanks|, |\maketitle|, |\@maketitle|を無効にし、
 % いくつかの内部マクロを空にして格納領域を節約します。
+% \changes{v1.7}{2016/11/12}{ドキュメントに反して\cs{@maketitle}が
+%    空になっていなかったのを修正}
 %    \begin{macrocode}
   \endgroup
   \setcounter{footnote}{0}%
@@ -2387,11 +2391,19 @@
 %
 % articleクラスの場合は、簡単です。
 %
-% 新しい段落を開始し、小さな空白を入れ、段落後のインデントをしないようにし、
-% |\secdef|で作成します。
+% 新しい段落を開始し、小さな空白を入れ、段落後のインデントを行い、
+% |\secdef|で作成します。（アスキーによる元のドキュメントには
+% 「段落後のインデントをしないようにし」と書かれていましたが、
+% 実際のコードでは段落後のインデントを行っていました。そこで
+% 日本語\TeX{}開発コミュニティは、ドキュメントをコードに合わせて
+% 「段落後のインデントを行い」へと修正しました。）
+% \changes{v1.7a}{2016/11/16}{Check \texttt{@noskipsec} switch and
+%    possibly force horizontal mode (sync with classes.dtx v1.4a)}
 %    \begin{macrocode}
 %<*article>
-\newcommand{\part}{\par\addvspace{4ex}%
+\newcommand{\part}{%
+  \if@noskipsec \leavevmode \fi
+  \par\addvspace{4ex}%
   \@afterindenttrue
   \secdef\@part\@spart}
 %</article>
