@@ -380,6 +380,7 @@
 % |\fontsize|コマンドの内部形式です。
 % ベースラインの設定と、支柱の設定を行ないます。
 %    \begin{macrocode}
+\def\strutbox{\iftdir\tstrutbox\else\ystrutbox\fi}
 \def\set@fontsize#1#2#3{%
     \@defaultunits\@tempdimb#2pt\relax\@nnil
     \edef\f@size{\strip@pt\@tempdimb}%
@@ -406,7 +407,6 @@
       \setbox\zstrutbox\hbox{\tate
           \vrule\@width\z@
                 \@height.7\baselineskip \@depth.3\baselineskip}%
-      \def\strutbox{\iftdir\tstrutbox\else\ystrutbox\fi}%
 %    \end{macrocode}
 % フォントサイズとベースラインに関する診断情報を出力します。
 %    \begin{macrocode}
@@ -551,7 +551,11 @@
 % しかし、これでは|\\|の直前の単語でハイフネーションが行われないという
 % 問題が発生します（\texttt{tests/hyphtest0.tex}を\texttt{latex}と
 % \texttt{platex}で処理してみてください）ので、
-% |\null|の代わりに|\break|を重ねる形で対応します。
+% |\null|の代わりに|\hskip\z@|を重ねる形で対応します。
+%
+% ただし、従来の|\null|を挿入した場合と異なり、強制改行後の行頭に
+% JFMグル―が入らなくなります。この挙動は、奥村さんのjsclassesで
+% 行頭を天ツキに直しているのと同じです。
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{????/??/??}{\@gnewline}
 %<platexrelease>                   {Hyphenation of a word before |\\|}%
@@ -560,7 +564,7 @@
   \ifvmode
     \@nolnerr
   \else
-    \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \break
+    \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \hskip \z@
     \ignorespaces
   \fi}
 %</plcore|platexrelease>
