@@ -389,7 +389,7 @@
   \fi
   \markboth{}{}%
   {\parindent\z@\raggedright
-   \interlinepenalty\@M\reset@font
+   \interlinepenalty\@M\normalfont
    \ifnum \c@secnumdepth >\m@ne
      \Large\bfseries\prepartname\thepart\postpartname
      \par\nobreak
@@ -398,29 +398,29 @@
   \nobreak\vskip3ex\@afterheading}
 \def\@spart#1{{%
   \parindent\z@\raggedright
-  \interlinepenalty\@M\reset@font
+  \interlinepenalty\@M\normalfont
   \huge\bfseries#1\par}%
   \nobreak\vskip3ex\@afterheading}
 \newcommand{\section}{\@startsection{section}{1}{\z@}%
    {1.5\Cvs \@plus.5\Cvs \@minus.2\Cvs}%
    {.5\Cvs \@plus.3\Cvs}%
-   {\reset@font\Large\bfseries}}
+   {\normalfont\Large\bfseries}}
 \newcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
    {1.5\Cvs \@plus.5\Cvs \@minus.2\Cvs}%
    {.5\Cvs \@plus.3\Cvs}%
-   {\reset@font\large\bfseries}}
+   {\normalfont\large\bfseries}}
 \newcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
    {1.5\Cvs \@plus.5\Cvs \@minus.2\Cvs}%
    {.5\Cvs \@plus.3\Cvs}%
-   {\reset@font\normalsize\bfseries}}
+   {\normalfont\normalsize\bfseries}}
 \newcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}%
    {3.25ex \@plus 1ex \@minus .2ex}%
    {-1em}%
-   {\reset@font\normalsize\bfseries}}
+   {\normalfont\normalsize\bfseries}}
 \newcommand{\subparagraph}{\@startsection{subparagraph}{5}{\z@}%
    {3.25ex \@plus 1ex \@minus .2ex}%
    {-1em}%
-   {\reset@font\normalsize\bfseries}}
+   {\normalfont\normalsize\bfseries}}
 \newcommand{\appendix}{\par
   \setcounter{section}{0}%
   \setcounter{subsection}{0}%
@@ -461,7 +461,7 @@
   {\ifnum \@enumdepth >\thr@@\@toodeep\else
    \advance\@enumdepth\@ne
    \edef\@enumctr{enum\romannumeral\the\@enumdepth}%
-   \list{\csname label\@enumctr\endcsname}{%
+   \expandafter \list \csname label\@enumctr\endcsname{%
       \iftdir
          \ifnum \@listdepth=\@ne \topsep.5\normalbaselineskip
            \else\topsep\z@\fi
@@ -488,8 +488,7 @@
   {\ifnum \@itemdepth >\thr@@\@toodeep\else
    \advance\@itemdepth\@ne
    \edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
-   \expandafter
-   \list{\csname \@itemitem\endcsname}{%
+   \expandafter \list \csname \@itemitem\endcsname{%
       \iftdir
          \ifnum \@listdepth=\@ne \topsep.5\normalbaselineskip
            \else\topsep\z@\fi
@@ -628,7 +627,7 @@
      \interlinepenalty\@M
      \leavevmode
      \@lnumwidth #3\relax
-     \advance\leftskip \@lnumwidth \hbox{}\hskip -\leftskip
+     \advance\leftskip \@lnumwidth \null\nobreak\hskip -\leftskip
      {#4}\nobreak
      \leaders\hbox{$\m@th \mkern \@dotsep mu.\mkern \@dotsep mu$}%
      \hfill\nobreak
