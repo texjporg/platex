@@ -27,7 +27,9 @@
    {\p@tabarray}{\p@tabarray<Z>}}
 \def\X@tabular{\@ifnextchar<%>
    {\p@tabular}{\p@tabular<Z>}}
-\def\@stabular<#1>#2{\def\@halignto{to#2}\p@tabular<#1>}
+\def\@stabular<#1>#2{%
+   \setlength\dimen@{#2}%
+   \edef\@halignto{to\the\dimen@}\p@tabular<#1>}
 \def\p@tabular<#1>{\leavevmode \null\hbox \bgroup $\let\@acol\@tabacol
    \let\@classz\@tabclassz
    \let\@classiv\@tabclassiv \let\\\@tabularcr\p@tabarray<#1>}
@@ -252,9 +254,9 @@
 \def\minipage{\@ifnextchar<%>
    {\X@minipage}{\X@minipage<Z>}}
 \def\X@minipage<#1>{\@ifnextchar[%]
-   {\@iminipage<#1>}{\@iiiminipage<#1>{c}\@empty[s]}}
+   {\@iminipage<#1>}{\@iiiminipage<#1>{c}\relax[s]}}
 \def\@iminipage<#1>[#2]{\@ifnextchar[%]
-   {\@iiminipage<#1>{#2}}{\@iiiminipage<#1>{#2}\@empty[s]}}
+   {\@iiminipage<#1>{#2}}{\@iiiminipage<#1>{#2}\relax[s]}}
 \def\@iiminipage<#1>#2[#3]{\@ifnextchar[%]
    {\@iiiminipage<#1>{#2}{#3}}{\@iiiminipage<#1>{#2}{#3}[#2]}}
 \def\@iiiminipage<#1>#2#3[#4]#5{%
@@ -284,8 +286,7 @@
       \let\@footnotetext\@mpfootnotetext
       \let\@listdepth\@mplistdepth \@mplistdepth\z@
       \@minipagerestore
-      \global\@minipagetrue %% \global added 24 May 89
-      \everypar{\global\@minipagefalse\everypar{}}}
+      \@setminipage}
 \def\endminipage{%
     \par
     \unskip
@@ -295,7 +296,7 @@
       \footnoterule
       \unvbox\@mpfootins
     \fi
-    \global\@minipagefalse   %% added 24 May 89
+    \@minipagefalse   %% added 24 May 89
   \color@endgroup
   \if@rotsw \egroup\m@th$\egroup\fi
   \egroup
@@ -303,9 +304,9 @@
 \def\parbox{\@ifnextchar<%>
    {\X@parbox}{\X@parbox<Z>}}
 \def\X@parbox<#1>{\@ifnextchar[%]
-   {\@iparbox<#1>}{\@iiiparbox<#1>{c}\@empty[s]}}
+   {\@iparbox<#1>}{\@iiiparbox<#1>{c}\relax[s]}}
 \def\@iparbox<#1>[#2]{\@ifnextchar[%]
-   {\@iiparbox<#1>{#2}}{\@iiiparbox<#1>{#2}\@empty[s]}}
+   {\@iiparbox<#1>{#2}}{\@iiiparbox<#1>{#2}\relax[s]}}
 \def\@iiparbox<#1>#2[#3]{\@ifnextchar[%]%
    {\@iiiparbox<#1>{#2}{#3}}{\@iiiparbox<#1>{#2}{#3}[#2]}}
 \long\def\@iiiparbox<#1>#2#3[#4]#5#6{%
@@ -314,14 +315,14 @@
   \fork@parbox@option<#1>[#2]%
 \if@rotsw
   \@begin@tempboxa\vbox{\box@dir\hsize\@tempdima
-    \hbox{$\vbox{\@parboxrestore\adjustbaseline#6\endgraf}\m@th$}}%
+    \hbox{$\vbox{\@parboxrestore\adjustbaseline#6\@@par}\m@th$}}%
 \else
   \@begin@tempboxa\vbox{\box@dir
-    \hsize\@tempdima\@parboxrestore\adjustbaseline#6\endgraf}%
+    \hsize\@tempdima\@parboxrestore\adjustbaseline#6\@@par}%
 \fi
-    \ifx\@empty#3\relax\else
+    \ifx\relax#3\relax\else
       \setlength\@tempdimb{#3}%
-      \def\@parboxto{to\@tempdimb}%
+      \edef\@parboxto{to\the\@tempdimb}%
     \fi
     \@begin@parbox\@parboxto{\box@dir\adjustbaseline
        \let\hss\vss\let\unhbox\unvbox

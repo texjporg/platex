@@ -37,6 +37,19 @@
 %    \cs{@arstrutbox}を余計に\cs{hbox}に入れていたのを修正}
 % \changes{v1.2b}{2016/11/07}{横組で段落の頭に\cs{rensuji}を使える
 %    ように\cs{leavevmode}を追加して修正}
+% \changes{v1.2c}{2016/11/19}{Use \cs{setlength}, so that
+%           calc extensions apply (sync with lttab.dtx v1.1j)}
+% \changes{v1.2c}{2016/11/19}{Use \cs{@setminpage}
+%                             (sync with ltboxes v1.1a)}
+% \changes{v1.2c}{2016/11/19}{put \cs{global} into definition
+%    of \cs{@minipagefalse} (sync with ltboxes v1.0z)}
+% \changes{v1.2c}{2016/11/19}{Changed \cs{endgraf} to
+%    \cs{@@par} (sync with ltboxes.dtx v1.1f)}
+% \changes{v1.2c}{2016/11/19}{Changed \cs{@empty} to \cs{relax} as
+%    flag for natural width: pr/2975 (sync with ltboxes.dtx v1.1f)}
+% \changes{v1.2c}{2016/11/19}{Ensure \cs{@parboxto} holds the value
+%    of \cs{@tempdimb} not the register itself (pr/3867)
+%    (sync with ltboxes.dtx v1.1g)}
 % \fi
 %
 % \iffalse
@@ -185,8 +198,12 @@
 % アスタリスク形式の場合は、組方向オプションの後ろに幅を指定します。
 % \changes{v1.1d}{1995/11/10}{\cs{@tabular} to \cs{p@tabular}}
 % \changes{v1.2a}{2016/08/20}{tabular環境前の余分な\cs{xkanjiskip}を削除}
+% \changes{v1.2c}{2016/11/19}{Use \cs{setlength}, so that
+%           calc extensions apply (sync with lttab.dtx v1.1j)}
 %    \begin{macrocode}
-\def\@stabular<#1>#2{\def\@halignto{to#2}\p@tabular<#1>}
+\def\@stabular<#1>#2{%
+   \setlength\dimen@{#2}%
+   \edef\@halignto{to\the\dimen@}\p@tabular<#1>}
 \def\p@tabular<#1>{\leavevmode \null\hbox \bgroup $\let\@acol\@tabacol
    \let\@classz\@tabclassz
    \let\@classiv\@tabclassiv \let\\\@tabularcr\p@tabarray<#1>}
@@ -625,7 +642,7 @@
 % \subsection{段落ボックス環境}
 % minipage環境と|\parbox|コマンドも、tabular環境と同じように、
 % 組方向を指定するオプションを追加してあります。
-% これらのコマンドは、\file{ltbox.dtx}で定義されています。
+% これらのコマンドは、\file{ltboxes.dtx}で定義されています。
 %
 % |\parbox|コマンドは幅だけでなく高さも指定できるようになっています。
 % 新しい|\parbox|コマンドについての詳細は、\file{usrguide.tex}を参照
@@ -643,17 +660,21 @@
 %
 % \begin{macro}{\X@minipage}
 % 位置オプションを調べます。
+% \changes{v1.2c}{2016/11/19}{Changed \cs{@empty} to \cs{relax} as
+%    flag for natural width: pr/2975 (sync with ltboxes.dtx v1.1f)}
 %    \begin{macrocode}
 \def\X@minipage<#1>{\@ifnextchar[%]
-   {\@iminipage<#1>}{\@iiiminipage<#1>{c}\@empty[s]}}
+   {\@iminipage<#1>}{\@iiiminipage<#1>{c}\relax[s]}}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\@iminipage}
 % 高さオプションを調べます。
+% \changes{v1.2c}{2016/11/19}{Changed \cs{@empty} to \cs{relax} as
+%    flag for natural width: pr/2975 (sync with ltboxes.dtx v1.1f)}
 %    \begin{macrocode}
 \def\@iminipage<#1>[#2]{\@ifnextchar[%]
-   {\@iiminipage<#1>{#2}}{\@iiiminipage<#1>{#2}\@empty[s]}}
+   {\@iiminipage<#1>{#2}}{\@iiiminipage<#1>{#2}\relax[s]}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -692,6 +713,8 @@
     \if@rotsw \hsize\@tempdima\hbox\bgroup$\vbox\bgroup\fi
 %    \end{macrocode}
 % \changes{v1.1c}{1995/09/11}{Add \cs{adjustbaseline}.}
+% \changes{v1.2c}{2016/11/19}{Use \cs{@setminpage}
+%                             (sync with ltboxes v1.1a)}
 %    \begin{macrocode}
     \adjustbaseline
     \color@begingroup
@@ -703,13 +726,14 @@
       \let\@footnotetext\@mpfootnotetext
       \let\@listdepth\@mplistdepth \@mplistdepth\z@
       \@minipagerestore
-      \global\@minipagetrue %% \global added 24 May 89
-      \everypar{\global\@minipagefalse\everypar{}}}
+      \@setminipage}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\endminipage}
 % minipage環境の終了コマンドです。
+% \changes{v1.2c}{2016/11/19}{put \cs{global} into definition
+%    of \cs{@minipagefalse} (sync with ltboxes v1.0z)}
 %    \begin{macrocode}
 \def\endminipage{%
     \par
@@ -720,7 +744,7 @@
       \footnoterule
       \unvbox\@mpfootins
     \fi
-    \global\@minipagefalse   %% added 24 May 89
+    \@minipagefalse   %% added 24 May 89
   \color@endgroup
   \if@rotsw \egroup\m@th$\egroup\fi
 %    \end{macrocode}
@@ -743,17 +767,21 @@
 %
 % \begin{macro}{\X@parbox}
 % 位置オプションを調べます。
+% \changes{v1.2c}{2016/11/19}{Changed \cs{@empty} to \cs{relax} as
+%    flag for natural width: pr/2975 (sync with ltboxes.dtx v1.1f)}
 %    \begin{macrocode}
 \def\X@parbox<#1>{\@ifnextchar[%]
-   {\@iparbox<#1>}{\@iiiparbox<#1>{c}\@empty[s]}}
+   {\@iparbox<#1>}{\@iiiparbox<#1>{c}\relax[s]}}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\@iparbox}
 % 高さオプションを調べます。
+% \changes{v1.2c}{2016/11/19}{Changed \cs{@empty} to \cs{relax} as
+%    flag for natural width: pr/2975 (sync with ltboxes.dtx v1.1f)}
 %    \begin{macrocode}
 \def\@iparbox<#1>[#2]{\@ifnextchar[%]
-   {\@iiparbox<#1>{#2}}{\@iiiparbox<#1>{#2}\@empty[s]}}
+   {\@iiparbox<#1>{#2}}{\@iiiparbox<#1>{#2}\relax[s]}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -773,6 +801,13 @@
 % minipage環境と同じようにグルーピングをします。
 % この括弧と対になるのは、このマクロの最後の\cs{egroup}です。
 % \changes{v1.2a}{2016/08/20}{\cs{parbox}前後の余分な\cs{xkanjiskip}を削除}
+% \changes{v1.2c}{2016/11/19}{Changed \cs{endgraf} to
+%    \cs{@@par} (sync with ltboxes.dtx v1.1f)}
+% \changes{v1.2c}{2016/11/19}{Changed \cs{@empty} to \cs{relax} as
+%    flag for natural width: pr/2975 (sync with ltboxes.dtx v1.1f)}
+% \changes{v1.2c}{2016/11/19}{Ensure \cs{@parboxto} holds the value
+%    of \cs{@tempdimb} not the register itself (pr/3867)
+%    (sync with ltboxes.dtx v1.1g)}
 %    \begin{macrocode}
 \long\def\@iiiparbox<#1>#2#3[#4]#5#6{%
   \leavevmode\null\bgroup
@@ -780,14 +815,14 @@
   \fork@parbox@option<#1>[#2]%
 \if@rotsw
   \@begin@tempboxa\vbox{\box@dir\hsize\@tempdima
-    \hbox{$\vbox{\@parboxrestore\adjustbaseline#6\endgraf}\m@th$}}%
+    \hbox{$\vbox{\@parboxrestore\adjustbaseline#6\@@par}\m@th$}}%
 \else
   \@begin@tempboxa\vbox{\box@dir
-    \hsize\@tempdima\@parboxrestore\adjustbaseline#6\endgraf}%
+    \hsize\@tempdima\@parboxrestore\adjustbaseline#6\@@par}%
 \fi
-    \ifx\@empty#3\relax\else
+    \ifx\relax#3\relax\else
       \setlength\@tempdimb{#3}%
-      \def\@parboxto{to\@tempdimb}%
+      \edef\@parboxto{to\the\@tempdimb}%
     \fi
     \@begin@parbox\@parboxto{\box@dir\adjustbaseline
        \let\hss\vss\let\unhbox\unvbox
