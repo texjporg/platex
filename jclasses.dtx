@@ -75,6 +75,7 @@
 %    latex/2343 (sync with ltsect.dtx v1.0z)}
 % \changes{v1.7a}{2016/11/16}{Use \cs{expandafter}
 %    (sync with ltlists.dtx v1.0j)}
+% \changes{v1.7b}{2016/11/22}{補足ドキュメントを追加}
 % \fi
 %
 % \iffalse
@@ -104,7 +105,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2016/11/16 v1.7a
+  [2016/11/22 v1.7b
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -2319,10 +2320,22 @@
 % \begin{macro}{\mainmatter}
 % \begin{macro}{\backmatter}
 % \changes{v1.1}{1997/01/15}{\cs{frontmatter}, \cs{mainmatter}, \cs{backmatter}
-%   を\LaTeX\ の定義に修正}
+%   を\LaTeX{}の定義に修正}
 % 一冊の本は論理的に３つに分割されます。
 % 表題や目次や「はじめに」あるいは権利などの前付け、
 % そして本文、それから用語集や索引や奥付けなどの後付けです。
+%
+% \emph{日本語\TeX{}開発コミュニティによる補足}：
+% \LaTeX{}のclasses.dtxは、1996/05/26 (v1.3r)と1998/05/05 (v1.3y)の
+% 計2回、|\frontmatter|と|\mainmatter|の定義を修正しています。一回目は
+% これらの命令を|openany|オプションに応じて切り替え、二回目はそれを
+% 元に戻しています。アスキーによるjclasses.dtxは、1997/01/15に
+% 一回目の修正に追随しましたが、二回目の修正には追随していません。
+% コミュニティ版では、アスキーによる仕様を維持することとし、
+% |openany|オプションの場合は|\cleardoublepage|ではなく|\clearpage|が
+% 発行されます。もし|\cleardoublepage|が起きてほしい場合には、
+% 明示的に挿入してください。（参考：latex/2754）
+% \changes{v1.7b}{2016/11/22}{補足ドキュメントを追加}
 %    \begin{macrocode}
 %<*book>
 \newcommand{\frontmatter}{%
