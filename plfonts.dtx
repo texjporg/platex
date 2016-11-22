@@ -303,7 +303,7 @@
 % このときの具体的な判断手順については、エンコード選択コマンドや
 % ファミリ選択コマンドなどの定義を参照してください。
 % 
-% \begin{macro}{\inlist}
+% \begin{macro}{\inlist@}
 % 次のコマンドは、エンコードやファミリのリスト内に第二引数で指定された文字列
 % があるかどうかを調べるマクロです。
 %    \begin{macrocode}
@@ -650,7 +650,7 @@
 % \end{macro}
 %
 % \begin{macro}{\DeclareKanjiFamily}
-% 欧文ファミリを宣言するためのコマンドです。
+% 和文ファミリを宣言するためのコマンドです。
 %    \begin{macrocode}
 \def\DeclareKanjiFamily#1#2#3{%
  \@ifundefined{T@#1}%

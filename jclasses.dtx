@@ -58,6 +58,24 @@
 %   \cs{section},\cs{subsection},\cs{subsubsection}の前後空きの伸縮幅を修正。
 %   (ありがとうございます、鈴木た＠MILNさん)}
 % \changes{v1.6}{2006/06/27}{フォントコマンドを修正。ありがとう、ymtさん。}
+% \changes{v1.7}{2016/11/12}{ドキュメントに反して\cs{@maketitle}が
+%    空になっていなかったのを修正}
+% \changes{v1.7}{2016/11/12}{use \cs{@width} (sync with classes.dtx v1.3a)}
+% \changes{v1.7}{2016/11/12}{Replaced all \cs{hbox to} by
+%    \cs{hb@xt@} (sync with classes.dtx v1.3a)}
+% \changes{v1.7}{2016/11/12}{Moved \cs{@mkboth} out of heading
+%                            arg (sync with classes.dtx v1.4c)}
+% \changes{v1.7}{2016/11/12}{\cs{columnsep}と\cs{columnseprule}の
+%    変更を後ろに移動(sync with classes.dtx v1.4f)}
+% \changes{v1.7a}{2016/11/16}{Check \texttt{@noskipsec} switch and
+%    possibly force horizontal mode (sync with classes.dtx v1.4a)}
+% \changes{v1.7a}{2016/11/16}{replace \cs{reset@font} with
+%    \cs{normalfont} (sync with classes.dtx v1.3c)}
+% \changes{v1.7a}{2016/11/16}{Added \cs{nobreak} for
+%    latex/2343 (sync with ltsect.dtx v1.0z)}
+% \changes{v1.7a}{2016/11/16}{Use \cs{expandafter}
+%    (sync with ltlists.dtx v1.0j)}
+% \changes{v1.7b}{2016/11/22}{補足ドキュメントを追加}
 % \fi
 %
 % \iffalse
@@ -87,7 +105,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2006/06/27 v1.6
+  [2016/11/22 v1.7b
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -1901,7 +1919,7 @@
 % \subsubsection{表題}
 %
 % \begin{macro}{\title}
-% \begin{macro}{\autor}
+% \begin{macro}{\author}
 % \begin{macro}{\date}
 % 文書のタイトル、著者、日付の情報のための、
 % これらの３つのコマンドは\file{latex.dtx}で提供されています。
@@ -2043,11 +2061,11 @@
       \else\hbox{\yoko$\m@th^{\@thefnmark}$}\fi}}%
 %<*tate>
     \long\def\@makefntext##1{\parindent 1zw\noindent
-       \hbox to 2zw{\hss\@makefnmark}##1}%
+       \hb@xt@ 2zw{\hss\@makefnmark}##1}%
 %</tate>
 %<*yoko>
      \long\def\@makefntext##1{\parindent 1em\noindent
-       \hbox to1.8em{\hss$\m@th^{\@thefnmark}$}##1}%
+       \hb@xt@1.8em{\hss$\m@th^{\@thefnmark}$}##1}%
 %</yoko>
     \if@twocolumn
       \ifnum \col@number=\@ne \@maketitle
@@ -2063,11 +2081,14 @@
 % ここでグループを閉じ、\Lcount{footnote}カウンタをリセットし、
 % |\thanks|, |\maketitle|, |\@maketitle|を無効にし、
 % いくつかの内部マクロを空にして格納領域を節約します。
+% \changes{v1.7}{2016/11/12}{ドキュメントに反して\cs{@maketitle}が
+%    空になっていなかったのを修正}
 %    \begin{macrocode}
   \endgroup
   \setcounter{footnote}{0}%
   \global\let\thanks\relax
   \global\let\maketitle\relax
+  \global\let\@maketitle\relax
   \global\let\p@thanks\relax
   \global\let\@thanks\@empty
   \global\let\@author\@empty
@@ -2299,13 +2320,25 @@
 % \begin{macro}{\mainmatter}
 % \begin{macro}{\backmatter}
 % \changes{v1.1}{1997/01/15}{\cs{frontmatter}, \cs{mainmatter}, \cs{backmatter}
-%   を\LaTeX\ の定義に修正}
+%   を\LaTeX{}の定義に修正}
 % 一冊の本は論理的に３つに分割されます。
 % 表題や目次や「はじめに」あるいは権利などの前付け、
 % そして本文、それから用語集や索引や奥付けなどの後付けです。
+%
+% \emph{日本語\TeX{}開発コミュニティによる補足}：
+% \LaTeX{}のclasses.dtxは、1996/05/26 (v1.3r)と1998/05/05 (v1.3y)の
+% 計2回、|\frontmatter|と|\mainmatter|の定義を修正しています。一回目は
+% これらの命令を|openany|オプションに応じて切り替え、二回目はそれを
+% 元に戻しています。アスキーによるjclasses.dtxは、1997/01/15に
+% 一回目の修正に追随しましたが、二回目の修正には追随していません。
+% コミュニティ版では、アスキーによる仕様を維持することとし、
+% |openany|オプションの場合は|\cleardoublepage|ではなく|\clearpage|が
+% 発行されます。もし|\cleardoublepage|が起きてほしい場合には、
+% 明示的に挿入してください。（参考：latex/2754）
+% \changes{v1.7b}{2016/11/22}{補足ドキュメントを追加}
 %    \begin{macrocode}
 %<*book>
-\newcommand\frontmatter{%
+\newcommand{\frontmatter}{%
   \if@openright \cleardoublepage \else \clearpage \fi
   \@mainmatterfalse\pagenumbering{roman}}
 \newcommand{\mainmatter}{%
@@ -2377,11 +2410,19 @@
 %
 % articleクラスの場合は、簡単です。
 %
-% 新しい段落を開始し、小さな空白を入れ、段落後のインデントをしないようにし、
-% |\secdef|で作成します。
+% 新しい段落を開始し、小さな空白を入れ、段落後のインデントを行い、
+% |\secdef|で作成します。（アスキーによる元のドキュメントには
+% 「段落後のインデントをしないようにし」と書かれていましたが、
+% 実際のコードでは段落後のインデントを行っていました。そこで
+% 日本語\TeX{}開発コミュニティは、ドキュメントをコードに合わせて
+% 「段落後のインデントを行い」へと修正しました。）
+% \changes{v1.7a}{2016/11/16}{Check \texttt{@noskipsec} switch and
+%    possibly force horizontal mode (sync with classes.dtx v1.4a)}
 %    \begin{macrocode}
 %<*article>
-\newcommand{\part}{\par\addvspace{4ex}%
+\newcommand{\part}{%
+  \if@noskipsec \leavevmode \fi
+  \par\addvspace{4ex}%
   \@afterindenttrue
   \secdef\@part\@spart}
 %</article>
@@ -2411,6 +2452,8 @@
 %
 % articleクラスの場合は、\Lcount{secnumdepth}が$-1$よりも大きいとき、
 % 見出し番号を付けます。このカウンタが$-1$以下の場合には付けません。
+% \changes{v1.7a}{2016/11/16}{replace \cs{reset@font} with
+%    \cs{normalfont} (sync with classes.dtx v1.3c)}
 %    \begin{macrocode}
 %<*article>
 \def\@part[#1]#2{%
@@ -2423,7 +2466,7 @@
   \fi
   \markboth{}{}%
   {\parindent\z@\raggedright
-   \interlinepenalty\@M\reset@font
+   \interlinepenalty\@M\normalfont
    \ifnum \c@secnumdepth >\m@ne
      \Large\bfseries\prepartname\thepart\postpartname
      \par\nobreak
@@ -2448,7 +2491,7 @@
   \fi
   \markboth{}{}%
   {\centering
-   \interlinepenalty\@M\reset@font
+   \interlinepenalty\@M\normalfont
    \ifnum \c@secnumdepth >-2\relax
      \huge\bfseries\prepartname\thepart\postpartname
      \par\vskip20\p@
@@ -2461,11 +2504,13 @@
 %
 % \begin{macro}{\@spart}
 % このマクロは、番号を付けないときの体裁です。
+% \changes{v1.7a}{2016/11/16}{replace \cs{reset@font} with
+%    \cs{normalfont} (sync with classes.dtx v1.3c)}
 %    \begin{macrocode}
 %<*article>
 \def\@spart#1{{%
   \parindent\z@\raggedright
-  \interlinepenalty\@M\reset@font
+  \interlinepenalty\@M\normalfont
   \huge\bfseries#1\par}%
   \nobreak\vskip3ex\@afterheading}
 %</article>
@@ -2476,7 +2521,7 @@
 %<*report|book>
 \def\@spart#1{{%
   \centering
-  \interlinepenalty\@M\reset@font
+  \interlinepenalty\@M\normalfont
   \Huge\bfseries#1\par}%
   \@endpart}
 %</report|book>
@@ -2555,12 +2600,14 @@
 %   見出し文字列も消えてしまうのを修正}
 % \changes{v1.2}{2001/09/04}{\cs{chapter}の出力位置がアスタリスク形式と
 %   そうでないときと違うのを修正(ありがとう、鈴木＠津さん)}
+% \changes{v1.7a}{2016/11/16}{replace \cs{reset@font} with
+%    \cs{normalfont} (sync with classes.dtx v1.3c)}
 %    \begin{macrocode}
 \def\@makechapterhead#1{\hbox{}%
   \vskip2\Cvs
   {\parindent\z@
    \raggedright
-   \reset@font\huge\bfseries
+   \normalfont\huge\bfseries
    \leavevmode
    \ifnum \c@secnumdepth >\m@ne
      \setlength\@tempdima{\linewidth}%
@@ -2591,12 +2638,14 @@
 % 番号を付けない場合の形式です。
 % \changes{v1.2}{2001/09/04}{\cs{chapter}の出力位置がアスタリスク形式と
 %   そうでないときと違うのを修正(ありがとう、鈴木＠津さん)}
+% \changes{v1.7a}{2016/11/16}{replace \cs{reset@font} with
+%    \cs{normalfont} (sync with classes.dtx v1.3c)}
 %    \begin{macrocode}
 \def\@makeschapterhead#1{\hbox{}%
   \vskip2\Cvs
   {\parindent\z@
    \raggedright
-   \reset@font\huge\bfseries
+   \normalfont\huge\bfseries
    \leavevmode
    \setlength\@tempdima{\linewidth}%
    \vtop{\hsize\@tempdima#1}}\vskip3\Cvs}
@@ -2608,42 +2657,50 @@
 %
 % \begin{macro}{\section}
 % 見出しの前後に空白を付け、|\Large\bfseries|で出力をします。
+% \changes{v1.7a}{2016/11/16}{replace \cs{reset@font} with
+%    \cs{normalfont} (sync with classes.dtx v1.3c)}
 %    \begin{macrocode}
 \newcommand{\section}{\@startsection{section}{1}{\z@}%
    {1.5\Cvs \@plus.5\Cvs \@minus.2\Cvs}%
    {.5\Cvs \@plus.3\Cvs}%
-   {\reset@font\Large\bfseries}}
+   {\normalfont\Large\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\subsection}
 % 見出しの前後に空白を付け、|\large\bfseries|で出力をします。
+% \changes{v1.7a}{2016/11/16}{replace \cs{reset@font} with
+%    \cs{normalfont} (sync with classes.dtx v1.3c)}
 %    \begin{macrocode}
 \newcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
    {1.5\Cvs \@plus.5\Cvs \@minus.2\Cvs}%
    {.5\Cvs \@plus.3\Cvs}%
-   {\reset@font\large\bfseries}}
+   {\normalfont\large\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\subsubsection}
 % 見出しの前後に空白を付け、|\normalsize\bfseries|で出力をします。
+% \changes{v1.7a}{2016/11/16}{replace \cs{reset@font} with
+%    \cs{normalfont} (sync with classes.dtx v1.3c)}
 %    \begin{macrocode}
 \newcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
    {1.5\Cvs \@plus.5\Cvs \@minus.2\Cvs}%
    {.5\Cvs \@plus.3\Cvs}%
-   {\reset@font\normalsize\bfseries}}
+   {\normalfont\normalsize\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\paragraph}
 % 見出しの前に空白を付け、|\normalsize\bfseries|で出力をします。
 % 見出しの後ろで改行されません。
+% \changes{v1.7a}{2016/11/16}{replace \cs{reset@font} with
+%    \cs{normalfont} (sync with classes.dtx v1.3c)}
 %    \begin{macrocode}
 \newcommand{\paragraph}{\@startsection{paragraph}{4}{\z@}%
    {3.25ex \@plus 1ex \@minus .2ex}%
    {-1em}%
-   {\reset@font\normalsize\bfseries}}
+   {\normalfont\normalsize\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2651,10 +2708,12 @@
 % 見出しの前に空白を付け、|\normalsize\bfseries|で出力をします。
 % 見出しの後ろで改行されません。
 %    \begin{macrocode}
+% \changes{v1.7a}{2016/11/16}{replace \cs{reset@font} with
+%    \cs{normalfont} (sync with classes.dtx v1.3c)}
 \newcommand{\subparagraph}{\@startsection{subparagraph}{5}{\z@}%
    {3.25ex \@plus 1ex \@minus .2ex}%
    {-1em}%
-   {\reset@font\normalsize\bfseries}}
+   {\normalfont\normalsize\bfseries}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2949,13 +3008,15 @@
 % \changes{v1.1q}{1999/05/18}{縦組時のみに設定するようにした}
 % トップレベルで使われたときに、最初と最後に半行分のスペースを開けるように、
 % 変更します。この環境は、\file{ltlists.dtx}で定義されています。
+% \changes{v1.7a}{2016/11/16}{Use \cs{expandafter}
+%    (sync with ltlists.dtx v1.0j)}
 %
 %    \begin{macrocode}
 \renewenvironment{enumerate}
   {\ifnum \@enumdepth >\thr@@\@toodeep\else
    \advance\@enumdepth\@ne
    \edef\@enumctr{enum\romannumeral\the\@enumdepth}%
-   \list{\csname label\@enumctr\endcsname}{%
+   \expandafter \list \csname label\@enumctr\endcsname{%
       \iftdir
          \ifnum \@listdepth=\@ne \topsep.5\normalbaselineskip
            \else\topsep\z@\fi
@@ -3002,13 +3063,14 @@
 % \changes{v1.0e}{1996/03/14}{縦組時のみに設定するようにした}
 % トップレベルで使われたときに、最初と最後に半行分のスペースを開けるように、
 % 変更します。この環境は、\file{ltlists.dtx}で定義されています。
+% \changes{v1.7a}{2016/11/16}{Use \cs{expandafter}
+%    (sync with ltlists.dtx v1.0j)}
 %    \begin{macrocode}
 \renewenvironment{itemize}
   {\ifnum \@itemdepth >\thr@@\@toodeep\else
    \advance\@itemdepth\@ne
    \edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
-   \expandafter
-   \list{\csname \@itemitem\endcsname}{%
+   \expandafter \list \csname \@itemitem\endcsname{%
       \iftdir
          \ifnum \@listdepth=\@ne \topsep.5\normalbaselineskip
            \else\topsep\z@\fi
@@ -3279,7 +3341,7 @@
       \else #1: #2\relax\par\fi
   \else
     \global \@minipagefalse
-    \hbox to\hsize{\hfil\box\@tempboxa\hfil}%
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
   \fi
   \vskip\belowcaptionskip}
 %    \end{macrocode}
@@ -3581,7 +3643,7 @@
 % |\numberline|マクロを再定義します。
 %    \begin{macrocode}
 \newdimen\@lnumwidth
-\def\numberline#1{\hbox to\@lnumwidth{#1\hfil}}
+\def\numberline#1{\hb@xt@\@lnumwidth{#1\hfil}}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -3590,6 +3652,8 @@
 % 目次の各行間に|\toclineskip|を入れるように変更します。
 % このマクロは\file{ltsect.dtx}で定義されています。
 % \changes{v1.3}{2001/10/04}{第５引数の書体を\cs{rmfamily}から\cs{normalfont}に変更}
+% \changes{v1.7a}{2016/11/16}{Added \cs{nobreak} for
+%    latex/2343 (sync with ltsect.dtx v1.0z)}
 %    \begin{macrocode}
 \def\@dottedtocline#1#2#3#4#5{%
   \ifnum #1>\c@tocdepth \else
@@ -3599,7 +3663,7 @@
      \interlinepenalty\@M
      \leavevmode
      \@lnumwidth #3\relax
-     \advance\leftskip \@lnumwidth \hbox{}\hskip -\leftskip
+     \advance\leftskip \@lnumwidth \null\nobreak\hskip -\leftskip
      {#4}\nobreak
      \leaders\hbox{$\m@th \mkern \@dotsep mu.\mkern \@dotsep mu$}%
      \hfill\nobreak
@@ -3640,6 +3704,11 @@
 %</report|book>
 %<article>  \section*{\contentsname
 %<!article>  \chapter*{\contentsname
+%    \end{macrocode}
+% |\tableofcontents|では、|\@mkboth|はheadingの中に入れてあります。
+% ほかの命令（|\listoffigures|など）については、|\@mkboth|はheadingの
+% 外に出してあります。これは\LaTeX の\file{classes.dtx}に合わせています。
+%    \begin{macrocode}
     \@mkboth{\contentsname}{\contentsname}%
   }\@starttoc{toc}%
 %<report|book>  \if@restonecol\twocolumn\fi
@@ -3661,7 +3730,7 @@
     {\leavevmode\large\bfseries
      \setlength\@lnumwidth{4zw}%
      #1\hfil\nobreak
-     \hbox to\@pnumwidth{\hss#2}}\par
+     \hb@xt@\@pnumwidth{\hss#2}}\par
     \nobreak
 %<article>    \if@compatibility
     \global\@nobreaktrue
@@ -3685,7 +3754,7 @@
       \leavevmode\bfseries
       \setlength\@lnumwidth{4zw}%
       \advance\leftskip\@lnumwidth \hskip-\leftskip
-      #1\nobreak\hfil\nobreak\hbox to\@pnumwidth{\hss#2}\par
+      #1\nobreak\hfil\nobreak\hb@xt@\@pnumwidth{\hss#2}\par
       \penalty\@highpenalty
     \endgroup
   \fi}
@@ -3706,7 +3775,7 @@
       \leavevmode\bfseries
       \setlength\@lnumwidth{1.5em}%
       \advance\leftskip\@lnumwidth \hskip-\leftskip
-      #1\nobreak\hfil\nobreak\hbox to\@pnumwidth{\hss#2}\par
+      #1\nobreak\hfil\nobreak\hb@xt@\@pnumwidth{\hss#2}\par
     \endgroup
   \fi}
 %</article>
@@ -3765,15 +3834,17 @@
 %
 % \begin{macro}{\listoffigures}
 % 図の一覧を作成します。
+% \changes{v1.7}{2016/11/12}{Moved \cs{@mkboth} out of heading
+%                            arg (sync with classes.dtx v1.4c)}
 %    \begin{macrocode}
 \newcommand{\listoffigures}{%
 %<*report|book>
   \if@twocolumn\@restonecoltrue\onecolumn
   \else\@restonecolfalse\fi
-  \chapter*{\listfigurename
+  \chapter*{\listfigurename}%
 %</report|book>
-%<article>    \section*{\listfigurename
-  \@mkboth{\listfigurename}{\listfigurename}}%
+%<article>    \section*{\listfigurename}%
+  \@mkboth{\listfigurename}{\listfigurename}%
   \@starttoc{lof}%
 %<report|book>  \if@restonecol\twocolumn\fi
 }
@@ -3791,15 +3862,17 @@
 % \begin{macro}{\listoftables}
 % \changes{v1.0c}{1995/12/28}{fix the \cs{listoftable} typo.}
 % 表の一覧を作成します。
+% \changes{v1.7}{2016/11/12}{Moved \cs{@mkboth} out of heading
+%                            arg (sync with classes.dtx v1.4c)}
 %    \begin{macrocode}
 \newcommand{\listoftables}{%
 %<*report|book>
   \if@twocolumn\@restonecoltrue\onecolumn
   \else\@restonecolfalse\fi
-  \chapter*{\listtablename
+  \chapter*{\listtablename}%
 %</report|book>
-%<article>    \section*{\listtablename
-  \@mkboth{\listtablename}{\listtablename}}%
+%<article>    \section*{\listtablename}%
+  \@mkboth{\listtablename}{\listtablename}%
   \@starttoc{lot}%
 %<report|book>  \if@restonecol\twocolumn\fi
 }
@@ -3833,10 +3906,12 @@
 %
 % \begin{environment}{thebibliography}
 % 参考文献や関連図書のリストを作成します。
+% \changes{v1.7}{2016/11/12}{Moved \cs{@mkboth} out of heading
+%                            arg (sync with classes.dtx v1.4c)}
 %    \begin{macrocode}
 \newenvironment{thebibliography}[1]
-%<article>{\section*{\refname\@mkboth{\refname}{\refname}}%
-%<report|book>{\chapter*{\bibname\@mkboth{\bibname}{\bibname}}%
+%<article>{\section*{\refname}\@mkboth{\refname}{\refname}%
+%<report|book>{\chapter*{\bibname}\@mkboth{\bibname}{\bibname}%
    \list{\@biblabel{\@arabic\c@enumiv}}%
         {\settowidth\labelwidth{\@biblabel{#1}}%
          \leftmargin\labelwidth
@@ -3893,12 +3968,19 @@
 %    \begin{macrocode}
 \newenvironment{theindex}
   {\if@twocolumn\@restonecolfalse\else\@restonecoltrue\fi
-   \columnseprule\z@ \columnsep 35\p@
 %<article>   \twocolumn[\section*{\indexname}]%
 %<report|book>   \twocolumn[\@makeschapterhead{\indexname}]%
    \@mkboth{\indexname}{\indexname}%
    \thispagestyle{jpl@in}\parindent\z@
+%    \end{macrocode}
+% パラメータ|\columnseprule|と|\columnsep|の変更は、|\twocolumn|が
+% 実行された後でなければなりません。そうしないと、索引の前のページ
+% にも影響してしまうためです。
+% \changes{v1.7}{2016/11/12}{\cs{columnsep}と\cs{columnseprule}の
+%    変更を後ろに移動(sync with classes.dtx v1.4f)}
+%    \begin{macrocode}
    \parskip\z@ \@plus .3\p@\relax
+   \columnseprule\z@ \columnsep 35\p@
    \let\item\@idxitem}
   {\if@restonecol\onecolumn\else\clearpage\fi}
 %    \end{macrocode}
@@ -3929,11 +4011,12 @@
 %
 % \begin{macro}{\footnoterule}
 % 本文と脚注の間に引かれる罫線です。
+% \changes{v1.7}{2016/11/12}{use \cs{@width} (sync with classes.dtx v1.3a)}
 %    \begin{macrocode}
 \renewcommand{\footnoterule}{%
   \kern-3\p@
-  \hrule width .4\columnwidth
-  \kern 2.6\p@}
+  \hrule\@width.4\columnwidth
+  \kern2.6\p@}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -3948,14 +4031,16 @@
 % このマクロにしたがって脚注が組まれます。
 %
 % |\@makefnmark|は脚注記号を組み立てるマクロです。
+% \changes{v1.7}{2016/11/12}{Replaced all \cs{hbox to} by
+%    \cs{hb@xt@} (sync with classes.dtx v1.3a)}
 %    \begin{macrocode}
 %<*tate>
 \newcommand\@makefntext[1]{\parindent 1zw
-  \noindent\hbox to 2zw{\hss\@makefnmark}#1}
+  \noindent\hb@xt@ 2zw{\hss\@makefnmark}#1}
 %</tate>
 %<*yoko>
 \newcommand\@makefntext[1]{\parindent 1em
-  \noindent\hbox to 1.8em{\hss\@makefnmark}#1}
+  \noindent\hb@xt@ 1.8em{\hss\@makefnmark}#1}
 %</yoko>
 %    \end{macrocode}
 % \end{macro}
