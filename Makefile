@@ -82,7 +82,7 @@ tascmac.sty: $(ASCMAC_SRC)
 jltxdoc.cls: jltxdoc.dtx
 	rm -f jltxdoc.cls pldoc.tex Xins.ins
 	platex $(KANJI) pldocs.ins
-	rm pldoc.tex Xins.ins
+	rm pldocs.log pldoc.tex Xins.ins
 
 platex.dvi: $(INTRODOC_SRC)
 	platex $(KANJI) platex.dtx

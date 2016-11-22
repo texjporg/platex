@@ -569,7 +569,7 @@
 % \begin{macro}{\Cwd}
 % \begin{macro}{\Cvs}
 % \begin{macro}{\Chs}
-% 基準となる長さの設定をします。これらのパラメータは\file{platex.dtx}で定義
+% 基準となる長さの設定をします。これらのパラメータは\file{plfonts.dtx}で定義
 % されています。
 %    \begin{macrocode}
 \setbox0\hbox{\char\euc"A1A1}%
@@ -1608,7 +1608,7 @@
 %
 % \section{ページスタイル}\label{sec:pagestyle}
 % p\LaTeXe{}では、つぎの6種類のページスタイルを使用できます。
-% \pstyle{empty}は\file{latex.dtx}で定義されています。 
+% \pstyle{empty}は\file{ltpage.dtx}で定義されています。
 %
 % \begin{tabular}{ll}
 % empty      & ヘッダにもフッタにも出力しない\\
@@ -1629,10 +1629,10 @@
 %
 % \DeleteShortVerb{\|}
 % \begin{tabular}{ll}
-% |\@oddhead| & 奇数ページのヘッダを出力\\
-% |\@oddfoot| & 奇数ページのフッタを出力\\
-% |\@evenhead| & 偶数ページのヘッダを出力\\
-% |\@evenfoot| & 偶数ページのフッタを出力\\
+%   \cs{@oddhead} & 奇数ページのヘッダを出力\\
+%   \cs{@oddfoot} & 奇数ページのフッタを出力\\
+%   \cs{@evenhead} & 偶数ページのヘッダを出力\\
+%   \cs{@evenfoot} & 偶数ページのフッタを出力\\
 % \end{tabular}
 % \MakeShortVerb{\|}
 %
@@ -1679,9 +1679,9 @@
 % \changes{v1.0a}{1995/08/30}{柱の書体がノンブルに影響するバグの修正}
 %
 % \subsection{plainページスタイル}
-% \pstyle{jpl@in}に|\let|するために、ここで定義をします。
 %
 % \begin{macro}{\ps@plain}
+% \pstyle{jpl@in}に|\let|するために、ここで定義をします。
 %    \begin{macrocode}
 \def\ps@plain{\let\@mkboth\@gobbletwo
    \let\ps@jpl@in\ps@plain
@@ -1693,6 +1693,8 @@
 % \end{macro}
 %
 % \subsection{jpl@inページスタイル}
+%
+% \begin{macro}{\ps@jpl@in}
 % \changes{v1.0d}{1996/02/29}{\pstyle{jpl@in}の初期値を定義}
 %
 % \pstyle{jpl@in}スタイルは、クラスファイル内部で使用するものです。
@@ -1708,8 +1710,6 @@
 % 出力されます。
 %
 % ここで、定義をしているのは、その初期値です。
-%
-% \begin{macro}{\ps@jpl@in}
 %    \begin{macrocode}
 \let\ps@jpl@in\ps@plain
 %    \end{macrocode}
@@ -1922,7 +1922,7 @@
 % \begin{macro}{\author}
 % \begin{macro}{\date}
 % 文書のタイトル、著者、日付の情報のための、
-% これらの３つのコマンドは\file{latex.dtx}で提供されています。
+% これらの３つのコマンドは\file{ltsect.dtx}で提供されています。
 % これらのコマンドは次のように定義されています。
 %    \begin{macrocode}
 %\newcommand*{\title}[1]{\gdef\@title{#1}}
@@ -2173,7 +2173,7 @@
 % \begin{macro}{\subparagraphmark}
 % |\...mark|コマンドを初期化します。これらのコマンドはページスタイルの
 % 定義で使われます（第\ref{sec:pagestyle}節参照）。
-% これらのたいていのコマンドは\file{latex.dtx}ですでに定義されています。
+% これらのたいていのコマンドは\file{ltsect.dtx}ですでに定義されています。
 %    \begin{macrocode}
 %<!article>\newcommand*{\chaptermark}[1]{}
 %\newcommand*{\sectionmark}[1]{}
@@ -3952,7 +3952,7 @@
 %
 % \begin{macro}{\@cite}
 %    The output of the |\cite| command is produced by this macro. The
-%    default from \file{latex.dtx} is used.
+%    default from \file{ltbibl.dtx} is used.
 %    \begin{macrocode}
 % \renewcommand*{\@cite}[1]{[#1]}
 %    \end{macrocode}
