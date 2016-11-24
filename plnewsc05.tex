@@ -1,0 +1,87 @@
+%% <2016/11/29>
+\documentclass{plnews}
+
+\publicationyear{2016}% 発行年
+\publicationmonth{11}% 発行月
+\publicationissue{c5}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\pTeX{p\kern-.15em\TeX}
+\def\eTeX{$\varepsilon$-\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+
+\begin{document}
+
+\maketitle
+
+この文書はコミュニティ版\pLaTeXe\ \texttt{<2016/11/29>}について、
+\pLaTeXe\ \texttt{<2016/09/08>}からの更新箇所をまとめたものです。
+
+
+\section{\epTeX{}拡張の活用}
+2015年以降の\LaTeX{}カーネルは、\eTeX{}などのエンジン拡張が利用可能ならば利用
+するという方針をとっています。\epTeX{}の場合、利用可能な数式ファミリの上限が
+16から256に増えています（通称「FAM256パッチ」）ので、\pLaTeX{}ではこれを活用
+しやすくする設定を加えました。
+数式用アルファベットを使うだけなら、|\DeclareMathAlphabet|をたくさん使っても
+\begin{verbatim}
+  ! LaTeX Error: Too many math alphabets
+    used in version normal.
+\end{verbatim}
+というエラーが出にくくなるはずです。
+
+なお、|\DeclareMathSymbol|などの記号類の定義に使用する命令は、\LaTeX{}カーネル
+で拡張が行われていませんので、\pLaTeX{}でも拡張は行いません。シンボルフォント
+を多数使用したい場合は、別途コードを書く必要があります（参考：eptexdoc.pdf）。
+
+
+\section{\file{jclasses}の\file{classes}への追随}
+\file{jclasses}（jarticle、jbook、tarticleなど）の\pLaTeX{}標準クラスを、元と
+なった\file{classes}（article、bookなど）に加えられたバグ修正に追随させました。
+
+主な修正は以下のとおりです。
+\begin{itemize}
+\item |\listof{figures,tables}|、|thebibliography|でヘッダに
+      「図目次」などではなく直前のタイトルが入ることがあるバグの修正
+\item 索引の一つ前のページで|\columnsep|と|\columnseprule|が本来より早く
+      リセットされてしまうバグの修正
+\item |\part|が前の文章から改段落されなかったり、目次の順序が入れ替わっ
+      たりするバグの修正
+\end{itemize}
+なお、\file{classes}では|\frontmatter|と|\mainmatter|の|openany|オプション
+指定時の挙動が変更されています（|openright|と共通に、|\cleardoublepage|する
+ようになりました）が、この変更への追随は行いませんでした。
+詳細は\file{jclasses.dtx}を参照してください。
+
+
+\section{\file{plext}の\LaTeX{}への追随と修正}
+\file{plext}パッケージが\LaTeX{}から拡張した命令に対しても、\LaTeX{}側の
+バグ修正への追随を施しました。主な修正は以下のとおりです。
+\begin{itemize}
+\item |\parbox|のオプション引数判定の改善
+\item |tabular*|と|\parbox|の寸法取得コードを改善
+\end{itemize}
+また、|\rensuji|を横組で段落の頭に使うと正しく動作しないバグも修正しました。
+
+
+\section{開発版のテストのお願い}
+今後p\LaTeX{}に導入するかもしれない修正パッチや仕様変更のテストにご協力くだ
+さい。\TeX{}ファイルの冒頭（|\documentclass|より前）で
+\begin{verbatim}
+  \RequirePackage{exppl2e}
+\end{verbatim}
+と書くことで、現在の開発版をテストすることができます。
+現在は、「アクセント文字パッチ」と「|\strutbox|パッチ」
+% ベースライン補正がゼロでないときのアクセント合成文字を修正する
+% 支柱で用いられる|\strutbox|の縦組時挙動を修正する
+が入っています。詳細は\file{exppl2e.pdf}を参照してください。
+バグ報告やご意見を歓迎します。
+\TeX\ ForumやGitHubのIssueシステムが利用できます。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
