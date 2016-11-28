@@ -456,7 +456,7 @@
 % 変化してしまいますので、とりあえずコメントアウトしておきます。
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{????/??/??}{\@gnewline}
-%<platexrelease>                   {Hyphenation of a word before |\\|}%
+%<platexrelease>                   {Restore Underfull warning for |\\\par|}%
 %<*plcore|platexrelease>
 %\def\@gnewline #1{%
 %  \ifvmode
@@ -468,7 +468,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@gnewline}
-%<platexrelease>                   {Hyphenation of a word before |\\|}%
+%<platexrelease>                   {Restore Underfull warning for |\\\par|}%
 %<platexrelease>\def\@gnewline #1{%
 %<platexrelease>  \ifvmode
 %<platexrelease>    \@nolnerr
