@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2016/11/06 v1.0g Experimental pLaTeX2e features]
+                [2016/11/29 v1.0h Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -430,114 +430,11 @@
 %
 % \section{e-p\TeX{}でのFAM256パッチの利用}
 %
-% \begin{macro}{\e@alloc@chardef}
-% \begin{macro}{\e@alloc@top}
-% \LaTeXe\ 2015/01/01以降、拡張レジスタがあれば利用するようになっています
-% ので、e-p\TeX{}の拡張レジスタを利用できるように設定します。
-% \changes{v????}{????/??/??}{FAM256パッチ適用e-p\TeX{}に対応}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}%
-%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
-%<*plcore|platexrelease>
-%    \end{macrocode}
-%    \begin{macrocode}
-\ifx\omathchar\@undefined
-  \ifx\widowpenalties\@undefined
-%    \end{macrocode}
-% オリジナルの\TeX{}の場合（拡張なしのアスキーp\TeX{}の場合）。
-%    \begin{macrocode}
-    \mathchardef\e@alloc@top=255
-    \let\e@alloc@chardef\chardef
-  \else
-%    \end{macrocode}
-% e-\TeX{}拡張で$2^{15}$個のレジスタが利用できます。
-% ^^A 「FAM256なしのe-(u)p\TeX{}」は事実上存在しないはず。
-% ^^A ただし、たとえばe-(u)p\TeX{}をベースにした
-% ^^A p\TeX{}-ng (Asiatic pTeX)はe-\TeX{}拡張を持っていて、
-% ^^A FAM256パッチは適用されていないため、ここに該当する。
-% ^^A   cf: https://github.com/clerkma/ptex-ng
-% ^^A なお、p\TeX{}-ngはe-p\TeX{}と同様にpdf\TeX{}拡張の
-% ^^A 一部（e-p\TeX{}と範囲が一致しない）を持っていること、
-% ^^A また|\lastnodechar|などのe-p\TeX{}独自のプリミティブを
-% ^^A 持っていないことにも注意。
-%    \begin{macrocode}
-    \mathchardef\e@alloc@top=32767
-    \let\e@alloc@chardef\mathchardef
-  \fi
-\else
-%    \end{macrocode}
-% FAM256パッチが適用されたe-p\TeX{}の場合は、$2^{16}$個のレジスタが利用できます。
-%    \begin{macrocode}
-  \ifx\enablecjktoken\@undefined % pTeX
-    \omathchardef\e@alloc@top=65535
-    \let\e@alloc@chardef\omathchardef
-  \else                          % upTeX
-    \chardef\e@alloc@top=65535
-    \let\e@alloc@chardef\chardef
-  \fi
-\fi
-%    \end{macrocode}
-%    \begin{macrocode}
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2015/01/01}%
-%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
-%<platexrelease>\ifx\widowpenalties\@undefined
-%<platexrelease>  \mathchardef\e@alloc@top=255
-%<platexrelease>  \let\e@alloc@chardef\chardef
-%<platexrelease>\else
-%<platexrelease>  \mathchardef\e@alloc@top=32767
-%<platexrelease>  \let\e@alloc@chardef\mathchardef
-%<platexrelease>\fi
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}%
-%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
-%<platexrelease>\let\e@alloc@top\@undefined
-%<platexrelease>\let\e@alloc@chardef\@undefined
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
-% \end{macro}
-%
-% \begin{macro}{\e@mathgroup@top}
-% 2015/01/01以降の\LaTeXe{}カーネルは、Xe\TeX{}とLua\TeX{}に対して数式famの
-% 上限を16から256に増やしています（|\Umathcode| で判定）。
-% FAM256パッチが適用されたe-p\TeX{}でも同様に上限を16から256に増やします。
-% これで
-%\begin{verbatim}
-%  ! LaTeX Error: Too many math alphabets used in version normal.
-%\end{verbatim}
-% が出にくくなるはずです。
-% \changes{v????}{????/??/??}{FAM256パッチ適用e-p\TeX{}に対応}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}%
-%<platexrelease>                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
-%<*plcore|platexrelease>
-%    \end{macrocode}
-%    \begin{macrocode}
-\ifx\omathchar\@undefined
-  \chardef\e@mathgroup@top=16 % LaTeX2e kernel standard
-\else
-  \mathchardef\e@mathgroup@top=256 % for e-pTeX FAM256 patched
-\fi
-%    \end{macrocode}
-%    \begin{macrocode}
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2015/01/01}%
-%<platexrelease>                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
-%<platexrelease>\chardef\e@mathgroup@top=16
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}%
-%<platexrelease>                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
-%<platexrelease>\let\e@mathgroup@top\@undefined
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
+% p\LaTeXe{}カーネル(2016/11/29)に導入したため削除。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \section{強制改行の直前の単語のハイフネーション}
+% \section{強制改行と\cs{par}}
 %
 % \begin{macro}{\@gnewline}
 % 従来、p\LaTeX では
@@ -548,25 +445,26 @@
 % のように行頭禁則文字の直前で強制改行を行えるようにするため
 % |\null|を|\@gnewline|マクロ内に挿入していました。
 %
-% しかし、これでは|\\|の直前の単語でハイフネーションが行われないという
-% 問題が発生します（\texttt{tests/hyphtest0.tex}を\texttt{latex}と
-% \texttt{platex}で処理してみてください）ので、
-% |\null|の代わりに|\hskip\z@|を重ねる形で対応します。
+% しかし、これでは|\\\par|と書いた場合にUnderfull警告が出なくなり
+% ます（|tests/newline_par.tex|を\texttt{latex}と\texttt{platex}で
+% 処理してみてください）ので、|\null|の代わりに|\hskip\z@|を重ねる
+% 形で対応します。
 %
 % ただし、従来の|\null|を挿入した場合と異なり、強制改行後の行頭に
-% JFMグル―が入らなくなります。この挙動は、奥村さんのjsclassesで
-% 行頭を天ツキに直しているのと同じです。
+% JFMグル―が入らなくなります。これはむしろ、奥村さんのjsclassesで
+% 行頭を天ツキに直しているのと同じですが、p\LaTeX{}としては挙動が
+% 変化してしまいますので、とりあえずコメントアウトしておきます。
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{????/??/??}{\@gnewline}
 %<platexrelease>                   {Hyphenation of a word before |\\|}%
 %<*plcore|platexrelease>
-\def\@gnewline #1{%
-  \ifvmode
-    \@nolnerr
-  \else
-    \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \hskip \z@
-    \ignorespaces
-  \fi}
+%\def\@gnewline #1{%
+%  \ifvmode
+%    \@nolnerr
+%  \else
+%    \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \hskip \z@
+%    \ignorespaces
+%  \fi}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@gnewline}
