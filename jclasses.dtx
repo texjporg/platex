@@ -76,6 +76,8 @@
 % \changes{v1.7a}{2016/11/16}{Use \cs{expandafter}
 %    (sync with ltlists.dtx v1.0j)}
 % \changes{v1.7b}{2016/11/22}{補足ドキュメントを追加}
+% \changes{v1.7c}{2016/12/18}{Only add empty page after part if
+%    twoside and openright (sync with classes.dtx v1.4b)}
 % \fi
 %
 % \iffalse
@@ -105,7 +107,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2016/11/22 v1.7b
+  [2016/12/18 v1.7c
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -2532,10 +2534,19 @@
 % |\@part|と|\@spart|の最後で実行されるマクロです。
 % 両面印刷モードのときは、白ページを追加します。
 % 二段組モードのときには、これ以降のページを二段組に戻します。
+% 2016年12月から、|openany| のときに白ページを追加するのをやめました。
+% このバグは\LaTeX{}ではclasses.dtx v1.4b (2000/05/19)で修正されていました。
+% （参考：latex/3155、texjporg/jsclasses\#48）
+% \changes{v1.7c}{2016/12/18}{Only add empty page after part if
+%    twoside and openright (sync with classes.dtx v1.4b)}
 %    \begin{macrocode}
 %<*report|book>
 \def\@endpart{\vfil\newpage
-   \if@twoside\null\thispagestyle{empty}\newpage\fi
+  \if@twoside
+   \if@openright %% added (2016/12/18)
+    \null\thispagestyle{empty}\newpage
+   \fi %% added (2016/12/18)
+  \fi
 %    \end{macrocode}
 % 二段組文書のとき、スイッチを二段組モードに戻す必要があります。
 %    \begin{macrocode}

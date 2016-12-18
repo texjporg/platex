@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesClass{tbook}
-  [2016/11/22 v1.7b
+  [2016/12/18 v1.7c
  Standard pLaTeX class]
 \newcounter{@paper}
 \newif\if@landscape \@landscapefalse
@@ -421,7 +421,11 @@
   \Huge\bfseries#1\par}%
   \@endpart}
 \def\@endpart{\vfil\newpage
-   \if@twoside\null\thispagestyle{empty}\newpage\fi
+  \if@twoside
+   \if@openright %% added (2016/12/18)
+    \null\thispagestyle{empty}\newpage
+   \fi %% added (2016/12/18)
+  \fi
    \if@tempswa\twocolumn\fi}
 \newcommand{\chapter}{%
   \if@openright\cleardoublepage\else\clearpage\fi
