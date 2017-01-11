@@ -29,21 +29,17 @@ See the documents (platex.pdf, pldoc.pdf, platexrelease.pdf) for more informatio
 A brief exposition of pLaTeX2e is provided in platex.pdf.
 The document can be obtained by executing the following commands:
 
-~~~~
-  platex platex.dtx
-  dvipdfmx platex.dvi
-~~~~
+    platex platex.dtx
+    dvipdfmx platex.dvi
 
 The comprehensive explanation of pLaTeX2e source is included in
 pldoc.pdf. If you are interested in typesetting pldoc.tex yourself,
 the following commands will be helpful:
 
-~~~~
-  platex pldocs.ins
-  platex Xins.ins
-  sh mkpldoc.sh
-  dvipdfmx pldoc.dvi
-~~~~
+    platex pldocs.ins
+    platex Xins.ins
+    sh mkpldoc.sh
+    dvipdfmx pldoc.dvi
 
 ## Character encoding
 
