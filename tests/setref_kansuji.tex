@@ -1,0 +1,13 @@
+%#!ptex2pdf -l setref_kansuji
+\documentclass{jarticle}
+\makeatletter
+\renewcommand{\thesection}{\kansuji\c@section}
+\makeatother
+\begin{document}
+% explicitly large kanjiskip for visualization
+\kanjiskip10pt
+\tableofcontents
+\section{ほげ}\label{sec:hoge}
+\section{第\ref{sec:hoge}節へのアンチテーゼ}
+\section{第\ref{sec:hoge}ページへのアンチテーゼ}
+\end{document}
