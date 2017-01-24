@@ -2,7 +2,7 @@
 %
 % This is file `exppl2e.sty', for experimental pLaTeX2e.
 %
-% Copyright (c) 2016 Japanese TeX Development Community
+% Copyright (c) 2016-2017 Japanese TeX Development Community
 %
 % This file is part of the pLaTeX2e system (community edition).
 % -------------------------------------------------------------
@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2016/11/29 v1.0h Experimental pLaTeX2e features]
+                [2017/01/24 v1.0i Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -475,6 +475,53 @@
 %<platexrelease>  \else
 %<platexrelease>    \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \null
 %<platexrelease>    \ignorespaces
+%<platexrelease>  \fi}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \section{相互参照}
+%
+% \begin{macro}{\@setref}
+% \changes{v1.1c}{1995/09/07}{change \cs{null} to \cs{relax} in \cs{@setref}.}
+% \changes{v????}{????/??/??}{目次で\cs{ref}を使った場合に後ろの空白が消える
+%    現象に対処するため、\cs{relax}のあとに\{\}を追加}
+% |\ref|コマンドや|\pageref|コマンドで参照したとき、これらのコマンドに
+% よって出力された番号と続く２バイト文字との間に|\xkanjiskip|が入りません。
+% これは、|\null|が|\hbox{}|と定義されているためです。
+% そこで|\null|を取り除きます。
+% このコマンドは、\file{ltxref.dtx}で定義されているものです。
+%
+% しかし、単に|\null|を|\relax|に置き換えるだけでは、|\section|のような
+% 「動く引数」で|\ref|などを使った場合に、目次で後ろの空白が消えてしまいます。
+% そこで、|\relax|のあとに|{}|を追加しました。
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\@setref}
+%<platexrelease>                   {Spacing after \ref in moving arguments}%
+%<*plcore|platexrelease>
+\def\@setref#1#2#3{%
+  \ifx#1\relax
+    \protect\G@refundefinedtrue
+    \nfss@text{\reset@font\bfseries ??}%
+    \@latex@warning{Reference `#3' on page \thepage \space
+              undefined}%
+  \else
+    \expandafter#2#1\relax{}% change \null to \relax{}
+  \fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@setref}
+%<platexrelease>                   {Spacing after \ref in moving arguments}%
+%<platexrelease>\def\@setref#1#2#3{%
+%<platexrelease>  \ifx#1\relax
+%<platexrelease>    \protect\G@refundefinedtrue
+%<platexrelease>    \nfss@text{\reset@font\bfseries ??}%
+%<platexrelease>    \@latex@warning{Reference `#3' on page \thepage \space
+%<platexrelease>              undefined}%
+%<platexrelease>  \else
+%<platexrelease>    \expandafter#2#1\relax% change \null to \relax
 %<platexrelease>  \fi}
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
