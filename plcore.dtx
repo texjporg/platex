@@ -3,7 +3,7 @@
 %
 %  Copyright 1994-2001 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016 Japanese TeX Development Community
+%  Copyright (c) 2016-2017 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -1134,6 +1134,8 @@
 %
 %
 % \subsection{tabbing環境}
+%
+% \begin{macro}{\@stopfield}
 % \changes{v1.1d}{1996/03/12}{\cs{=}の後ろに和欧文間スペースが入るのを修正}
 % 相互参照や疑似タイプ入力では、和欧文間スペースが入らないので、|\null|を
 % 取り除きましたが、|tabbing|環境では、逆に|\null|がないため、
@@ -1142,6 +1144,7 @@
 %    \begin{macrocode}
 \gdef\@stopfield{\null\color@endgroup\egroup}
 %    \end{macrocode}
+% \end{macro}
 %
 % \subsection{用語集の出力}
 % \LaTeX{}には、なぜか用語集を出力するためのコマンドがありませんので、
