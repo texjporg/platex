@@ -1776,9 +1776,9 @@
 %<*report|book>
   \def\chaptermark##1{\markboth{%
      \ifnum \c@secnumdepth >\m@ne
-%<book>         \if@mainmatter
+%<book>       \if@mainmatter
          \@chapapp\thechapter\@chappos\hskip1zw
-%<book>         \fi
+%<book>       \fi
      \fi
      ##1}{}}%
   \def\sectionmark##1{\markright{%
@@ -1805,9 +1805,9 @@
 %<*report|book>
 \def\chaptermark##1{\markright{%
    \ifnum \c@secnumdepth >\m@ne
-%<book>         \if@mainmatter
+%<book>     \if@mainmatter
        \@chapapp\thechapter\@chappos\hskip1zw
-%<book>         \fi
+%<book>     \fi
    \fi
    ##1}}%
 %</report|book>
@@ -1852,9 +1852,9 @@
 %<*report|book>
 \def\chaptermark##1{\markboth{%
      \ifnum \c@secnumdepth >\m@ne
-%<book>         \if@mainmatter
+%<book>       \if@mainmatter
          \@chapapp\thechapter\@chappos\hskip1zw
-%<book>         \fi
+%<book>       \fi
      \fi
      ##1}{}}%
   \def\sectionmark##1{\markright{%
@@ -1883,9 +1883,9 @@
 %<*report|book>
   \def\chaptermark##1{\markright{%
      \ifnum \c@secnumdepth >\m@ne
-%<book>         \if@mainmatter
+%<book>       \if@mainmatter
          \@chapapp\thechapter\@chappos\hskip1zw
-%<book>         \fi
+%<book>       \fi
      \fi
      ##1}}%
 %</report|book>
@@ -1952,7 +1952,7 @@
 \if@compatibility
 \newenvironment{titlepage}
     {%
-%<book>      \cleardoublepage
+%<book>     \cleardoublepage
      \if@twocolumn\@restonecoltrue\onecolumn
      \else\@restonecolfalse\newpage\fi
      \thispagestyle{empty}%
@@ -3463,7 +3463,7 @@
 %
 % \changes{v1.6}{2006/06/27}{フォントコマンドを修正。ありがとう、ymtさん。}
 %    p\LaTeX{} 2.09
-%    compatibility mode では和文数式フォントfamが2重定義されていた
+%    compatibility modeでは和文数式フォントfamが2重定義されていた
 %    ので、その部分を変更しました。
 %    \begin{macrocode}
 \if@enablejfam
