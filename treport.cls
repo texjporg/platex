@@ -428,7 +428,7 @@
 \newcommand{\@chapapp}{\prechaptername}
 \newcommand{\@chappos}{\postchaptername}
 \newcommand{\part}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi
   \thispagestyle{empty}%
   \if@twocolumn\onecolumn\@tempswatrue\else\@tempswafalse\fi
   \null\vfil
@@ -463,7 +463,7 @@
   \fi
    \if@tempswa\twocolumn\fi}
 \newcommand{\chapter}{%
-  \if@openright\cleardoublepage\else\clearpage\fi
+  \if@openright\pltx@cleartorightpage\else\clearpage\fi
   \thispagestyle{jpl@in}%
   \global\@topnum\z@
   \@afterindenttrue

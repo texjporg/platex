@@ -2019,7 +2019,7 @@
 \if@compatibility
 \newenvironment{titlepage}
     {%
-%<book>     \cleardoublepage
+%<book>     \pltx@cleartorightpage
      \if@twocolumn\@restonecoltrue\onecolumn
      \else\@restonecolfalse\newpage\fi
      \thispagestyle{empty}%
@@ -2034,7 +2034,7 @@
 \else
 \newenvironment{titlepage}
     {%
-%<book>      \cleardoublepage
+%<book>      \pltx@cleartorightpage
       \if@twocolumn
         \@restonecoltrue\onecolumn
       \else
@@ -2412,13 +2412,13 @@
 %    \begin{macrocode}
 %<*book>
 \newcommand{\frontmatter}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi
   \@mainmatterfalse\pagenumbering{roman}}
 \newcommand{\mainmatter}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi
   \@mainmattertrue\pagenumbering{arabic}}
 \newcommand{\backmatter}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi
   \@mainmatterfalse}
 %</book>
 %    \end{macrocode}
@@ -2510,7 +2510,7 @@
 %    \begin{macrocode}
 %<*report|book>
 \newcommand{\part}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi
   \thispagestyle{empty}%
   \if@twocolumn\onecolumn\@tempswatrue\else\@tempswafalse\fi
   \null\vfil
@@ -2645,7 +2645,7 @@
 %    \begin{macrocode}
 %<*report|book>
 \newcommand{\chapter}{%
-  \if@openright\cleardoublepage\else\clearpage\fi
+  \if@openright\pltx@cleartorightpage\else\clearpage\fi
   \thispagestyle{jpl@in}%
   \global\@topnum\z@
   \@afterindenttrue

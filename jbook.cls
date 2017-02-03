@@ -280,7 +280,7 @@
 \if@compatibility
 \newenvironment{titlepage}
     {%
-     \cleardoublepage
+     \pltx@cleartorightpage
      \if@twocolumn\@restonecoltrue\onecolumn
      \else\@restonecolfalse\newpage\fi
      \thispagestyle{empty}%
@@ -291,7 +291,7 @@
 \else
 \newenvironment{titlepage}
     {%
-      \cleardoublepage
+      \pltx@cleartorightpage
       \if@twocolumn
         \@restonecoltrue\onecolumn
       \else
@@ -414,16 +414,16 @@
 \newcommand{\@chapapp}{\prechaptername}
 \newcommand{\@chappos}{\postchaptername}
 \newcommand{\frontmatter}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi
   \@mainmatterfalse\pagenumbering{roman}}
 \newcommand{\mainmatter}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi
   \@mainmattertrue\pagenumbering{arabic}}
 \newcommand{\backmatter}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi
   \@mainmatterfalse}
 \newcommand{\part}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi
   \thispagestyle{empty}%
   \if@twocolumn\onecolumn\@tempswatrue\else\@tempswafalse\fi
   \null\vfil
@@ -458,7 +458,7 @@
   \fi
    \if@tempswa\twocolumn\fi}
 \newcommand{\chapter}{%
-  \if@openright\cleardoublepage\else\clearpage\fi
+  \if@openright\pltx@cleartorightpage\else\clearpage\fi
   \thispagestyle{jpl@in}%
   \global\@topnum\z@
   \@afterindenttrue
