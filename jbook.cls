@@ -24,6 +24,7 @@
 \newif\if@titlepage
 \@titlepagetrue
 \newif\if@openright
+\newif\if@openleft
 \newif\if@mainmatter \@mainmattertrue
 \hour\time \divide\hour by 60\relax
 \@tempcnta\hour \multiply\@tempcnta 60\relax
@@ -106,8 +107,9 @@
 \if@compatibility
 \@openrighttrue
 \else
-\DeclareOption{openright}{\@openrighttrue}
-\DeclareOption{openany}{\@openrightfalse}
+\DeclareOption{openright}{\@openrighttrue\@openleftfalse}
+\DeclareOption{openleft}{\@openlefttrue\@openrightfalse}
+\DeclareOption{openany}{\@openrightfalse\@openleftfalse}
 \fi
 \DeclareOption{leqno}{\input{leqno.clo}}
 \DeclareOption{fleqn}{\input{fleqn.clo}}
@@ -414,16 +416,20 @@
 \newcommand{\@chapapp}{\prechaptername}
 \newcommand{\@chappos}{\postchaptername}
 \newcommand{\frontmatter}{%
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi
+  \if@openleft \pltx@cleartoleftpage \else
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
   \@mainmatterfalse\pagenumbering{roman}}
 \newcommand{\mainmatter}{%
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi
+  \if@openleft \pltx@cleartoleftpage \else
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
   \@mainmattertrue\pagenumbering{arabic}}
 \newcommand{\backmatter}{%
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi
+  \if@openleft \pltx@cleartoleftpage \else
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
   \@mainmatterfalse}
 \newcommand{\part}{%
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi
+  \if@openleft \pltx@cleartoleftpage \else
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
   \thispagestyle{empty}%
   \if@twocolumn\onecolumn\@tempswatrue\else\@tempswafalse\fi
   \null\vfil
@@ -452,13 +458,16 @@
   \@endpart}
 \def\@endpart{\vfil\newpage
   \if@twoside
-   \if@openright %% added (2016/12/18)
+   \if@openleft %% \if@openleft added (????/??/??)
     \null\thispagestyle{empty}\newpage
-   \fi %% added (2016/12/18)
+   \else\if@openright %% \if@openright added (2016/12/18)
+    \null\thispagestyle{empty}\newpage
+   \fi\fi %% added (2016/12/18, ????/??/??)
   \fi
    \if@tempswa\twocolumn\fi}
 \newcommand{\chapter}{%
-  \if@openright\pltx@cleartorightpage\else\clearpage\fi
+  \if@openleft \pltx@cleartoleftpage \else
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
   \thispagestyle{jpl@in}%
   \global\@topnum\z@
   \@afterindenttrue

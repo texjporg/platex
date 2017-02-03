@@ -195,11 +195,23 @@
 % \end{macro}
 %
 % \begin{macro}{\if@openright}
-% chapterレベルを奇数ページからはじめるかどうかのスイッチです。
+% chapterレベルを右ページからはじめるかどうかのスイッチです。
+% 横組では奇数ページ、縦組では偶数ページから始まることになります。
 % reportクラスのデフォルトは、``no''です。
 % bookクラスのデフォルトは、``yes''です。
 %    \begin{macrocode}
 %<!article>\newif\if@openright
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\if@openleft}
+% chapterレベルを左ページからはじめるかどうかのスイッチです。
+% 日本語\TeX{}開発コミュニティ版で新たに追加されました。
+% 横組では偶数ページ、縦組では奇数ページから始まることになります。
+% reportクラスとbookクラスの両方で、デフォルトは``no''です。
+% \changes{v1.7d}{????/??/??}{\cs{if@openleft}スイッチ追加}
+%    \begin{macrocode}
+%<!article>\newif\if@openleft
 %    \end{macrocode}
 % \end{macro}
 %
@@ -391,12 +403,15 @@
 % \subsection{右左起こしオプション}
 % chapterを右ページあるいは左ページから
 % はじめるかどうかを指定するオプションです。
+% |openleft|オプションは日本語\TeX{}開発コミュニティによって追加されました。
+% \changes{v1.7d}{????/??/??}{openleftオプション追加}
 %    \begin{macrocode}
 %<!article>\if@compatibility
 %<book>\@openrighttrue
 %<!article>\else
-%<!article>\DeclareOption{openright}{\@openrighttrue}
-%<!article>\DeclareOption{openany}{\@openrightfalse}
+%<!article>\DeclareOption{openright}{\@openrighttrue\@openleftfalse}
+%<!article>\DeclareOption{openleft}{\@openlefttrue\@openrightfalse}
+%<!article>\DeclareOption{openany}{\@openrightfalse\@openleftfalse}
 %<!article>\fi
 %    \end{macrocode}
 %
@@ -2412,13 +2427,16 @@
 %    \begin{macrocode}
 %<*book>
 \newcommand{\frontmatter}{%
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi
+  \if@openleft \pltx@cleartoleftpage \else
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
   \@mainmatterfalse\pagenumbering{roman}}
 \newcommand{\mainmatter}{%
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi
+  \if@openleft \pltx@cleartoleftpage \else
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
   \@mainmattertrue\pagenumbering{arabic}}
 \newcommand{\backmatter}{%
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi
+  \if@openleft \pltx@cleartoleftpage \else
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
   \@mainmatterfalse}
 %</book>
 %    \end{macrocode}
@@ -2510,7 +2528,8 @@
 %    \begin{macrocode}
 %<*report|book>
 \newcommand{\part}{%
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi
+  \if@openleft \pltx@cleartoleftpage \else
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
   \thispagestyle{empty}%
   \if@twocolumn\onecolumn\@tempswatrue\else\@tempswafalse\fi
   \null\vfil
@@ -2614,9 +2633,11 @@
 %<*report|book>
 \def\@endpart{\vfil\newpage
   \if@twoside
-   \if@openright %% added (2016/12/18)
+   \if@openleft %% \if@openleft added (????/??/??)
     \null\thispagestyle{empty}\newpage
-   \fi %% added (2016/12/18)
+   \else\if@openright %% \if@openright added (2016/12/18)
+    \null\thispagestyle{empty}\newpage
+   \fi\fi %% added (2016/12/18, ????/??/??)
   \fi
 %    \end{macrocode}
 % 二段組文書のとき、スイッチを二段組モードに戻す必要があります。
@@ -2645,7 +2666,8 @@
 %    \begin{macrocode}
 %<*report|book>
 \newcommand{\chapter}{%
-  \if@openright\pltx@cleartorightpage\else\clearpage\fi
+  \if@openleft \pltx@cleartoleftpage \else
+  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
   \thispagestyle{jpl@in}%
   \global\@topnum\z@
   \@afterindenttrue
