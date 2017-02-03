@@ -1999,10 +1999,14 @@
 % 縦組のときは、|\thanks|コマンドを|\p@thanks|に|\let|します。
 % このコマンドは|\footnotetext|を使わず、直接、文字を|\@thanks|に格納
 % していきます。
+%
+% 著者名の脇に表示される合印は直立した数字、注釈側は横に寝た数字となっていまし
+% たが、不自然なので|\hbox{\yoko ...}|を追加し、両方とも直立するようにしました。
+% \changes{v1.7d}{????/??/??}{縦組クラスの表紙を縦書きにするようにした}
 %    \begin{macrocode}
 \def\p@thanks#1{\footnotemark
   \protected@xdef\@thanks{\@thanks
-    \protect{\noindent$\m@th^\thefootnote$~#1\protect\par}}}
+    \protect{\noindent\hbox{\yoko$\m@th^\thefootnote$}#1\protect\par}}}
 %    \end{macrocode}
 % \end{macro}
 %

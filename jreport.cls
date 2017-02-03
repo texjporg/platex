@@ -262,7 +262,7 @@
 \fi
 \def\p@thanks#1{\footnotemark
   \protected@xdef\@thanks{\@thanks
-    \protect{\noindent$\m@th^\thefootnote$~#1\protect\par}}}
+    \protect{\noindent\hbox{\yoko$\m@th^\thefootnote$}#1\protect\par}}}
 \if@titlepage
   \newcommand{\maketitle}{\begin{titlepage}%
   \let\footnotesize\small
