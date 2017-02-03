@@ -148,6 +148,40 @@
 \renewcommand{\floatpagefraction}{.5}
 \renewcommand{\dbltopfraction}{.7}
 \renewcommand{\dblfloatpagefraction}{.5}
+\def\pltx@cleartorightpage{\clearpage\if@twoside
+  \ifodd\c@page
+    \iftdir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \else
+    \ifydir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \fi\fi}
+\def\pltx@cleartoleftpage{\clearpage\if@twoside
+  \ifodd\c@page
+    \ifydir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \else
+    \iftdir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \fi\fi}
+\def\pltx@cleartooddpage{\clearpage\if@twoside
+  \ifodd\c@page\else
+    \hbox{}\newpage
+    \if@twocolumn\hbox{}\newpage\fi
+  \fi\fi}
+\def\pltx@cleartoevenpage{\clearpage\if@twoside
+  \ifodd\c@page
+    \hbox{}\newpage
+    \if@twocolumn\hbox{}\newpage\fi
+  \fi\fi}
 \def\ps@plain{\let\@mkboth\@gobbletwo
    \let\ps@jpl@in\ps@plain
    \let\@oddhead\@empty

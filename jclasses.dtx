@@ -1607,6 +1607,73 @@
 % \end{macro}
 %
 %
+% \subsection{改ページ（日本語\TeX{}開発コミュニティ版のみ）}
+%
+% \begin{macro}{\pltx@cleartorightpage}
+% \begin{macro}{\pltx@cleartoleftpage}
+% \begin{macro}{\pltx@cleartooddpage}
+% \begin{macro}{\pltx@cleartoevenpage}
+% |\cleardoublepage|命令は、\LaTeX{}カーネルでは「奇数ページになるまでページを
+% 繰る命令」として定義されています。しかしp\LaTeX{}カーネルでは、アスキーの方針
+% により「横組では奇数ページになるまで、縦組では偶数ページになるまでページを
+% 繰る命令」に再定義されています。すなわち、p\LaTeX{}では縦組でも横組でも
+% 右ページになるまでページを繰ることになります。
+%
+% p\LaTeX{}標準クラスのbookは、横組も縦組も|openright|がデフォルトになっていて、
+% これは従来p\LaTeX{}カーネルで定義された|\cleardoublepage|を利用していました。
+% しかし、縦組で奇数ページ始まりの文書を作りたい場合もあるでしょうから、
+% コミュニティ版クラスでは以下の命令を追加します。
+% \begin{enumerate}
+%   \item|\pltx@cleartorightpage|：右ページになるまでページを繰る命令
+%   \item|\pltx@cleartoleftpage|：左ページになるまでページを繰る命令
+%   \item|\pltx@cleartooddpage|：奇数ページになるまでページを繰る命令
+%   \item|\pltx@cleartoevenpage|：偶数ページになるまでページを繰る命令
+% \end{enumerate}
+% また、コミュニティ版クラスの内部では、p\LaTeX{}カーネルの|\cleardoublepage|の
+% 代わりに上記の命令を使って|openright|および|openleft|オプションを実装します。
+% \changes{v1.7d}{????/??/??}{\cs{cleardoublepage}の代用となる命令群を追加}
+%    \begin{macrocode}
+\def\pltx@cleartorightpage{\clearpage\if@twoside
+  \ifodd\c@page
+    \iftdir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \else
+    \ifydir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \fi\fi}
+\def\pltx@cleartoleftpage{\clearpage\if@twoside
+  \ifodd\c@page
+    \ifydir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \else
+    \iftdir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \fi\fi}
+\def\pltx@cleartooddpage{\clearpage\if@twoside
+  \ifodd\c@page\else
+    \hbox{}\newpage
+    \if@twocolumn\hbox{}\newpage\fi
+  \fi\fi}
+\def\pltx@cleartoevenpage{\clearpage\if@twoside
+  \ifodd\c@page
+    \hbox{}\newpage
+    \if@twocolumn\hbox{}\newpage\fi
+  \fi\fi}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+%
 %
 % \section{ページスタイル}\label{sec:pagestyle}
 % p\LaTeXe{}では、つぎの6種類のページスタイルを使用できます。
@@ -2002,7 +2069,7 @@
 %
 % 著者名の脇に表示される合印は直立した数字、注釈側は横に寝た数字となっていまし
 % たが、不自然なので|\hbox{\yoko ...}|を追加し、両方とも直立するようにしました。
-% \changes{v1.7d}{????/??/??}{縦組クラスの表紙を縦書きにするようにした}
+% \changes{v1.7d}{????/??/??}{縦組クラスの所属表示の番号を直立にした}
 %    \begin{macrocode}
 \def\p@thanks#1{\footnotemark
   \protected@xdef\@thanks{\@thanks
