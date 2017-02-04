@@ -3,7 +3,7 @@
 %
 %  Copyright 2001 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016 Japanese TeX Development Community
+%  Copyright (c) 2016-2017 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -50,6 +50,8 @@
 % \changes{v1.2c}{2016/11/19}{Ensure \cs{@parboxto} holds the value
 %    of \cs{@tempdimb} not the register itself (pr/3867)
 %    (sync with ltboxes.dtx v1.1g)}
+% \changes{v1.2d}{2017/02/04}{\cs{Kanji}の引数だけでなく後に連続する
+%    数字も漢数字になってしまうバグを修正}
 % \fi
 %
 % \iffalse
@@ -58,7 +60,7 @@
 \ProvidesFile{plext.dtx}
 %</driver>
 %<package>\ProvidesPackage{plext}
-   [2016/11/19 v1.2c pLaTeX package file (community edition)]
+   [2017/02/04 v1.2d pLaTeX package file (community edition)]
 %<*driver>
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -1167,7 +1169,7 @@
 % \begin{macro}{\Kanji}
 % \begin{macro}{\@Kanji}
 % \begin{macro}{\kanji}
-% |\Kanji|コマンドを定義します。|\Kanji|コマンドは|\Alpha|と同じように、
+% |\Kanji|コマンドを定義します。|\Kanji|コマンドは|\Alph|と同じように、
 % カウンタに対してのみ使用することができます。
 %
 % |\kanji|コマンドは、後続の半角数字を漢数字にします。
@@ -1175,10 +1177,14 @@
 % ただし、横組モードのときには、何もしません。
 % つねに漢数字にしたい場合は、|\kansuji|プリミティブを使ってください。
 %
+% 後続の数字まで漢数字になってしまうのを防ぐため、|\@Kanji|の
+% 末尾に半角スペースを追加しました(Issue~\#33)。
 % \changes{v1.0h}{1996/03/13}{\cs{@Kanji}を追加。英語版と同様にした。}
+% \changes{v1.2d}{2017/02/04}{\cs{Kanji}の引数だけでなく後に連続する
+%    数字も漢数字になってしまうバグを修正}
 %    \begin{macrocode}
 \def\Kanji#1{\expandafter\@Kanji\csname c@#1\endcsname}
-\def\@Kanji#1{\expandafter\kansuji\number #1}
+\def\@Kanji#1{\expandafter\kansuji\number #1 }
 \def\kanji{\iftdir\expandafter\kansuji\fi}
 %    \end{macrocode}
 % \end{macro}
