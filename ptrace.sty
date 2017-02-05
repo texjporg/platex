@@ -95,16 +95,16 @@
       \setbox\zstrutbox\hbox{\tate
           \vrule\@width\z@
                 \@height.7\baselineskip \@depth.3\baselineskip}%
-     \ifnum \tracingfonts>\tw@
-       \ifx\f@linespread\@empty
-         \let\reserved@a\@empty
-       \else
-         \def\reserved@a{\f@linespread x}%
-       \fi
-       \@font@info{Changing size to\space
-             \f@size/\reserved@a \f@baselineskip}%
-       \aftergroup\type@restoreinfo
-     \fi
+    \ifnum \tracingfonts>\tw@
+      \ifx\f@linespread\@empty
+        \let\reserved@a\@empty
+      \else
+        \def\reserved@a{\f@linespread x}%
+      \fi
+      \@font@info{Changing size to\space
+            \f@size/\reserved@a \f@baselineskip}%
+      \aftergroup\type@restoreinfo
+    \fi
         \let\size@update\relax}}
 \newbox\adjust@box
 \newdimen\adjust@dimen
