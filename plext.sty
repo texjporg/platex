@@ -504,7 +504,7 @@
 \let\Rensuji\rensuji
 \let\prensuji\rensuji
 \def\Kanji#1{\expandafter\@Kanji\csname c@#1\endcsname}
-\def\@Kanji#1{\expandafter\kansuji\number #1 }
+\def\@Kanji#1{\kansuji #1}
 \def\kanji{\iftdir\expandafter\kansuji\fi}
 \def\boutenchar{\char\euc"A1A2}
 \def\bou#1{\ifvmode\leavevmode\fi\@bou#1\end}

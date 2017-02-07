@@ -1,8 +1,10 @@
 \documentclass{jarticle}
-\usepackage{plext}
+\usepackage{../plext}
 \makeatletter
 % カウンタ引数の後続の数字が漢数字になるのを防ぐ半角スペース
 %\def\@Kanji#1{\expandafter\kansuji\number #1 }
+% より簡潔な定義
+%\def\@Kanji#1{\kansuji #1}
 \makeatother
 \begin{document}
 \tableofcontents

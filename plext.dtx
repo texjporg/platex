@@ -1177,14 +1177,13 @@
 % ただし、横組モードのときには、何もしません。
 % つねに漢数字にしたい場合は、|\kansuji|プリミティブを使ってください。
 %
-% 後続の数字まで漢数字になってしまうのを防ぐため、|\@Kanji|の
-% 末尾に半角スペースを追加しました(Issue~\#33)。
+% 後続の数字まで漢数字になってしまうバグを修正しました(Issue~\#33)。
 % \changes{v1.0h}{1996/03/13}{\cs{@Kanji}を追加。英語版と同様にした。}
 % \changes{v1.2d}{2017/02/04}{\cs{Kanji}の引数だけでなく後に連続する
 %    数字も漢数字になってしまうバグを修正}
 %    \begin{macrocode}
 \def\Kanji#1{\expandafter\@Kanji\csname c@#1\endcsname}
-\def\@Kanji#1{\expandafter\kansuji\number #1 }
+\def\@Kanji#1{\kansuji #1}
 \def\kanji{\iftdir\expandafter\kansuji\fi}
 %    \end{macrocode}
 % \end{macro}
