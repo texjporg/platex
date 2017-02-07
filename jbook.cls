@@ -282,7 +282,11 @@
 \if@compatibility
 \newenvironment{titlepage}
     {%
-     \pltx@cleartorightpage
+     \if@openleft
+       \pltx@cleartoleftpage
+     \else\if@openright
+       \pltx@cleartorightpage
+     \fi\fi
      \if@twocolumn\@restonecoltrue\onecolumn
      \else\@restonecolfalse\newpage\fi
      \thispagestyle{empty}%
@@ -293,7 +297,11 @@
 \else
 \newenvironment{titlepage}
     {%
-      \pltx@cleartorightpage
+      \if@openleft
+        \pltx@cleartoleftpage
+      \else\if@openright
+        \pltx@cleartorightpage
+      \fi\fi
       \if@twocolumn
         \@restonecoltrue\onecolumn
       \else

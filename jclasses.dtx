@@ -2034,7 +2034,11 @@
 \if@compatibility
 \newenvironment{titlepage}
     {%
-%<book>     \pltx@cleartorightpage
+%<book>     \if@openleft
+%<book>       \pltx@cleartoleftpage
+%<book>     \else\if@openright
+%<book>       \pltx@cleartorightpage
+%<book>     \fi\fi
      \if@twocolumn\@restonecoltrue\onecolumn
      \else\@restonecolfalse\newpage\fi
      \thispagestyle{empty}%
@@ -2049,7 +2053,11 @@
 \else
 \newenvironment{titlepage}
     {%
-%<book>      \pltx@cleartorightpage
+%<book>      \if@openleft
+%<book>        \pltx@cleartoleftpage
+%<book>      \else\if@openright
+%<book>        \pltx@cleartorightpage
+%<book>      \fi\fi
       \if@twocolumn
         \@restonecoltrue\onecolumn
       \else
