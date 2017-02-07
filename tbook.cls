@@ -285,9 +285,9 @@
     {%
      \if@openleft
        \pltx@cleartoleftpage
-     \else\if@openright
+     \else % \if@openright not used (compat. with ASCII ed. and LaTeX)
        \pltx@cleartorightpage
-     \fi\fi
+     \fi   % \fi
      \if@twocolumn\@restonecoltrue\onecolumn
      \else\@restonecolfalse\newpage\fi
      \thispagestyle{empty}%
@@ -300,9 +300,9 @@
     {%
       \if@openleft
         \pltx@cleartoleftpage
-      \else\if@openright
+      \else % \if@openright not used (compat. with ASCII ed. and LaTeX)
         \pltx@cleartorightpage
-      \fi\fi
+      \fi   % \fi
       \if@twocolumn
         \@restonecoltrue\onecolumn
       \else

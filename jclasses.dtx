@@ -2036,9 +2036,9 @@
     {%
 %<book>     \if@openleft
 %<book>       \pltx@cleartoleftpage
-%<book>     \else\if@openright
+%<book>     \else % \if@openright not used (compat. with ASCII ed. and LaTeX)
 %<book>       \pltx@cleartorightpage
-%<book>     \fi\fi
+%<book>     \fi   % \fi
      \if@twocolumn\@restonecoltrue\onecolumn
      \else\@restonecolfalse\newpage\fi
      \thispagestyle{empty}%
@@ -2055,9 +2055,9 @@
     {%
 %<book>      \if@openleft
 %<book>        \pltx@cleartoleftpage
-%<book>      \else\if@openright
+%<book>      \else % \if@openright not used (compat. with ASCII ed. and LaTeX)
 %<book>        \pltx@cleartorightpage
-%<book>      \fi\fi
+%<book>      \fi   % \fi
       \if@twocolumn
         \@restonecoltrue\onecolumn
       \else
