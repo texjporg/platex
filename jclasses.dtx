@@ -78,6 +78,8 @@
 % \changes{v1.7b}{2016/11/22}{補足ドキュメントを追加}
 % \changes{v1.7c}{2016/12/18}{Only add empty page after part if
 %    twoside and openright (sync with classes.dtx v1.4b)}
+% \changes{v1.7c}{2016/12/18}{奇妙なarticleガードとコードを削除して
+%    ドキュメントを追加}
 % \fi
 %
 % \iffalse
@@ -2586,6 +2588,12 @@
 % このマクロは、章見出しに番号を付けるときに呼び出されます。
 % \Lcount{secnumdepth}が$-1$よりも大きく、
 % |\@mainmatter|が真（bookクラスの場合）のときに、番号を出力します。
+%
+% \emph{日本語\TeX{}開発コミュニティによる補足}：本家\LaTeX{}の
+% \file{classes}では、二段組のときチャプタータイトルは一段組に戻され
+% ますが、アスキーによる\file{jclasses}では二段組のままにされています。
+% したがって、チャプタータイトルより高い位置に右カラムの始点が来るという
+% 挙動になっていますが、コミュニティ版でもアスキー版の挙動を維持しています。
 %    \begin{macrocode}
 \def\@chapter[#1]#2{%
   \ifnum \c@secnumdepth >\m@ne
@@ -2636,11 +2644,14 @@
 %
 % \begin{macro}{\@schapter}
 % このマクロは、章見出しに番号を付けないときに呼び出されます。
+%
+% \emph{日本語\TeX{}開発コミュニティによる補足}：やはり二段組でチャプター
+% タイトルより高い位置に右カラムの始点が来るという挙動を維持してあります。
+% \changes{v1.7c}{2016/12/18}{奇妙なarticleガードとコードを削除して
+%    ドキュメントを追加}
 %    \begin{macrocode}
 \def\@schapter#1{%
-%<article>  \if@twocolumn\@topnewpage[\@makeschapterhead{#1}]\else
   \@makeschapterhead{#1}\@afterheading
-%<article>  \fi
 }
 %    \end{macrocode}
 % \end{macro}
