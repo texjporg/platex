@@ -1622,7 +1622,7 @@
 % \end{macro}
 %
 %
-% \subsection{改ページ（日本語\TeX{}開発コミュニティ版のみ）}
+% \section{改ページ（日本語\TeX{}開発コミュニティ版のみ）}\label{sec:cleardoublepage}
 %
 % \begin{macro}{\pltx@cleartorightpage}
 % \begin{macro}{\pltx@cleartoleftpage}
@@ -1686,6 +1686,22 @@
 % \end{macro}
 % \end{macro}
 % \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cleardoublepage}
+% そしてreportとbookクラスの場合は、ユーザ向け命令である|\cleardoublepage|を、
+% |openright|オプションが指定されている場合は|\pltx@cleartorightpage|に、
+% |openelft|オプションが指定されている場合は|\pltx@cleartoleftpage|に、
+% それぞれ|\let|します。|openany|の場合はp\LaTeX{}カーネルの定義のままです。
+%    \begin{macrocode}
+%<*!article>
+\if@openleft
+  \let\cleardoublepage\pltx@cleartoleftpage
+\else\if@openright
+  \let\cleardoublepage\pltx@cleartorightpage
+\fi\fi
+%</!article>
+%    \end{macrocode}
 % \end{macro}
 %
 %
@@ -2034,11 +2050,7 @@
 \if@compatibility
 \newenvironment{titlepage}
     {%
-%<book>     \if@openleft
-%<book>       \pltx@cleartoleftpage
-%<book>     \else % \if@openright not used (compat. with ASCII ed. and LaTeX)
-%<book>       \pltx@cleartorightpage
-%<book>     \fi   % \fi
+%<book>     \cleardoublepage
      \if@twocolumn\@restonecoltrue\onecolumn
      \else\@restonecolfalse\newpage\fi
      \thispagestyle{empty}%
@@ -2053,11 +2065,7 @@
 \else
 \newenvironment{titlepage}
     {%
-%<book>      \if@openleft
-%<book>        \pltx@cleartoleftpage
-%<book>      \else % \if@openright not used (compat. with ASCII ed. and LaTeX)
-%<book>        \pltx@cleartorightpage
-%<book>      \fi   % \fi
+%<book>      \cleardoublepage
       \if@twocolumn
         \@restonecoltrue\onecolumn
       \else
@@ -2435,16 +2443,16 @@
 %    \begin{macrocode}
 %<*book>
 \newcommand{\frontmatter}{%
-  \if@openleft \pltx@cleartoleftpage \else
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \@mainmatterfalse\pagenumbering{roman}}
 \newcommand{\mainmatter}{%
-  \if@openleft \pltx@cleartoleftpage \else
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \@mainmattertrue\pagenumbering{arabic}}
 \newcommand{\backmatter}{%
-  \if@openleft \pltx@cleartoleftpage \else
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \@mainmatterfalse}
 %</book>
 %    \end{macrocode}
@@ -2536,8 +2544,8 @@
 %    \begin{macrocode}
 %<*report|book>
 \newcommand{\part}{%
-  \if@openleft \pltx@cleartoleftpage \else
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \thispagestyle{empty}%
   \if@twocolumn\onecolumn\@tempswatrue\else\@tempswafalse\fi
   \null\vfil
@@ -2665,6 +2673,10 @@
 % なお、縦組の場合でも右ページからはじまるように、
 % フォーマットファイルで|\clerdoublepage|が定義されています。
 %
+% \emph{日本語\TeX{}開発コミュニティによる補足}：コミュニティ版の実装では、
+% |openright|と|openleft|の場合に|\cleardoublepage|をクラスファイルの中で
+% 再々定義しています。\ref{sec:cleardoublepage}を参照してください。
+%
 % 章見出しが出力されるページのスタイルは、\pstyle{jpl@in}になります。
 % \pstyle{jpl@in}は、\pstyle{headnomble}か\pstyle{footnomble}のいずれかです。
 % 詳細は、第\ref{sec:pagestyle}節を参照してください。
@@ -2674,8 +2686,8 @@
 %    \begin{macrocode}
 %<*report|book>
 \newcommand{\chapter}{%
-  \if@openleft \pltx@cleartoleftpage \else
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \thispagestyle{jpl@in}%
   \global\@topnum\z@
   \@afterindenttrue

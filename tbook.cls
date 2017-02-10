@@ -192,6 +192,11 @@
     \hbox{}\newpage
     \if@twocolumn\hbox{}\newpage\fi
   \fi\fi}
+\if@openleft
+  \let\cleardoublepage\pltx@cleartoleftpage
+\else\if@openright
+  \let\cleardoublepage\pltx@cleartorightpage
+\fi\fi
 \def\ps@plain{\let\@mkboth\@gobbletwo
    \let\ps@jpl@in\ps@plain
    \let\@oddhead\@empty
@@ -283,11 +288,7 @@
 \if@compatibility
 \newenvironment{titlepage}
     {%
-     \if@openleft
-       \pltx@cleartoleftpage
-     \else % \if@openright not used (compat. with ASCII ed. and LaTeX)
-       \pltx@cleartorightpage
-     \fi   % \fi
+     \cleardoublepage
      \if@twocolumn\@restonecoltrue\onecolumn
      \else\@restonecolfalse\newpage\fi
      \thispagestyle{empty}%
@@ -298,11 +299,7 @@
 \else
 \newenvironment{titlepage}
     {%
-      \if@openleft
-        \pltx@cleartoleftpage
-      \else % \if@openright not used (compat. with ASCII ed. and LaTeX)
-        \pltx@cleartorightpage
-      \fi   % \fi
+      \cleardoublepage
       \if@twocolumn
         \@restonecoltrue\onecolumn
       \else
@@ -428,20 +425,20 @@
 \newcommand{\@chapapp}{\prechaptername}
 \newcommand{\@chappos}{\postchaptername}
 \newcommand{\frontmatter}{%
-  \if@openleft \pltx@cleartoleftpage \else
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \@mainmatterfalse\pagenumbering{roman}}
 \newcommand{\mainmatter}{%
-  \if@openleft \pltx@cleartoleftpage \else
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \@mainmattertrue\pagenumbering{arabic}}
 \newcommand{\backmatter}{%
-  \if@openleft \pltx@cleartoleftpage \else
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \@mainmatterfalse}
 \newcommand{\part}{%
-  \if@openleft \pltx@cleartoleftpage \else
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \thispagestyle{empty}%
   \if@twocolumn\onecolumn\@tempswatrue\else\@tempswafalse\fi
   \null\vfil
@@ -478,8 +475,8 @@
   \fi
    \if@tempswa\twocolumn\fi}
 \newcommand{\chapter}{%
-  \if@openleft \pltx@cleartoleftpage \else
-  \if@openright \pltx@cleartorightpage \else \clearpage \fi \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \thispagestyle{jpl@in}%
   \global\@topnum\z@
   \@afterindenttrue
