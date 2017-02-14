@@ -299,14 +299,14 @@
 \else
 \newenvironment{titlepage}
     {%
-      \cleardoublepage
       \if@twocolumn
         \@restonecoltrue\onecolumn
       \else
         \@restonecolfalse\newpage
       \fi
+      \ifnum\c@page=\@ne\else\cleardoublepage\fi %% ... to here! (????/??/??)
       \thispagestyle{empty}%
-      \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi
+      \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi %% ????/??/??
     }%
     {\if@restonecol\twocolumn \else \newpage \fi
      \if@twoside\else
