@@ -1672,14 +1672,19 @@
       \if@twocolumn\hbox{}\newpage\fi
     \fi
   \fi\fi}
+%    \end{macrocode}
+%
+% |\pltx@cleartooddpage|は\LaTeX{}の|\cleardoublepage|に似ていますが、
+% |\thispagestyle{empty}|を追加してあります。
+%    \begin{macrocode}
 \def\pltx@cleartooddpage{\clearpage\if@twoside
   \ifodd\c@page\else
-    \hbox{}\newpage
+    \hbox{}\thispagestyle{empty}\newpage
     \if@twocolumn\hbox{}\newpage\fi
   \fi\fi}
 \def\pltx@cleartoevenpage{\clearpage\if@twoside
   \ifodd\c@page
-    \hbox{}\newpage
+    \hbox{}\thispagestyle{empty}\newpage
     \if@twocolumn\hbox{}\newpage\fi
   \fi\fi}
 %    \end{macrocode}
@@ -2050,19 +2055,26 @@
 % 以下のようになります。
 % \begin{enumerate}
 % \item アスキー版では、タイトルページの番号を必ず1にリセットしていましたが、
-%   これは正しくありません。本来ならば、タイトルの出るページに応じて
-%   \begin{itemize}
-%     \item 奇数ページ目に出る場合、ページ番号を1（奇数）にリセット
-%     \item 偶数ページ目に出る場合、ページ番号を0（偶数）にリセット
-%   \end{itemize}
-%   とすべきです。そうしないと、タイトルページが偶数ページ目に出る場合にも、
-%   レイアウトだけ奇数ページ用が適用されてしまい、さらにその次のページも偶数の
-%   ページ番号を持ってしまうからです。
+%   これは正しくありません。これは、タイトルページが奇数ページ目か偶数ページ目
+%   かにかかわらず、レイアウトだけ奇数ページ用が適用されてしまうからです。
+%   さらに、タイトルの次のページも偶数のページ番号を持ってしまうため、両面印刷
+%   で奇数ページと偶数ページが交互に出なくなるという問題もあります。
 % \item アスキー版bookクラスは、タイトルページを必ず|\cleardoublepage|で始めて
-%   いました。これ自体が正しくないと断定することはできません。しかしこれでは、
-%   偶数ページ起こしの場合に|\maketitle|を文書の冒頭に書いただけで、
-%   タイトルの前に空白ページが発生します。
+%   いました。p\LaTeX{}カーネルでの|\cleardoublepage|の定義から、縦組の既定では
+%   タイトルが偶数ページ目に出ることになります。これ自体が正しくないと断定する
+%   ことはできませんが、タイトルのページ番号を1にリセットすることと合わさって、
+%   偶数ページに送ったタイトルに奇数ページ用レイアウトが適用されてしまうという
+%   結果は正しくありません。
 % \end{enumerate}
+% そこで、コミュニティ版ではタイトルのレイアウトが必ず奇数ページ用になるという
+% 挙動を支持し、bookクラスではタイトルページを奇数ページ目に送ることにしました。
+% これでタイトルページが表紙らしく見えるようになります。また、reportクラスの
+% ようなタイトルが成り行きに従って出る場合には
+% \begin{itemize}
+%   \item 奇数ページ目に出る場合、ページ番号を1（奇数）にリセット
+%   \item 偶数ページ目に出る場合、ページ番号を0（偶数）にリセット
+% \end{itemize}
+% としました。
 %
 % 一つめの例を考えます。
 %\begin{verbatim}
@@ -2147,7 +2159,7 @@
       \else
         \@restonecolfalse\newpage
       \fi
-%<book>      \ifodd\c@page\else\null\thispagestyle{empty}\newpage\fi %% ... to here! (????/??/??)
+%<book>      \pltx@cleartooddpage %% ... to here! (????/??/??)
       \thispagestyle{empty}%
       \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi %% ????/??/??
     }%

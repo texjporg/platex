@@ -183,12 +183,12 @@
   \fi\fi}
 \def\pltx@cleartooddpage{\clearpage\if@twoside
   \ifodd\c@page\else
-    \hbox{}\newpage
+    \hbox{}\thispagestyle{empty}\newpage
     \if@twocolumn\hbox{}\newpage\fi
   \fi\fi}
 \def\pltx@cleartoevenpage{\clearpage\if@twoside
   \ifodd\c@page
-    \hbox{}\newpage
+    \hbox{}\thispagestyle{empty}\newpage
     \if@twocolumn\hbox{}\newpage\fi
   \fi\fi}
 \if@openleft
@@ -303,7 +303,7 @@
       \else
         \@restonecolfalse\newpage
       \fi
-      \ifodd\c@page\else\null\thispagestyle{empty}\newpage\fi %% ... to here! (????/??/??)
+      \pltx@cleartooddpage %% ... to here! (????/??/??)
       \thispagestyle{empty}%
       \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi %% ????/??/??
     }%

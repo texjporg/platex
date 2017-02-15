@@ -173,12 +173,12 @@
   \fi\fi}
 \def\pltx@cleartooddpage{\clearpage\if@twoside
   \ifodd\c@page\else
-    \hbox{}\newpage
+    \hbox{}\thispagestyle{empty}\newpage
     \if@twocolumn\hbox{}\newpage\fi
   \fi\fi}
 \def\pltx@cleartoevenpage{\clearpage\if@twoside
   \ifodd\c@page
-    \hbox{}\newpage
+    \hbox{}\thispagestyle{empty}\newpage
     \if@twocolumn\hbox{}\newpage\fi
   \fi\fi}
 \def\ps@plain{\let\@mkboth\@gobbletwo
