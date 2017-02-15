@@ -3,7 +3,7 @@
 %
 %  Copyright 1995-2001 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016 Japanese TeX Development Community
+%  Copyright (c) 2016-2017 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -80,6 +80,14 @@
 %    twoside and openright (sync with classes.dtx v1.4b)}
 % \changes{v1.7c}{2016/12/18}{奇妙なarticleガードとコードを削除して
 %    ドキュメントを追加}
+% \changes{v1.7d}{2017/02/15}{\cs{if@openleft}スイッチ追加}
+% \changes{v1.7d}{2017/02/15}{openleftオプション追加}
+% \changes{v1.7d}{2017/02/15}{\cs{cleardoublepage}の代用となる命令群を追加}
+% \changes{v1.7d}{2017/02/15}{bookクラスでtitlepageを必ず奇数ページ
+%   に送るように変更}
+% \changes{v1.7d}{2017/02/15}{titlepageのページ番号を奇数ならば1に、
+%   偶数ならば0にリセットするように変更}
+% \changes{v1.7d}{2017/02/15}{縦組クラスの所属表示の番号を直立にした}
 % \fi
 %
 % \iffalse
@@ -109,7 +117,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2016/12/18 v1.7c
+  [2017/02/15 v1.7d
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -211,7 +219,7 @@
 % 日本語\TeX{}開発コミュニティ版で新たに追加されました。
 % 横組では偶数ページ、縦組では奇数ページから始まることになります。
 % reportクラスとbookクラスの両方で、デフォルトは``no''です。
-% \changes{v1.7d}{????/??/??}{\cs{if@openleft}スイッチ追加}
+% \changes{v1.7d}{2017/02/15}{\cs{if@openleft}スイッチ追加}
 %    \begin{macrocode}
 %<!article>\newif\if@openleft
 %    \end{macrocode}
@@ -406,7 +414,7 @@
 % chapterを右ページあるいは左ページから
 % はじめるかどうかを指定するオプションです。
 % |openleft|オプションは日本語\TeX{}開発コミュニティによって追加されました。
-% \changes{v1.7d}{????/??/??}{openleftオプション追加}
+% \changes{v1.7d}{2017/02/15}{openleftオプション追加}
 %    \begin{macrocode}
 %<!article>\if@compatibility
 %<book>\@openrighttrue
@@ -1639,16 +1647,14 @@
 % p\LaTeX{}標準クラスのbookは、横組も縦組も|openright|がデフォルトになっていて、
 % これは従来p\LaTeX{}カーネルで定義された|\cleardoublepage|を利用していました。
 % しかし、縦組で奇数ページ始まりの文書を作りたい場合もあるでしょうから、
-% コミュニティ版クラスでは以下の命令を追加します。
+% コミュニティ版クラスでは以下の（非ユーザ向け）命令を追加します。
 % \begin{enumerate}
 %   \item|\pltx@cleartorightpage|：右ページになるまでページを繰る命令
 %   \item|\pltx@cleartoleftpage|：左ページになるまでページを繰る命令
 %   \item|\pltx@cleartooddpage|：奇数ページになるまでページを繰る命令
 %   \item|\pltx@cleartoevenpage|：偶数ページになるまでページを繰る命令
 % \end{enumerate}
-% また、コミュニティ版クラスの内部では、p\LaTeX{}カーネルの|\cleardoublepage|の
-% 代わりに上記の命令を使って|openright|および|openleft|オプションを実装します。
-% \changes{v1.7d}{????/??/??}{\cs{cleardoublepage}の代用となる命令群を追加}
+% \changes{v1.7d}{2017/02/15}{\cs{cleardoublepage}の代用となる命令群を追加}
 %    \begin{macrocode}
 \def\pltx@cleartorightpage{\clearpage\if@twoside
   \ifodd\c@page
@@ -1677,7 +1683,7 @@
 %    \end{macrocode}
 %
 % |\pltx@cleartooddpage|は\LaTeX{}の|\cleardoublepage|に似ていますが、
-% |\thispagestyle{empty}|を追加してあります。
+% 上の2つに合わせるため|\thispagestyle{empty}|を追加してあります。
 %    \begin{macrocode}
 \def\pltx@cleartooddpage{\clearpage\if@twoside
   \ifodd\c@page\else
@@ -1698,7 +1704,7 @@
 % \begin{macro}{\cleardoublepage}
 % そしてreportとbookクラスの場合は、ユーザ向け命令である|\cleardoublepage|を、
 % |openright|オプションが指定されている場合は|\pltx@cleartorightpage|に、
-% |openelft|オプションが指定されている場合は|\pltx@cleartoleftpage|に、
+% |openleft|オプションが指定されている場合は|\pltx@cleartoleftpage|に、
 % それぞれ|\let|します。|openany|の場合はp\LaTeX{}カーネルの定義のままです。
 %    \begin{macrocode}
 %<*!article>
@@ -2129,11 +2135,6 @@
 % なお、p\LaTeX~2.09互換モードはアスキー版のまま、すなわち「ページ番号をゼロに
 % 設定」としてあります。これは、横組の右起こしの挙動としては誤りですが、縦組の
 % 右起こしの挙動としては一応正しくなっているといえます。
-% \changes{v1.7d}{????/??/??}{titlepageのページ番号を奇数ならば1に、
-%   偶数ならば0にリセットするように変更}
-% \changes{v1.7d}{????/??/??}{\cs{maketitle}が\cs{begin\{document\}}直後に
-%   使われた場合に限り、たとえ偶数ページ起こしでもタイトルの前に空白ページを
-%   作らないようにした}
 %
 % 最初に互換モードの定義を作ります。
 %    \begin{macrocode}
@@ -2151,19 +2152,22 @@
 %    \end{macrocode}
 %
 % そして、\LaTeX{}ネイティブのための定義です。
+% \changes{v1.7d}{2017/02/15}{bookクラスでtitlepageを必ず奇数ページ
+%   に送るように変更}
+% \changes{v1.7d}{2017/02/15}{titlepageのページ番号を奇数ならば1に、
+%   偶数ならば0にリセットするように変更}
 %    \begin{macrocode}
 \else
 \newenvironment{titlepage}
     {%
-%      \cleardoublepage %% <book> moved from here ...
+%<book>      \pltx@cleartooddpage %% 2017/02/15
       \if@twocolumn
         \@restonecoltrue\onecolumn
       \else
         \@restonecolfalse\newpage
       \fi
-%<book>      \pltx@cleartooddpage %% ... to here! (????/??/??)
       \thispagestyle{empty}%
-      \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi %% ????/??/??
+      \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi %% 2017/02/15
     }%
     {\if@restonecol\twocolumn \else \newpage \fi
 %    \end{macrocode}
@@ -2191,7 +2195,7 @@
 %
 % 著者名の脇に表示される合印は直立した数字、注釈側は横に寝た数字となっていまし
 % たが、不自然なので|\hbox{\yoko ...}|を追加し、両方とも直立するようにしました。
-% \changes{v1.7d}{????/??/??}{縦組クラスの所属表示の番号を直立にした}
+% \changes{v1.7d}{2017/02/15}{縦組クラスの所属表示の番号を直立にした}
 %    \begin{macrocode}
 \def\p@thanks#1{\footnotemark
   \protected@xdef\@thanks{\@thanks
@@ -2740,11 +2744,11 @@
 %<*report|book>
 \def\@endpart{\vfil\newpage
   \if@twoside
-   \if@openleft %% \if@openleft added (????/??/??)
+   \if@openleft %% \if@openleft added (2017/02/15)
     \null\thispagestyle{empty}\newpage
    \else\if@openright %% \if@openright added (2016/12/18)
     \null\thispagestyle{empty}\newpage
-   \fi\fi %% added (2016/12/18, ????/??/??)
+   \fi\fi %% added (2016/12/18, 2017/02/15)
   \fi
 %    \end{macrocode}
 % 二段組文書のとき、スイッチを二段組モードに戻す必要があります。

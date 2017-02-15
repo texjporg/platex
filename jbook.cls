@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesClass{jbook}
-  [2016/12/18 v1.7c
+  [2017/02/15 v1.7d
  Standard pLaTeX class]
 \newcounter{@paper}
 \newif\if@landscape \@landscapefalse
@@ -298,14 +298,14 @@
 \else
 \newenvironment{titlepage}
     {%
+      \pltx@cleartooddpage %% 2017/02/15
       \if@twocolumn
         \@restonecoltrue\onecolumn
       \else
         \@restonecolfalse\newpage
       \fi
-      \pltx@cleartooddpage %% ... to here! (????/??/??)
       \thispagestyle{empty}%
-      \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi %% ????/??/??
+      \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi %% 2017/02/15
     }%
     {\if@restonecol\twocolumn \else \newpage \fi
      \if@twoside\else
@@ -463,11 +463,11 @@
   \@endpart}
 \def\@endpart{\vfil\newpage
   \if@twoside
-   \if@openleft %% \if@openleft added (????/??/??)
+   \if@openleft %% \if@openleft added (2017/02/15)
     \null\thispagestyle{empty}\newpage
    \else\if@openright %% \if@openright added (2016/12/18)
     \null\thispagestyle{empty}\newpage
-   \fi\fi %% added (2016/12/18, ????/??/??)
+   \fi\fi %% added (2016/12/18, 2017/02/15)
   \fi
    \if@tempswa\twocolumn\fi}
 \newcommand{\chapter}{%

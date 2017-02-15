@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesClass{tarticle}
-  [2016/12/18 v1.7c
+  [2017/02/15 v1.7d
  Standard pLaTeX class]
 \newcounter{@paper}
 \newif\if@landscape \@landscapefalse
@@ -273,7 +273,7 @@
         \@restonecolfalse\newpage
       \fi
       \thispagestyle{empty}%
-      \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi %% ????/??/??
+      \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi %% 2017/02/15
     }%
     {\if@restonecol\twocolumn \else \newpage \fi
      \if@twoside\else
