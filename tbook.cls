@@ -304,7 +304,7 @@
       \else
         \@restonecolfalse\newpage
       \fi
-      \ifnum\c@page=\@ne\else\cleardoublepage\fi %% ... to here! (????/??/??)
+      \ifodd\c@page\else\null\thispagestyle{empty}\newpage\fi %% ... to here! (????/??/??)
       \thispagestyle{empty}%
       \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi %% ????/??/??
     }%

@@ -2106,8 +2106,8 @@
 % ありません。そこで、コミュニティ版では
 %\begin{verbatim}
 %   1ページ目：テスト文章（奇数レイアウト、ページ番号1）
-%   2ページ目：タイトル（偶数レイアウト、ページ番号0は非表示）
-%   3ページ目：空白ページ（ページ番号1は非表示）
+%   2ページ目：空白ページ（ページ番号2は非表示）
+%   3ページ目：タイトル（奇数レイアウト、ページ番号1は非表示）
 %   4ページ目：チャプター（偶数レイアウト、ページ番号2）
 %\end{verbatim}
 % と直しました。
@@ -2147,7 +2147,7 @@
       \else
         \@restonecolfalse\newpage
       \fi
-%<book>      \ifnum\c@page=\@ne\else\cleardoublepage\fi %% ... to here! (????/??/??)
+%<book>      \ifodd\c@page\else\null\thispagestyle{empty}\newpage\fi %% ... to here! (????/??/??)
       \thispagestyle{empty}%
       \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi %% ????/??/??
     }%
