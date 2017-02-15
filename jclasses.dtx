@@ -197,11 +197,23 @@
 % \end{macro}
 %
 % \begin{macro}{\if@openright}
-% chapterレベルを奇数ページからはじめるかどうかのスイッチです。
+% chapterレベルを右ページからはじめるかどうかのスイッチです。
+% 横組では奇数ページ、縦組では偶数ページから始まることになります。
 % reportクラスのデフォルトは、``no''です。
 % bookクラスのデフォルトは、``yes''です。
 %    \begin{macrocode}
 %<!article>\newif\if@openright
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\if@openleft}
+% chapterレベルを左ページからはじめるかどうかのスイッチです。
+% 日本語\TeX{}開発コミュニティ版で新たに追加されました。
+% 横組では偶数ページ、縦組では奇数ページから始まることになります。
+% reportクラスとbookクラスの両方で、デフォルトは``no''です。
+% \changes{v1.7d}{????/??/??}{\cs{if@openleft}スイッチ追加}
+%    \begin{macrocode}
+%<!article>\newif\if@openleft
 %    \end{macrocode}
 % \end{macro}
 %
@@ -393,12 +405,15 @@
 % \subsection{右左起こしオプション}
 % chapterを右ページあるいは左ページから
 % はじめるかどうかを指定するオプションです。
+% |openleft|オプションは日本語\TeX{}開発コミュニティによって追加されました。
+% \changes{v1.7d}{????/??/??}{openleftオプション追加}
 %    \begin{macrocode}
 %<!article>\if@compatibility
 %<book>\@openrighttrue
 %<!article>\else
-%<!article>\DeclareOption{openright}{\@openrighttrue}
-%<!article>\DeclareOption{openany}{\@openrightfalse}
+%<!article>\DeclareOption{openright}{\@openrighttrue\@openleftfalse}
+%<!article>\DeclareOption{openleft}{\@openlefttrue\@openrightfalse}
+%<!article>\DeclareOption{openany}{\@openrightfalse\@openleftfalse}
 %<!article>\fi
 %    \end{macrocode}
 %
@@ -1609,6 +1624,94 @@
 % \end{macro}
 %
 %
+% \section{改ページ（日本語\TeX{}開発コミュニティ版のみ）}\label{sec:cleardoublepage}
+%
+% \begin{macro}{\pltx@cleartorightpage}
+% \begin{macro}{\pltx@cleartoleftpage}
+% \begin{macro}{\pltx@cleartooddpage}
+% \begin{macro}{\pltx@cleartoevenpage}
+% |\cleardoublepage|命令は、\LaTeX{}カーネルでは「奇数ページになるまでページを
+% 繰る命令」として定義されています。しかしp\LaTeX{}カーネルでは、アスキーの方針
+% により「横組では奇数ページになるまで、縦組では偶数ページになるまでページを
+% 繰る命令」に再定義されています。すなわち、p\LaTeX{}では縦組でも横組でも
+% 右ページになるまでページを繰ることになります。
+%
+% p\LaTeX{}標準クラスのbookは、横組も縦組も|openright|がデフォルトになっていて、
+% これは従来p\LaTeX{}カーネルで定義された|\cleardoublepage|を利用していました。
+% しかし、縦組で奇数ページ始まりの文書を作りたい場合もあるでしょうから、
+% コミュニティ版クラスでは以下の命令を追加します。
+% \begin{enumerate}
+%   \item|\pltx@cleartorightpage|：右ページになるまでページを繰る命令
+%   \item|\pltx@cleartoleftpage|：左ページになるまでページを繰る命令
+%   \item|\pltx@cleartooddpage|：奇数ページになるまでページを繰る命令
+%   \item|\pltx@cleartoevenpage|：偶数ページになるまでページを繰る命令
+% \end{enumerate}
+% また、コミュニティ版クラスの内部では、p\LaTeX{}カーネルの|\cleardoublepage|の
+% 代わりに上記の命令を使って|openright|および|openleft|オプションを実装します。
+% \changes{v1.7d}{????/??/??}{\cs{cleardoublepage}の代用となる命令群を追加}
+%    \begin{macrocode}
+\def\pltx@cleartorightpage{\clearpage\if@twoside
+  \ifodd\c@page
+    \iftdir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \else
+    \ifydir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \fi\fi}
+\def\pltx@cleartoleftpage{\clearpage\if@twoside
+  \ifodd\c@page
+    \ifydir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \else
+    \iftdir
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\newpage\fi
+    \fi
+  \fi\fi}
+%    \end{macrocode}
+%
+% |\pltx@cleartooddpage|は\LaTeX{}の|\cleardoublepage|に似ていますが、
+% |\thispagestyle{empty}|を追加してあります。
+%    \begin{macrocode}
+\def\pltx@cleartooddpage{\clearpage\if@twoside
+  \ifodd\c@page\else
+    \hbox{}\thispagestyle{empty}\newpage
+    \if@twocolumn\hbox{}\newpage\fi
+  \fi\fi}
+\def\pltx@cleartoevenpage{\clearpage\if@twoside
+  \ifodd\c@page
+    \hbox{}\thispagestyle{empty}\newpage
+    \if@twocolumn\hbox{}\newpage\fi
+  \fi\fi}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\cleardoublepage}
+% そしてreportとbookクラスの場合は、ユーザ向け命令である|\cleardoublepage|を、
+% |openright|オプションが指定されている場合は|\pltx@cleartorightpage|に、
+% |openelft|オプションが指定されている場合は|\pltx@cleartoleftpage|に、
+% それぞれ|\let|します。|openany|の場合はp\LaTeX{}カーネルの定義のままです。
+%    \begin{macrocode}
+%<*!article>
+\if@openleft
+  \let\cleardoublepage\pltx@cleartoleftpage
+\else\if@openright
+  \let\cleardoublepage\pltx@cleartorightpage
+\fi\fi
+%</!article>
+%    \end{macrocode}
+% \end{macro}
+%
+%
 %
 % \section{ページスタイル}\label{sec:pagestyle}
 % p\LaTeXe{}では、つぎの6種類のページスタイルを使用できます。
@@ -1949,6 +2052,89 @@
 % 右起こしページ用のページパラメータでは誤った結果になります。
 % 二段組スタイルでも一段組のページが作られます。
 %
+% \noindent\emph{日本語\TeX{}開発コミュニティによる変更}：
+% 上にあるのはアスキー版の説明です。改めてアスキー版の挙動を整理すると、
+% 以下のようになります。
+% \begin{enumerate}
+% \item アスキー版では、タイトルページの番号を必ず1にリセットしていましたが、
+%   これは正しくありません。これは、タイトルページが奇数ページ目か偶数ページ目
+%   かにかかわらず、レイアウトだけ奇数ページ用が適用されてしまうからです。
+%   さらに、タイトルの次のページも偶数のページ番号を持ってしまうため、両面印刷
+%   で奇数ページと偶数ページが交互に出なくなるという問題もあります。
+% \item アスキー版bookクラスは、タイトルページを必ず|\cleardoublepage|で始めて
+%   いました。p\LaTeX{}カーネルでの|\cleardoublepage|の定義から、縦組の既定では
+%   タイトルが偶数ページ目に出ることになります。これ自体が正しくないと断定する
+%   ことはできませんが、タイトルのページ番号を1にリセットすることと合わさって、
+%   偶数ページに送ったタイトルに奇数ページ用レイアウトが適用されてしまうという
+%   結果は正しくありません。
+% \end{enumerate}
+% そこで、コミュニティ版ではタイトルのレイアウトが必ず奇数ページ用になるという
+% 挙動を支持し、bookクラスではタイトルページを奇数ページ目に送ることにしました。
+% これでタイトルページが表紙らしく見えるようになります。また、reportクラスの
+% ようなタイトルが成り行きに従って出る場合には
+% \begin{itemize}
+%   \item 奇数ページ目に出る場合、ページ番号を1（奇数）にリセット
+%   \item 偶数ページ目に出る場合、ページ番号を0（偶数）にリセット
+% \end{itemize}
+% としました。
+%
+% 一つめの例を考えます。
+%\begin{verbatim}
+%   \documentclass{tbook}
+%   \title{タイトル}\author{著者}
+%   \begin{document}
+%   \maketitle
+%   \chapter{チャプター}
+%   \end{document}
+%\end{verbatim}
+% アスキー版tbookクラスでの結果は
+%\begin{verbatim}
+%   1ページ目：空白（ページ番号1は非表示）
+%   2ページ目：タイトル（奇数レイアウト、ページ番号1は非表示）
+%   3ページ目：チャプター（偶数レイアウト、ページ番号2）
+%\end{verbatim}
+% ですが、仮に最初の空白ページさえなければ
+%\begin{verbatim}
+%   1ページ目：タイトルすなわち表紙（奇数レイアウト、ページ番号1は非表示）
+%   2ページ目：チャプター（偶数レイアウト、ページ番号2）
+%\end{verbatim}
+% とみなせるため、コミュニティ版では空白ページを発生させないようにしました。
+%
+% 二つめの例を考えます。
+%\begin{verbatim}
+%   \documentclass{tbook}
+%   \title{タイトル}\author{著者}
+%   \begin{document}
+%   テスト文章
+%   \maketitle
+%   \chapter{チャプター}
+%   \end{document}
+%\end{verbatim}
+% アスキー版tbookクラスでの結果は
+%\begin{verbatim}
+%   1ページ目：テスト文章（奇数レイアウト、ページ番号1）
+%   2ページ目：タイトル（奇数レイアウト、ページ番号1は非表示）
+%   3ページ目：チャプター（偶数レイアウト、ページ番号2）
+%\end{verbatim}
+% ですが、これでは奇数と偶数のページ番号が交互になっていないので正しく
+% ありません。そこで、コミュニティ版では
+%\begin{verbatim}
+%   1ページ目：テスト文章（奇数レイアウト、ページ番号1）
+%   2ページ目：空白ページ（ページ番号2は非表示）
+%   3ページ目：タイトル（奇数レイアウト、ページ番号1は非表示）
+%   4ページ目：チャプター（偶数レイアウト、ページ番号2）
+%\end{verbatim}
+% と直しました。
+%
+% なお、p\LaTeX~2.09互換モードはアスキー版のまま、すなわち「ページ番号をゼロに
+% 設定」としてあります。これは、横組の右起こしの挙動としては誤りですが、縦組の
+% 右起こしの挙動としては一応正しくなっているといえます。
+% \changes{v1.7d}{????/??/??}{titlepageのページ番号を奇数ならば1に、
+%   偶数ならば0にリセットするように変更}
+% \changes{v1.7d}{????/??/??}{\cs{maketitle}が\cs{begin\{document\}}直後に
+%   使われた場合に限り、たとえ偶数ページ起こしでもタイトルの前に空白ページを
+%   作らないようにした}
+%
 % 最初に互換モードの定義を作ります。
 %    \begin{macrocode}
 \if@compatibility
@@ -1969,14 +2155,15 @@
 \else
 \newenvironment{titlepage}
     {%
-%<book>      \cleardoublepage
+%      \cleardoublepage %% <book> moved from here ...
       \if@twocolumn
         \@restonecoltrue\onecolumn
       \else
         \@restonecolfalse\newpage
       \fi
+%<book>      \pltx@cleartooddpage %% ... to here! (????/??/??)
       \thispagestyle{empty}%
-      \setcounter{page}\@ne
+      \ifodd\c@page\setcounter{page}\@ne\else\setcounter{page}\z@\fi %% ????/??/??
     }%
     {\if@restonecol\twocolumn \else \newpage \fi
 %    \end{macrocode}
@@ -2001,10 +2188,14 @@
 % 縦組のときは、|\thanks|コマンドを|\p@thanks|に|\let|します。
 % このコマンドは|\footnotetext|を使わず、直接、文字を|\@thanks|に格納
 % していきます。
+%
+% 著者名の脇に表示される合印は直立した数字、注釈側は横に寝た数字となっていまし
+% たが、不自然なので|\hbox{\yoko ...}|を追加し、両方とも直立するようにしました。
+% \changes{v1.7d}{????/??/??}{縦組クラスの所属表示の番号を直立にした}
 %    \begin{macrocode}
 \def\p@thanks#1{\footnotemark
   \protected@xdef\@thanks{\@thanks
-    \protect{\noindent$\m@th^\thefootnote$~#1\protect\par}}}
+    \protect{\noindent\hbox{\yoko$\m@th^\thefootnote$}#1\protect\par}}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2343,13 +2534,16 @@
 %    \begin{macrocode}
 %<*book>
 \newcommand{\frontmatter}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \@mainmatterfalse\pagenumbering{roman}}
 \newcommand{\mainmatter}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \@mainmattertrue\pagenumbering{arabic}}
 \newcommand{\backmatter}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \@mainmatterfalse}
 %</book>
 %    \end{macrocode}
@@ -2441,7 +2635,8 @@
 %    \begin{macrocode}
 %<*report|book>
 \newcommand{\part}{%
-  \if@openright \cleardoublepage \else \clearpage \fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \thispagestyle{empty}%
   \if@twocolumn\onecolumn\@tempswatrue\else\@tempswafalse\fi
   \null\vfil
@@ -2545,9 +2740,11 @@
 %<*report|book>
 \def\@endpart{\vfil\newpage
   \if@twoside
-   \if@openright %% added (2016/12/18)
+   \if@openleft %% \if@openleft added (????/??/??)
     \null\thispagestyle{empty}\newpage
-   \fi %% added (2016/12/18)
+   \else\if@openright %% \if@openright added (2016/12/18)
+    \null\thispagestyle{empty}\newpage
+   \fi\fi %% added (2016/12/18, ????/??/??)
   \fi
 %    \end{macrocode}
 % 二段組文書のとき、スイッチを二段組モードに戻す必要があります。
@@ -2567,6 +2764,10 @@
 % なお、縦組の場合でも右ページからはじまるように、
 % フォーマットファイルで|\clerdoublepage|が定義されています。
 %
+% \emph{日本語\TeX{}開発コミュニティによる補足}：コミュニティ版の実装では、
+% |openright|と|openleft|の場合に|\cleardoublepage|をクラスファイルの中で
+% 再々定義しています。\ref{sec:cleardoublepage}を参照してください。
+%
 % 章見出しが出力されるページのスタイルは、\pstyle{jpl@in}になります。
 % \pstyle{jpl@in}は、\pstyle{headnomble}か\pstyle{footnomble}のいずれかです。
 % 詳細は、第\ref{sec:pagestyle}節を参照してください。
@@ -2576,7 +2777,8 @@
 %    \begin{macrocode}
 %<*report|book>
 \newcommand{\chapter}{%
-  \if@openright\cleardoublepage\else\clearpage\fi
+  \if@openleft \cleardoublepage \else
+  \if@openright \cleardoublepage \else \clearpage \fi \fi
   \thispagestyle{jpl@in}%
   \global\@topnum\z@
   \@afterindenttrue
