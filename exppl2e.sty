@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2017/01/24 v1.0i Experimental pLaTeX2e features]
+                [2017/02/17 v1.0j Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -523,6 +523,116 @@
 %<platexrelease>  \else
 %<platexrelease>    \expandafter#2#1\relax% change \null to \relax
 %<platexrelease>  \fi}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \section{脚注とボトムフロートの順序および垂直位置}
+%
+% \begin{macro}{\@makecol}
+% このマクロが組み立てる部分の中心となります。
+% \file{ltoutput.dtx}で定義されているものです。
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\@makecol}{\@makecol}%
+%<*plcore|platexrelease>
+\gdef\@makecol{%
+   \setbox\@outputbox\box\@cclv%
+   \let\@elt\relax % added on LaTeX (ltoutput.dtx 2003/12/16 v1.2k)
+   \xdef\@freelist{\@freelist\@midlist}%
+   \global \let \@midlist \@empty
+   \@combinefloats
+%    \end{macrocode}
+% オリジナルの\LaTeX{}は、トップフロート、本文、脚注、ボトムフロートの順番で出力
+% します。しかしp\LaTeX{}は、トップフロート、本文、ボトムフロート、脚注という順番
+% で出力します。ところが、アスキーによって書かれたコードは順番を入れ替えるだけでなく、
+% 版面全体の垂直位置がずれていて、特に縦組では全体が右にシフトしていました。
+% これは補正量|\dp\@outputbox|の取得が早すぎたためですので、コミュニティ版
+% p\LaTeX{}ではこの問題に対処してあります。結果的に、fnposパッケージ(yafoot)の
+% |\makeFNbottom|かつ|\maekFNbelow|な状態と完全に等価になりました。
+% \changes{v????}{????/??/??}{脚注とボトムフロートの順序を入れ替えたことで
+%    版面全体の垂直位置がずれていたのを修正(Issue 32)}
+%    \begin{macrocode}
+   \let\pltx@textbottom\@textbottom % save (pLaTeX ????/??/??)
+   \ifvoid\footins\else % changed (pLaTeX ????/??/??)
+     \setbox\@outputbox \vbox {%
+       \boxmaxdepth \@maxdepth
+       \unvbox \@outputbox
+       \@textbottom % inserted here (pLaTeX ????/??/??)
+       \vskip \skip\footins
+       \color@begingroup
+         \normalcolor
+         \footnoterule
+         \unvbox \footins
+       \color@endgroup
+       }%
+       \let\@textbottom\relax % disable temporarily (pLaTeX ????/??/??)
+   \fi
+   \ifvbox\@kludgeins
+     \@makespecialcolbox
+   \else
+     \setbox\@outputbox \vbox to\@colht {%
+%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+       \@texttop
+       \dimen@ \dp\@outputbox
+       \unvbox \@outputbox
+%    \end{macrocode}
+% 縦組の際に|\@outputbox|の内容が空のボックスだけの場合に、|\wd\@outputbox|が
+% 0ptになってしまい、結果としてフッタの位置がくるってしまっていた。
+% 0の|\hskip|を発生させると|\wd\@outputbox|の値が期待したものとなるので、
+% 縦組の場合はその方法で対処する。
+%
+% ただし、0の|\hskip|を発生させるとき、水平モードに入ってしまうと、たとえば
+% longtableパッケージを使用して表組途中で改ページするときに|\par -> {\vskip}|の
+% 無限ループが起きてしまいます。そこで、|\vbox|の中で発生させます。
+% \changes{v1.1j}{2001/05/10}{\cs{@makecol}で組み立てられる
+%    \cs{@outputbox}の大きさが、縦組で中身が空のボックスだけの場合も適正になる
+%    ように修正}
+% \changes{v1.2b}{2016/01/26}{\cs{@outputbox}の深さが他のものの位置に影響を与えない
+%    ようにする\texttt{\cs{vskip}~-\cs{dimen@}}が縦組モードでは無効になっていたので修正}
+% \changes{v1.2h}{2016/09/01}{縦組でlongtableパッケージを使って表組の途中で改ページ
+%    するとき無限ループが起こる問題に対処(Issue 21)}
+%    \begin{macrocode}
+       \iftdir\vbox{\hskip\z@}\fi
+       \vskip -\dimen@
+       \@textbottom
+       }%
+   \fi
+   \let\@textbottom\pltx@textbottom % restore (pLaTeX ????/??/??)
+   \global \maxdepth \@maxdepth
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/09/03}{\@makecol}{\@makecol}%
+%<platexrelease>\gdef\@makecol{%
+%<platexrelease>   \setbox\@outputbox\box\@cclv%
+%<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
+%<platexrelease>   \global \let \@midlist \@empty
+%<platexrelease>   \@combinefloats
+%<platexrelease>   \ifvbox\@kludgeins
+%<platexrelease>     \@makespecialcolbox
+%<platexrelease>   \else
+%<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
+%<platexrelease>%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+%<platexrelease>       \@texttop
+%<platexrelease>       \dimen@ \dp\@outputbox
+%<platexrelease>       \unvbox \@outputbox
+%<platexrelease>       \iftdir\vbox{\hskip\z@}\fi
+%<platexrelease>       \vskip -\dimen@
+%<platexrelease>       \@textbottom
+%<platexrelease>       \ifvoid\footins\else % for pLaTeX
+%<platexrelease>         \vskip \skip\footins
+%<platexrelease>         \color@begingroup
+%<platexrelease>            \normalcolor
+%<platexrelease>            \footnoterule
+%<platexrelease>            \unvbox \footins
+%<platexrelease>         \color@endgroup
+%<platexrelease>       \fi
+%<platexrelease>       }%
+%<platexrelease>   \fi
+%<platexrelease>   \global \maxdepth \@maxdepth
+%<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
