@@ -1,0 +1,16 @@
+\documentclass[a4paper,12pt]{tarticle}
+\usepackage{array}% これを読むと plext がキャンセルされて文字が回る
+%\usepackage{plextarray}% これを読むと strutbox パッチなしでも正常
+\begin{document}
+% strutbox パッチなしでは表間隔が狭い
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{3}{|c|}{\textbf{名古屋鉄道・知立駅の名物}} \\ \hline
+品名 & 金額 & 評価 \\ \hline
+栗入り大あん巻き & 170円 & ◎ \\ \hline
+たこ焼き一皿 & 250円 & ▲ \\ \hline
+うどん & 280円 & ○ \\ \hline
+そば & 300円 & △ \\ \hline
+知立ラーメン & 350円 & ☆ \\ \hline
+\end{tabular}
+\end{document}

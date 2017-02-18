@@ -1,0 +1,43 @@
+\documentclass{tarticle}
+\usepackage{longtable}% pLaTeX 2016/09/03 以降が必須（無限ループ防止）
+\textheight3cm
+\begin{document}
+
+% strutbox パッチなしでは間隔が狭い
+\begin{longtable}[c]{ccc}
+\hline
+ひらがな & カタカナ & Alphabet \\
+\hline
+あ & ア & A \\
+い & イ & B \\
+う & ウ & C \\
+え & エ & D \\
+お & オ & E \\
+か & カ & F \\
+き & キ & G \\
+く & ク & H \\
+\end{longtable}
+
+\clearpage
+
+% 空ページのテスト
+\null
+\clearpage
+
+% strutbox パッチなしでは調節が効かない
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}[c]{ccc}
+\hline
+ひらがな & カタカナ & Alphabet \\
+\hline
+あ & ア & A \\
+い & イ & B \\
+う & ウ & C \\
+え & エ & D \\
+お & オ & E \\
+か & カ & F \\
+き & キ & G \\
+く & ク & H \\
+\end{longtable}
+
+\end{document}

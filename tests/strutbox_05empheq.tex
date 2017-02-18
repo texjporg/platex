@@ -1,0 +1,11 @@
+\documentclass{tarticle}
+\usepackage{empheq}
+\textwidth6cm
+\begin{document}
+% strutbox パッチなしでは括弧と数式がくっつかない
+% さらに縦数式ディレクションがずれる 2016 年の pTeX のバグも影響
+\begin{empheq}[left=\empheqlbrace]{align}
+  -2x + 4y &= 5\\
+    x -  y &= -2
+\end{empheq}
+\end{document}

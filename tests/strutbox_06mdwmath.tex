@@ -1,0 +1,9 @@
+\documentclass{tarticle}
+\usepackage{mdwmath}
+\begin{document}
+% strutbox パッチなしでは括弧が大きくならない
+% さらに縦数式ディレクションがずれる 2016 年の pTeX のバグも影響
+\begin{equation}
+\Bigg( \sum_{n=0}^{\infty} \frac{1}{x^n} \Bigg)
+\end{equation}
+\end{document}

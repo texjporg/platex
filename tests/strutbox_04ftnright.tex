@@ -1,0 +1,13 @@
+\documentclass[a4paper,twocolumn]{tarticle}
+\usepackage{pxftnright}% この中に strutbox パッチと等価な対処も含む
+% 上の対処がない状況をエミュレートすると脚注同士が密着する。
+\AtBeginDocument{\global\footnotesep\ht\strutbox}
+\def\hoge{ほげほげ。ふがふがふが。ぴよぴよぴよぴよ。}
+\def\HOGE{\hoge\hoge\hoge\hoge\hoge\hoge\hoge\hoge\hoge\hoge}
+\begin{document}
+\HOGE\HOGE
+ここに脚注を\footnote{脚注です。}入れました。
+\HOGE\HOGE
+もう一つ脚注を\footnote{ふたつめの脚注です。}入れてみましょう。
+\HOGE\HOGE
+\end{document}
