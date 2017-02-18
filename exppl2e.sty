@@ -237,7 +237,7 @@
 %    \begin{macrocode}
     \else
       \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
-      \else\lower\@tempdima\box\z@\fi
+      \else\leavevmode\lower\@tempdima\box\z@\fi
     \fi
     \endgroup}%
   \fi
