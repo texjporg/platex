@@ -3,7 +3,7 @@
 %
 %  Copyright 1994-2006 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016 Japanese TeX Development Community
+%  Copyright (c) 2016-2017 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -1132,7 +1132,8 @@
 % しまうため、計算した値が大きくなってしまいます。そこで、このボックス
 % の中でゼロにするようにしました。また、``/''と比較していたのを``M''に 
 % しました。
-% \changes{v1.3k}{2001/05/10}{\cs{adjustbaseline}の調整量}
+% \changes{v1.3k}{2001/05/10}{\cs{adjustbaseline}の調整量
+%    （再び`M'を基準にした）}
 %    \begin{macrocode}
 \newbox\adjust@box
 \newdimen\adjust@dimen
@@ -1154,9 +1155,9 @@
 %
 % \begin{eqnarray*}
 % \textmc{ベースラインシフト量} &=&
-%   \{ (\textmc{全角空白の深さ}) - (\textmc{/の深さ}) \} \\
+%   \{ (\textmc{全角空白の深さ}) - (\textmc{Mの深さ}) \} \\
 %       &&- \frac{(\textmc{全角空白の高さ$+$深さ})
-%              - (\textmc{/の高さ$+$深さ})}{2}
+%              - (\textmc{Mの高さ$+$深さ})}{2}
 % \end{eqnarray*}
 %
 %    \begin{macrocode}
