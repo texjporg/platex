@@ -6,6 +6,7 @@ TARGET3 = platex.dvi platexrelease.dvi pldoc.dvi \
 	nidanfloat.dvi ascmac.dvi exppl2e.dvi
 KANJI = -kanji=jis
 FONTMAP = -f ipaex.map -f ptex-ipaex.map
+TEXMF = $(shell kpsewhich -var-value=TEXMFHOME)
 
 default: $(TARGET1) $(TARGET3)
 strip: $(TARGET1)
@@ -134,7 +135,28 @@ ascmac.pdf: ascmac.dvi
 exppl2e.pdf: exppl2e.dvi
 	dvipdfmx $(FONTMAP) exppl2e.dvi
 
-.PHONY: clean cleanstrip cleanall cleandoc
+.PHONY: install clean cleanstrip cleanall cleandoc
+install:
+	mkdir -p ${TEXMF}/doc/platex/base
+	cp ./LICENSE ${TEXMF}/doc/platex/base/
+	cp ./README.md ${TEXMF}/doc/platex/base/
+	cp ./*.pdf ${TEXMF}/doc/platex/base/
+	cp ./*.txt ${TEXMF}/doc/platex/base/
+	mkdir -p ${TEXMF}/source/platex/base
+	cp ./Makefile ${TEXMF}/source/platex/base/
+	cp ./plnews* ${TEXMF}/source/platex/base/
+	cp ./*.dtx ${TEXMF}/source/platex/base/
+	cp ./*.ins ${TEXMF}/source/platex/base/
+	mkdir -p ${TEXMF}/tex/platex/base
+	cp ./kinsoku.tex ${TEXMF}/tex/platex/base/
+	cp ./*.clo ${TEXMF}/tex/platex/base/
+	ls ./*.cls | grep -v plnews.cls | xargs -i% cp % ${TEXMF}/tex/platex/base
+	cp ./*.def ${TEXMF}/tex/platex/base/
+	cp ./*.fd  ${TEXMF}/tex/platex/base/
+	cp ./*.ltx ${TEXMF}/tex/platex/base/
+	cp ./*.sty ${TEXMF}/tex/platex/base/
+	mkdir -p ${TEXMF}/tex/platex/config
+	cp ./platex.ini ${TEXMF}/tex/platex/config/
 clean:
 	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
 	$(NIDAN) $(ASCMAC) \
