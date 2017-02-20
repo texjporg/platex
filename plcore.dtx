@@ -54,13 +54,15 @@
 % \changes{v1.2i}{2016/09/08}{v1.2gの修正で入れた\cs{null}がまずかったので
 %    水平モードのときだけ発行することにした(Issue 23)}
 % \changes{v1.2j}{2016/11/09}{FAM256パッチ適用e-p\TeX{}に対応}
+% \changes{v1.2k}{2017/02/20}{目次で\cs{ref}を使った場合に後ろの空白が消える
+%    現象に対処するため、\cs{relax}のあとに\{\}を追加}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2016/11/09 v1.2j pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2017/02/20 v1.2k pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1090,12 +1092,24 @@
 %
 % \begin{macro}{\@setref}
 % \changes{v1.1c}{1995/09/07}{change \cs{null} to \cs{relax} in \cs{@setref}.}
+% \changes{v1.2k}{2017/02/20}{目次で\cs{ref}を使った場合に後ろの空白が消える
+%    現象に対処するため、\cs{relax}のあとに\{\}を追加}
 % |\ref|コマンドや|\pageref|コマンドで参照したとき、これらのコマンドに
 % よって出力された番号と続く２バイト文字との間に|\xkanjiskip|が入りません。
 % これは、|\null|が|\hbox{}|と定義されているためです。
 % そこで|\null|を取り除きます。
 % このコマンドは、\file{ltxref.dtx}で定義されているものです。
+%
+% しかし、単に|\null|を|\relax|に置き換えるだけでは、|\section|のような
+% 「動く引数」で|\ref|などを使った場合に、目次で後ろの空白が消えてしまいます。
+% そこで、|\relax|のあとに|{}|を追加しました。従来も|\protect\ref|のように使えば
+% 問題ありませんでしたが、\LaTeX{}では展開されても問題が起きないrobustな実装に
+% なっていますので、これに従います。
 %    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\@setref}
+%<platexrelease>                   {Spacing after \ref in moving arguments}%
+%<*plcore|platexrelease>
 \def\@setref#1#2#3{%
   \ifx#1\relax
     \protect\G@refundefinedtrue
@@ -1103,8 +1117,23 @@
     \@latex@warning{Reference `#3' on page \thepage \space
               undefined}%
   \else
-    \expandafter#2#1\relax% change \null to \relax
+    \expandafter#2#1\relax{}% change \null to \relax{}
   \fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@setref}
+%<platexrelease>                   {Spacing after \ref in moving arguments}%
+%<platexrelease>\def\@setref#1#2#3{%
+%<platexrelease>  \ifx#1\relax
+%<platexrelease>    \protect\G@refundefinedtrue
+%<platexrelease>    \nfss@text{\reset@font\bfseries ??}%
+%<platexrelease>    \@latex@warning{Reference `#3' on page \thepage \space
+%<platexrelease>              undefined}%
+%<platexrelease>  \else
+%<platexrelease>    \expandafter#2#1\relax% change \null to \relax
+%<platexrelease>  \fi}
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %

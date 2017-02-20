@@ -541,7 +541,7 @@
 %
 % \begin{macro}{\@setref}
 % \changes{v1.1c}{1995/09/07}{change \cs{null} to \cs{relax} in \cs{@setref}.}
-% \changes{v????}{????/??/??}{目次で\cs{ref}を使った場合に後ろの空白が消える
+% \changes{v1.2k}{2017/02/20}{目次で\cs{ref}を使った場合に後ろの空白が消える
 %    現象に対処するため、\cs{relax}のあとに\{\}を追加}
 % |\ref|コマンドや|\pageref|コマンドで参照したとき、これらのコマンドに
 % よって出力された番号と続く２バイト文字との間に|\xkanjiskip|が入りません。
@@ -551,9 +551,11 @@
 %
 % しかし、単に|\null|を|\relax|に置き換えるだけでは、|\section|のような
 % 「動く引数」で|\ref|などを使った場合に、目次で後ろの空白が消えてしまいます。
-% そこで、|\relax|のあとに|{}|を追加しました。
+% そこで、|\relax|のあとに|{}|を追加しました。従来も|\protect\ref|のように使えば
+% 問題ありませんでしたが、\LaTeX{}では展開されても問題が起きないrobustな実装に
+% なっていますので、これに従います。
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\@setref}
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\@setref}
 %<platexrelease>                   {Spacing after \ref in moving arguments}%
 %<*plcore|platexrelease>
 \def\@setref#1#2#3{%

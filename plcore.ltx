@@ -967,7 +967,7 @@
     \@latex@warning{Reference `#3' on page \thepage \space
               undefined}%
   \else
-    \expandafter#2#1\relax% change \null to \relax
+    \expandafter#2#1\relax{}% change \null to \relax{}
   \fi}
 \if@compatibility\else
 \def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
