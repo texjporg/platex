@@ -15,7 +15,7 @@
 %% File: plfonts.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{ptrace}
-     [2016/04/30 v1.6b Standard pLaTeX package (font tracing)]
+     [2017/02/20 v1.6f Standard pLaTeX package (font tracing)]
 \RequirePackageWithOptions{tracefnt}
 \DeclareRobustCommand\selectfont{%
   \let\tmp@error@fontshape\error@fontshape
@@ -74,6 +74,43 @@
   \size@update}
 \def\KanjiEncodingPair#1#2{\@namedef{t@enc@#1}{#2}\@namedef{y@enc@#2}{#1}}
 \KanjiEncodingPair{JY1}{JT1}
+\plIncludeInRelease{2017/04/08}{\set@fontsize}
+                   {Construct \ystrutbox}%
+\def\set@fontsize#1#2#3{%
+    \@defaultunits\@tempdimb#2pt\relax\@nnil
+    \edef\f@size{\strip@pt\@tempdimb}%
+    \@defaultunits\@tempskipa#3pt\relax\@nnil
+    \edef\f@baselineskip{\the\@tempskipa}%
+    \edef\f@linespread{#1}%
+    \let\baselinestretch\f@linespread
+    \def\size@update{%
+      \baselineskip\f@baselineskip\relax
+      \baselineskip\f@linespread\baselineskip
+      \normalbaselineskip\baselineskip
+      \adjustbaseline
+      \setbox\ystrutbox\hbox{\yoko
+          \vrule\@width\z@
+                \@height.7\baselineskip \@depth.3\baselineskip}%
+      \setbox\tstrutbox\hbox{\tate
+          \vrule\@width\z@
+                \@height.5\baselineskip \@depth.5\baselineskip}%
+      \setbox\zstrutbox\hbox{\tate
+          \vrule\@width\z@
+                \@height.7\baselineskip \@depth.3\baselineskip}%
+    \ifnum \tracingfonts>\tw@
+      \ifx\f@linespread\@empty
+        \let\reserved@a\@empty
+      \else
+        \def\reserved@a{\f@linespread x}%
+      \fi
+      \@font@info{Changing size to\space
+            \f@size/\reserved@a \f@baselineskip}%
+      \aftergroup\type@restoreinfo
+    \fi
+        \let\size@update\relax}}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\set@fontsize}
+                   {Construct \ystrutbox}%
 \def\set@fontsize#1#2#3{%
     \@defaultunits\@tempdimb#2pt\relax\@nnil
     \edef\f@size{\strip@pt\@tempdimb}%
@@ -106,6 +143,7 @@
       \aftergroup\type@restoreinfo
     \fi
         \let\size@update\relax}}
+\plEndIncludeInRelease
 \newbox\adjust@box
 \newdimen\adjust@dimen
 \def\adjustbaseline{%

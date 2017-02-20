@@ -57,13 +57,19 @@
 % \changes{v1.6d}{2016/06/19}{アクセント付き文字をさらに修正(forum:1951)}
 % \changes{v1.6e}{2016/06/26}{v1.6a以降の修正で全てのアクセント付き文字で
 %    トラブルが相次いだため、いったんパッチを除去。}
+% \changes{v1.6f}{2017/02/20}{ptrace.styのplatexrelease対応}
+% \changes{v1.6f}{2017/02/20}{\cs{ystrutbox}を追加}
+% \changes{v1.6f}{2017/02/20}{\cs{strutbox}を縦横両対応に}
+% \changes{v1.6f}{2017/02/20}{\cs{strutbox}の代わりに\cs{ystrutbox}を使用}
+% \changes{v1.6f}{2017/02/20}{\cs{ystrut}を追加}
+% \changes{v1.6f}{2017/02/20}{\cs{ystrutbox}を組み立てるように}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2016/06/26 v1.6e pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2017/02/20 v1.6f pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -137,7 +143,7 @@
 %<*trace>
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{ptrace}
-     [2016/04/30 v1.6b Standard pLaTeX package (font tracing)]
+     [2017/02/20 v1.6f Standard pLaTeX package (font tracing)]
 \RequirePackageWithOptions{tracefnt}
 %</trace>
 %    \end{macrocode}
@@ -406,12 +412,25 @@
 %
 % フォントサイズが変更されたときに、|\set@fontsize|コマンドで更新されます。
 %
+% 従来、横組ボックス用の支柱は|\strutbox|で、高さと深さが7対3となっていました。
+% これはp\LaTeX{}単体では問題になりませんでしたが、海外製の\LaTeX{}パッケージを
+% 縦組で使用した場合に、意図しない幅や高さが取得されることがありました。
+% この不都合を回避するため、コミュニティ版p\LaTeX{}では次の方法をとります。
+% \begin{itemize}
+% \item |\ystrutbox|（新設）：高さと深さが7対3の横組ボックス用の支柱
+% \item |\tstrutbox|：高さと深さが5対5の縦組ボックス用の支柱
+% \item |\zstrutbox|：高さと深さが7対3の縦組ボックス用の支柱
+% \item |\strutbox|（仕様変更）：縦横のディレクションに応じて
+%                     |\tstrutbox|または|\ystrutbox|に展開されるマクロ
+% \end{itemize}
+% すなわち、従来のp\LaTeX{}における|\strutbox|と同じ挙動を示すのが、
+% 新設された|\ystrutbox|ということになります。
+%
 % \begin{macro}{\tstrutbox}
 % \begin{macro}{\zstrutbox}
-% |\tstrutbox|は高さと深さが５対５、
-% |\zstrutbox|は高さと深さが７対３の支柱ボックスとなります。
+% |\tstrutbox|は高さと深さが5対5、
+% |\zstrutbox|は高さと深さが7対3の支柱ボックスとなります。
 % これらは縦組ボックスの行間の調整などに使います。
-% なお、横組ボックス用の支柱は|\strutbox|で、高さと深さが７対３となっています。
 %    \begin{macrocode}
 \newbox\tstrutbox
 \newbox\zstrutbox
@@ -419,24 +438,80 @@
 % \end{macro}
 % \end{macro}
 %
+% \begin{macro}{\ystrutbox}
+% |\ystrutbox|は高さと深さが7対3の横組ボックス用の支柱です。
+% \changes{v1.6f}{2017/02/20}{\cs{ystrutbox}を追加}
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\ystrutbox}
+%<platexrelease>                   {Add \ystrutbox}%
+%<*plcore|platexrelease>
+\newbox\ystrutbox
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\ystrutbox}
+%<platexrelease>                   {Add \ystrutbox}%
+%<platexrelease>\let\ystrutbox\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\strutbox}
+% |\strutbox|は縦横両対応です。
+% \changes{v1.6f}{2017/02/20}{\cs{strutbox}を縦横両対応に}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\strutbox}
+%<platexrelease>                   {Add \strutbox}%
+%<*plcore|platexrelease>
+\def\strutbox{\iftdir\tstrutbox\else\ystrutbox\fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\strutbox}
+%<platexrelease>                   {Add \strutbox}%
+%<platexrelease>\newbox\strutbox % emulation purpose only
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\strut}
-% \begin{macro}{\tstrut}
-% \begin{macro}{\zstrut}
-% |\strutbox|は|\yoko|ディレクションで組まれていますので、
-% 縦組ボックス内で|\unhcopy|をするとエラーとなります。
-% このマクロは\file{ltplain.dtx}で定義されています。
+% ディレクションに応じて|\ystrutbox|と|\tstrutbox|を使い分けます。
+% ^^A |\strutbox|は|\yoko|ディレクションで組まれていますので、
+% ^^A 縦組ボックス内で|\unhcopy|をするとエラーとなります。
+% 元々このマクロは\file{ltplain.dtx}で定義されています。
 %
 % \changes{v1.1c}{1995/08/24}{``\cs{centerling}~\cs{strut}''の幅がゼロに
 % なってしまうのを修正}
 % \changes{v1.3h}{1999/08/09}{縦組のとき、幅のあるボックスになってしまう
 % のを修正}
+% \changes{v1.6f}{2017/02/20}{\cs{strutbox}の代わりに\cs{ystrutbox}を使用}
 %    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\strut}
+%<platexrelease>                   {Use \ystrutbox}%
+%<*plcore|platexrelease>
 \def\strut{\relax
   \ifydir
-    \ifmmode\copy\strutbox\else\unhcopy\strutbox\fi
+    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi
   \else
     \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
   \fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\strut}
+%<platexrelease>                   {Use \ystrutbox}%
+%<platexrelease>\def\strut{\relax
+%<platexrelease>  \ifydir
+%<platexrelease>    \ifmmode\copy\strutbox\else\unhcopy\strutbox\fi
+%<platexrelease>  \else
+%<platexrelease>    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
+%<platexrelease>  \fi}
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tstrut}
+% \begin{macro}{\zstrut}
+%    \begin{macrocode}
 \def\tstrut{\relax\hbox{\tate
    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi}}
 \def\zstrut{\relax\hbox{\tate
@@ -444,6 +519,24 @@
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
+%
+% \begin{macro}{\ystrut}
+% \changes{v1.6f}{2017/02/20}{\cs{ystrut}を追加}
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\ystrut}
+%<platexrelease>                   {Add \ystrut}%
+%<*plcore|platexrelease>
+\def\ystrut{\relax\hbox{\yoko
+    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi}}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\ystrut}
+%<platexrelease>                   {Add \ystrut}%
+%<platexrelease>\let\ystrut\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
+%    \end{macrocode}
 % \end{macro}
 %
 %
@@ -1069,6 +1162,10 @@
 % |\fontsize|コマンドの内部形式です。
 % ベースラインの設定と、支柱の設定を行ないます。
 %    \begin{macrocode}
+%</plcore|trace>
+%<platexrelease|trace>\plIncludeInRelease{2017/04/08}{\set@fontsize}
+%<platexrelease|trace>                   {Construct \ystrutbox}%
+%<*plcore|platexrelease|trace>
 \def\set@fontsize#1#2#3{%
     \@defaultunits\@tempdimb#2pt\relax\@nnil
     \edef\f@size{\strip@pt\@tempdimb}%
@@ -1082,9 +1179,10 @@
       \normalbaselineskip\baselineskip
 %    \end{macrocode}
 % ここで、ベースラインシフトの調整と支柱を組み立てます。
+% \changes{v1.6f}{2017/02/20}{\cs{ystrutbox}を組み立てるように}
 %    \begin{macrocode}
       \adjustbaseline
-      \setbox\strutbox\hbox{\yoko
+      \setbox\ystrutbox\hbox{\yoko
           \vrule\@width\z@
                 \@height.7\baselineskip \@depth.3\baselineskip}%
       \setbox\tstrutbox\hbox{\tate
@@ -1109,6 +1207,46 @@
     \fi
 %</trace>
         \let\size@update\relax}}
+%</plcore|platexrelease|trace>
+%<platexrelease|trace>\plEndIncludeInRelease
+%<platexrelease|trace>\plIncludeInRelease{0000/00/00}{\set@fontsize}
+%<platexrelease|trace>                   {Construct \ystrutbox}%
+%<platexrelease|trace>\def\set@fontsize#1#2#3{%
+%<platexrelease|trace>    \@defaultunits\@tempdimb#2pt\relax\@nnil
+%<platexrelease|trace>    \edef\f@size{\strip@pt\@tempdimb}%
+%<platexrelease|trace>    \@defaultunits\@tempskipa#3pt\relax\@nnil
+%<platexrelease|trace>    \edef\f@baselineskip{\the\@tempskipa}%
+%<platexrelease|trace>    \edef\f@linespread{#1}%
+%<platexrelease|trace>    \let\baselinestretch\f@linespread
+%<platexrelease|trace>    \def\size@update{%
+%<platexrelease|trace>      \baselineskip\f@baselineskip\relax
+%<platexrelease|trace>      \baselineskip\f@linespread\baselineskip
+%<platexrelease|trace>      \normalbaselineskip\baselineskip
+%<platexrelease|trace>      \adjustbaseline
+%<platexrelease|trace>      \setbox\strutbox\hbox{\yoko
+%<platexrelease|trace>          \vrule\@width\z@
+%<platexrelease|trace>                \@height.7\baselineskip \@depth.3\baselineskip}%
+%<platexrelease|trace>      \setbox\tstrutbox\hbox{\tate
+%<platexrelease|trace>          \vrule\@width\z@
+%<platexrelease|trace>                \@height.5\baselineskip \@depth.5\baselineskip}%
+%<platexrelease|trace>      \setbox\zstrutbox\hbox{\tate
+%<platexrelease|trace>          \vrule\@width\z@
+%<platexrelease|trace>                \@height.7\baselineskip \@depth.3\baselineskip}%
+%<*trace>
+%<platexrelease|trace>    \ifnum \tracingfonts>\tw@
+%<platexrelease|trace>      \ifx\f@linespread\@empty
+%<platexrelease|trace>        \let\reserved@a\@empty
+%<platexrelease|trace>      \else
+%<platexrelease|trace>        \def\reserved@a{\f@linespread x}%
+%<platexrelease|trace>      \fi
+%<platexrelease|trace>      \@font@info{Changing size to\space
+%<platexrelease|trace>            \f@size/\reserved@a \f@baselineskip}%
+%<platexrelease|trace>      \aftergroup\type@restoreinfo
+%<platexrelease|trace>    \fi
+%</trace>
+%<platexrelease|trace>        \let\size@update\relax}}
+%<platexrelease|trace>\plEndIncludeInRelease
+%<*plcore|trace>
 %    \end{macrocode}
 % \end{macro}
 %

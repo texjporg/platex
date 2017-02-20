@@ -82,9 +82,11 @@
 \let\notffam@list\kfam@list
 \newbox\tstrutbox
 \newbox\zstrutbox
+\newbox\ystrutbox
+\def\strutbox{\iftdir\tstrutbox\else\ystrutbox\fi}
 \def\strut{\relax
   \ifydir
-    \ifmmode\copy\strutbox\else\unhcopy\strutbox\fi
+    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi
   \else
     \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
   \fi}
@@ -92,6 +94,8 @@
    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi}}
 \def\zstrut{\relax\hbox{\tate
    \ifmmode\copy\zstrutbox\else\unhcopy\zstrutbox\fi}}
+\def\ystrut{\relax\hbox{\yoko
+    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi}}
 \def\DeclareFontEncoding{%
   \begingroup
   \nfss@catcodes
@@ -427,7 +431,7 @@
       \baselineskip\f@linespread\baselineskip
       \normalbaselineskip\baselineskip
       \adjustbaseline
-      \setbox\strutbox\hbox{\yoko
+      \setbox\ystrutbox\hbox{\yoko
           \vrule\@width\z@
                 \@height.7\baselineskip \@depth.3\baselineskip}%
       \setbox\tstrutbox\hbox{\tate

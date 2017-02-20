@@ -292,9 +292,9 @@
 %
 % \begin{macro}{\ystrutbox}
 % |\ystrutbox|は高さと深さが7対3の横組ボックス用の支柱です。
-% \changes{v????}{????/??/??}{\cs{ystrutbox}を追加}
+% \changes{v1.6f}{2017/02/20}{\cs{ystrutbox}を追加}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\ystrutbox}
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\ystrutbox}
 %<platexrelease>                   {Add \ystrutbox}%
 %<*plcore|platexrelease>
 \newbox\ystrutbox
@@ -303,6 +303,23 @@
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\ystrutbox}
 %<platexrelease>                   {Add \ystrutbox}%
 %<platexrelease>\let\ystrutbox\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\strutbox}
+% |\strutbox|は縦横両対応です。
+% \changes{v1.6f}{2017/02/20}{\cs{strutbox}を縦横両対応に}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\strutbox}
+%<platexrelease>                   {Add \strutbox}%
+%<*plcore|platexrelease>
+\def\strutbox{\iftdir\tstrutbox\else\ystrutbox\fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\strutbox}
+%<platexrelease>                   {Add \strutbox}%
+%<platexrelease>\newbox\strutbox % emulation purpose only
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
@@ -317,9 +334,9 @@
 % なってしまうのを修正}
 % \changes{v1.3h}{1999/08/09}{縦組のとき、幅のあるボックスになってしまう
 % のを修正}
-% \changes{v????}{????/??/??}{\cs{strutbox}の代わりに\cs{ystrutbox}を使用}
+% \changes{v1.6f}{2017/02/20}{\cs{strutbox}の代わりに\cs{ystrutbox}を使用}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\strut}
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\strut}
 %<platexrelease>                   {Use \ystrutbox}%
 %<*plcore|platexrelease>
 \def\strut{\relax
@@ -354,9 +371,9 @@
 % \end{macro}
 %
 % \begin{macro}{\ystrut}
-% \changes{v????}{????/??/??}{\cs{ystrut}を追加}
+% \changes{v1.6f}{2017/02/20}{\cs{ystrut}を追加}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\ystrut}
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\ystrut}
 %<platexrelease>                   {Add \ystrut}%
 %<*plcore|platexrelease>
 \def\ystrut{\relax\hbox{\yoko
@@ -372,15 +389,14 @@
 %
 %
 %
-%^^A=================================================================
-%^^A メモ：|\set@fontsize|のplatexreleaseガード、traceガードは未完成
-%^^A=================================================================
-%
 % \begin{macro}{\set@fontsize}
 % |\fontsize|コマンドの内部形式です。
 % ベースラインの設定と、支柱の設定を行ないます。
 %    \begin{macrocode}
-\def\strutbox{\iftdir\tstrutbox\else\ystrutbox\fi}
+%</plcore|trace>
+%<platexrelease|trace>\plIncludeInRelease{2017/04/08}{\set@fontsize}
+%<platexrelease|trace>                   {Construct \ystrutbox}%
+%<*plcore|platexrelease|trace>
 \def\set@fontsize#1#2#3{%
     \@defaultunits\@tempdimb#2pt\relax\@nnil
     \edef\f@size{\strip@pt\@tempdimb}%
@@ -394,8 +410,7 @@
       \normalbaselineskip\baselineskip
 %    \end{macrocode}
 % ここで、ベースラインシフトの調整と支柱を組み立てます。
-% \changes{v????}{????/??/??}{\cs{ystrutbox}を組み立てるように
-%    し、\cs{strutbox}を縦横両対応に}
+% \changes{v1.6f}{2017/02/20}{\cs{ystrutbox}を組み立てるように}
 %    \begin{macrocode}
       \adjustbaseline
       \setbox\ystrutbox\hbox{\yoko
@@ -411,18 +426,58 @@
 % フォントサイズとベースラインに関する診断情報を出力します。
 %    \begin{macrocode}
 %<*trace>
-%     \ifnum \tracingfonts>\tw@
-%       \ifx\f@linespread\@empty
-%         \let\reserved@a\@empty
-%       \else
-%         \def\reserved@a{\f@linespread x}%
-%       \fi
-%       \@font@info{Changing size to\space
-%             \f@size/\reserved@a \f@baselineskip}%
-%       \aftergroup\type@restoreinfo
-%     \fi
+%    \ifnum \tracingfonts>\tw@
+%      \ifx\f@linespread\@empty
+%        \let\reserved@a\@empty
+%      \else
+%        \def\reserved@a{\f@linespread x}%
+%      \fi
+%      \@font@info{Changing size to\space
+%            \f@size/\reserved@a \f@baselineskip}%
+%      \aftergroup\type@restoreinfo
+%    \fi
 %</trace>
         \let\size@update\relax}}
+%</plcore|platexrelease|trace>
+%<platexrelease|trace>\plEndIncludeInRelease
+%<platexrelease|trace>\plIncludeInRelease{0000/00/00}{\set@fontsize}
+%<platexrelease|trace>                   {Construct \ystrutbox}%
+%<platexrelease|trace>\def\set@fontsize#1#2#3{%
+%<platexrelease|trace>    \@defaultunits\@tempdimb#2pt\relax\@nnil
+%<platexrelease|trace>    \edef\f@size{\strip@pt\@tempdimb}%
+%<platexrelease|trace>    \@defaultunits\@tempskipa#3pt\relax\@nnil
+%<platexrelease|trace>    \edef\f@baselineskip{\the\@tempskipa}%
+%<platexrelease|trace>    \edef\f@linespread{#1}%
+%<platexrelease|trace>    \let\baselinestretch\f@linespread
+%<platexrelease|trace>    \def\size@update{%
+%<platexrelease|trace>      \baselineskip\f@baselineskip\relax
+%<platexrelease|trace>      \baselineskip\f@linespread\baselineskip
+%<platexrelease|trace>      \normalbaselineskip\baselineskip
+%<platexrelease|trace>      \adjustbaseline
+%<platexrelease|trace>      \setbox\strutbox\hbox{\yoko
+%<platexrelease|trace>          \vrule\@width\z@
+%<platexrelease|trace>                \@height.7\baselineskip \@depth.3\baselineskip}%
+%<platexrelease|trace>      \setbox\tstrutbox\hbox{\tate
+%<platexrelease|trace>          \vrule\@width\z@
+%<platexrelease|trace>                \@height.5\baselineskip \@depth.5\baselineskip}%
+%<platexrelease|trace>      \setbox\zstrutbox\hbox{\tate
+%<platexrelease|trace>          \vrule\@width\z@
+%<platexrelease|trace>                \@height.7\baselineskip \@depth.3\baselineskip}%
+%<*trace>
+%<platexrelease|trace>    \ifnum \tracingfonts>\tw@
+%<platexrelease|trace>      \ifx\f@linespread\@empty
+%<platexrelease|trace>        \let\reserved@a\@empty
+%<platexrelease|trace>      \else
+%<platexrelease|trace>        \def\reserved@a{\f@linespread x}%
+%<platexrelease|trace>      \fi
+%<platexrelease|trace>      \@font@info{Changing size to\space
+%<platexrelease|trace>            \f@size/\reserved@a \f@baselineskip}%
+%<platexrelease|trace>      \aftergroup\type@restoreinfo
+%<platexrelease|trace>    \fi
+%</trace>
+%<platexrelease|trace>        \let\size@update\relax}}
+%<platexrelease|trace>\plEndIncludeInRelease
+%<*plcore|trace>
 %    \end{macrocode}
 % \end{macro}
 %

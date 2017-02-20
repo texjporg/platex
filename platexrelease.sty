@@ -121,6 +121,99 @@ of this package available from CTAN}
 \plIncludeInRelease{0000/00/00}{\PackageWarning}{pLaTeX Info}%
 \plEndIncludeInRelease
 %% File: plfonts.dtx
+\plIncludeInRelease{2017/04/08}{\ystrutbox}
+                   {Add \ystrutbox}%
+\newbox\ystrutbox
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\ystrutbox}
+                   {Add \ystrutbox}%
+\let\ystrutbox\@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{2017/04/08}{\strutbox}
+                   {Add \strutbox}%
+\def\strutbox{\iftdir\tstrutbox\else\ystrutbox\fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\strutbox}
+                   {Add \strutbox}%
+\newbox\strutbox % emulation purpose only
+\plEndIncludeInRelease
+\plIncludeInRelease{2017/04/08}{\strut}
+                   {Use \ystrutbox}%
+\def\strut{\relax
+  \ifydir
+    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi
+  \else
+    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
+  \fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\strut}
+                   {Use \ystrutbox}%
+\def\strut{\relax
+  \ifydir
+    \ifmmode\copy\strutbox\else\unhcopy\strutbox\fi
+  \else
+    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
+  \fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{2017/04/08}{\ystrut}
+                   {Add \ystrut}%
+\def\ystrut{\relax\hbox{\yoko
+    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi}}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\ystrut}
+                   {Add \ystrut}%
+\let\ystrut\@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{2017/04/08}{\set@fontsize}
+                   {Construct \ystrutbox}%
+\def\set@fontsize#1#2#3{%
+    \@defaultunits\@tempdimb#2pt\relax\@nnil
+    \edef\f@size{\strip@pt\@tempdimb}%
+    \@defaultunits\@tempskipa#3pt\relax\@nnil
+    \edef\f@baselineskip{\the\@tempskipa}%
+    \edef\f@linespread{#1}%
+    \let\baselinestretch\f@linespread
+    \def\size@update{%
+      \baselineskip\f@baselineskip\relax
+      \baselineskip\f@linespread\baselineskip
+      \normalbaselineskip\baselineskip
+      \adjustbaseline
+      \setbox\ystrutbox\hbox{\yoko
+          \vrule\@width\z@
+                \@height.7\baselineskip \@depth.3\baselineskip}%
+      \setbox\tstrutbox\hbox{\tate
+          \vrule\@width\z@
+                \@height.5\baselineskip \@depth.5\baselineskip}%
+      \setbox\zstrutbox\hbox{\tate
+          \vrule\@width\z@
+                \@height.7\baselineskip \@depth.3\baselineskip}%
+        \let\size@update\relax}}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\set@fontsize}
+                   {Construct \ystrutbox}%
+\def\set@fontsize#1#2#3{%
+    \@defaultunits\@tempdimb#2pt\relax\@nnil
+    \edef\f@size{\strip@pt\@tempdimb}%
+    \@defaultunits\@tempskipa#3pt\relax\@nnil
+    \edef\f@baselineskip{\the\@tempskipa}%
+    \edef\f@linespread{#1}%
+    \let\baselinestretch\f@linespread
+    \def\size@update{%
+      \baselineskip\f@baselineskip\relax
+      \baselineskip\f@linespread\baselineskip
+      \normalbaselineskip\baselineskip
+      \adjustbaseline
+      \setbox\strutbox\hbox{\yoko
+          \vrule\@width\z@
+                \@height.7\baselineskip \@depth.3\baselineskip}%
+      \setbox\tstrutbox\hbox{\tate
+          \vrule\@width\z@
+                \@height.5\baselineskip \@depth.5\baselineskip}%
+      \setbox\zstrutbox\hbox{\tate
+          \vrule\@width\z@
+                \@height.7\baselineskip \@depth.3\baselineskip}%
+        \let\size@update\relax}}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/06/10}{\g@tlastchart@}
                    {Added \g@tlastchart@}%
 \def\g@tlastchart@#1{#1\ifx\lastnodechar\@undefined\m@ne\else\lastnodechar\fi}
