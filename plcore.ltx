@@ -693,9 +693,25 @@
   \fi}
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%
+   \let\@elt\relax % added on LaTeX (ltoutput.dtx 2003/12/16 v1.2k)
    \xdef\@freelist{\@freelist\@midlist}%
    \global \let \@midlist \@empty
    \@combinefloats
+   \let\pltx@textbottom\@textbottom % save (pLaTeX 2017/02/25)
+   \ifvoid\footins\else % changed (pLaTeX 2017/02/25)
+     \setbox\@outputbox \vbox {%
+       \boxmaxdepth \@maxdepth
+       \unvbox \@outputbox
+       \@textbottom % inserted here (pLaTeX 2017/02/25)
+       \vskip \skip\footins
+       \color@begingroup
+         \normalcolor
+         \footnoterule
+         \unvbox \footins
+       \color@endgroup
+       }%
+       \let\@textbottom\relax % disable temporarily (pLaTeX 2017/02/25)
+   \fi
    \ifvbox\@kludgeins
      \@makespecialcolbox
    \else
@@ -706,16 +722,9 @@
        \iftdir\vbox{\hskip\z@}\fi
        \vskip -\dimen@
        \@textbottom
-       \ifvoid\footins\else % for pLaTeX
-         \vskip \skip\footins
-         \color@begingroup
-            \normalcolor
-            \footnoterule
-            \unvbox \footins
-         \color@endgroup
-       \fi
        }%
    \fi
+   \let\@textbottom\pltx@textbottom % restore (pLaTeX 2017/02/25)
    \global \maxdepth \@maxdepth
 }
 \gdef\@makespecialcolbox{%

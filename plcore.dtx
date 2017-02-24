@@ -56,13 +56,17 @@
 % \changes{v1.2j}{2016/11/09}{FAM256パッチ適用e-p\TeX{}に対応}
 % \changes{v1.2k}{2017/02/20}{目次で\cs{ref}を使った場合に後ろの空白が消える
 %    現象に対処するため、\cs{relax}のあとに\{\}を追加}
+% \changes{v1.2l}{2017/02/25}{脚注とボトムフロートの順序を入れ替えたことで
+%    版面全体の垂直位置がずれていたのを修正(Issue 32)}
+% \changes{v1.2l}{2017/02/25}{\cs{@makecol}を変更したのに
+%    \cs{@makespecialcolbox}を変更しない、という判断について明文化}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2017/02/20 v1.2k pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2017/02/25 v1.2l pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -255,13 +259,40 @@
 % このマクロが組み立てる部分の中心となります。
 % \file{ltoutput.dtx}で定義されているものです。
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2016/09/03}{\@makecol}{\@makecol}%
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\@makecol}{\@makecol}%
 %<*plcore|platexrelease>
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%
+   \let\@elt\relax % added on LaTeX (ltoutput.dtx 2003/12/16 v1.2k)
    \xdef\@freelist{\@freelist\@midlist}%
    \global \let \@midlist \@empty
    \@combinefloats
+%    \end{macrocode}
+% オリジナルの\LaTeX{}は、トップフロート、本文、脚注、ボトムフロートの順番で
+% 出力します。一方p\LaTeX{}は、トップフロート、本文、ボトムフロート、脚注の
+% 順番で出力します。ところが、アスキー版のコードは順番を入れ替えるだけでなく、
+% 版面全体の垂直位置が（特に縦組で顕著に）ずれてしまっていました。
+% これは補正量|\dp\@outputbox|の取得が早すぎたためですので、コミュニティ版
+% p\LaTeX{}ではこの問題に対処してあります。結果的に、fnposパッケージ(yafoot)の
+% |\makeFNbottom|かつ|\makeFNbelow|な状態と完全に等価になりました。
+% \changes{v1.2l}{2017/02/25}{脚注とボトムフロートの順序を入れ替えたことで
+%    版面全体の垂直位置がずれていたのを修正(Issue 32)}
+%    \begin{macrocode}
+   \let\pltx@textbottom\@textbottom % save (pLaTeX 2017/02/25)
+   \ifvoid\footins\else % changed (pLaTeX 2017/02/25)
+     \setbox\@outputbox \vbox {%
+       \boxmaxdepth \@maxdepth
+       \unvbox \@outputbox
+       \@textbottom % inserted here (pLaTeX 2017/02/25)
+       \vskip \skip\footins
+       \color@begingroup
+         \normalcolor
+         \footnoterule
+         \unvbox \footins
+       \color@endgroup
+       }%
+       \let\@textbottom\relax % disable temporarily (pLaTeX 2017/02/25)
+   \fi
    \ifvbox\@kludgeins
      \@makespecialcolbox
    \else
@@ -290,19 +321,42 @@
        \iftdir\vbox{\hskip\z@}\fi
        \vskip -\dimen@
        \@textbottom
-       \ifvoid\footins\else % for pLaTeX
-         \vskip \skip\footins
-         \color@begingroup
-            \normalcolor
-            \footnoterule
-            \unvbox \footins
-         \color@endgroup
-       \fi
        }%
    \fi
+   \let\@textbottom\pltx@textbottom % restore (pLaTeX 2017/02/25)
    \global \maxdepth \@maxdepth
 }
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/09/03}{\@makecol}{\@makecol}%
+%<platexrelease>\gdef\@makecol{%
+%<platexrelease>   \setbox\@outputbox\box\@cclv%
+%<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
+%<platexrelease>   \global \let \@midlist \@empty
+%<platexrelease>   \@combinefloats
+%<platexrelease>   \ifvbox\@kludgeins
+%<platexrelease>     \@makespecialcolbox
+%<platexrelease>   \else
+%<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
+%<platexrelease>%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+%<platexrelease>       \@texttop
+%<platexrelease>       \dimen@ \dp\@outputbox
+%<platexrelease>       \unvbox \@outputbox
+%<platexrelease>       \iftdir\vbox{\hskip\z@}\fi
+%<platexrelease>       \vskip -\dimen@
+%<platexrelease>       \@textbottom
+%<platexrelease>       \ifvoid\footins\else % for pLaTeX
+%<platexrelease>         \vskip \skip\footins
+%<platexrelease>         \color@begingroup
+%<platexrelease>            \normalcolor
+%<platexrelease>            \footnoterule
+%<platexrelease>            \unvbox \footins
+%<platexrelease>         \color@endgroup
+%<platexrelease>       \fi
+%<platexrelease>       }%
+%<platexrelease>   \fi
+%<platexrelease>   \global \maxdepth \@maxdepth
+%<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/04/17}{\@makecol}{\@makecol}%
 %<platexrelease>\gdef\@makecol{%
@@ -375,6 +429,27 @@
 %
 % このマクロは、|\enlargethispage|が使われたときに、
 % |\@makecol|マクロから呼び出されます。
+%
+% \noindent\emph{日本語\TeX{}開発コミュニティによる補足(2017/02/25)}：
+% 2016/11/29以前のp\LaTeX{}では、|\@makecol|はボトムフロートを挿入した後、
+% すぐに|\@kludgeins|が空かどうか判定し
+% \begin{itemize}
+% \item 空の場合は、残りすべての処理を|\@makespecialcolbox|に任せる
+% \item 空でない場合は、|\@makecol|自身で残りすべての処理を行う
+% \end{itemize}
+% としていました。しかし2017/04/08以降のp\LaTeX{}では、|\@makecol|はボトム
+% フロートと脚注を挿入してから|\@kludgeins|の判定に移るようにしています。
+% したがって、新しい|\@makecol|から以下に記す|\@makespecialcolbox|が呼び
+% 出される場合は、|\ifvoid\footins|（二箇所）の判定は常に真となるはずです。
+% 要するに「つぎの部分がp\LaTeX{}用の修正です。」という二箇所のコードは
+% 実質的に不要となりました。
+%
+% しかし、だからといって消してしまうと、古いp\LaTeX{}の|\@makecol|を
+% ベースに作られた外部パッケージから|\@makespecialcolbox|が呼び出される
+% 場合に脚注が消滅するおそれがあります。このため、|\@makespecialcolbox|は
+% 従来のコードのまま維持してあります（害はありません）。
+% \changes{v1.2l}{2017/02/25}{\cs{@makecol}を変更したのに
+%    \cs{@makespecialcolbox}を変更しない、という判断について明文化}
 %    \begin{macrocode}
 %<*plcore|fltrace>
 \gdef\@makespecialcolbox{%
