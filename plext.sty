@@ -15,7 +15,7 @@
 %% File: plext.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plext}
-   [2017/02/04 v1.2d pLaTeX package file (community edition)]
+   [2017/03/02 v1.2e pLaTeX package file (community edition)]
 \newif\if@rotsw
 \def\array{\let\@acol\@arrayacol \let\@classz\@arrayclassz
   \let\@classiv\@arrayclassiv
@@ -301,7 +301,7 @@
   \if@rotsw \egroup\m@th$\egroup\fi
   \egroup
   \expandafter\@iiiparbox\@mpargs{\unvbox\@tempboxa}\egroup}
-\def\parbox{\@ifnextchar<%>
+\DeclareRobustCommand\parbox{\@ifnextchar<%>
    {\X@parbox}{\X@parbox<Z>}}
 \def\X@parbox<#1>{\@ifnextchar[%]
    {\@iparbox<#1>}{\@iiiparbox<#1>{c}\relax[s]}}

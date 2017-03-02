@@ -52,6 +52,8 @@
 %    (sync with ltboxes.dtx v1.1g)}
 % \changes{v1.2d}{2017/02/04}{\cs{Kanji}の引数だけでなく後に連続する
 %    数字も漢数字になってしまうバグを修正}
+% \changes{v1.2e}{2017/03/02}{Make \cs{parbox} Robust
+%    (sync with ltboxes 2015/01/08 v1.1h)}
 % \fi
 %
 % \iffalse
@@ -60,7 +62,7 @@
 \ProvidesFile{plext.dtx}
 %</driver>
 %<package>\ProvidesPackage{plext}
-   [2017/02/04 v1.2d pLaTeX package file (community edition)]
+   [2017/03/02 v1.2e pLaTeX package file (community edition)]
 %<*driver>
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -761,8 +763,10 @@
 %
 % \begin{macro}{\parbox}
 % 組方向オプションを調べます。
+% \changes{v1.2e}{2017/03/02}{Make \cs{parbox} Robust
+%    (sync with ltboxes 2015/01/08 v1.1h)}
 %    \begin{macrocode}
-\def\parbox{\@ifnextchar<%>
+\DeclareRobustCommand\parbox{\@ifnextchar<%>
    {\X@parbox}{\X@parbox<Z>}}
 %    \end{macrocode}
 % \end{macro}
