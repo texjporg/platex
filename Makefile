@@ -1,16 +1,16 @@
-TARGET1 = platex.ltx jarticle.cls pl209.def platexrelease.sty \
+STRIPTARGET = platex.ltx jarticle.cls pl209.def platexrelease.sty \
 	nidanfloat.sty tascmac.sty jltxdoc.cls
-TARGET2 = platex.pdf platexrelease.pdf pldoc.pdf \
+PDFTARGET = platex.pdf platexrelease.pdf pldoc.pdf \
 	nidanfloat.pdf ascmac.pdf exppl2e.pdf
-TARGET3 = platex.dvi platexrelease.dvi pldoc.dvi \
+DVITARGET = platex.dvi platexrelease.dvi pldoc.dvi \
 	nidanfloat.dvi ascmac.dvi exppl2e.dvi
 KANJI = -kanji=jis
 FONTMAP = -f ipaex.map -f ptex-ipaex.map
 TEXMF = $(shell kpsewhich -var-value=TEXMFHOME)
 
-default: $(TARGET1) $(TARGET3)
-strip: $(TARGET1)
-all: $(TARGET1) $(TARGET2)
+default: $(STRIPTARGET) $(DVITARGET)
+strip: $(STRIPTARGET)
+all: $(STRIPTARGET) $(PDFTARGET)
 
 PLFMT = platex.ltx plcore.ltx kinsoku.tex pldefs.ltx \
 	jy1mc.fd jy1gt.fd jt1mc.fd jt1gt.fd plext.sty \
@@ -160,8 +160,7 @@ install:
 clean:
 	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
 	$(NIDAN) $(ASCMAC) \
-	platex.dvi platexrelease.dvi pldoc.dvi \
-	nidanfloat.dvi ascmac.dvi exppl2e.dvi \
+	$(DVITARGET) \
 	jltxdoc.cls pldoc.tex Xins.ins
 cleanstrip:
 	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
@@ -170,14 +169,7 @@ cleanstrip:
 cleanall:
 	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
 	$(NIDAN) $(ASCMAC) \
-	platex.dvi platexrelease.dvi pldoc.dvi \
-	nidanfloat.dvi ascmac.dvi exppl2e.dvi \
-	platex.pdf platexrelease.pdf pldoc.pdf \
-	nidanfloat.pdf ascmac.pdf exppl2e.pdf \
+	$(DVITARGET) $(PDFTARGET) \
 	jltxdoc.cls pldoc.tex Xins.ins
 cleandoc:
-	rm -f \
-	platex.dvi platexrelease.dvi pldoc.dvi \
-	nidanfloat.dvi ascmac.dvi exppl2e.dvi \
-	platex.pdf platexrelease.pdf pldoc.pdf \
-	nidanfloat.pdf ascmac.pdf exppl2e.pdf
+	rm -f $(DVITARGET) $(PDFTARGET)
