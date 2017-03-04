@@ -88,6 +88,7 @@
 % \changes{v1.7d}{2017/02/15}{titlepageのページ番号を奇数ならば1に、
 %   偶数ならば0にリセットするように変更}
 % \changes{v1.7d}{2017/02/15}{縦組クラスの所属表示の番号を直立にした}
+% \changes{v1.7e}{2017/03/05}{ジョブ情報の書式を変更}
 % \fi
 %
 % \iffalse
@@ -117,7 +118,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2017/02/15 v1.7d
+  [2017/03/05 v1.7e
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -347,15 +348,19 @@
 % |tombow|オプションが指定されると、用紙サイズに合わせてトンボを出力します。
 % このとき、トンボの脇にDVIを作成した日付が出力されます。
 % 作成日付の出力を抑制するには、|tombow|ではなく、|tombo|と指定をします。
+%
+% ジョブ情報の書式は元々|filename :  2017/3/5(13:3)|のような書式でしたが、
+% jsclassesにあわせて桁数固定の|filename (2017-03-05 13:03)|に直しました。
 % \changes{v1.0g}{1996/09/03}{Add to \cs{@bannertoken}.}
 % \changes{v1.1a}{1997/01/23}{日付出力オプション}
+% \changes{v1.7e}{2017/03/05}{ジョブ情報の書式を変更}
 %    \begin{macrocode}
 \DeclareOption{tombow}{%
   \tombowtrue \tombowdatetrue
   \setlength{\@tombowwidth}{.1\p@}%
   \@bannertoken{%
-     \jobname\space:\space\number\year/\number\month/\number\day
-      (\number\hour:\number\minute)}
+     \jobname\space(\number\year-\two@digits\month-\two@digits\day
+     \space\two@digits\hour:\two@digits\minute)}%
   \maketombowbox}
 \DeclareOption{tombo}{%
   \tombowtrue \tombowdatefalse
