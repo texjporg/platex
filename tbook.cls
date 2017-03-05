@@ -425,12 +425,10 @@
 \newcommand{\@chapapp}{\prechaptername}
 \newcommand{\@chappos}{\postchaptername}
 \newcommand{\frontmatter}{%
-  \if@openleft \cleardoublepage \else
-  \if@openright \cleardoublepage \else \clearpage \fi \fi
+  \pltx@cleartooddpage
   \@mainmatterfalse\pagenumbering{roman}}
 \newcommand{\mainmatter}{%
-  \if@openleft \cleardoublepage \else
-  \if@openright \cleardoublepage \else \clearpage \fi \fi
+  \pltx@cleartooddpage
   \@mainmattertrue\pagenumbering{arabic}}
 \newcommand{\backmatter}{%
   \if@openleft \cleardoublepage \else

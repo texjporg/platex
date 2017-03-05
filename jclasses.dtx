@@ -88,7 +88,9 @@
 % \changes{v1.7d}{2017/02/15}{titlepageのページ番号を奇数ならば1に、
 %   偶数ならば0にリセットするように変更}
 % \changes{v1.7d}{2017/02/15}{縦組クラスの所属表示の番号を直立にした}
-% \changes{v1.7e}{2017/03/05}{ジョブ情報の書式を変更}
+% \changes{v1.7e}{2017/03/05}{トンボに表示するジョブ情報の書式を変更}
+% \changes{v1.7e}{2017/03/05}{\cs{frontmatter}と\cs{mainmatter}を
+%   奇数ページに送るように変更}
 % \fi
 %
 % \iffalse
@@ -353,7 +355,7 @@
 % jsclassesにあわせて桁数固定の|filename (2017-03-05 13:03)|に直しました。
 % \changes{v1.0g}{1996/09/03}{Add to \cs{@bannertoken}.}
 % \changes{v1.1a}{1997/01/23}{日付出力オプション}
-% \changes{v1.7e}{2017/03/05}{ジョブ情報の書式を変更}
+% \changes{v1.7e}{2017/03/05}{トンボに表示するジョブ情報の書式を変更}
 %    \begin{macrocode}
 \DeclareOption{tombow}{%
   \tombowtrue \tombowdatetrue
@@ -2542,20 +2544,35 @@
 % これらの命令を|openany|オプションに応じて切り替え、二回目はそれを
 % 元に戻しています。アスキーによるjclasses.dtxは、1997/01/15に
 % 一回目の修正に追随しましたが、二回目の修正には追随していません。
-% コミュニティ版では、アスキーによる仕様を維持することとし、
-% |openany|オプションの場合は|\cleardoublepage|ではなく|\clearpage|が
-% 発行されます。もし|\cleardoublepage|が起きてほしい場合には、
-% 明示的に挿入してください。（参考：latex/2754）
+% コミュニティ版では、一旦はアスキーによる仕様を維持しようと考え
+% ました(2016/11/22)が、以下の理由により二回目の修正にも追随する
+% ことにしました(2017/03/05)。
+%
+% アスキー版での|\frontmatter|と|\mainmatter|の改ページ挙動は
+%\begin{quote}
+% |openright|なら|\cleardoublepage|、|openany|なら|\clearpage|を実行
+%\end{quote}
+% というものでした。しかし、|\frontmatter|及び|\mainmatter|はノンブルを
+% 1にリセットしますから、改ページの結果が偶数ページ目になる場合
+% \footnote{縦tbookのデフォルト(openright)が該当するほか、横jbookと
+% 縦tbookのopenanyのときには成り行き次第で該当する可能性があります。}に
+% ノンブルが偶奇逆転してしまいました。このままでは|openany|の場合に両面
+% 印刷がうまくいかないため、新しいコミュニティ版では
+%\begin{quote}
+% 必ず|\pltx@cleartooddpage|を実行
+%\end{quote}
+% としました。これは両面印刷(twoside)の場合は奇数ページに送り、
+% 片面印刷(oneside)の場合は単に改ページとなります。（参考：latex/2754）
 % \changes{v1.7b}{2016/11/22}{補足ドキュメントを追加}
+% \changes{v1.7e}{2017/03/05}{\cs{frontmatter}と\cs{mainmatter}を
+%   奇数ページに送るように変更}
 %    \begin{macrocode}
 %<*book>
 \newcommand{\frontmatter}{%
-  \if@openleft \cleardoublepage \else
-  \if@openright \cleardoublepage \else \clearpage \fi \fi
+  \pltx@cleartooddpage
   \@mainmatterfalse\pagenumbering{roman}}
 \newcommand{\mainmatter}{%
-  \if@openleft \cleardoublepage \else
-  \if@openright \cleardoublepage \else \clearpage \fi \fi
+  \pltx@cleartooddpage
   \@mainmattertrue\pagenumbering{arabic}}
 \newcommand{\backmatter}{%
   \if@openleft \cleardoublepage \else
