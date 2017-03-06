@@ -150,7 +150,7 @@ install:
 	mkdir -p ${TEXMF}/tex/platex/base
 	cp ./kinsoku.tex ${TEXMF}/tex/platex/base/
 	cp ./*.clo ${TEXMF}/tex/platex/base/
-	ls ./*.cls | grep -v plnews.cls | xargs -i% cp % ${TEXMF}/tex/platex/base
+	ls ./*.cls | grep -v plnews.cls | xargs -I % cp % ${TEXMF}/tex/platex/base
 	cp ./*.def ${TEXMF}/tex/platex/base/
 	cp ./*.fd  ${TEXMF}/tex/platex/base/
 	cp ./*.ltx ${TEXMF}/tex/platex/base/
