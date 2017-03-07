@@ -1,0 +1,25 @@
+\documentclass{jarticle}
+\begin{document}
+アンダースコアのベースライン補正量\par
+\vbox to10pt{\yoko\adjustbaseline
+あunder\_scoreい$\hbox{under\_score}$う\vfill}
+\vbox to10pt{\tate\adjustbaseline
+あunder\_scoreい$\hbox{under\_score}$う\vfill} %% ここが変
+\end{document}
+
+%% LaTeX original
+\DeclareTextCommandDefault{\textunderscore}{%
+  \leavevmode\kern.06em
+  \vbox{\hrule\@width.3em}}
+%% pLaTeX (ASCII)
+\DeclareTextCommandDefault{\textunderscore}{%
+  \leavevmode\kern.06em
+  \iftdir\raise-\tbaselineshift\fi
+  \vbox{\hrule\@width.3em}}
+%% pLaTeX (2017/04/08 candidate)
+\DeclareTextCommandDefault{\textunderscore}{%
+  \leavevmode\kern.06em
+  \raise-\iftdir\ifmdir\ybaselineshift
+         \else\tbaselineshift\fi
+         \else\ybaselineshift\fi
+  \vbox{\hrule\@width.3em}}

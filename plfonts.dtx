@@ -63,13 +63,14 @@
 % \changes{v1.6f}{2017/02/20}{\cs{strutbox}の代わりに\cs{ystrutbox}を使用}
 % \changes{v1.6f}{2017/02/20}{\cs{ystrut}を追加}
 % \changes{v1.6f}{2017/02/20}{\cs{ystrutbox}を組み立てるように}
+% \changes{v1.6g}{2017/03/07}{ベースライン補正量を修正}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2017/02/20 v1.6f pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2017/03/07 v1.6g pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -1723,11 +1724,32 @@
 % もとは\file{ltoutenc.dtx}で定義されています。
 %
 % なお、|\_|を数式モードで使うと|\mathunderscore|が実行されます。
+%
+% コミュニティ版では縦数式ディレクションでベースライン補正量が
+% 変だったのを直しました。あわせて横ディレクションでもベースライン
+% 補正に追随するようにしています。
+% \changes{v1.6g}{2017/03/07}{ベースライン補正量を修正}
 %    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\textunderscore}
+%<platexrelease>                   {Baseline shift for \textunderscore}%
+%<*plcore|platexrelease>
 \DeclareTextCommandDefault{\textunderscore}{%
   \leavevmode\kern.06em
-  \iftdir\raise-\tbaselineshift\fi
+  \raise-\iftdir\ifmdir\ybaselineshift
+         \else\tbaselineshift\fi
+         \else\ybaselineshift\fi
   \vbox{\hrule\@width.3em}}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\textunderscore}
+%<platexrelease>                   {Baseline shift for \textunderscore}%
+%<platexrelease>\DeclareTextCommandDefault{\textunderscore}{%
+%<platexrelease>  \leavevmode\kern.06em
+%<platexrelease>  \iftdir\raise-\tbaselineshift\fi
+%<platexrelease>  \vbox{\hrule\@width.3em}}
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %

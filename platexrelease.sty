@@ -214,6 +214,22 @@ of this package available from CTAN}
                 \@height.7\baselineskip \@depth.3\baselineskip}%
         \let\size@update\relax}}
 \plEndIncludeInRelease
+\plIncludeInRelease{2017/04/08}{\textunderscore}
+                   {Baseline shift for \textunderscore}%
+\DeclareTextCommandDefault{\textunderscore}{%
+  \leavevmode\kern.06em
+  \raise-\iftdir\ifmdir\ybaselineshift
+         \else\tbaselineshift\fi
+         \else\ybaselineshift\fi
+  \vbox{\hrule\@width.3em}}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\textunderscore}
+                   {Baseline shift for \textunderscore}%
+\DeclareTextCommandDefault{\textunderscore}{%
+  \leavevmode\kern.06em
+  \iftdir\raise-\tbaselineshift\fi
+  \vbox{\hrule\@width.3em}}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/06/10}{\g@tlastchart@}
                    {Added \g@tlastchart@}%
 \def\g@tlastchart@#1{#1\ifx\lastnodechar\@undefined\m@ne\else\lastnodechar\fi}

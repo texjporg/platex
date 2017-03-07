@@ -636,7 +636,9 @@
 \@onlypreamble\kanjiprocess@table
 \DeclareTextCommandDefault{\textunderscore}{%
   \leavevmode\kern.06em
-  \iftdir\raise-\tbaselineshift\fi
+  \raise-\iftdir\ifmdir\ybaselineshift
+         \else\tbaselineshift\fi
+         \else\ybaselineshift\fi
   \vbox{\hrule\@width.3em}}
 \InputIfFileExists{pldefs.cfg}
            {\typeout{*************************************^^J%

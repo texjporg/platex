@@ -787,4 +787,42 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
+% \section{下線マクロ}
+%
+% \begin{macro}{\textunderscore}
+% \changes{v1.1b}{1995/04/12}{下線マクロを追加}
+% このコマンドはテキストモードで指定された|\_|の内部コマンドです。
+% 縦組での位置を調整するように再定義をします。
+% もとは\file{ltoutenc.dtx}で定義されています。
+%
+% なお、|\_|を数式モードで使うと|\mathunderscore|が実行されます。
+%
+% コミュニティ版では縦数式ディレクションでベースライン補正量が
+% 変だったのを直しました。あわせて横ディレクションでもベースライン
+% 補正に追随するようにしています。
+% \changes{v1.6g}{2017/03/07}{ベースライン補正量を修正}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\textunderscore}
+%<platexrelease>                   {Baseline shift for \textunderscore}%
+%<*plcore|platexrelease>
+\DeclareTextCommandDefault{\textunderscore}{%
+  \leavevmode\kern.06em
+  \raise-\iftdir\ifmdir\ybaselineshift
+         \else\tbaselineshift\fi
+         \else\ybaselineshift\fi
+  \vbox{\hrule\@width.3em}}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\textunderscore}
+%<platexrelease>                   {Baseline shift for \textunderscore}%
+%<platexrelease>\DeclareTextCommandDefault{\textunderscore}{%
+%<platexrelease>  \leavevmode\kern.06em
+%<platexrelease>  \iftdir\raise-\tbaselineshift\fi
+%<platexrelease>  \vbox{\hrule\@width.3em}}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 \endinput
