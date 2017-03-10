@@ -51,12 +51,14 @@
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
 % \changes{v1.1}{2016/09/14}{起動時のバナーを取得するコードを改良}
 % \changes{v1.1a}{2017/02/20}{\LaTeX\ \texttt{!<2017/01/01!>}版対応確認}
+% \changes{v1.1b}{2017/03/11}{\cs{\@nohyphenation}の定義を保証
+%    (sync with ltfinal 2017/03/09 v2.0t)}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2017/02/20 v1.1a pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2017/03/11 v1.1b pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -174,6 +176,8 @@
 %  }{}
 %    \end{macrocode}
 %
+% \subsection{起動時に表示するバナー}
+%
 % 起動時に表示される文字列です。
 % \LaTeX{}にパッチがあてられている場合は、それも表示します。
 %
@@ -232,7 +236,6 @@
   }
   \expandafter
 \endgroup \platexTMP
-%</plfinal>
 %    \end{macrocode}
 %
 % ^^A 起動時に\file{platex.cfg}がある場合、それを読み込むようにする
@@ -240,6 +243,22 @@
 % \changes{v1.0y}{2016/06/27}{\file{platex.cfg}の読み込みを追加}
 % \changes{v1.0z}{2016/08/26}{\file{platex.cfg}の読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
+%
+% \subsection{ハイフネーション関連}
+%
+% \LaTeXe\ 2017/05/01で、|\verb|の途中でハイフネーションが起きないように
+% する修正が入りました。この修正には|\@nohyphenation|が定義済みでなければ
+% ならないので、同時にltfinalで対策されています。p\LaTeXe{}は2017/04/08で
+% 対策しますので、更新タイミングのずれを加味して念のためplfinalでも対策
+% しておきます（参考：latex2e svn r1405）。
+% \changes{v1.1b}{2017/03/11}{\cs{\@nohyphenation}の定義を保証
+%    (sync with ltfinal 2017/03/09 v2.0t)}
+%    \begin{macrocode}
+\ifx\l@nohyphenation \@undefined
+  \newlanguage\l@nohyphenation
+\fi
+%</plfinal>
+%    \end{macrocode}
 %
 % \subsection{latexreleaseパッケージへの対応}
 %

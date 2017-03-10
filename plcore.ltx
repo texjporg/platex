@@ -985,6 +985,7 @@
   \bgroup
     \verb@eol@error \let\do\@makeother \dospecials
     \verbatim@font\@noligs
+    \language\l@nohyphenation
     \@ifstar\@sverb\@verb}
 \fi
 \gdef\@stopfield{\null\color@endgroup\egroup}
@@ -1073,6 +1074,9 @@
   }
   \expandafter
 \endgroup \platexTMP
+\ifx\l@nohyphenation \@undefined
+  \newlanguage\l@nohyphenation
+\fi
 \AtBeginDocument{%
   \@ifpackageloaded{latexrelease}{%
     \@ifpackageloaded{platexrelease}{}{%
