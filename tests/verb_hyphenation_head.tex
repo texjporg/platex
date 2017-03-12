@@ -1,0 +1,55 @@
+\documentclass{article}
+
+\addtolength\textheight{-30\baselineskip}
+\addtolength\headheight{10pt}
+
+% Show page head language not changed by verbatim in the page body
+% based on tlb-verb-003.lvt
+
+\makeatletter
+\def\@oddhead{\parbox{\textwidth}{[\thepage]
+Supercalifragilisticexpialidocious
+Supercalifragilisticexpialidocious
+Supercalifragilisticexpialidocious
+\the\language\typeout{lan=\the\language}}}
+\makeatother
+\begin{document}
+
+verbatim環境がハイフネーションを抑制しても、途中のヘッダーで
+ハイフネーションが抑制されないことのテスト。
+
+a $x$
+
+zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz
+
+zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz
+
+zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz\\zzz
+\begin{verbatim}
+a
+ a
+  a
+   a
+    a
+     a
+      a
+       a
+        a
+         a
+          a
+a
+ a
+  a
+   a
+    a
+     a
+      a
+       a
+        a
+         a
+          a
+\end{verbatim}
+
+\clearpage
+
+\end{document}
