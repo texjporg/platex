@@ -723,27 +723,6 @@ of this package available from CTAN}
     \expandafter#2#1\relax% change \null to \relax
   \fi}
 \plEndIncludeInRelease
-\plIncludeInRelease{2017/04/08}{\verb}
-                   {Disable hyphenation in verb}%
-\if@compatibility\else
-\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
-  \bgroup
-    \verb@eol@error \let\do\@makeother \dospecials
-    \verbatim@font\@noligs
-    \language\l@nohyphenation
-    \@ifstar\@sverb\@verb}
-\fi
-\plEndIncludeInRelease
-\plIncludeInRelease{0000/00/00}{\verb}
-                   {Disable hyphenation in verb}%
-\if@compatibility\else
-\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
-  \bgroup
-    \verb@eol@error \let\do\@makeother \dospecials
-    \verbatim@font\@noligs
-    \@ifstar\@sverb\@verb}
-\fi
-\plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@tabular}
                    {Remove extra \xkanjiskip}%
 \def\@tabular{\leavevmode \null\hbox \bgroup $\let\@acol\@tabacol

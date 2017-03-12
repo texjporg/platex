@@ -60,15 +60,13 @@
 %    版面全体の垂直位置がずれていたのを修正(Issue 32)}
 % \changes{v1.2l}{2017/02/25}{\cs{@makecol}を変更したのに
 %    \cs{@makespecialcolbox}を変更しない、という判断について明文化}
-% \changes{v1.2m}{2017/03/11}{\cs{verb}の途中でハイフネーションが
-%    起きないようにした(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2017/03/11 v1.2m pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2017/02/25 v1.2l pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1228,37 +1226,13 @@
 % そこで、|\null|を出力しないようマクロを修正します。
 % このマクロは、\file{ltmiscen.dtx}で定義されています。
 %    \begin{macrocode}
-%</plcore>
-%<platexrelease>\plIncludeInRelease{2017/04/08}{\verb}
-%<platexrelease>                   {Disable hyphenation in verb}%
-%<*plcore|platexrelease>
 \if@compatibility\else
 \def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
   \bgroup
     \verb@eol@error \let\do\@makeother \dospecials
     \verbatim@font\@noligs
-%    \end{macrocode}
-% \LaTeXe\ 2017/05/01に追随して、|\verb|の途中でハイフネーションが起きない
-% ようにしました（参考：latex2e svn r1405）。
-% \changes{v1.2m}{2017/03/11}{\cs{verb}の途中でハイフネーションが
-%    起きないようにした(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
-%    \begin{macrocode}
-    \language\l@nohyphenation
     \@ifstar\@sverb\@verb}
 \fi
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\verb}
-%<platexrelease>                   {Disable hyphenation in verb}%
-%<platexrelease>\if@compatibility\else
-%<platexrelease>\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
-%<platexrelease>  \bgroup
-%<platexrelease>    \verb@eol@error \let\do\@makeother \dospecials
-%<platexrelease>    \verbatim@font\@noligs
-%<platexrelease>    \@ifstar\@sverb\@verb}
-%<platexrelease>\fi
-%<platexrelease>\plEndIncludeInRelease
-%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %

@@ -586,53 +586,6 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \section{疑似タイプ入力}
-%
-% \begin{macro}{\verb}
-% \changes{v1.1b}{1995/04/05}{互換モードのときは、pl209.defの定義を使う}
-% \changes{v1.1g}{1997/01/16}
-%    {\cs{verb}コマンドを\LaTeX\ \texttt{!<1996/06/01!>}に合わせて修正}
-% \LaTeX{}の|\verb|コマンドでは、数式モードでないときは、
-% |\leavevmode|で水平モードに入ったあと、|\null|を出力しています。
-% マクロ|\null|は|\hbox{}|として定義されていますので、
-% ここには和欧文間スペース（|\xkanjiskip|）が入りません。
-% そこで、|\null|を出力しないようマクロを修正します。
-% このマクロは、\file{ltmiscen.dtx}で定義されています。
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2017/04/08}{\verb}
-%<platexrelease>                   {Disable hyphenation in verb}%
-%<*plcore|platexrelease>
-\if@compatibility\else
-\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
-  \bgroup
-    \verb@eol@error \let\do\@makeother \dospecials
-    \verbatim@font\@noligs
-%    \end{macrocode}
-% \LaTeXe\ 2017/05/01に追随して、|\verb|の途中でハイフネーションが起きない
-% ようにしました（参考：latex2e svn r1405）。
-% \changes{v1.2m}{2017/03/11}{\cs{verb}の途中でハイフネーションが
-%    起きないようにした(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
-%    \begin{macrocode}
-    \language\l@nohyphenation
-    \@ifstar\@sverb\@verb}
-\fi
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\verb}
-%<platexrelease>                   {Disable hyphenation in verb}%
-%<platexrelease>\if@compatibility\else
-%<platexrelease>\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
-%<platexrelease>  \bgroup
-%<platexrelease>    \verb@eol@error \let\do\@makeother \dospecials
-%<platexrelease>    \verbatim@font\@noligs
-%<platexrelease>    \@ifstar\@sverb\@verb}
-%<platexrelease>\fi
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % \section{脚注とボトムフロートの順序および垂直位置}
 %
 % \begin{macro}{\@makecol}
@@ -867,6 +820,278 @@
 %<platexrelease>  \iftdir\raise-\tbaselineshift\fi
 %<platexrelease>  \vbox{\hrule\@width.3em}}
 %<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% ^^A ===== plcore.dtx (plcore) =====
+% \section{verbatimとハイフネーション}
+%
+% \LaTeXe\ 2017-05-01で導入された疑似タイプ入力(verbatim)内での
+% ハイフネーションに関連した修正に追随します。
+%
+% \begin{macro}{\@outputpage}
+% |\textwidth|と|\textheight|の交換は、|\@shipoutsetup|内では行ないません。
+% なぜなら、|\@shipoutsetup|マクロが実行されるときは、
+% |\shipout|されるvboxの中であり、このときは横組モードですので、
+% つねに|\iftdir|は偽と判断され、縦と横のサイズを交換できないからです。
+%
+% なお、この変更をローカルなものにするために、
+% |\begingroup|と|\endgroup|で囲みます。
+% \changes{v1.2a}{2001/09/26}{\LaTeX\ \texttt{!<2001/06/01!>}に対応}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@outputpage}
+%<platexrelease>                   {Reset language for hyphenation}%
+%<*plcore|platexrelease>
+\def\@outputpage{%
+\begingroup % the \endgroup is put in by \aftergroup
+  \iftdir
+    \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
+  \fi
+  \let \protect \noexpand
+%    \end{macrocode}
+% \LaTeXe\ 2017-05-01ではverbatim環境内でハイフネーションが起きないように
+% 修正されましたが、verbatim環境の途中で改ページが起きた場合にヘッダで
+% ハイフネーションが抑制されるのは正しくないので、|\language|を
+% |\begin{document}|での値にリセットします（参考：latex2e svn r1407）。
+% プリアンブルで特別に設定されればその値、設定されなければ0です（万が一
+% |\document|の定義が古い場合は$-1$になるが、これは0と同じはたらきをする）。
+% \changes{v????}{????/??/??}{\cs{language}をリセット
+%    (sync with ltoutput.dtx 2017/03/10 v1.3c)}
+%    \begin{macrocode}
+  \language\document@default@language
+  \@resetactivechars
+  \global\let\@@if@newlist\if@newlist
+  \global\@newlistfalse
+  \@parboxrestore
+  \shipout\vbox{\yoko
+    \set@typeset@protect
+    \aftergroup\endgroup
+    \aftergroup\set@typeset@protect
+%    \end{macrocode}
+% \changes{v1.1g}{1998/02/03}{\cs{@shipoutsetup}を\cs{@outputpage}内に入れた}
+% ここから|\@shipoutsetup|の内容。
+%    \begin{macrocode}
+     \if@specialpage
+       \global\@specialpagefalse\@nameuse{ps@\@specialstyle}%
+     \fi
+%    \end{macrocode}
+% \changes{v1.1c}{1995/02/05}{\cs{oddsidemargin}と\cs{evensidemargin}が
+%    逆だったのを修正}
+%    \begin{macrocode}
+     \if@twoside
+       \ifodd\count\z@ \let\@thehead\@oddhead \let\@thefoot\@oddfoot
+          \iftdir\let\@themargin\evensidemargin
+          \else\let\@themargin\oddsidemargin\fi
+       \else \let\@thehead\@evenhead
+          \let\@thefoot\@evenfoot
+           \iftdir\let\@themargin\oddsidemargin
+           \else\let\@themargin\evensidemargin\fi
+     \fi\fi
+%    \end{macrocode}
+% トンボ出力オプションが指定されている場合、ここで用紙サイズを再設定します。
+% \TeX の加える左と上部の1インチは、トンボの内側に入ります。
+% \changes{v1.1a}{1995/11/10}{\cs{topmargin}が反映されないバグを修正}
+%    \begin{macrocode}
+     \@@topmargin\topmargin
+     \iftombow
+       \@@paperwidth\paperwidth \advance\@@paperwidth 6mm\relax
+       \@@paperheight\paperheight \advance\@@paperheight 16mm\relax
+       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
+     \fi
+     \reset@font
+     \normalsize
+     \normalsfcodes
+     \let\label\@gobble
+     \let\index\@gobble
+     \let\glossary\@gobble
+     \baselineskip\z@skip \lineskip\z@skip \lineskiplimit\z@
+%    \end{macrocode}
+% ここまでが|\@shipoutsetup|の内容。
+%    \begin{macrocode}
+    \@begindvi
+    \@outputtombow
+    \vskip \@@topmargin
+    \moveright\@themargin\vbox{%
+      \setbox\@tempboxa \vbox to\headheight{%
+        \vfil
+        \color@hbox
+          \normalcolor
+          \hb@xt@\textwidth{\@thehead}%
+        \color@endbox
+      }%                        %% 22 Feb 87
+      \dp\@tempboxa \z@
+      \box\@tempboxa
+      \vskip \headsep
+      \box\@outputbox
+      \baselineskip \footskip
+      \color@hbox
+        \normalcolor
+        \hb@xt@\textwidth{\@thefoot}%
+      \color@endbox
+    }%
+  }%
+%  \endgroup now inserted by \aftergroup
+%    \end{macrocode}
+% |\if@newlist|を初期化。
+%    \begin{macrocode}
+  \global\let\if@newlist\@@if@newlist
+  \global \@colht \textheight
+  \stepcounter{page}%
+  \let\firstmark\botmark
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@outputpage}
+%<platexrelease>                   {Reset language for hyphenation}%
+%<platexrelease>\def\@outputpage{%
+%<platexrelease>\begingroup % the \endgroup is put in by \aftergroup
+%<platexrelease>  \iftdir
+%<platexrelease>    \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
+%<platexrelease>  \fi
+%<platexrelease>  \let \protect \noexpand
+%<platexrelease>  \@resetactivechars
+%<platexrelease>  \global\let\@@if@newlist\if@newlist
+%<platexrelease>  \global\@newlistfalse
+%<platexrelease>  \@parboxrestore
+%<platexrelease>  \shipout\vbox{\yoko
+%<platexrelease>    \set@typeset@protect
+%<platexrelease>    \aftergroup\endgroup
+%<platexrelease>    \aftergroup\set@typeset@protect
+%<platexrelease>     \if@specialpage
+%<platexrelease>       \global\@specialpagefalse\@nameuse{ps@\@specialstyle}%
+%<platexrelease>     \fi
+%<platexrelease>     \if@twoside
+%<platexrelease>       \ifodd\count\z@ \let\@thehead\@oddhead \let\@thefoot\@oddfoot
+%<platexrelease>          \iftdir\let\@themargin\evensidemargin
+%<platexrelease>          \else\let\@themargin\oddsidemargin\fi
+%<platexrelease>       \else \let\@thehead\@evenhead
+%<platexrelease>          \let\@thefoot\@evenfoot
+%<platexrelease>           \iftdir\let\@themargin\oddsidemargin
+%<platexrelease>           \else\let\@themargin\evensidemargin\fi
+%<platexrelease>     \fi\fi
+%<platexrelease>     \@@topmargin\topmargin
+%<platexrelease>     \iftombow
+%<platexrelease>       \@@paperwidth\paperwidth \advance\@@paperwidth 6mm\relax
+%<platexrelease>       \@@paperheight\paperheight \advance\@@paperheight 16mm\relax
+%<platexrelease>       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
+%<platexrelease>     \fi
+%<platexrelease>     \reset@font
+%<platexrelease>     \normalsize
+%<platexrelease>     \normalsfcodes
+%<platexrelease>     \let\label\@gobble
+%<platexrelease>     \let\index\@gobble
+%<platexrelease>     \let\glossary\@gobble
+%<platexrelease>     \baselineskip\z@skip \lineskip\z@skip \lineskiplimit\z@
+%<platexrelease>    \@begindvi
+%<platexrelease>    \@outputtombow
+%<platexrelease>    \vskip \@@topmargin
+%<platexrelease>    \moveright\@themargin\vbox{%
+%<platexrelease>      \setbox\@tempboxa \vbox to\headheight{%
+%<platexrelease>        \vfil
+%<platexrelease>        \color@hbox
+%<platexrelease>          \normalcolor
+%<platexrelease>          \hb@xt@\textwidth{\@thehead}%
+%<platexrelease>        \color@endbox
+%<platexrelease>      }%                        %% 22 Feb 87
+%<platexrelease>      \dp\@tempboxa \z@
+%<platexrelease>      \box\@tempboxa
+%<platexrelease>      \vskip \headsep
+%<platexrelease>      \box\@outputbox
+%<platexrelease>      \baselineskip \footskip
+%<platexrelease>      \color@hbox
+%<platexrelease>        \normalcolor
+%<platexrelease>        \hb@xt@\textwidth{\@thefoot}%
+%<platexrelease>      \color@endbox
+%<platexrelease>    }%
+%<platexrelease>  }%
+%<platexrelease>  \global\let\if@newlist\@@if@newlist
+%<platexrelease>  \global \@colht \textheight
+%<platexrelease>  \stepcounter{page}%
+%<platexrelease>  \let\firstmark\botmark
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{疑似タイプ入力}
+%
+% \begin{macro}{\verb}
+% \changes{v1.1b}{1995/04/05}{互換モードのときは、pl209.defの定義を使う}
+% \changes{v1.1g}{1997/01/16}
+%    {\cs{verb}コマンドを\LaTeX\ \texttt{!<1996/06/01!>}に合わせて修正}
+% \LaTeX{}の|\verb|コマンドでは、数式モードでないときは、
+% |\leavevmode|で水平モードに入ったあと、|\null|を出力しています。
+% マクロ|\null|は|\hbox{}|として定義されていますので、
+% ここには和欧文間スペース（|\xkanjiskip|）が入りません。
+% そこで、|\null|を出力しないようマクロを修正します。
+% このマクロは、\file{ltmiscen.dtx}で定義されています。
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\verb}
+%<platexrelease>                   {Disable hyphenation in verb}%
+%<*plcore|platexrelease>
+\if@compatibility\else
+\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+  \bgroup
+    \verb@eol@error \let\do\@makeother \dospecials
+    \verbatim@font\@noligs
+%    \end{macrocode}
+% \LaTeXe\ 2017-05-01に追随して、|\verb|の途中でハイフネーションが起きない
+% ように|\language|を設定します（参考：latex2e svn r1405）。
+% \changes{v????}{????/??/??}{\cs{verb}の途中でハイフネーションが起きない
+%    ように\cs{language}を設定(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
+%    \begin{macrocode}
+    \language\l@nohyphenation
+    \@ifstar\@sverb\@verb}
+\fi
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\verb}
+%<platexrelease>                   {Disable hyphenation in verb}%
+%<platexrelease>\if@compatibility\else
+%<platexrelease>\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+%<platexrelease>  \bgroup
+%<platexrelease>    \verb@eol@error \let\do\@makeother \dospecials
+%<platexrelease>    \verbatim@font\@noligs
+%<platexrelease>    \@ifstar\@sverb\@verb}
+%<platexrelease>\fi
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% ^^A ===== plvers.dtx (plfinal) =====
+% \subsection{ハイフネーション関連}
+%
+% \begin{macro}{\l@nohyphenation}
+% \LaTeXe\ 2017-05-01で、|\verb|の途中でハイフネーションが起きないように
+% する修正が入りました。この修正には|\l@nohyphenation|が定義済みでなければ
+% なりませんが、通常はBabelの定義ファイルによって提供されています。
+% \LaTeXe{}は特殊な状況も想定してltfinalで対策しているようですので、
+% p\LaTeXe{}も念のためplfinalで対策します（参考：latex2e svn r1405）。
+% \changes{v????}{????/??/??}{\cs{l@nohyphenation}の定義を保証
+%    (sync with ltfinal 2017/03/09 v2.0t)}
+%    \begin{macrocode}
+%<*plfinal>
+\ifx\l@nohyphenation \@undefined
+  \newlanguage\l@nohyphenation
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\document@default@language}
+% \LaTeXe\ 2017-05-01で導入されたパラメータです。更新タイミングのずれの
+% 可能性を考慮し、p\LaTeXe{}でも準備しておきます。verbatim環境の途中で
+% 改ページが起きた場合にヘッダでハイフネーションが抑制されないように、
+% |\@outputpage|で|\language|をリセットするときに使われます
+% （参考：latex2e svn r1407）。
+% \changes{v????}{????/??/??}{\cs{document@default@language}の定義を保証
+%    (sync with ltfinal 2017/03/09 v2.0t)}
+%    \begin{macrocode}
+\ifx\document@default@language \@undefined
+  \let\document@default@language\m@ne
+\fi
+%</plfinal>
 %    \end{macrocode}
 % \end{macro}
 %
