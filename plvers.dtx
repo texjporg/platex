@@ -51,7 +51,7 @@
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
 % \changes{v1.1}{2016/09/14}{起動時のバナーを取得するコードを改良}
 % \changes{v1.1a}{2017/02/20}{\LaTeX\ \texttt{!<2017/01/01!>}版対応確認}
-% \changes{v1.1b}{2017/03/11}{\cs{\@nohyphenation}の定義を保証
+% \changes{v1.1b}{2017/03/11}{\cs{l@nohyphenation}の定義を保証
 %    (sync with ltfinal 2017/03/09 v2.0t)}
 % \fi
 %
@@ -178,6 +178,7 @@
 %
 % \subsection{起動時に表示するバナー}
 %
+% \begin{macro}{\everyjob}
 % 起動時に表示される文字列です。
 % \LaTeX{}にパッチがあてられている場合は、それも表示します。
 %
@@ -237,6 +238,7 @@
   \expandafter
 \endgroup \platexTMP
 %    \end{macrocode}
+% \end{macro}
 %
 % ^^A 起動時に\file{platex.cfg}がある場合、それを読み込むようにする
 % ^^A コードは、\file{plcore.ltx}から\file{platex.ltx}へ移動しました。
@@ -246,12 +248,13 @@
 %
 % \subsection{ハイフネーション関連}
 %
+% \begin{macro}{\l@nohyphenation}
 % \LaTeXe\ 2017/05/01で、|\verb|の途中でハイフネーションが起きないように
-% する修正が入りました。この修正には|\@nohyphenation|が定義済みでなければ
+% する修正が入りました。この修正には|\l@nohyphenation|が定義済みでなければ
 % ならないので、同時にltfinalで対策されています。p\LaTeXe{}は2017/04/08で
 % 対策しますので、更新タイミングのずれを加味して念のためplfinalでも対策
 % しておきます（参考：latex2e svn r1405）。
-% \changes{v1.1b}{2017/03/11}{\cs{\@nohyphenation}の定義を保証
+% \changes{v1.1b}{2017/03/11}{\cs{l@nohyphenation}の定義を保証
 %    (sync with ltfinal 2017/03/09 v2.0t)}
 %    \begin{macrocode}
 \ifx\l@nohyphenation \@undefined
@@ -259,6 +262,7 @@
 \fi
 %</plfinal>
 %    \end{macrocode}
+% \end{macro}
 %
 % \subsection{latexreleaseパッケージへの対応}
 %

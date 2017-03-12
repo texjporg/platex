@@ -1221,17 +1221,12 @@
 % \changes{v1.1b}{1995/04/05}{互換モードのときは、pl209.defの定義を使う}
 % \changes{v1.1g}{1997/01/16}
 %    {\cs{verb}コマンドを\LaTeX\ \texttt{!<1996/06/01!>}に合わせて修正}
-% \changes{v1.2m}{2017/03/11}{\cs{verb}の途中でハイフネーションが
-%    起きないようにした(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
 % \LaTeX{}の|\verb|コマンドでは、数式モードでないときは、
 % |\leavevmode|で水平モードに入ったあと、|\null|を出力しています。
 % マクロ|\null|は|\hbox{}|として定義されていますので、
 % ここには和欧文間スペース（|\xkanjiskip|）が入りません。
 % そこで、|\null|を出力しないようマクロを修正します。
 % このマクロは、\file{ltmiscen.dtx}で定義されています。
-%
-% \LaTeXe\ 2017/05/01に追随して、|\verb|の途中でハイフネーションが起きない
-% ようにしました（参考：latex2e svn r1405）。
 %    \begin{macrocode}
 %</plcore>
 %<platexrelease>\plIncludeInRelease{2017/04/08}{\verb}
@@ -1242,6 +1237,12 @@
   \bgroup
     \verb@eol@error \let\do\@makeother \dospecials
     \verbatim@font\@noligs
+%    \end{macrocode}
+% \LaTeXe\ 2017/05/01に追随して、|\verb|の途中でハイフネーションが起きない
+% ようにしました（参考：latex2e svn r1405）。
+% \changes{v1.2m}{2017/03/11}{\cs{verb}の途中でハイフネーションが
+%    起きないようにした(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
+%    \begin{macrocode}
     \language\l@nohyphenation
     \@ifstar\@sverb\@verb}
 \fi
