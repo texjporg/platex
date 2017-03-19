@@ -564,6 +564,145 @@ of this package available from CTAN}
   \fi
 }
 \plEndIncludeInRelease
+\plIncludeInRelease{2017/04/08}{\@outputpage}
+                   {Reset language for hyphenation}%
+\def\@outputpage{%
+\begingroup % the \endgroup is put in by \aftergroup
+  \iftdir
+    \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
+  \fi
+  \let \protect \noexpand
+  \language\document@default@language
+  \@resetactivechars
+  \global\let\@@if@newlist\if@newlist
+  \global\@newlistfalse
+  \@parboxrestore
+  \shipout\vbox{\yoko
+    \set@typeset@protect
+    \aftergroup\endgroup
+    \aftergroup\set@typeset@protect
+     \if@specialpage
+       \global\@specialpagefalse\@nameuse{ps@\@specialstyle}%
+     \fi
+     \if@twoside
+       \ifodd\count\z@ \let\@thehead\@oddhead \let\@thefoot\@oddfoot
+          \iftdir\let\@themargin\evensidemargin
+          \else\let\@themargin\oddsidemargin\fi
+       \else \let\@thehead\@evenhead
+          \let\@thefoot\@evenfoot
+           \iftdir\let\@themargin\oddsidemargin
+           \else\let\@themargin\evensidemargin\fi
+     \fi\fi
+     \@@topmargin\topmargin
+     \iftombow
+       \@@paperwidth\paperwidth \advance\@@paperwidth 6mm\relax
+       \@@paperheight\paperheight \advance\@@paperheight 16mm\relax
+       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
+     \fi
+     \reset@font
+     \normalsize
+     \normalsfcodes
+     \let\label\@gobble
+     \let\index\@gobble
+     \let\glossary\@gobble
+     \baselineskip\z@skip \lineskip\z@skip \lineskiplimit\z@
+    \@begindvi
+    \@outputtombow
+    \vskip \@@topmargin
+    \moveright\@themargin\vbox{%
+      \setbox\@tempboxa \vbox to\headheight{%
+        \vfil
+        \color@hbox
+          \normalcolor
+          \hb@xt@\textwidth{\@thehead}%
+        \color@endbox
+      }%                        %% 22 Feb 87
+      \dp\@tempboxa \z@
+      \box\@tempboxa
+      \vskip \headsep
+      \box\@outputbox
+      \baselineskip \footskip
+      \color@hbox
+        \normalcolor
+        \hb@xt@\textwidth{\@thefoot}%
+      \color@endbox
+    }%
+  }%
+  \global\let\if@newlist\@@if@newlist
+  \global \@colht \textheight
+  \stepcounter{page}%
+  \let\firstmark\botmark
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@outputpage}
+                   {Reset language for hyphenation}%
+\def\@outputpage{%
+\begingroup % the \endgroup is put in by \aftergroup
+  \iftdir
+    \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
+  \fi
+  \let \protect \noexpand
+  \@resetactivechars
+  \global\let\@@if@newlist\if@newlist
+  \global\@newlistfalse
+  \@parboxrestore
+  \shipout\vbox{\yoko
+    \set@typeset@protect
+    \aftergroup\endgroup
+    \aftergroup\set@typeset@protect
+     \if@specialpage
+       \global\@specialpagefalse\@nameuse{ps@\@specialstyle}%
+     \fi
+     \if@twoside
+       \ifodd\count\z@ \let\@thehead\@oddhead \let\@thefoot\@oddfoot
+          \iftdir\let\@themargin\evensidemargin
+          \else\let\@themargin\oddsidemargin\fi
+       \else \let\@thehead\@evenhead
+          \let\@thefoot\@evenfoot
+           \iftdir\let\@themargin\oddsidemargin
+           \else\let\@themargin\evensidemargin\fi
+     \fi\fi
+     \@@topmargin\topmargin
+     \iftombow
+       \@@paperwidth\paperwidth \advance\@@paperwidth 6mm\relax
+       \@@paperheight\paperheight \advance\@@paperheight 16mm\relax
+       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
+     \fi
+     \reset@font
+     \normalsize
+     \normalsfcodes
+     \let\label\@gobble
+     \let\index\@gobble
+     \let\glossary\@gobble
+     \baselineskip\z@skip \lineskip\z@skip \lineskiplimit\z@
+    \@begindvi
+    \@outputtombow
+    \vskip \@@topmargin
+    \moveright\@themargin\vbox{%
+      \setbox\@tempboxa \vbox to\headheight{%
+        \vfil
+        \color@hbox
+          \normalcolor
+          \hb@xt@\textwidth{\@thehead}%
+        \color@endbox
+      }%                        %% 22 Feb 87
+      \dp\@tempboxa \z@
+      \box\@tempboxa
+      \vskip \headsep
+      \box\@outputbox
+      \baselineskip \footskip
+      \color@hbox
+        \normalcolor
+        \hb@xt@\textwidth{\@thefoot}%
+      \color@endbox
+    }%
+  }%
+  \global\let\if@newlist\@@if@newlist
+  \global \@colht \textheight
+  \stepcounter{page}%
+  \let\firstmark\botmark
+}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/07/01}{\AtBeginDvi}
                    {Fix for incompatible direction}%
 \def \AtBeginDvi #1{%
@@ -722,6 +861,27 @@ of this package available from CTAN}
   \else
     \expandafter#2#1\relax% change \null to \relax
   \fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{2017/04/08}{\verb}
+                   {Disable hyphenation in verb}%
+\if@compatibility\else
+\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+  \bgroup
+    \verb@eol@error \let\do\@makeother \dospecials
+    \verbatim@font\@noligs
+    \language\l@nohyphenation
+    \@ifstar\@sverb\@verb}
+\fi
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\verb}
+                   {Disable hyphenation in verb}%
+\if@compatibility\else
+\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+  \bgroup
+    \verb@eol@error \let\do\@makeother \dospecials
+    \verbatim@font\@noligs
+    \@ifstar\@sverb\@verb}
+\fi
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@tabular}
                    {Remove extra \xkanjiskip}%

@@ -60,13 +60,17 @@
 %    版面全体の垂直位置がずれていたのを修正(Issue 32)}
 % \changes{v1.2l}{2017/02/25}{\cs{@makecol}を変更したのに
 %    \cs{@makespecialcolbox}を変更しない、という判断について明文化}
+% \changes{v1.2m}{2017/03/19}{\cs{language}をリセット
+%    (sync with ltoutput.dtx 2017/03/10 v1.3c)}
+% \changes{v1.2m}{2017/03/19}{\cs{verb}の途中でハイフネーションが起きない
+%    ように\cs{language}を設定(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2017/02/25 v1.2l pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2017/03/19 v1.2m pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -785,12 +789,30 @@
 % |\begingroup|と|\endgroup|で囲みます。
 % \changes{v1.2a}{2001/09/26}{\LaTeX\ \texttt{!<2001/06/01!>}に対応}
 %    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\@outputpage}
+%<platexrelease>                   {Reset language for hyphenation}%
+%<*plcore|platexrelease>
 \def\@outputpage{%
 \begingroup % the \endgroup is put in by \aftergroup
   \iftdir
     \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
   \fi
   \let \protect \noexpand
+%    \end{macrocode}
+% \LaTeXe\ 2017-05-01ではverbatim環境内でハイフネーションが起きないように
+% 修正されましたが、verbatim環境の途中で改ページが起きた場合にヘッダで
+% ハイフネーションが抑制されるのは正しくないので、|\language|を
+% |\begin{document}|での値にリセットします（参考：latex2e svn r1407）。
+% プリアンブルで特別に設定されればその値、設定されなければ0です（万が一
+% |\document|の定義が古い場合\footnote{\LaTeXe\ 2017/01/01以前を使って
+% p\LaTeXe{}のフォーマットを作成した場合や、dinbrief.clsのように独自の
+% 再定義を行うクラスやパッケージを使った場合に起こるかもしれません。}は
+% $-1$になりますが、これは0と同じはたらきをするので問題は起きません）。
+% \changes{v1.2m}{2017/03/19}{\cs{language}をリセット
+%    (sync with ltoutput.dtx 2017/03/10 v1.3c)}
+%    \begin{macrocode}
+  \language\document@default@language
   \@resetactivechars
   \global\let\@@if@newlist\if@newlist
   \global\@newlistfalse
@@ -871,6 +893,78 @@
   \stepcounter{page}%
   \let\firstmark\botmark
 }
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@outputpage}
+%<platexrelease>                   {Reset language for hyphenation}%
+%<platexrelease>\def\@outputpage{%
+%<platexrelease>\begingroup % the \endgroup is put in by \aftergroup
+%<platexrelease>  \iftdir
+%<platexrelease>    \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
+%<platexrelease>  \fi
+%<platexrelease>  \let \protect \noexpand
+%<platexrelease>  \@resetactivechars
+%<platexrelease>  \global\let\@@if@newlist\if@newlist
+%<platexrelease>  \global\@newlistfalse
+%<platexrelease>  \@parboxrestore
+%<platexrelease>  \shipout\vbox{\yoko
+%<platexrelease>    \set@typeset@protect
+%<platexrelease>    \aftergroup\endgroup
+%<platexrelease>    \aftergroup\set@typeset@protect
+%<platexrelease>     \if@specialpage
+%<platexrelease>       \global\@specialpagefalse\@nameuse{ps@\@specialstyle}%
+%<platexrelease>     \fi
+%<platexrelease>     \if@twoside
+%<platexrelease>       \ifodd\count\z@ \let\@thehead\@oddhead \let\@thefoot\@oddfoot
+%<platexrelease>          \iftdir\let\@themargin\evensidemargin
+%<platexrelease>          \else\let\@themargin\oddsidemargin\fi
+%<platexrelease>       \else \let\@thehead\@evenhead
+%<platexrelease>          \let\@thefoot\@evenfoot
+%<platexrelease>           \iftdir\let\@themargin\oddsidemargin
+%<platexrelease>           \else\let\@themargin\evensidemargin\fi
+%<platexrelease>     \fi\fi
+%<platexrelease>     \@@topmargin\topmargin
+%<platexrelease>     \iftombow
+%<platexrelease>       \@@paperwidth\paperwidth \advance\@@paperwidth 6mm\relax
+%<platexrelease>       \@@paperheight\paperheight \advance\@@paperheight 16mm\relax
+%<platexrelease>       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
+%<platexrelease>     \fi
+%<platexrelease>     \reset@font
+%<platexrelease>     \normalsize
+%<platexrelease>     \normalsfcodes
+%<platexrelease>     \let\label\@gobble
+%<platexrelease>     \let\index\@gobble
+%<platexrelease>     \let\glossary\@gobble
+%<platexrelease>     \baselineskip\z@skip \lineskip\z@skip \lineskiplimit\z@
+%<platexrelease>    \@begindvi
+%<platexrelease>    \@outputtombow
+%<platexrelease>    \vskip \@@topmargin
+%<platexrelease>    \moveright\@themargin\vbox{%
+%<platexrelease>      \setbox\@tempboxa \vbox to\headheight{%
+%<platexrelease>        \vfil
+%<platexrelease>        \color@hbox
+%<platexrelease>          \normalcolor
+%<platexrelease>          \hb@xt@\textwidth{\@thehead}%
+%<platexrelease>        \color@endbox
+%<platexrelease>      }%                        %% 22 Feb 87
+%<platexrelease>      \dp\@tempboxa \z@
+%<platexrelease>      \box\@tempboxa
+%<platexrelease>      \vskip \headsep
+%<platexrelease>      \box\@outputbox
+%<platexrelease>      \baselineskip \footskip
+%<platexrelease>      \color@hbox
+%<platexrelease>        \normalcolor
+%<platexrelease>        \hb@xt@\textwidth{\@thefoot}%
+%<platexrelease>      \color@endbox
+%<platexrelease>    }%
+%<platexrelease>  }%
+%<platexrelease>  \global\let\if@newlist\@@if@newlist
+%<platexrelease>  \global \@colht \textheight
+%<platexrelease>  \stepcounter{page}%
+%<platexrelease>  \let\firstmark\botmark
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1226,13 +1320,37 @@
 % そこで、|\null|を出力しないようマクロを修正します。
 % このマクロは、\file{ltmiscen.dtx}で定義されています。
 %    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\verb}
+%<platexrelease>                   {Disable hyphenation in verb}%
+%<*plcore|platexrelease>
 \if@compatibility\else
 \def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
   \bgroup
     \verb@eol@error \let\do\@makeother \dospecials
     \verbatim@font\@noligs
+%    \end{macrocode}
+% \LaTeXe\ 2017-05-01に追随して、|\verb|の途中でハイフネーションが起きない
+% ように|\language|を設定します（参考：latex2e svn r1405）。
+% \changes{v1.2m}{2017/03/19}{\cs{verb}の途中でハイフネーションが起きない
+%    ように\cs{language}を設定(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
+%    \begin{macrocode}
+    \language\l@nohyphenation
     \@ifstar\@sverb\@verb}
 \fi
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\verb}
+%<platexrelease>                   {Disable hyphenation in verb}%
+%<platexrelease>\if@compatibility\else
+%<platexrelease>\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+%<platexrelease>  \bgroup
+%<platexrelease>    \verb@eol@error \let\do\@makeother \dospecials
+%<platexrelease>    \verbatim@font\@noligs
+%<platexrelease>    \@ifstar\@sverb\@verb}
+%<platexrelease>\fi
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %

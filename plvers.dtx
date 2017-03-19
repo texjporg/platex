@@ -51,12 +51,16 @@
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
 % \changes{v1.1}{2016/09/14}{起動時のバナーを取得するコードを改良}
 % \changes{v1.1a}{2017/02/20}{\LaTeX\ \texttt{!<2017/01/01!>}版対応確認}
+% \changes{v1.1b}{2017/03/19}{\cs{l@nohyphenation}の定義を保証
+%    (sync with ltfinal 2017/03/09 v2.0t)}
+% \changes{v1.1b}{2017/03/19}{\cs{document@default@language}の定義を保証
+%    (sync with ltfinal 2017/03/09 v2.0t)}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2017/02/20 v1.1a pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2017/03/19 v1.1b pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -244,6 +248,40 @@
 % \changes{v1.0y}{2016/06/27}{\file{platex.cfg}の読み込みを追加}
 % \changes{v1.0z}{2016/08/26}{\file{platex.cfg}の読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
+%
+% \subsection{ハイフネーション関連}
+%
+% \begin{macro}{\l@nohyphenation}
+% \LaTeXe\ 2017-05-01で、|\verb|の途中でハイフネーションが起きないように
+% する修正が入りました。この修正には|\l@nohyphenation|が定義済みでなければ
+% なりませんが、通常はBabelの定義ファイルによって提供されています。
+% \LaTeXe{}は特殊な状況も想定してltfinalで対策しているようですので、
+% p\LaTeXe{}も念のためplfinalで対策します（参考：latex2e svn r1405）。
+% \changes{v1.1b}{2017/03/19}{\cs{l@nohyphenation}の定義を保証
+%    (sync with ltfinal 2017/03/09 v2.0t)}
+%    \begin{macrocode}
+%<*plfinal>
+\ifx\l@nohyphenation \@undefined
+  \newlanguage\l@nohyphenation
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\document@default@language}
+% \LaTeXe\ 2017-05-01で導入されたパラメータです。更新タイミングのずれの
+% 可能性を考慮し、p\LaTeXe{}でも準備しておきます。verbatim環境の途中で
+% 改ページが起きた場合にヘッダでハイフネーションが抑制されないように、
+% |\@outputpage|で|\language|をリセットするときに使われます
+% （参考：latex2e svn r1407）。
+% \changes{v1.1b}{2017/03/19}{\cs{document@default@language}の定義を保証
+%    (sync with ltfinal 2017/03/09 v2.0t)}
+%    \begin{macrocode}
+\ifx\document@default@language \@undefined
+  \let\document@default@language\m@ne
+\fi
+%</plfinal>
+%    \end{macrocode}
+% \end{macro}
 %
 % \subsection{latexreleaseパッケージへの対応}
 %

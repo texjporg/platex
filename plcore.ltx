@@ -864,6 +864,7 @@
     \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
   \fi
   \let \protect \noexpand
+  \language\document@default@language
   \@resetactivechars
   \global\let\@@if@newlist\if@newlist
   \global\@newlistfalse
@@ -985,6 +986,7 @@
   \bgroup
     \verb@eol@error \let\do\@makeother \dospecials
     \verbatim@font\@noligs
+    \language\l@nohyphenation
     \@ifstar\@sverb\@verb}
 \fi
 \gdef\@stopfield{\null\color@endgroup\egroup}
@@ -1073,6 +1075,12 @@
   }
   \expandafter
 \endgroup \platexTMP
+\ifx\l@nohyphenation \@undefined
+  \newlanguage\l@nohyphenation
+\fi
+\ifx\document@default@language \@undefined
+  \let\document@default@language\m@ne
+\fi
 \AtBeginDocument{%
   \@ifpackageloaded{latexrelease}{%
     \@ifpackageloaded{platexrelease}{}{%

@@ -841,7 +841,7 @@
 % |\begingroup|と|\endgroup|で囲みます。
 % \changes{v1.2a}{2001/09/26}{\LaTeX\ \texttt{!<2001/06/01!>}に対応}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\@outputpage}
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\@outputpage}
 %<platexrelease>                   {Reset language for hyphenation}%
 %<*plcore|platexrelease>
 \def\@outputpage{%
@@ -856,8 +856,11 @@
 % ハイフネーションが抑制されるのは正しくないので、|\language|を
 % |\begin{document}|での値にリセットします（参考：latex2e svn r1407）。
 % プリアンブルで特別に設定されればその値、設定されなければ0です（万が一
-% |\document|の定義が古い場合は$-1$になるが、これは0と同じはたらきをする）。
-% \changes{v????}{????/??/??}{\cs{language}をリセット
+% |\document|の定義が古い場合\footnote{\LaTeXe\ 2017/01/01以前を使って
+% p\LaTeXe{}のフォーマットを作成した場合や、dinbrief.clsのように独自の
+% 再定義を行うクラスやパッケージを使った場合に起こるかもしれません。}は
+% $-1$になりますが、これは0と同じはたらきをするので問題は起きません）。
+% \changes{v1.2m}{2017/03/19}{\cs{language}をリセット
 %    (sync with ltoutput.dtx 2017/03/10 v1.3c)}
 %    \begin{macrocode}
   \language\document@default@language
@@ -1028,7 +1031,7 @@
 % そこで、|\null|を出力しないようマクロを修正します。
 % このマクロは、\file{ltmiscen.dtx}で定義されています。
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\verb}
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\verb}
 %<platexrelease>                   {Disable hyphenation in verb}%
 %<*plcore|platexrelease>
 \if@compatibility\else
@@ -1039,7 +1042,7 @@
 %    \end{macrocode}
 % \LaTeXe\ 2017-05-01に追随して、|\verb|の途中でハイフネーションが起きない
 % ように|\language|を設定します（参考：latex2e svn r1405）。
-% \changes{v????}{????/??/??}{\cs{verb}の途中でハイフネーションが起きない
+% \changes{v1.2m}{2017/03/19}{\cs{verb}の途中でハイフネーションが起きない
 %    ように\cs{language}を設定(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
 %    \begin{macrocode}
     \language\l@nohyphenation
@@ -1069,7 +1072,7 @@
 % なりませんが、通常はBabelの定義ファイルによって提供されています。
 % \LaTeXe{}は特殊な状況も想定してltfinalで対策しているようですので、
 % p\LaTeXe{}も念のためplfinalで対策します（参考：latex2e svn r1405）。
-% \changes{v????}{????/??/??}{\cs{l@nohyphenation}の定義を保証
+% \changes{v1.1b}{2017/03/19}{\cs{l@nohyphenation}の定義を保証
 %    (sync with ltfinal 2017/03/09 v2.0t)}
 %    \begin{macrocode}
 %<*plfinal>
@@ -1085,7 +1088,7 @@
 % 改ページが起きた場合にヘッダでハイフネーションが抑制されないように、
 % |\@outputpage|で|\language|をリセットするときに使われます
 % （参考：latex2e svn r1407）。
-% \changes{v????}{????/??/??}{\cs{document@default@language}の定義を保証
+% \changes{v1.1b}{2017/03/19}{\cs{document@default@language}の定義を保証
 %    (sync with ltfinal 2017/03/09 v2.0t)}
 %    \begin{macrocode}
 \ifx\document@default@language \@undefined
