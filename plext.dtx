@@ -54,6 +54,8 @@
 %    数字も漢数字になってしまうバグを修正}
 % \changes{v1.2e}{2017/03/02}{Make \cs{parbox} Robust
 %    (sync with ltboxes 2015/01/08 v1.1h)}
+% \changes{v1.2f}{2017/03/28}{表と周囲との揃え位置を修正}
+% \changes{v1.2f}{2017/03/28}{段落の箱と周囲との揃え位置を修正}
 % \fi
 %
 % \iffalse
@@ -62,7 +64,7 @@
 \ProvidesFile{plext.dtx}
 %</driver>
 %<package>\ProvidesPackage{plext}
-   [2017/03/02 v1.2e pLaTeX package file (community edition)]
+   [2017/03/28 v1.2f pLaTeX package file (community edition)]
 %<*driver>
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -284,6 +286,43 @@
 % \begin{macro}{\fork@array@option}
 % array環境とtabular環境で与えられた
 % 第一引数と第二引数の組合せの分岐を行ないます。
+%
+% コミュニティ版では、アスキー版で不自然だった表組（array環境およびtabular環境）と
+% 周囲の本文との揃え位置を修正し、以下のように設計しました。
+% \begin{itemize}
+% \item 周囲の組方向が横組かつ組方向が|<y>|, |<z>|指定の場合
+% \begin{itemize}
+%   \item |[t]|指定のとき、\\一行目のベースラインが周囲のそれと一致（罫線の場合は和文ベースラインの位置）
+%   \item |[c]|指定のとき、\\表組の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
+%   \item |[b]|指定のとき、\\最終行のベースラインが周囲のそれと一致（罫線の場合は和文ベースラインの位置）
+% \end{itemize}
+% \item 周囲の組方向が横組かつ組方向が|<t>|指定の場合
+% \begin{itemize}
+%   \item |[t]|指定のとき、\\表組の上端が周囲の和文ベースラインと一致
+%   \item |[c]|指定のとき、\\表組の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
+%   \item |[b]|指定のとき、\\表組の下端が周囲の和文ベースラインと一致
+% \end{itemize}
+% \item 周囲の組方向が縦組かつ組方向が|<y>|指定の場合
+% \begin{itemize}
+%   \item |[t]|指定のとき、\\表組の上端が周囲の和文ベースラインと一致
+%   \item |[c]|指定のとき、\\表組の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
+%   \item |[b]|指定のとき、\\表組の下端が周囲の和文ベースラインと一致
+% \end{itemize}
+% \item 周囲の組方向が縦組かつ組方向が|<t>|指定の場合
+% \begin{itemize}
+%   \item |[t]|指定のとき、\\一行目のベースラインが周囲のそれと一致（罫線の場合は和文ベースラインの位置）
+%   \item |[c]|指定のとき、\\表組の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
+%   \item |[b]|指定のとき、\\最終行のベースラインが周囲のそれと一致（罫線の場合は和文ベースラインの位置）
+% \end{itemize}
+% \item 周囲の組方向が縦組かつ組方向が|<z>|指定の場合
+%  [TODO] 未定！
+%^^A \begin{itemize}
+%^^A   \item |[t]|指定のとき、\\表組の上端が周囲の和文ベースラインと一致
+%^^A   \item |[c]|指定のとき、\\表組の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
+%^^A   \item |[b]|指定のとき、\\表組の下端が周囲の和文ベースラインと一致
+%^^A \end{itemize}
+% \end{itemize}
+% \changes{v1.2f}{2017/03/28}{表と周囲との揃え位置を修正}
 %    \begin{macrocode}
 \def\fork@array@option<#1>[#2]{%
 \@rotswfalse
@@ -293,10 +332,16 @@
 \iftdir
 \if #1y\relax\let\box@dir\yoko
   \if #2t\relax
-     \def\@begin@alignbox{\raise\cdp\vtop\bgroup\kern\z@\vbox}%
+     \def\@begin@alignbox{%
+         \@tempdima=\tbaselineshift
+         \advance\@tempdima-\ybaselineshift
+         \raise\@tempdima\vtop\bgroup\kern\z@\vtop}%
      \let\@end@alignbox\egroup
   \else\if #2b\relax
-     \def\@begin@alignbox{\lower\cdp\vbox\bgroup\vbox}%
+     \def\@begin@alignbox{%
+         \@tempdima=\tbaselineshift
+         \advance\@tempdima-\ybaselineshift
+         \raise\@tempdima\vbox\bgroup\vbox}%
      \def\@end@alignbox{\kern\z@\egroup}%
   \else
      \let\@begin@alignbox\vcenter
@@ -315,7 +360,7 @@
   \fi\fi
 \else\let\box@dir\tate
   \if #2t\relax
-     \def\@begin@alignbox{\raise\cdp\vtop}%
+     \let\@begin@alignbox\vtop
      \let\@end@alignbox\relax
   \else\if #2b\relax
      \let\@begin@alignbox\vbox
@@ -342,7 +387,7 @@
   \fi\fi
 \else\let\box@dir\yoko
   \if #2t\relax
-     \def\@begin@alignbox{\raise\cdp\vtop}%
+     \let\@begin@alignbox\vtop
      \let\@end@alignbox\relax
   \else\if #2b\relax
      \let\@begin@alignbox\vbox
@@ -839,6 +884,43 @@
 %
 % \begin{macro}{\fork@parbox@option}
 % |\parbox|で与えられた第一引数と第二引数の組合せの分岐を行ないます。
+%
+% コミュニティ版では、アスキー版で不自然だった|\parbox|の箱と
+% 周囲の本文との揃え位置を修正し、以下のように設計しました。
+% \begin{itemize}
+% \item 周囲の組方向が横組かつ組方向が|<y>|, |<z>|指定の場合
+% \begin{itemize}
+%   \item |[t]|指定のとき、\\一行目のベースラインが周囲のそれと一致
+%   \item |[c]|指定のとき、\\箱の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
+%   \item |[b]|指定のとき、\\最終行のベースラインが周囲のそれと一致
+% \end{itemize}
+% \item 周囲の組方向が横組かつ組方向が|<t>|指定の場合
+% \begin{itemize}
+%   \item |[t]|指定のとき、\\箱の上端が周囲の和文ベースラインと一致
+%   \item |[c]|指定のとき、\\箱の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
+%   \item |[b]|指定のとき、\\箱の下端が周囲の和文ベースラインと一致
+% \end{itemize}
+% \item 周囲の組方向が縦組かつ組方向が|<y>|指定の場合
+% \begin{itemize}
+%   \item |[t]|指定のとき、\\箱の上端が周囲の和文ベースラインと一致
+%   \item |[c]|指定のとき、\\箱の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
+%   \item |[b]|指定のとき、\\箱の下端が周囲の和文ベースラインと一致
+% \end{itemize}
+% \item 周囲の組方向が縦組かつ組方向が|<t>|指定の場合
+% \begin{itemize}
+%   \item |[t]|指定のとき、\\一行目のベースラインが周囲のそれと一致
+%   \item |[c]|指定のとき、\\箱の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
+%   \item |[b]|指定のとき、\\最終行のベースラインが周囲のそれと一致
+% \end{itemize}
+% \item 周囲の組方向が縦組かつ組方向が|<z>|指定の場合
+%  [TODO] 未定！
+%^^A \begin{itemize}
+%^^A   \item |[t]|指定のとき、\\箱の上端が周囲の和文ベースラインと一致
+%^^A   \item |[c]|指定のとき、\\箱の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
+%^^A   \item |[b]|指定のとき、\\箱の下端が周囲の和文ベースラインと一致
+%^^A \end{itemize}
+% \end{itemize}
+% \changes{v1.2f}{2017/03/28}{段落の箱と周囲との揃え位置を修正}
 %    \begin{macrocode}
 \def\fork@parbox@option<#1>[#2]{%
 \@rotswfalse
@@ -848,16 +930,16 @@
 \iftdir
 \if #1y\relax\let\box@dir\yoko
    \if #2t\relax
-      \def\@begin@parbox{\raise\cdp\vtop\bgroup\kern\z@\vtop}%
+      \def\@begin@parbox{\vtop\bgroup\kern\z@\vtop}%
       \let\@end@parbox\egroup
    \else\if #2b\relax
-      \def\@begin@parbox{\lower\cdp\vbox\bgroup\vbox}%
+      \def\@begin@parbox{\vbox\bgroup\vbox}%
       \def\@end@parbox{\kern\z@\egroup}%
    \else\ifmmode
       \let\@begin@parbox\vcenter
       \let\@end@parbox\relax
    \else
-      \def\@begin@parbox{\hskip\tbaselineshift$\vcenter}%
+      \def\@begin@parbox{$\vcenter}%
       \def\@end@parbox{\m@th$}%
    \fi\fi\fi
 \else\if #1z\relax\@rotswtrue \let\box@dir\relax
@@ -879,7 +961,7 @@
       \let\@begin@parbox\vtop
       \let\@end@parbox\relax
    \else\if #2b\relax
-      \def\@begin@parbox{\lower\cdp\vbox}%
+      \let\@begin@parbox\vbox
       \let\@end@parbox\relax
    \else\ifmmode
       \let\@begin@parbox\vcenter
