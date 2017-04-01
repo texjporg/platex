@@ -828,7 +828,7 @@
 % ^^A ===== plcore.dtx (plcore) =====
 % \section{verbatimとハイフネーション}
 %
-% \LaTeXe\ 2017-05-01で導入された疑似タイプ入力(verbatim)内での
+% \LaTeXe\ 2017-04-15で導入された疑似タイプ入力(verbatim)内での
 % ハイフネーションに関連した修正に追随します。
 %
 % \begin{macro}{\@outputpage}
@@ -851,7 +851,7 @@
   \fi
   \let \protect \noexpand
 %    \end{macrocode}
-% \LaTeXe\ 2017-05-01ではverbatim環境内でハイフネーションが起きないように
+% \LaTeXe\ 2017-04-15ではverbatim環境内でハイフネーションが起きないように
 % 修正されましたが、verbatim環境の途中で改ページが起きた場合にヘッダで
 % ハイフネーションが抑制されるのは正しくないので、|\language|を
 % |\begin{document}|での値にリセットします（参考：latex2e svn r1407）。
@@ -1040,7 +1040,7 @@
     \verb@eol@error \let\do\@makeother \dospecials
     \verbatim@font\@noligs
 %    \end{macrocode}
-% \LaTeXe\ 2017-05-01に追随して、|\verb|の途中でハイフネーションが起きない
+% \LaTeXe\ 2017-04-15に追随して、|\verb|の途中でハイフネーションが起きない
 % ように|\language|を設定します（参考：latex2e svn r1405）。
 % \changes{v1.2m}{2017/03/19}{\cs{verb}の途中でハイフネーションが起きない
 %    ように\cs{language}を設定(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
@@ -1067,7 +1067,7 @@
 % \subsection{ハイフネーション関連}
 %
 % \begin{macro}{\l@nohyphenation}
-% \LaTeXe\ 2017-05-01で、|\verb|の途中でハイフネーションが起きないように
+% \LaTeXe\ 2017-04-15で、|\verb|の途中でハイフネーションが起きないように
 % する修正が入りました。この修正には|\l@nohyphenation|が定義済みでなければ
 % なりませんが、通常はBabelの定義ファイルによって提供されています。
 % \LaTeXe{}は特殊な状況も想定してltfinalで対策しているようですので、
@@ -1083,7 +1083,7 @@
 % \end{macro}
 %
 % \begin{macro}{\document@default@language}
-% \LaTeXe\ 2017-05-01で導入されたパラメータです。更新タイミングのずれの
+% \LaTeXe\ 2017-04-15で導入されたパラメータです。更新タイミングのずれの
 % 可能性を考慮し、p\LaTeXe{}でも準備しておきます。verbatim環境の途中で
 % 改ページが起きた場合にヘッダでハイフネーションが抑制されないように、
 % |\@outputpage|で|\language|をリセットするときに使われます

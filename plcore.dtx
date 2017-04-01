@@ -800,7 +800,7 @@
   \fi
   \let \protect \noexpand
 %    \end{macrocode}
-% \LaTeXe\ 2017-05-01ではverbatim環境内でハイフネーションが起きないように
+% \LaTeXe\ 2017-04-15ではverbatim環境内でハイフネーションが起きないように
 % 修正されましたが、verbatim環境の途中で改ページが起きた場合にヘッダで
 % ハイフネーションが抑制されるのは正しくないので、|\language|を
 % |\begin{document}|での値にリセットします（参考：latex2e svn r1407）。
@@ -1330,7 +1330,7 @@
     \verb@eol@error \let\do\@makeother \dospecials
     \verbatim@font\@noligs
 %    \end{macrocode}
-% \LaTeXe\ 2017-05-01に追随して、|\verb|の途中でハイフネーションが起きない
+% \LaTeXe\ 2017-04-15に追随して、|\verb|の途中でハイフネーションが起きない
 % ように|\language|を設定します（参考：latex2e svn r1405）。
 % \changes{v1.2m}{2017/03/19}{\cs{verb}の途中でハイフネーションが起きない
 %    ように\cs{language}を設定(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
