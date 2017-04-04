@@ -896,15 +896,15 @@
 % \end{itemize}
 % \item 周囲の組方向が横組かつ組方向が|<t>|指定の場合
 % \begin{itemize}
-%   \item |[t]|指定のとき\\箱の上端が周囲の和文ベースラインと一致
+%   \item |[t]|指定のとき\\箱の上端が周囲の和文文字の高さと一致
 %   \item |[c]|指定のとき\\箱の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
-%   \item |[b]|指定のとき\\箱の下端が周囲の和文ベースラインと一致
+%   \item |[b]|指定のとき\\箱の下端が周囲の和文文字の深さと一致
 % \end{itemize}
 % \item 周囲の組方向が縦組かつ組方向が|<y>|指定の場合
 % \begin{itemize}
-%   \item |[t]|指定のとき\\箱の上端が周囲の和文ベースラインと一致
+%   \item |[t]|指定のとき\\箱の上端が周囲の和文文字の高さと一致
 %   \item |[c]|指定のとき\\箱の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
-%   \item |[b]|指定のとき\\箱の下端が周囲の和文ベースラインと一致
+%   \item |[b]|指定のとき\\箱の下端が周囲の和文文字の深さと一致
 % \end{itemize}
 % \item 周囲の組方向が縦組かつ組方向が|<t>|指定の場合
 % \begin{itemize}
@@ -930,10 +930,10 @@
 \iftdir
 \if #1y\relax\let\box@dir\yoko
    \if #2t\relax
-      \def\@begin@parbox{\vtop\bgroup\kern\z@\vtop}%
+      \def\@begin@parbox{\raise\cht\vtop\bgroup\kern\z@\vtop}%
       \let\@end@parbox\egroup
    \else\if #2b\relax
-      \def\@begin@parbox{\vbox\bgroup\vbox}%
+      \def\@begin@parbox{\lower\cdp\vbox\bgroup\vbox}%
       \def\@end@parbox{\kern\z@\egroup}%
    \else\ifmmode
       \let\@begin@parbox\vcenter
@@ -977,10 +977,10 @@
 \else
 \if #1t\relax\let\box@dir\tate
    \if #2t\relax
-      \def\@begin@parbox{\vtop\bgroup\kern\z@\vbox}%
+      \def\@begin@parbox{\raise\cht\vtop\bgroup\kern\z@\vtop}%
       \let\@end@parbox\egroup
    \else\if #2b\relax
-      \def\@begin@parbox{\vbox\bgroup\vbox}%
+      \def\@begin@parbox{\lower\cdp\vbox\bgroup\vbox}%
       \def\@end@parbox{\kern\z@\egroup}%
    \else\ifmmode
       \let\@begin@parbox\vcenter

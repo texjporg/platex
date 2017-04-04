@@ -339,10 +339,10 @@
 \iftdir
 \if #1y\relax\let\box@dir\yoko
    \if #2t\relax
-      \def\@begin@parbox{\vtop\bgroup\kern\z@\vtop}%
+      \def\@begin@parbox{\raise\cht\vtop\bgroup\kern\z@\vtop}%
       \let\@end@parbox\egroup
    \else\if #2b\relax
-      \def\@begin@parbox{\vbox\bgroup\vbox}%
+      \def\@begin@parbox{\lower\cdp\vbox\bgroup\vbox}%
       \def\@end@parbox{\kern\z@\egroup}%
    \else\ifmmode
       \let\@begin@parbox\vcenter
@@ -383,10 +383,10 @@
 \else
 \if #1t\relax\let\box@dir\tate
    \if #2t\relax
-      \def\@begin@parbox{\vtop\bgroup\kern\z@\vbox}%
+      \def\@begin@parbox{\raise\cht\vtop\bgroup\kern\z@\vtop}%
       \let\@end@parbox\egroup
    \else\if #2b\relax
-      \def\@begin@parbox{\vbox\bgroup\vbox}%
+      \def\@begin@parbox{\lower\cdp\vbox\bgroup\vbox}%
       \def\@end@parbox{\kern\z@\egroup}%
    \else\ifmmode
       \let\@begin@parbox\vcenter
