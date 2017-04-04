@@ -1,0 +1,114 @@
+%% <2017/04/08>
+\documentclass{plnews}
+
+\publicationyear{2017}% 発行年
+\publicationmonth{04}% 発行月
+\publicationissue{c6}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\pTeX{p\kern-.15em\TeX}
+\def\eTeX{$\varepsilon$-\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+
+\begin{document}
+
+\maketitle
+
+この文書はコミュニティ版\pLaTeXe\ \texttt{<2017/04/08>}について、
+\pLaTeXe\ \texttt{<2016/11/29>}からの更新箇所をまとめたものです。
+
+
+\section{標準クラスファイルの修正}
+\file{jclasses}が全体的に新しくなりました。
+\begin{itemize}
+\item (j,t)book/reportクラス：|openleft|オプションを追加しました。これは章の
+  始まりを左起こし（横組では見開き起こし、縦組では片起こし）にします。
+  従来は|openright|（横組では片起こし、縦組では見開き起こし）と
+  |openany|（成り行きに従う）しかありませんでした。なお、|openleft|の場合は
+  |\cleardoublepage|命令も左起こし用に再々定義します。
+\item (j,t)book/reportクラス：|openany|指定時に|\part|のあとに白ページを
+  入れるのをやめました。\LaTeX{}標準クラスの古いバグ修正にようやく追随した
+  ことになります。
+\item (j,t)bookクラス：タイトルページを必ず奇数ページ目に送るように変更しました。
+  今回の修正により、従来のtbookクラスでタイトルの前に出ていた空白ページは
+  無くなります。また、|\frontmatter|と|\mainmatter|も必ず奇数ページ目に送るよう
+  に変更しました。
+\item タイトルを独立ページとする場合に、奇数レイアウトのページと偶数レイアウト
+  のページが交互にならない、すなわち両面印刷がうまくいかないことがある問題に
+  対処しました。
+\item 縦組の所属表示（|\thanks|）の番号が寝るのは奇妙なので直しました。
+\item トンボに日付を表示する|tombow|オプションの日付表示を\file{jsclasses}に
+  あわせて桁数固定としました。
+\end{itemize}
+
+
+\section{\file{plext}の揃え位置}
+\file{plext}パッケージは|tabular|や|\parbox|などを拡張しますが、罫線やベース
+ラインの揃え方に統一性がありませんでした。また、アスキー当時の2001年から
+現在に至るまで、\pTeX{}の数々の仕様変更を受けて何度も揃え位置が（勝手に）
+変化してきた経緯があります。今回、コミュニティ版で2017年の\pTeX{}に合わせて
+仕様を策定することにしました。
+また、\LaTeXe\ 2015/01/01に追随して|\parbox|をrobustにしたほか、
+|\Kanji|命令のバグを修正しました。
+
+
+\section{支柱の高さ}
+高さや深さだけを持つ見えない箱、すなわち支柱として、\LaTeX{}では
+|\strutbox|というボックスが用意されます。縦組と横組という概念が追加された
+\pLaTeX{}では、|\strutbox|を横組ボックスとして組み、別途に縦組ボックス
+|\tstrutbox|を用意していました。これに従えば、支柱を利用したいパッケージ側が
+「横組では|\strutbox|を呼び出し、縦組では|\tstrutbox|を呼び出す」と使い分け
+る必要があります。
+
+\pLaTeX{}と一緒に配布しているパッケージは実際にこの使い分けを行っており、
+ほとんど問題ありませんでした。ところが、\pLaTeX{}縦組を考慮していない外部の
+パッケージはこのような運用になっていないため、縦組で|\strutbox|の寸法を取得
+しようとして、支柱の期待に反する値が返ってしまいます。
+結果的に、縦組で\file{amsmath}パッケージの|align|環境内の整列がうまくいかな
+かったり、表の|\arraystretch|命令が効かなかったりという問題が生じていました。
+
+新しい\pLaTeX{}では、横組ボックス|\ystrutbox|と縦組ボックス|\tstrutbox|を
+用意し、|\strutbox|は「現在の組方向を判定し、横組なら|\ystrutbox|を、縦組なら
+|\tstrutbox|を返すマクロ」へと変更しました。これで、何も考えなくても
+|\strutbox|が常に支柱として機能するようになりました。
+
+
+\section{\LaTeXe\ \texttt{<2017-04-15>}対応}
+\LaTeXe\ \texttt{<2017-04-15>}で入る予定の修正の一部が\pLaTeXe{}と衝突する
+部分について、事前に対策を施しました。現時点では、|\verb|の途中で
+ハイフネーション行分割を抑制するための修正、および|verbatim|環境中での
+ハイフネーション抑制に絡んだ出力ルーチンの命令の修正に対応しました。
+なお、フォーマットの日付が\texttt{yyyy/mm/dd}から\texttt{yyyy-mm-dd}という
+ISO書式に変更されましたが、\pLaTeXe{}のフォーマット日付はまだ従来の書式の
+ままにしています。
+
+
+\section{その他のバグ修正}
+\begin{itemize}
+\item 相互参照の|\ref{ラベル}|や|\pageref{ラベル}|をセクションなどの
+  「動く引数」で使うと、目次に出たときに後ろの半角スペースが消えるバグを
+  修正しました。
+\item 出力ルーチンに関わるマクロの深さ補正の誤りにより、脚注を含むページ
+  の版面全体が（特に縦組で顕著に）ずれていたバグを直しました。
+\item 縦数式ディレクションでアンダースコア(|\_|)のベースライン補正量が
+  間違っていたのを直しました
+\end{itemize}
+
+
+\section{開発版のテストのお願い}
+今後p\LaTeX{}に導入するかもしれない修正パッチや仕様変更のテストにご協力くだ
+さい。\TeX{}ファイルの冒頭（|\documentclass|より前）で
+\begin{verbatim}
+  \RequirePackage{exppl2e}
+\end{verbatim}
+と書くことで、現在の開発版をテストすることができます。
+バグ報告やご意見を歓迎します。
+\TeX\ ForumやGitHubのIssueシステムが利用できます。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
