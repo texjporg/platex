@@ -64,13 +64,14 @@
 %    (sync with ltoutput.dtx 2017/03/10 v1.3c)}
 % \changes{v1.2m}{2017/03/19}{\cs{verb}の途中でハイフネーションが起きない
 %    ように\cs{language}を設定(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
+% \changes{v1.2n}{2017/04/23}{ドキュメントの追加}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2017/03/19 v1.2m pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2017/04/23 v1.2n pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -197,9 +198,11 @@
 % \end{macro}
 %
 % \subsection{改行}
+%
+% \begin{macro}{\@gnewline}
 % \changes{v1.1c}{1995/08/25}{行頭禁則文字の直前での改行での不具合の修正}
 % 日本語\TeX{}の行頭禁則処理は、禁則対象文字の直前に、
-% |\prekinsokupenalty|で指定されたペナルティの値を挿入することで
+% |\prebreakpenalty|で指定されたペナルティの値を挿入することで
 % 行なっています。
 % ところが、改行コマンドは負のペナルティの値を挿入することで改行を行ないます。
 % そのために、禁則ペナルティの値が$10000$の文字の直後では、ペナルティの値が
@@ -222,8 +225,26 @@
 %    ありがとう、奥村さん。}
 % \LaTeX\ \texttt{<1996/12/01>}で改行マクロが変更され、|\\|が
 % |\newline|を呼び出さなくなったため、変更された改行マクロに対応しまし
-% た。|\mbox{}|の挿入位置は同じです。
+% た。|\null|の挿入位置は同じです。
 % \file{ltspace.dtx}の定義を上記に合わせて、定義しなおしました。
+%
+% \emph{日本語\TeX{}開発コミュニティによる補足}：
+% アスキーによるp\LaTeX{}では、行頭禁則文字の直前で|\\|による強制改行を
+% 行えるようにするという目的で
+% |\null|を|\@gnewline|マクロ内に挿入していました。
+% しかし、これでは|\\\par|と書いた場合にUnderfull警告が出なくなって
+% います（|tests/newline_par.tex|を\texttt{latex}と\texttt{platex}で
+% 処理してみてください）。
+%
+% もし|\null|の代わりに|\hskip\z@|を挿入すれば、\LaTeX{}と同様に
+% Underfull警告を出すことができます。
+% ただし、|\null|を挿入した場合と異なり、強制改行後の行頭に
+% JFMグル―が入らなくなります。これはむしろ、奥村さんのjsclassesで
+% 行頭を天ツキに直しているのと同じですが、p\LaTeX{}としては挙動が
+% 変化してしまいますので、現時点では|\null|→|\hskip\z@|への変更を
+% 見送っています。
+% \changes{v1.2n}{2017/04/23}{ドキュメントの追加}
+%
 %    \begin{macrocode}
 \def\@gnewline #1{%
   \ifvmode
@@ -234,6 +255,7 @@
   \fi}
 %</plcore>
 %    \end{macrocode}
+% \end{macro}
 %
 % \subsection{オブジェクトの出力順序}
 % オリジナルの\LaTeX{}は、トップフロート、本文、脚注、ボトムフロート
