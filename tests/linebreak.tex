@@ -1,8 +1,8 @@
-\documentclass{jarticle}
+\documentclass[twocolumn]{jarticle}
 \begin{document}
 %% 従来と同じでなければならない（行頭 JFM グル―消滅も込みで）
-テスト\linebreak（テスト\par
-テスト\linebreak[4]（テスト\par
+テスト\linebreak（テスト\par    % 強制改行
+テスト\linebreak[4]（テスト\par % 強制改行
 テスト\linebreak[3]（テスト\par
 テスト\linebreak[2]（テスト\par
 テスト\linebreak[1]（テスト\par
@@ -14,8 +14,8 @@
 テスト\nolinebreak[1]（テスト\par
 テスト\nolinebreak[0]（テスト\par
 %% \linebreak は強制改行に変更したい
-テスト\linebreak！テスト\par
-テスト\linebreak[4]！テスト\par
+テスト\linebreak！テスト\par    % 強制改行（変更）
+テスト\linebreak[4]！テスト\par % 強制改行（変更）
 テスト\linebreak[3]！テスト\par
 テスト\linebreak[2]！テスト\par
 テスト\linebreak[1]！テスト\par
@@ -26,4 +26,27 @@
 テスト\nolinebreak[2]！テスト\par
 テスト\nolinebreak[1]！テスト\par
 テスト\nolinebreak[0]！テスト\par
+\newpage
+%% 従来と同じでなければならない
+This is\linebreak a test.\par     % 強制改行
+This is\linebreak[4] a test.\par  % 強制改行
+This is \linebreak[4]a test.\par  % 強制改行
+This is \linebreak[4] a test.\par % 強制改行
+This is\linebreak[0] a test.\par  % is と a の間に空白
+This is \linebreak[0]a test.\par  % is と a の間に空白
+This is \linebreak[0] a test.\par % is と a の間に空白
+This is a test.\par               % is と a の間に空白（比較用）
+%% 従来と同じでなければならない
+This is\hskip20pt\linebreak a test.\par     % 強制改行
+This is \hskip20pt\linebreak a test.\par    % is の後に空白と強制改行
+This is\hskip20pt\linebreak[4]a test.\par   % 強制改行
+This is \hskip20pt\linebreak[4]a test.\par  % is の後に空白と強制改行
+This is\hskip20pt\linebreak[4] a test.\par  % 強制改行
+This is \hskip20pt\linebreak[4] a test.\par % is の後に空白と強制改行
+This is\hskip20pt\linebreak[0]a test.\par   % 20pt の空白
+This is \hskip20pt\linebreak[0]a test.\par  % 空白 + 20ptの空白
+This is\hskip20pt\linebreak[0] a test.\par  % 20pt の空白
+This is \hskip20pt\linebreak[0] a test.\par % 空白 + 20ptの空白
+This is\hskip20pt a test.\par               % 20pt の空白（比較用）
+This is \hskip20pt a test.\par              % 空白 + 20ptの空白（比較用）
 \end{document}

@@ -573,7 +573,7 @@
 % 理由は、この対処を施していなかった従来のp\LaTeX{}で
 % |\linebreak|を発行した場合に行頭のJFMグル―は消えていたのを
 % 保持するためです。
-p\LaTeXe{}では、
+% p\LaTeXe{}では、
 % \changes{v????}{????/??/??}{行頭禁則文字の直前でも改行するようにした}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{????/??/??}{\@no@lnbk}
@@ -586,11 +586,11 @@ p\LaTeXe{}では、
     \@tempskipa\lastskip
     \unskip
     \penalty #1\@getpen{#2}%
+    \hskip\z@\relax %% added (????/??/??)
     \ifdim\@tempskipa>\z@
       \hskip\@tempskipa
       \ignorespaces
     \fi
-    \hskip\z@ %% added (????/??/??)
   \fi}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
