@@ -15,7 +15,7 @@
 %% File: nidanfloat.dtx
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{nidanfloat}%
-  [2005/12/09 v2.7 Put double-floats at top/bottom within twocolumn mode]
+  [2017/05/01 v2.8 Put double-floats at top/bottom within twocolumn mode]
 \DeclareOption{balance}{\AtEndDocument{\let\clearpage\balanceclearpage}}
 \DeclareOption{nobalance}{\relax}
 \ExecuteOptions{nobalance}
@@ -373,6 +373,7 @@
   \global\@floatht\@floatht
 }
 \global\newdimen\@fixht
+\global\newdimen\@rightfixht
 \def\@combinefloats{%
   %%\boxmaxdepth\maxdepth
   \if@twocolumn
@@ -390,16 +391,32 @@
         \setbox\z@=\vsplit\@leftcolumn to\@fixht
         \advance\@fixht-\maxdepth
         \@tempdima\baselineskip \advance\@tempdima-\topskip
-        \setbox\@outputbox=\vbox to\@fixht{%
+        \setbox\@outputbox=\vbox{%
             \ifvoid\@leftcolumn
             \else
               \unvbox\@leftcolumn\vskip\@tempdima
             \fi\relax
-            \unvbox\@outputbox\vss}%
-        \setbox\@leftcolumn=\vbox to\@fixht{\unvbox\z@}%
+            \unvbox\@outputbox}% \vss moved from here
+        \setbox\@leftcolumn=\vbox to\@fixht{\unvbox\z@\vss}% to here (2017/05/01)
       \fi
       \@fixht\ht\@leftcolumn
         \advance\@fixht\dp\@leftcolumn \advance\@fixht\@floatht
+      \@rightfixht\ht\@outputbox \advance\@rightfixht\dp\@outputbox
+      \@chkdblfloatht \@tempdima\@floatht
+      \R@chkfloatht \advance\@tempdima\@floatht
+      \advance\@rightfixht\@tempdima
+      \ifdim\@rightfixht>\textheight
+        \@rightfixht\textheight
+        \advance\@rightfixht-\@tempdima
+        \advance\@rightfixht\maxdepth
+        \vbadness=\@M \splittopskip=\topskip \splitmaxdepth=\maxdepth
+        \setbox\z@=\vsplit\@outputbox to\@rightfixht
+        \advance\@rightfixht-\maxdepth
+        \unvbox\@outputbox
+        \setbox\@outputbox=\vbox to\@rightfixht{\unvbox\z@\vss}%
+      \fi
+      \@rightfixht\ht\@outputbox
+        \advance\@rightfixht\dp\@outputbox \advance\@rightfixht\@floatht
       \ifx\L@toplist\@empty\else\L@cflt\fi
       \ifx\L@botlist\@empty\else\L@cflb\fi
       \ifx\R@toplist\@empty\else\R@cflt\fi
@@ -418,6 +435,7 @@
       \vss}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\L@toplist}\global\let\L@toplist\@empty
+  \@colht\@fixht
 }
 \def\L@cflb{%
   \let\@elt\@comflelt\setbox\@tempboxa\vbox{}\L@botlist
@@ -427,24 +445,27 @@
       \vss}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\L@botlist}\global\let\L@botlist\@empty
+  \@colht\@fixht
 }
 \def\R@cflt{%
   \let\@elt\@comflelt\setbox\@tempboxa\vbox{}\R@toplist
-  \setbox\@outputbox\vbox to\@fixht{\boxmaxdepth\maxdepth
+  \setbox\@outputbox\vbox to\@rightfixht{\boxmaxdepth\maxdepth
       \unvbox\@tempboxa
       \vskip-\floatsep\topfigrule\vskip\textfloatsep\unvbox\@outputbox
       \vss}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\R@toplist}\global\let\R@toplist\@empty
+  \@colht\@rightfixht
 }
 \def\R@cflb{%
   \let\@elt\@comflelt\setbox\@tempboxa\vbox{}\R@botlist
-  \setbox\@outputbox\vbox to\@fixht{\boxmaxdepth\maxdepth
+  \setbox\@outputbox\vbox to\@rightfixht{\boxmaxdepth\maxdepth
       \unvbox\@outputbox
       \vskip\textfloatsep\botfigrule\unvbox\@tempboxa\vskip-\floatsep
       \vss}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\R@botlist}\global\let\R@botlist\@empty
+  \@colht\@rightfixht
 }
 \def\@combinedblfloats{%
   \ifx\@dbltoplist\@empty

@@ -3,7 +3,7 @@
 %
 %  Copyright 1994 ASCII Co.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016 Japanese TeX Development Community
+%  Copyright (c) 2016-2017 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -27,6 +27,13 @@
 % \changes{v2.6}{2003/05/15}{\cs{@fstype}を\cs{@fstyle}とタイプミスしていた
 %    のを修正（ありがとう、川上＠航空宇宙研究所さん）}
 % \changes{v2.7}{2005/12/09}{必須フォーマットファイルをpLaTeX2eからLaTeX2eへ変更}
+% \changes{v2.8}{2017/05/01}{\cs{@rightfixht}を追加}
+% \changes{v2.8}{2017/05/01}{\cs{@outputbox}を作るときの
+%    \texttt{to \cs{@fixht}}の高さ指定をやめた}
+% \changes{v2.8}{2017/05/01}{\cs{vss}の位置を移動}
+% \changes{v2.8}{2017/05/01}{右カラム用の処理を丸ごと追加}
+% \changes{v2.8}{2017/05/01}{右カラムでは\cs{@rightfixht}の高さで
+%    組み立て、\cs{@colht}も更新するようにした}
 % \fi
 %
 % \iffalse
@@ -35,7 +42,7 @@
 \ProvidesFile{nidanfloat.dtx}
 %</driver>
 %<core>\ProvidesPackage{nidanfloat}%
-  [2005/12/09 v2.7 Put double-floats at top/bottom within twocolumn mode]
+  [2017/05/01 v2.8 Put double-floats at top/bottom within twocolumn mode]
 %
 %<*driver>
 \documentclass{jltxdoc}
@@ -431,7 +438,7 @@
             \global\advance\@colroom-\dp\z@
           \fi
 %    \end{macrocode}
-% 最後に、|@inert|フラグを真にする。
+% 最後に、|@insert|フラグを真にする。
 %    \begin{macrocode}
           \@inserttrue
         \fi
@@ -685,9 +692,18 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\@rightfixht}
+% \emph{日本語\TeX{}開発コミュニティによる追加}：
+% |\@rightfixht|は、右カラムの高さを格納するのに用いる。
+% \changes{v2.8}{2017/05/01}{\cs{@rightfixht}を追加}
+%    \begin{macrocode}
+\global\newdimen\@rightfixht
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\@combinefloats}
 % \changes{v2.4}{2001/07/23}{\cs{boxmaxdepth}を\cs{maxdepth}にしないようにした}
-% |@combinefloats|は、カラム単位で、テキストとフロートをマージする。
+% |\@combinefloats|は、カラム単位で、テキストとフロートをマージする。
 % このマクロは右カラムのときに実行する。
 %    \begin{macrocode}
 \def\@combinefloats{%
@@ -725,15 +741,17 @@
 % また、ボックス０の内容を左カラムに戻す。
 % \changes{v2.4}{2001/02/19}{行間が揃わない部分を修正}
 % \changes{v2.4}{2001/02/19}{柱が出ないのを修正}
+% \changes{v2.8}{2017/05/01}{\cs{@outputbox}を作るときの
+%    \texttt{to \cs{@fixht}}の高さ指定をやめた}
 %    \begin{macrocode}
         \advance\@fixht-\maxdepth
         \@tempdima\baselineskip \advance\@tempdima-\topskip
-        \setbox\@outputbox=\vbox to\@fixht{%
+        \setbox\@outputbox=\vbox{%
             \ifvoid\@leftcolumn
             \else
               \unvbox\@leftcolumn\vskip\@tempdima
             \fi\relax
-            \unvbox\@outputbox\vss}%
+            \unvbox\@outputbox}% \vss moved from here
 %    \end{macrocode}
 % \changes{v2.5}{2001/09/14}{\cs{vsplit}時、infiniteエラーになるのを修正}
 % |\@leftcolumn|を作成するときに用いていた|\vss|が
@@ -741,14 +759,45 @@
 % ! Infinite glue shrinkage found in box being split.
 %\end{verbatim}
 % のエラーを起こすことがあるので削除した。
+%
+% \emph{日本語\TeX{}開発コミュニティによる修正}：
+% この場所のすぐ上にあるコードの|\unvbox\@outputbox|の直後にあった|vss|を
+% こちらに持ってきました。
+% \changes{v2.8}{2017/05/01}{\cs{vss}の位置を移動}
 %    \begin{macrocode}
-        \setbox\@leftcolumn=\vbox to\@fixht{\unvbox\z@}%
+        \setbox\@leftcolumn=\vbox to\@fixht{\unvbox\z@\vss}% to here (2017/05/01)
       \fi
 %    \end{macrocode}
-% 左右、それぞれテキストとカラム幅フロートを組み立てる。
+% 左カラムのテキストサイズに左カラムに入るフロートの高さを加えることで、
+% 左カラムの高さを|\@fixht|に格納します。
 %    \begin{macrocode}
       \@fixht\ht\@leftcolumn
         \advance\@fixht\dp\@leftcolumn \advance\@fixht\@floatht
+%    \end{macrocode}
+% \emph{日本語\TeX{}開発コミュニティによる追加}：
+% 右カラムについても同様に処理します。これで、古くからあった
+% 右カラムとフロートが重なるバグを解消しました。
+% \changes{v2.8}{2017/05/01}{右カラム用の処理を丸ごと追加}
+%    \begin{macrocode}
+      \@rightfixht\ht\@outputbox \advance\@rightfixht\dp\@outputbox
+      \@chkdblfloatht \@tempdima\@floatht
+      \R@chkfloatht \advance\@tempdima\@floatht
+      \advance\@rightfixht\@tempdima
+      \ifdim\@rightfixht>\textheight
+        \@rightfixht\textheight
+        \advance\@rightfixht-\@tempdima
+        \advance\@rightfixht\maxdepth
+        \vbadness=\@M \splittopskip=\topskip \splitmaxdepth=\maxdepth
+        \setbox\z@=\vsplit\@outputbox to\@rightfixht
+        \advance\@rightfixht-\maxdepth
+        \unvbox\@outputbox
+        \setbox\@outputbox=\vbox to\@rightfixht{\unvbox\z@\vss}%
+      \fi
+      \@rightfixht\ht\@outputbox
+        \advance\@rightfixht\dp\@outputbox \advance\@rightfixht\@floatht
+%    \end{macrocode}
+% 左右、それぞれテキストとカラム幅フロートを組み立てる。
+%    \begin{macrocode}
       \ifx\L@toplist\@empty\else\L@cflt\fi
       \ifx\L@botlist\@empty\else\L@cflb\fi
       \ifx\R@toplist\@empty\else\R@cflt\fi
@@ -770,7 +819,13 @@
 % \begin{macro}{\R@cflt}
 % \begin{macro}{\R@cflb}
 % 左カラムと右カラムを組み立てるのに用いる。
+%
+% \emph{日本語\TeX{}開発コミュニティによる追加}：
+% 左カラムでは|\@fixht|、右カラムでは|\@rightfixht|の高さになるように
+% します。また、|\@colht|をこれらの高さに更新します。
 % \changes{v2.3}{2000/12/20}{\cs{gdef}を\cs{global}\cs{let}に変更}
+% \changes{v2.8}{2017/05/01}{右カラムでは\cs{@rightfixht}の高さで
+%    組み立て、\cs{@colht}も更新するようにした}
 %    \begin{macrocode}
 \def\L@cflt{%
   \let\@elt\@comflelt\setbox\@tempboxa\vbox{}\L@toplist
@@ -780,6 +835,7 @@
       \vss}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\L@toplist}\global\let\L@toplist\@empty
+  \@colht\@fixht
 }
 \def\L@cflb{%
   \let\@elt\@comflelt\setbox\@tempboxa\vbox{}\L@botlist
@@ -789,24 +845,27 @@
       \vss}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\L@botlist}\global\let\L@botlist\@empty
+  \@colht\@fixht
 }
 \def\R@cflt{%
   \let\@elt\@comflelt\setbox\@tempboxa\vbox{}\R@toplist
-  \setbox\@outputbox\vbox to\@fixht{\boxmaxdepth\maxdepth
+  \setbox\@outputbox\vbox to\@rightfixht{\boxmaxdepth\maxdepth
       \unvbox\@tempboxa
       \vskip-\floatsep\topfigrule\vskip\textfloatsep\unvbox\@outputbox
       \vss}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\R@toplist}\global\let\R@toplist\@empty
+  \@colht\@rightfixht
 }
 \def\R@cflb{%
   \let\@elt\@comflelt\setbox\@tempboxa\vbox{}\R@botlist
-  \setbox\@outputbox\vbox to\@fixht{\boxmaxdepth\maxdepth
+  \setbox\@outputbox\vbox to\@rightfixht{\boxmaxdepth\maxdepth
       \unvbox\@outputbox
       \vskip\textfloatsep\botfigrule\unvbox\@tempboxa\vskip-\floatsep
       \vss}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\R@botlist}\global\let\R@botlist\@empty
+  \@colht\@rightfixht
 }
 %    \end{macrocode}
 % \end{macro}
