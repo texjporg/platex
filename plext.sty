@@ -15,7 +15,7 @@
 %% File: plext.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plext}
-   [2017/03/28 v1.2f pLaTeX package file (community edition)]
+   [2017/05/04 v1.2g pLaTeX package file (community edition)]
 \newif\if@rotsw
 \def\array{\let\@acol\@arrayacol \let\@classz\@arrayclassz
   \let\@classiv\@arrayclassiv
@@ -410,7 +410,7 @@
       \def\@end@parbox{\m@th$}%
    \fi\fi\fi
 \fi\fi}
-\def\pbox{\leavevmode\@ifnextchar<{\X@makePbox}{\X@makePbox<Z>}}
+\DeclareRobustCommand\pbox{\leavevmode\@ifnextchar<{\X@makePbox}{\X@makePbox<Z>}}
 \def\X@makePbox<#1>{%
   \@ifnextchar[{\@imakePbox<#1>}{\@imakePbox<#1>[-5\p@]}}
 \def\@imakePbox<#1>[#2]{\@ifnextchar[%]
@@ -428,8 +428,9 @@
     \fi
   \fi
   \ifmmode\else\if@rotsw\@pboxswtrue\hbox\bgroup$\fi\fi
-    \ifdim #2 <\z@ \hbox{\box@dir#4}\else
-    \hbox to#2{\box@dir
+    \setlength{\@tempdima}{#2}%
+    \ifdim\@tempdima<\z@ \hbox{\box@dir#4}\else
+    \hb@xt@\@tempdima{\box@dir
                \if #3l\relax\else\hss\fi
                #4\relax
                \if #3r\relax\else\hss\fi}\fi

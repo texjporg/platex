@@ -56,6 +56,9 @@
 %    (sync with ltboxes 2015/01/08 v1.1h)}
 % \changes{v1.2f}{2017/03/28}{表と周囲との揃え位置を修正}
 % \changes{v1.2f}{2017/03/28}{段落の箱と周囲との揃え位置を修正}
+% \changes{v1.2g}{2017/05/04}{Make \cs{pbox} Robust}
+% \changes{v1.2g}{2017/05/04}{Use \cs{setlength}, so that
+%           calc extensions apply}
 % \fi
 %
 % \iffalse
@@ -64,7 +67,7 @@
 \ProvidesFile{plext.dtx}
 %</driver>
 %<package>\ProvidesPackage{plext}
-   [2017/03/28 v1.2f pLaTeX package file (community edition)]
+   [2017/05/04 v1.2g pLaTeX package file (community edition)]
 %<*driver>
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -913,12 +916,11 @@
 %   \item |[b]|指定のとき\\最終行のベースラインが周囲のそれと一致
 % \end{itemize}
 % \item 周囲の組方向が縦組かつ組方向が|<z>|指定の場合
-%  [TODO] 未定！
-%^^A \begin{itemize}
-%^^A   \item |[t]|指定のとき\\箱の上端が周囲の和文ベースラインと一致
-%^^A   \item |[c]|指定のとき\\箱の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
-%^^A   \item |[b]|指定のとき\\箱の下端が周囲の和文ベースラインと一致
-%^^A \end{itemize}
+% \begin{itemize}
+%   \item |[t]|指定のとき\\箱の上端が周囲の和文文字の高さと一致
+%   \item |[c]|指定のとき\\箱の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
+%   \item |[b]|指定のとき\\箱の下端が周囲の和文文字の深さと一致
+% \end{itemize}
 % \end{itemize}
 % \changes{v1.2f}{2017/03/28}{段落の箱と周囲との揃え位置を修正}
 %    \begin{macrocode}
@@ -1015,12 +1017,16 @@
 % |\pbox<|\meta{dir}|>[|\meta{width}|][|\meta{pos}|]{|\meta{obj}|}|
 %
 % \begin{macro}{\pbox}
+% オプションを調べます。
+% \changes{v1.2g}{2017/05/04}{Make \cs{pbox} Robust}
+%    \begin{macrocode}
+\DeclareRobustCommand\pbox{\leavevmode\@ifnextchar<{\X@makePbox}{\X@makePbox<Z>}}
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\X@makepbox}
 % \begin{macro}{\@imakepbox}
-% オプションを調べます。
 %    \begin{macrocode}
-\def\pbox{\leavevmode\@ifnextchar<{\X@makePbox}{\X@makePbox<Z>}}
-%
 \def\X@makePbox<#1>{%
   \@ifnextchar[{\@imakePbox<#1>}{\@imakePbox<#1>[-5\p@]}}
 %
@@ -1029,11 +1035,12 @@
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
-% \end{macro}
 %
 % \begin{macro}{\@iimakePbox}
 % |\pbox|の内部形式です。
 % \changes{v1.1i}{2001/05/10}{縦組でzを指定するとエラーになるのを修正。}
+% \changes{v1.2g}{2017/05/04}{Use \cs{setlength}, so that
+%           calc extensions apply}
 %    \begin{macrocode}
 \def\@iimakePbox<#1>#2[#3]#4{%
   \bgroup \@rotswfalse \@pboxswfalse
@@ -1048,8 +1055,9 @@
     \fi
   \fi
   \ifmmode\else\if@rotsw\@pboxswtrue\hbox\bgroup$\fi\fi
-    \ifdim #2 <\z@ \hbox{\box@dir#4}\else
-    \hbox to#2{\box@dir
+    \setlength{\@tempdima}{#2}%
+    \ifdim\@tempdima<\z@ \hbox{\box@dir#4}\else
+    \hb@xt@\@tempdima{\box@dir
                \if #3l\relax\else\hss\fi
                #4\relax
                \if #3r\relax\else\hss\fi}\fi

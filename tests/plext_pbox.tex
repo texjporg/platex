@@ -1,0 +1,30 @@
+\documentclass{jarticle}
+\usepackage{plext}
+\usepackage{calc}
+\begin{document}
+
+%% cf. latex.ltx macros (from ltboxes)
+あいうえお\makebox[60pt]{かきく}さしすせそ\par
+あいうえお\makebox[-30pt]{かきく}さしすせそ\par
+
+% calc extension check
+あいうえお\makebox[60pt+10pt]{かきく}さしすせそ\par
+あいうえお\makebox[-30pt/2*3]{かきく}さしすせそ\par
+
+% robustness
+\section{あいうえお\makebox[60pt]{かきく}さしすせそ}
+\section{あいうえお\makebox[-30pt]{かきく}さしすせそ}
+
+%% plext.sty macros
+あいうえお\pbox[60pt]{かきく}さしすせそ\par
+あいうえお\pbox[-30pt]{かきく}さしすせそ\par % natural width
+
+% calc extension check
+あいうえお\pbox[60pt+10pt]{かきく}さしすせそ\par
+あいうえお\pbox[-30pt/2*3]{かきく}さしすせそ\par % natural width
+
+% robustness
+\section{あいうえお\pbox<t>[60pt]{かきく}さしすせそ}
+\section{あいうえお\pbox<t>[-30pt]{かきく}さしすせそ}
+
+\end{document}
