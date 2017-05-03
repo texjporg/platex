@@ -393,6 +393,37 @@ of this package available from CTAN}
 \let\eminnershape\@undefined
 \plEndIncludeInRelease
 %% File: plcore.dtx
+\plIncludeInRelease{2017/05/05}{\@no@lnbk}
+                   {Break before prebreakpenalty}%
+\def\@no@lnbk #1[#2]{%
+  \ifvmode
+    \@nolnerr
+  \else
+    \@tempskipa\lastskip
+    \unskip
+    \penalty #1\@getpen{#2}%
+    \hskip\z@\relax %% added (2017/05/03)
+    \ifdim\@tempskipa>\z@
+      \hskip\@tempskipa
+      \ignorespaces
+    \fi
+  \fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@no@lnbk}
+                   {Break before prebreakpenalty}%
+\def\@no@lnbk #1[#2]{%
+  \ifvmode
+    \@nolnerr
+  \else
+    \@tempskipa\lastskip
+    \unskip
+    \penalty #1\@getpen{#2}%
+    \ifdim\@tempskipa>\z@
+      \hskip\@tempskipa
+      \ignorespaces
+    \fi
+  \fi}
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\@makecol}{\@makecol}%
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%

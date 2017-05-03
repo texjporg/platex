@@ -569,14 +569,12 @@
 % さらに、|\\|だけでなく|\linebreak|についても同様の対処をします。
 % \LaTeX{}の定義のままではマクロによるペナルティ$-10000$と
 % 行頭文字のペナルティ$10000$が加算されてしまうため、
-% |\hskip\z@|を入れておきます。ここで|\null|でなく|\hskip\z@|とした
-% 理由は、この対処を施していなかった従来のp\LaTeX{}で
-% |\linebreak|を発行した場合に行頭のJFMグル―は消えていたのを
-% 保持するためです。
-% p\LaTeXe{}では、
-% \changes{v????}{????/??/??}{行頭禁則文字の直前でも改行するようにした}
+% |\hskip\z@\relax|を入れておきます。なお、|\linebreak|を発行して
+% 行分割が起きた場合、新しい行頭のJFMグル―は消えるという従来の
+% p\LaTeX{}の挙動も維持しています。
+% \changes{v1.2o}{2017/05/03}{行頭禁則文字の直前でも改行するようにした}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\@no@lnbk}
+%<platexrelease>\plIncludeInRelease{2017/05/05}{\@no@lnbk}
 %<platexrelease>                   {Break before prebreakpenalty}%
 %<*plcore|platexrelease>
 \def\@no@lnbk #1[#2]{%
@@ -586,7 +584,7 @@
     \@tempskipa\lastskip
     \unskip
     \penalty #1\@getpen{#2}%
-    \hskip\z@\relax %% added (????/??/??)
+    \hskip\z@\relax %% added (2017/05/03)
     \ifdim\@tempskipa>\z@
       \hskip\@tempskipa
       \ignorespaces

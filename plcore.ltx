@@ -693,6 +693,19 @@
     \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \null
     \ignorespaces
   \fi}
+\def\@no@lnbk #1[#2]{%
+  \ifvmode
+    \@nolnerr
+  \else
+    \@tempskipa\lastskip
+    \unskip
+    \penalty #1\@getpen{#2}%
+    \hskip\z@\relax %% added (2017/05/03)
+    \ifdim\@tempskipa>\z@
+      \hskip\@tempskipa
+      \ignorespaces
+    \fi
+  \fi}
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%
    \let\@elt\relax % added on LaTeX (ltoutput.dtx 2003/12/16 v1.2k)

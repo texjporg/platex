@@ -65,13 +65,14 @@
 % \changes{v1.2m}{2017/03/19}{\cs{verb}の途中でハイフネーションが起きない
 %    ように\cs{language}を設定(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
 % \changes{v1.2n}{2017/04/23}{ドキュメントの追加}
+% \changes{v1.2o}{2017/05/03}{行頭禁則文字の直前でも改行するようにした}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2017/04/23 v1.2n pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2017/05/03 v1.2o pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -254,6 +255,52 @@
     \ignorespaces
   \fi}
 %</plcore>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@no@lnbk}
+% \emph{日本語\TeX{}開発コミュニティによる追加}：
+% さらに、|\\|だけでなく|\linebreak|についても同様の対処をします。
+% \LaTeX{}の定義のままではマクロによるペナルティ$-10000$と
+% 行頭文字のペナルティ$10000$が加算されてしまうため、
+% |\hskip\z@\relax|を入れておきます。なお、|\linebreak|を発行して
+% 行分割が起きた場合、新しい行頭のJFMグル―は消えるという従来の
+% p\LaTeX{}の挙動も維持しています。
+% \changes{v1.2o}{2017/05/03}{行頭禁則文字の直前でも改行するようにした}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2017/05/05}{\@no@lnbk}
+%<platexrelease>                   {Break before prebreakpenalty}%
+%<*plcore|platexrelease>
+\def\@no@lnbk #1[#2]{%
+  \ifvmode
+    \@nolnerr
+  \else
+    \@tempskipa\lastskip
+    \unskip
+    \penalty #1\@getpen{#2}%
+    \hskip\z@\relax %% added (2017/05/03)
+    \ifdim\@tempskipa>\z@
+      \hskip\@tempskipa
+      \ignorespaces
+    \fi
+  \fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@no@lnbk}
+%<platexrelease>                   {Break before prebreakpenalty}%
+%<platexrelease>\def\@no@lnbk #1[#2]{%
+%<platexrelease>  \ifvmode
+%<platexrelease>    \@nolnerr
+%<platexrelease>  \else
+%<platexrelease>    \@tempskipa\lastskip
+%<platexrelease>    \unskip
+%<platexrelease>    \penalty #1\@getpen{#2}%
+%<platexrelease>    \ifdim\@tempskipa>\z@
+%<platexrelease>      \hskip\@tempskipa
+%<platexrelease>      \ignorespaces
+%<platexrelease>    \fi
+%<platexrelease>  \fi}
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 %
