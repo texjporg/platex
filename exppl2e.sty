@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2017/05/04 v1.0l Experimental pLaTeX2e features]
+                [2017/06/15 v1.0m Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -370,6 +370,75 @@
 % \section{verbatimとハイフネーション}
 %
 % p\LaTeXe{}カーネル(2017/04/08)に導入したため削除。
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \section{tabular環境のセル内のJFMグル―}
+%
+% \begin{macro}{\@tabclassz}
+% \LaTeX{}カーネルは、アラインメント文字|&|の周囲に半角空白を書いたかどうかに
+% かかわらず余分なスペースを出力しないように、|\ignorespaces|と|\unskip|を
+% 発行しています(lttab.dtx)。しかし、これだけではJFMグルーが消えずに残ります。
+% そこで、セルの中身を|\mbox|に入れ、さらに最初に|\inhibitglue|を発行する
+% ことで、セル要素の周囲のJFMグル―を消します。
+% \changes{v???}{????/??/??}{tabular環境のセル内のJFMグル―を削除}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\@tabclassz}
+%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<*plcore|platexrelease>
+\def\@tabclassz{%
+  \ifcase\@lastchclass
+    \@acolampacol
+  \or
+    \@ampacol
+  \or
+  \or
+  \or
+    \@addamp
+  \or
+    \@acolampacol
+  \or
+    \@firstampfalse\@acol
+  \fi
+  \edef\@preamble{%
+    \@preamble{%
+      \ifcase\@chnum
+        \hfil\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % c
+      \or
+        \hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % l
+      \or
+        \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% r
+      \fi}}}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@tabclassz}
+%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<platexrelease>\def\@tabclassz{%
+%<platexrelease>  \ifcase\@lastchclass
+%<platexrelease>    \@acolampacol
+%<platexrelease>  \or
+%<platexrelease>    \@ampacol
+%<platexrelease>  \or
+%<platexrelease>  \or
+%<platexrelease>  \or
+%<platexrelease>    \@addamp
+%<platexrelease>  \or
+%<platexrelease>    \@acolampacol
+%<platexrelease>  \or
+%<platexrelease>    \@firstampfalse\@acol
+%<platexrelease>  \fi
+%<platexrelease>  \edef\@preamble{%
+%<platexrelease>    \@preamble{%
+%<platexrelease>      \ifcase\@chnum
+%<platexrelease>        \hfil\ignorespaces\@sharp\unskip\hfil
+%<platexrelease>      \or
+%<platexrelease>        \hskip1sp\ignorespaces\@sharp\unskip\hfil
+%<platexrelease>      \or
+%<platexrelease>        \hfil\hskip1sp\ignorespaces\@sharp\unskip
+%<platexrelease>      \fi}}}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
