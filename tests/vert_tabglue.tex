@@ -1,0 +1,45 @@
+\documentclass{tarticle}
+\begin{document}
+
+% テスト %% &の前後に空白なし
+\begin{tabular}{|c|c|c|}
+（ほげ）&（ほげ）&（ほげ）
+\end{tabular}
+
+\begin{tabular}{|l|l|l|}
+（ほげ）&（ほげ）&（ほげ）
+\end{tabular}
+
+\begin{tabular}{|r|r|r|}
+（ほげ）&（ほげ）&（ほげ）
+\end{tabular}
+
+% テスト %% &の前後に空白あり
+\begin{tabular}{|c|c|c|}
+（ほげ） & （ほげ） & （ほげ）
+\end{tabular}
+
+\begin{tabular}{|l|l|l|}
+（ほげ） & （ほげ） & （ほげ）
+\end{tabular}
+
+\begin{tabular}{|r|r|r|}
+（ほげ） & （ほげ） & （ほげ）
+\end{tabular}
+
+% 比較用（\mbox に入れるとグルーが両方とも消える）
+% 新コードに変わっても問題が起きないことを確認
+
+\begin{tabular}{|c|c|c|}
+\mbox{（ほげ）}&\mbox{（ほげ）}&\mbox{（ほげ）}
+\end{tabular}
+
+\begin{tabular}{|l|l|l|}
+\mbox{（ほげ）}&\mbox{（ほげ）}&\mbox{（ほげ）}
+\end{tabular}
+
+\begin{tabular}{|r|r|r|}
+\mbox{（ほげ）}&\mbox{（ほげ）}&\mbox{（ほげ）}
+\end{tabular}
+
+\end{document}
