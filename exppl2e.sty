@@ -378,8 +378,11 @@
 % \begin{macro}{\@tabclassz}
 % \LaTeX{}カーネルは、アラインメント文字|&|の周囲に半角空白を書いたかどうかに
 % かかわらず余分なスペースを出力しないように、|\ignorespaces|と|\unskip|を
-% 発行しています(lttab.dtx)。しかし、これだけではJFMグルーが消えずに残ります。
-% そこで、セルの中身を|\mbox|に入れ、さらに最初に|\inhibitglue|を発行する
+% 発行しています(lttab.dtx)。しかし、これだけではJFMグルーが消えずに残って
+% しまうので、p\LaTeX{}では追加の対処を入れます。
+%
+% まず、|l|, |c|, |r|の場合です。
+% セルの中身を|\mbox|に入れ、さらに最初に|\inhibitglue|を発行する
 % ことで、セル要素の周囲のJFMグル―を消します。
 % \changes{v???}{????/??/??}{tabular環境のセル内のJFMグル―を削除}
 %    \begin{macrocode}
@@ -436,6 +439,26 @@
 %<platexrelease>      \or
 %<platexrelease>        \hfil\hskip1sp\ignorespaces\@sharp\unskip
 %<platexrelease>      \fi}}}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%  \begin{macro}{\@classv}
+%    \begin{macrocode}
+% 次に、|p|の場合です。|\mbox{}\inhibitglue|と|\unskip|を追加しています。
+% \changes{v???}{????/??/??}{tabular環境のセル内のJFMグル―を削除}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\@tabclassz}
+%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<*plcore|platexrelease>
+\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\mbox{}\inhibitglue\ignorespaces
+\@sharp\unskip\@endpbox}}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@tabclassz}
+%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<platexrelease>\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\ignorespaces
+%<platexrelease>\@sharp\@endpbox}}
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
