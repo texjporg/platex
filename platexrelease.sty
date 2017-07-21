@@ -18,7 +18,7 @@
 \edef\p@known@latexreleaseversion
    {2017/04/15}
 \edef\platexreleaseversion
-   {2017/05/05}
+   {2017/07/29}
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
   {\@plIncludeInRelease{#1}[#1]}}
@@ -913,6 +913,68 @@ of this package available from CTAN}
     \verbatim@font\@noligs
     \@ifstar\@sverb\@verb}
 \fi
+\plEndIncludeInRelease
+\plIncludeInRelease{2017/07/29}{\@tabclassz}
+                   {Inhibit JFM glue in tabular cells}%
+\def\@tabclassz{%
+  \ifcase\@lastchclass
+    \@acolampacol
+  \or
+    \@ampacol
+  \or
+  \or
+  \or
+    \@addamp
+  \or
+    \@acolampacol
+  \or
+    \@firstampfalse\@acol
+  \fi
+  \edef\@preamble{%
+    \@preamble{%
+      \ifcase\@chnum
+        \hfil\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % c
+      \or
+        \hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % l
+      \or
+        \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% r
+      \fi}}}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@tabclassz}
+                   {Inhibit JFM glue in tabular cells}%
+\def\@tabclassz{%
+  \ifcase\@lastchclass
+    \@acolampacol
+  \or
+    \@ampacol
+  \or
+  \or
+  \or
+    \@addamp
+  \or
+    \@acolampacol
+  \or
+    \@firstampfalse\@acol
+  \fi
+  \edef\@preamble{%
+    \@preamble{%
+      \ifcase\@chnum
+        \hfil\ignorespaces\@sharp\unskip\hfil
+      \or
+        \hskip1sp\ignorespaces\@sharp\unskip\hfil
+      \or
+        \hfil\hskip1sp\ignorespaces\@sharp\unskip
+      \fi}}}
+\plEndIncludeInRelease
+\plIncludeInRelease{2017/07/29}{\@tabclassz}
+                   {Inhibit JFM glue in tabular cells}%
+\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\mbox{}\inhibitglue\ignorespaces
+\@sharp\unskip\@endpbox}}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@tabclassz}
+                   {Inhibit JFM glue in tabular cells}%
+\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\ignorespaces
+\@sharp\@endpbox}}
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@tabular}
                    {Remove extra \xkanjiskip}%

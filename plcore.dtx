@@ -37,8 +37,9 @@
 %    との間にxkanjiskipが入ってしまう問題に対応。
 %    \cs{@outputbox}の深さが他のものの位置に影響を与えない
 %    ようにする\texttt{\cs{vskip}~-\cs{dimen@}}が縦組モードでは無効になっていたので修正}
-% \changes{v1.2c}{2016/02/28}{1.2bと同様の修正を
-%     tabular環境、\cs{parbox}命令、\cs{underline}命令にも行った}
+% \changes{v1.2c}{2016/02/28}{1.2bと同様の修正をtabular環境にも行った}
+% \changes{v1.2c}{2016/02/28}{1.2bと同様の修正を\cs{parbox}命令にも行った}
+% \changes{v1.2c}{2016/02/28}{1.2bと同様の修正を\cs{underline}命令にも行った}
 % \changes{v1.2d}{2016/04/01}{multicolパッケージを使うとトンボの下端が縮む問題を修正}
 % \changes{v1.2e}{2016/05/20}{\file{fltrace}パッケージのp\LaTeX{}版
 %    として\file{pfltrace}パッケージを新設}
@@ -66,13 +67,14 @@
 %    ように\cs{language}を設定(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
 % \changes{v1.2n}{2017/04/23}{ドキュメントの追加}
 % \changes{v1.2o}{2017/05/03}{行頭禁則文字の直前でも改行するようにした}
+% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2017/05/03 v1.2o pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2017/07/21 v1.2p pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1474,15 +1476,108 @@
 % \end{macro}
 % \end{macro}
 %
-% \subsection{tabular環境など}
-% \changes{v1.2c}{2016/02/28}{1.2bと同様の修正を
-%     tabular環境、\cs{parbox}命令、\cs{underline}命令にも行った}
-% \LaTeXe{}のカーネルのコードをそのまま使うと、p\TeX{}の|\xkanjiskip|由来の
-% アキが前後に入ってしまうことがありました。そうした命令にパッチをあてます。
-% \begin{macro}{\@tabular}
-% tabular環境の内部命令です。もとは\file{lttab.dtx}で定義されています。
+% \subsection{tabular環境}
+% \LaTeX{}カーネル(lttab.dtx)の命令群を修正します。
+%
+% \begin{macro}{\@tabclassz}
+% \LaTeX{}カーネルは、アラインメント文字|&|の周囲に半角空白を書いたかどうかに
+% かかわらず余分なスペースを出力しないように、|\ignorespaces|と|\unskip|を
+% 発行しています(lttab.dtx)。しかし、これだけではJFMグルーが消えずに残って
+% しまうので、p\LaTeX{}では追加の対処を入れます。
+%
+% まず、|l|, |c|, |r|の場合です。
+% セルの中身を|\mbox|に入れ、さらに最初に|\inhibitglue|を発行する
+% ことで、セル要素の周囲のJFMグル―を消します。
+% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
 %    \begin{macrocode}
 %</plcore>
+%<platexrelease>\plIncludeInRelease{2017/07/29}{\@tabclassz}
+%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<*plcore|platexrelease>
+\def\@tabclassz{%
+  \ifcase\@lastchclass
+    \@acolampacol
+  \or
+    \@ampacol
+  \or
+  \or
+  \or
+    \@addamp
+  \or
+    \@acolampacol
+  \or
+    \@firstampfalse\@acol
+  \fi
+  \edef\@preamble{%
+    \@preamble{%
+      \ifcase\@chnum
+        \hfil\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % c
+      \or
+        \hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % l
+      \or
+        \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% r
+      \fi}}}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@tabclassz}
+%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<platexrelease>\def\@tabclassz{%
+%<platexrelease>  \ifcase\@lastchclass
+%<platexrelease>    \@acolampacol
+%<platexrelease>  \or
+%<platexrelease>    \@ampacol
+%<platexrelease>  \or
+%<platexrelease>  \or
+%<platexrelease>  \or
+%<platexrelease>    \@addamp
+%<platexrelease>  \or
+%<platexrelease>    \@acolampacol
+%<platexrelease>  \or
+%<platexrelease>    \@firstampfalse\@acol
+%<platexrelease>  \fi
+%<platexrelease>  \edef\@preamble{%
+%<platexrelease>    \@preamble{%
+%<platexrelease>      \ifcase\@chnum
+%<platexrelease>        \hfil\ignorespaces\@sharp\unskip\hfil
+%<platexrelease>      \or
+%<platexrelease>        \hskip1sp\ignorespaces\@sharp\unskip\hfil
+%<platexrelease>      \or
+%<platexrelease>        \hfil\hskip1sp\ignorespaces\@sharp\unskip
+%<platexrelease>      \fi}}}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@classv}
+% 次に、|p|の場合です。|\mbox{}\inhibitglue|と|\unskip|を追加しています。
+% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2017/07/29}{\@tabclassz}
+%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<*plcore|platexrelease>
+\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\mbox{}\inhibitglue\ignorespaces
+\@sharp\unskip\@endpbox}}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@tabclassz}
+%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<platexrelease>\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\ignorespaces
+%<platexrelease>\@sharp\@endpbox}}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{2013年以降の新しいp\TeX{}対応}
+% \LaTeXe{}のカーネルのコードをそのまま使うと、2013年以降のp\TeX{}では
+% |\xkanjiskip|由来のアキが前後に入ってしまうことがありました。
+% そうした命令にパッチをあてます。なお、既に出てきた|\footnote|の内部命令
+% （|\@makefnmark|）には同様のパッチがもうあててあります。
+%
+% \begin{macro}{\@tabular}
+% tabular環境の内部命令です。もとは\file{lttab.dtx}で定義されています。
+% \changes{v1.2c}{2016/02/28}{1.2bと同様の修正をtabular環境にも行った}
+%    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2016/04/17}{\@tabular}
 %<platexrelease>                   {Remove extra \xkanjiskip}%
 %<*plcore|platexrelease>
@@ -1521,6 +1616,7 @@
 %
 % \begin{macro}{\@iiiparbox}
 % |\parbox|の内部命令です。もとは\file{ltboxes.dtx}で定義されています。
+% \changes{v1.2c}{2016/02/28}{1.2bと同様の修正を\cs{parbox}命令にも行った}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2016/04/17}{\@iiiparbox}
 %<platexrelease>                   {Remove extra \xkanjiskip}%
@@ -1573,6 +1669,7 @@
 %
 % \begin{macro}{\underline}
 % 下線を引く命令です。もとは\file{ltboxes.dtx}で定義されています。
+% \changes{v1.2c}{2016/02/28}{1.2bと同様の修正を\cs{underline}命令にも行った}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2016/04/17}{\underline}
 %<platexrelease>                   {Remove extra \xkanjiskip}%
