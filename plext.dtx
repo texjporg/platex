@@ -352,7 +352,7 @@
   \fi\fi
 \else\if #1z\relax\let\box@dir\relax\@rotswtrue
   \if #2t\relax
-     \def\@begin@alignbox{\raise\cdp\vtop\bgroup\kern\z@\vbox}%
+     \def\@begin@alignbox{\raise\cht\vtop\bgroup\kern\z@\vtop}%
      \let\@end@alignbox\egroup
   \else\if #2b\relax
      \def\@begin@alignbox{\lower\cdp\vbox\bgroup\vbox}%
@@ -946,7 +946,7 @@
    \fi\fi\fi
 \else\if #1z\relax\@rotswtrue \let\box@dir\relax
    \if #2t\relax
-      \def\@begin@parbox{\raise\cdp\vtop\bgroup\kern\z@\vtop}%
+      \def\@begin@parbox{\raise\cht\vtop\bgroup\kern\z@\vtop}%
       \let\@end@parbox\egroup
    \else\if #2b\relax
       \def\@begin@parbox{\lower\cdp\vbox\bgroup\vbox}%
