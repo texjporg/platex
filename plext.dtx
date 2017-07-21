@@ -59,6 +59,7 @@
 % \changes{v1.2g}{2017/05/04}{Make \cs{pbox} Robust}
 % \changes{v1.2g}{2017/05/04}{Use \cs{setlength}, so that
 %           calc extensions apply}
+% \changes{v1.2h}{2017/07/21}{表と周囲との揃え位置をさらに修正}
 % \fi
 %
 % \iffalse
@@ -67,7 +68,7 @@
 \ProvidesFile{plext.dtx}
 %</driver>
 %<package>\ProvidesPackage{plext}
-   [2017/05/04 v1.2g pLaTeX package file (community edition)]
+   [2017/07/21 v1.2h pLaTeX package file (community edition)]
 %<*driver>
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -318,14 +319,14 @@
 %   \item |[b]|指定のとき\\最終行のベースラインが周囲のそれと一致（罫線の場合は和文ベースラインの位置）
 % \end{itemize}
 % \item 周囲の組方向が縦組かつ組方向が|<z>|指定の場合
-%  [TODO] 未定！
-%^^A \begin{itemize}
-%^^A   \item |[t]|指定のとき\\表組の上端が周囲の和文ベースラインと一致
-%^^A   \item |[c]|指定のとき\\表組の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
-%^^A   \item |[b]|指定のとき\\表組の下端が周囲の和文ベースラインと一致
-%^^A \end{itemize}
+% \begin{itemize}
+%   \item |[t]|指定のとき\\一行目の欧文ベースラインが周囲のそれと一致
+%   \item |[c]|指定のとき\\表組の中心が周囲の数式軸を通る（欧文ベースラインシフトの影響下）
+%   \item |[b]|指定のとき\\最終行の欧文ベースラインが周囲のそれと一致
+% \end{itemize}
 % \end{itemize}
 % \changes{v1.2f}{2017/03/28}{表と周囲との揃え位置を修正}
+% \changes{v1.2h}{2017/07/21}{表と周囲との揃え位置をさらに修正}
 %    \begin{macrocode}
 \def\fork@array@option<#1>[#2]{%
 \@rotswfalse
@@ -352,10 +353,18 @@
   \fi\fi
 \else\if #1z\relax\let\box@dir\relax\@rotswtrue
   \if #2t\relax
-     \def\@begin@alignbox{\raise\cht\vtop\bgroup\kern\z@\vtop}%
+     \def\@begin@alignbox{%
+         \@tempdima=\tbaselineshift
+         \advance\@tempdima-\ybaselineshift
+         \advance\@tempdima\ht\tstrutbox
+         \raise\arraystretch\@tempdima\vtop\bgroup\kern\z@\vtop}%
      \let\@end@alignbox\egroup
   \else\if #2b\relax
-     \def\@begin@alignbox{\lower\cdp\vbox\bgroup\vbox}%
+     \def\@begin@alignbox{%
+         \@tempdima=\tbaselineshift
+         \advance\@tempdima-\ybaselineshift
+         \advance\@tempdima-\dp\tstrutbox
+         \raise\arraystretch\@tempdima\vbox\bgroup\vbox}%
      \def\@end@alignbox{\kern\z@\egroup}%
   \else
      \let\@begin@alignbox\vcenter
