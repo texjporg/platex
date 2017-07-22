@@ -1,7 +1,7 @@
 % \iffalse meta-comment
 %
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016 Japanese TeX Development Community
+%  Copyright (c) 2016-2017 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -11,6 +11,9 @@
 %
 % \iffalse
 %
+% 2017/07/22 v2.0d
+%     - Check existing \Return definition and throw an error
+%       if it is not compatible with ascmac.
 % 2016/08/21 v2.0c
 %     - Support pdfLaTeX, XeLaTeX and LuaLaTeX.
 % 2016/04/15 v2.0b
@@ -62,7 +65,7 @@
 %</driver>
 %<tascmac>\ProvidesPackage{tascmac}
 %<ascmac>\ProvidesPackage{ascmac}
-  [2016/08/21 v2.0c
+  [2017/07/22 v2.0d
 %<driver|tascmac>  ascmac package (community edition)
 %<ascmac>  ascmac wrapper (community edition)
   ]
@@ -554,9 +557,49 @@ Q \iftdir\yoko\fi
 %
 % \begin{macro}{\return}
 % \begin{macro}{\Return}
-% 改行記号です。
+% 改行記号です。|\return|や|\Return|という名称はありふれているので、
+% ascmacパッケージの定義が別のパッケージと衝突する場合があります
+% （例：algorithm2eパッケージ）。
+% そこで、|\Return|という命令が既に定義されていて、かつascgrpフォントが
+% 不使用と判断される場合はエラーを出します。本来ならば|\return|も同様に
+% チェックしたいのですが、「okumacroパッケージの後にascmacパッケージを
+% 読み込むと、エラーなしにascmacパッケージの定義が勝つ」という従来の挙動
+% を維持するため、現時点ではチェックしません。
 %    \begin{macrocode}
 %% return-key
+\begingroup
+  \let\GDEF\gdef
+  \let\ENDGROUP\endgroup
+  \let\CATCODE\catcode
+  \catcode`\~=0
+  \catcode`\\=12
+  ~CATCODE`@=12
+  ~CATCODE`a=12
+  ~CATCODE`s=12
+  ~CATCODE`c=12
+  ~CATCODE`g=12
+  ~CATCODE`r=12
+  ~CATCODE`p=12
+  ~GDEF~ASCGRP{\@ascgrp}
+~ENDGROUP
+\begingroup
+\def\ascmac@definable{\PackageWarning{ascmac}{Command
+  \@backslashchar\reserved@a\space already defined, but
+  compatible with\MessageBreak ascmac package, overwriting}}
+\def\ascmac@check#1{\ifx#1\@undefined\else\ascmac@parse{#1}\fi}
+\def\ascmac@parse#1{\edef\reserved@a{\expandafter\@gobble\string #1}%
+  \edef\ascmac@parse@tmp{\meaning#1 \ASCGRP}%
+  \expandafter\ascmac@parse@i\ascmac@parse@tmp\@nil}
+\expandafter\def\expandafter\ascmac@parse@i
+  \expandafter#\expandafter1\ASCGRP#2\@nil{\ifx\relax#2\relax
+  \@notdefinable\else\ascmac@definable\fi}
+%\ascmac@check{\return}% conflict with okumacro, no check
+\ascmac@check{\Return}
+\endgroup \let\ASCGRP\@undefined
+%    \end{macrocode}
+%
+% 改行記号の定義の本体です。
+%    \begin{macrocode}
 \def\return{\leavevmode\hbox{%
 Q \iftdir\yoko\fi
   \@ascgrp\char"20}}
