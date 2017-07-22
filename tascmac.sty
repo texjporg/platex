@@ -191,33 +191,18 @@ Q \iftdir\yoko\fi
 %%
 %% return-key
 \begingroup
-  \let\GDEF\gdef
-  \let\ENDGROUP\endgroup
-  \let\CATCODE\catcode
-  \catcode`\~=0
-  \catcode`\\=12
-  ~CATCODE`@=12
-  ~CATCODE`a=12
-  ~CATCODE`s=12
-  ~CATCODE`c=12
-  ~CATCODE`g=12
-  ~CATCODE`r=12
-  ~CATCODE`p=12
-  ~GDEF~ASCGRP{\@ascgrp}
-~ENDGROUP
-\begingroup
 \def\ascmac@definable{\PackageInfo{ascmac}{Command
   \@backslashchar\reserved@a\space already defined, but
   compatible with\MessageBreak ascmac package, overwriting}}
 \def\ascmac@check#1{\ifx#1\@undefined\else\ascmac@parse{#1}\fi}
 \def\ascmac@parse#1{\edef\reserved@a{\expandafter\@gobble\string #1}%
-  \edef\ascmac@parse@tmp{\meaning#1 \ASCGRP}%
+  \edef\ascmac@parse@tmp{\meaning#1 \string\@ascgrp}%
   \expandafter\ascmac@parse@i\ascmac@parse@tmp\@nil}
 \expandafter\def\expandafter\ascmac@parse@i
-  \expandafter#\expandafter1\ASCGRP#2\@nil{\ifx\relax#2\relax
+  \expandafter#\expandafter1\string\@ascgrp#2\@nil{\ifx\relax#2\relax
   \@notdefinable\else\ascmac@definable\fi}
 \ascmac@check{\Return}
-\endgroup \let\ASCGRP\@undefined
+\endgroup
 \def\return{\leavevmode\hbox{%
 Q \iftdir\yoko\fi
   \@ascgrp\char"20}}
