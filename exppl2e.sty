@@ -384,9 +384,9 @@
 % まず、|l|, |c|, |r|の場合です。
 % セルの中身を|\mbox|に入れ、さらに最初に|\inhibitglue|を発行する
 % ことで、セル要素の周囲のJFMグル―を消します。
-% \changes{v???}{????/??/??}{tabular環境のセル内のJFMグル―を削除}
+% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\@tabclassz}
+%<platexrelease>\plIncludeInRelease{2017/07/29}{\@tabclassz}
 %<platexrelease>                   {Inhibit JFM glue in tabular cells}%
 %<*plcore|platexrelease>
 \def\@tabclassz{%
@@ -445,16 +445,16 @@
 %
 % \begin{macro}{\@classv}
 % 次に、|p|の場合です。|\mbox{}\inhibitglue|と|\unskip|を追加しています。
-% \changes{v???}{????/??/??}{tabular環境のセル内のJFMグル―を削除}
+% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\@tabclassz}
+%<platexrelease>\plIncludeInRelease{2017/07/29}{\@classv}
 %<platexrelease>                   {Inhibit JFM glue in tabular cells}%
 %<*plcore|platexrelease>
 \def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\mbox{}\inhibitglue\ignorespaces
 \@sharp\unskip\@endpbox}}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\@tabclassz}
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@classv}
 %<platexrelease>                   {Inhibit JFM glue in tabular cells}%
 %<platexrelease>\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\ignorespaces
 %<platexrelease>\@sharp\@endpbox}}
