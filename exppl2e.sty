@@ -382,7 +382,7 @@
 % しまうので、p\LaTeX{}では追加の対処を入れます。
 %
 % まず、|l|, |c|, |r|の場合です。
-% セルの中身を|\mbox|に入れ、さらに最初に|\inhibitglue|を発行する
+% 最初に|\inhibitglue|を発行し、最後に余分な|\unskip|を発行する
 % ことで、セル要素の周囲のJFMグル―を消します。
 % \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
 %    \begin{macrocode}
@@ -451,7 +451,7 @@
 %<platexrelease>                   {Inhibit JFM glue in tabular cells}%
 %<*plcore|platexrelease>
 \def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\mbox{}\inhibitglue\ignorespaces
-\@sharp\unskip\unskip\@endpbox}}
+\@sharp\unskip\@endpbox}}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@classv}
