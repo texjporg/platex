@@ -1486,7 +1486,7 @@
 % しまうので、p\LaTeX{}では追加の対処を入れます。
 %
 % まず、|l|, |c|, |r|の場合です。
-% セルの中身を|\mbox|に入れ、さらに最初に|\inhibitglue|を発行する
+% 最初に|\inhibitglue|を発行し、最後に余分な|\unskip|を発行する
 % ことで、セル要素の周囲のJFMグル―を消します。
 % \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
 %    \begin{macrocode}
@@ -1511,11 +1511,11 @@
   \edef\@preamble{%
     \@preamble{%
       \ifcase\@chnum
-        \hfil\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % c
+        \hfil\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % c
       \or
-        \hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % l
+        \hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % l
       \or
-        \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% r
+        \hfil\hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip % r
       \fi}}}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease

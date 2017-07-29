@@ -933,11 +933,11 @@ of this package available from CTAN}
   \edef\@preamble{%
     \@preamble{%
       \ifcase\@chnum
-        \hfil\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % c
+        \hfil\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % c
       \or
-        \hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % l
+        \hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % l
       \or
-        \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% r
+        \hfil\hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip % r
       \fi}}}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@tabclassz}
