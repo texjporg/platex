@@ -406,11 +406,11 @@
   \edef\@preamble{%
     \@preamble{%
       \ifcase\@chnum
-        \hfil\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % c
+        \hfil\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % c
       \or
-        \hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % l
+        \hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % l
       \or
-        \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% r
+        \hfil\hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip % r
       \fi}}}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
@@ -450,8 +450,8 @@
 %<platexrelease>\plIncludeInRelease{2017/07/29}{\@classv}
 %<platexrelease>                   {Inhibit JFM glue in tabular cells}%
 %<*plcore|platexrelease>
-\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\mbox{}\inhibitglue\ignorespaces
-\@sharp\unskip\@endpbox}}
+\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\inhibitglue\ignorespaces
+\@sharp\unskip\unskip\@endpbox}}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@classv}
