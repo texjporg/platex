@@ -1,0 +1,207 @@
+%% <2017/07/29>
+\documentclass{plnews}
+
+\publicationyear{2017}% 発行年
+\publicationmonth{07}% 発行月
+\publicationissue{c7}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\pTeX{p\kern-.15em\TeX}
+\def\eTeX{$\varepsilon$-\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+
+\usepackage{booktabs}
+
+\begin{document}
+
+\maketitle
+
+この文書はコミュニティ版\pLaTeXe\ \texttt{<2017/07/29>}について、
+\pLaTeXe\ \texttt{<2017/05/05>}からの更新箇所をまとめたものです。
+
+
+\section{表のセル要素周囲のJFMグルーを抑制}
+表を作る|tabular|環境で、セルの要素が括弧類などで始まる、または括弧類
+などで終わる場合、余分なスペースが入ることがありました。
+また、スペースが入るかどうかは、「ソース中でアラインメント文字 |&| の
+前後に半角空白を書いたかどうか」で変化していました。この余分なスペース
+は、\pTeX{}のメトリックから挿入されるJFMグルーに由来します。
+
+\begin{verbatim}
+  \begin{tabular}{|l|c|r|}
+    （左揃え）&（中央揃え）&（右揃え）\\
+    （左）    &   （中）   &    （右）\\
+  \end{tabular}
+\end{verbatim}
+
+\makeatletter
+\def\@tabclassz{%
+  \ifcase\@lastchclass
+    \@acolampacol
+  \or
+    \@ampacol
+  \or
+  \or
+  \or
+    \@addamp
+  \or
+    \@acolampacol
+  \or
+    \@firstampfalse\@acol
+  \fi
+  \edef\@preamble{%
+    \@preamble{%
+      \ifcase\@chnum
+        \hfil\ignorespaces\@sharp\unskip\hfil
+      \or
+        \hskip1sp\ignorespaces\@sharp\unskip\hfil
+      \or
+        \hfil\hskip1sp\ignorespaces\@sharp\unskip
+      \fi}}}
+\makeatother
+\DeleteShortVerb{\|}
+  \begin{tabular}{|l|c|r|}
+    （左揃え）&（中央揃え）&（右揃え）\\
+    （左）    &   （中）   &    （右）\\
+  \end{tabular}
+\MakeShortVerb{\|}
+\medskip
+
+ソースを見やすくするために半角空白を入れることはよくありますので、
+半角空白の有無によって結果が変わるのは困ります。そのためか、本家の
+\LaTeX{}では、アラインメント文字 |&| の前後に半角空白を書いたかどうか
+にかかわらず、同じ出力が得られるような対処が従来から入っていました。
+
+\pLaTeX{}の場合、この対処が\pTeX{}のJFMグルーには効いていませんでした。
+この問題を修正し、中央揃え(|c|)や左揃え(|l|)、右揃え(|r|)がずれて
+見えないようになりました。
+
+\medskip
+\makeatletter
+\def\@tabclassz{%
+  \ifcase\@lastchclass
+    \@acolampacol
+  \or
+    \@ampacol
+  \or
+  \or
+  \or
+    \@addamp
+  \or
+    \@acolampacol
+  \or
+    \@firstampfalse\@acol
+  \fi
+  \edef\@preamble{%
+    \@preamble{%
+      \ifcase\@chnum
+        \hfil\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % c
+      \or
+        \hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % l
+      \or
+        \hfil\hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip % r
+      \fi}}}
+\makeatother
+\DeleteShortVerb{\|}
+  \begin{tabular}{|l|c|r|}
+    （左揃え）&（中央揃え）&（右揃え）\\
+    （左）    &   （中）   &    （右）\\
+  \end{tabular}
+\MakeShortVerb{\|}
+\medskip
+
+なお、この修正は\file{array}パッケージ（\LaTeX3 Teamによる
+\file{latex-tools}バンドルに収録）を読み込むと無効になってしまいます。
+\pLaTeX{}/u\pLaTeX{}で\file{array}パッケージを使いたい場合は、
+\file{plarray}パッケージ（2017/07/29以降の\file{platex-tools}バンドルに
+収録）を追加もしくは代わりに読み込んでください。
+
+
+\section{\file{plext}の揃え位置}
+\file{plext}パッケージが拡張する表組（|tabular|環境と|array|環境）、
+および|\parbox|命令と|minipage|環境の「組方向オプション」
+(|<t>|, |<y>|, |<z>|)を使用した場合の、罫線やベースラインの揃え方の
+仕様を新たに策定しました。
+
+\medskip
+  \begin{tabular}{lcccc}
+    \toprule
+    ↓中身＼周囲→ & 横 & 縦 & 縦数式 \\
+    \midrule
+    横             & A  & B  & B      \\
+    縦             & B  & A  & D      \\
+    縦数式         & B  & D  & A      \\
+    \bottomrule
+  \end{tabular}
+\bigskip
+
+A, B, Dはそれぞれ以下のとおりです（なお、この表記は
+Lua\TeX-jaパッケージのドキュメントでの表記と一致させてあります）。
+
+\begin{itemize}
+ \item[A] 周囲の組方向と中身の組方向が同じ場合
+        （＝横組での|<y>|, |<z>|、縦組での|<t>|）
+  \begin{itemize}
+   \item \texttt{[t]}指定のとき：
+    中身の先頭行のベースラインが周囲のベースラインと一致する。
+    表組で先頭行の上に罫線があった場合は、それが和文ベースラインの位置となる。
+   \item \texttt{[c]}指定のとき：
+    中身の上下の中心が周囲の数式の軸を通る。
+   \item \texttt{[b]}指定のとき：
+    中身の最終行のベースラインが周囲のベースラインと一致する。
+    表組で最終行の下に罫線があった場合は、それが和文ベースラインの位置となる。
+  \end{itemize}
+ \item[B] 周囲の組方向と中身の組方向が90度ずれている場合
+        （＝横組での|<t>|、縦組での|<y>|）
+  \begin{itemize}
+   \item \texttt{[t]}指定のとき：
+    表組においては、上端が周囲の和文ベースラインと一致する。
+    |\parbox|や|minipage|環境においては、上端が周囲の和文文字の上端と一致する。
+   \item \texttt{[c]}指定のとき：
+    中身の上下の中心が周囲の数式の軸を通る。
+   \item \texttt{[b]}指定のとき：
+    表組においては、下端が周囲の和文ベースラインと一致する。
+    |\parbox|や|minipage|環境においては、下端が周囲の和文文字の下端と一致する。
+  \end{itemize}
+ \item[D] 通常の縦組と縦数式ディレクションが絡んだ場合
+        （＝縦組での|<z>|） \\
+  |\parbox|や|minipage|環境においては、上のBの場合と同じ。
+  表組においては、
+  \begin{itemize}
+   \item \texttt{[t]}指定のとき：
+    中身の先頭行の欧文ベースラインが周囲の欧文ベースラインと一致する。
+   \item \texttt{[c]}指定のとき：
+    中身の上下の中心が周囲の数式の軸を通る。
+   \item \texttt{[b]}指定のとき：
+    中身の最終行の欧文ベースラインが周囲の欧文ベースラインと一致する。
+  \end{itemize}
+\end{itemize}
+
+
+\section{\file{ascmac}のリターン記号命令の衝突対策}
+\file{ascmac}パッケージが提供する|\Return|という命令が、ほかの
+パッケージと衝突することがありました（例：\file{algorithm2e}パッケージ）。
+従来の\file{ascmac}パッケージでは、既に|\Return|という命令が定義されて
+いても関係なく上書きしていましたが、新しい版では|\Return|が定義済みか
+どうかチェックするようにしました。そして、
+「定義済みでかつ\file{ascmac}パッケージの定義と非互換な場合」
+にエラーを出します。
+
+
+\section{開発版のテストのお願い}
+今後\pLaTeX{}に導入するかもしれない修正パッチや仕様変更のテストにご協力くだ
+さい。\TeX{}ファイルの冒頭（|\documentclass|より前）で
+\begin{verbatim}
+  \RequirePackage{exppl2e}
+\end{verbatim}
+と書くことで、現在の開発版をテストすることができます。
+バグ報告やご意見を歓迎します。
+\TeX\ ForumやGitHubのIssueシステムが利用できます。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
