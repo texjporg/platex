@@ -3,7 +3,7 @@
 %
 %  Copyright 1995 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016 Japanese TeX Development Community
+%  Copyright (c) 2016-2017 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -15,6 +15,8 @@
 % \changes{v1.0}{1995/04/01}{first edition}
 % \changes{v1.0a}{2016/06/08}{T1などの8ビットフォントエンコーディング
 %      のために128--256の文字を\texttt{\cs{xspcode}=3}に設定}
+% \changes{v1.0b}{2017/08/05}{％、＆、\%、\&の禁則ペナルティが
+%      誤っていたのを修正（post $\rightarrow$ pre）}
 % \fi
 %
 % \setcounter{StandardModuleDepth}{1}
@@ -24,7 +26,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{kinsoku.dtx}[2016/06/08 v1.0a pLaTeX Kernel (community edition)]
+\ProvidesFile{kinsoku.dtx}[2017/08/05 v1.0b pLaTeX Kernel (community edition)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{kinsoku.dtx}
@@ -57,14 +59,16 @@
 %
 % \subsection{半角文字に対する禁則}
 % ここでは、半角文字に対する禁則の設定を行なっています。
+% \changes{v1.0b}{2017/08/05}{％、＆、\%、\&の禁則ペナルティが
+%      誤っていたのを修正（post $\rightarrow$ pre）}
 %
 %    \begin{macrocode}
 \prebreakpenalty`!=10000
 \prebreakpenalty`"=10000
 \postbreakpenalty`\#=500
 \postbreakpenalty`\$=500
-\postbreakpenalty`\%=500
-\postbreakpenalty`\&=500
+\prebreakpenalty`\%=500
+\prebreakpenalty`\&=500
 \postbreakpenalty`\`=10000
 \prebreakpenalty`'=10000
 \prebreakpenalty`)=10000
@@ -132,8 +136,8 @@
 \prebreakpenalty`＝=200
 \postbreakpenalty`＃=200
 \postbreakpenalty`＄=200
-\postbreakpenalty`％=200
-\postbreakpenalty`＆=200
+\prebreakpenalty`％=200
+\prebreakpenalty`＆=200
 \prebreakpenalty`ぁ=150
 \prebreakpenalty`ぃ=150
 \prebreakpenalty`ぅ=150
