@@ -19,7 +19,7 @@
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
    {2017/07/29}
-\def\ppatch@level{0}
+\def\ppatch@level{1}
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
   {\@plIncludeInRelease{#1}[#1]}}
@@ -444,7 +444,7 @@
 \newbox\adjust@box
 \newdimen\adjust@dimen
 \def\adjustbaseline{%
-    \setbox\adjust@box\hbox{\char\euc"A1A1}%"
+    \setbox\adjust@box\hbox{\char\jis"3441}%"
     \cht\ht\adjust@box
     \cdp\dp\adjust@box
     \cwd\wd\adjust@box

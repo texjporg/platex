@@ -34,7 +34,7 @@
 %    入らないのを修正}
 % \changes{v1.3j}{2000/10/24}{\cs{adjustbaseline}で余分なアキが入らない
 %    ようにした}
-% \changes{v1.3k}{2001/05/10}{\cs{adjustbaseline}の調整量}
+% \changes{v1.3k}{2001/05/10}{欧文書体の基準を再び`/`から`M'に変更}
 % \changes{v1.3l}{2002/04/05}{\cs{adjustbaseline}でフォントの基準値が縦書き
 %    以外では設定されないのを修正}
 % \changes{v1.3m}{2004/06/14}{\cs{fontfamily}コマンド内部フラグ変更}
@@ -64,13 +64,15 @@
 % \changes{v1.6f}{2017/02/20}{\cs{ystrut}を追加}
 % \changes{v1.6f}{2017/02/20}{\cs{ystrutbox}を組み立てるように}
 % \changes{v1.6g}{2017/03/07}{ベースライン補正量を修正}
+% \changes{v1.6h}{2017/08/05}{和文書体の基準を全角空白から「漢」に変更}
+% \changes{v1.6h}{2017/08/05}{traceのコードの\texttt{\%}忘れを修正}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2017/03/07 v1.6g pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2017/08/05 v1.6h pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -144,7 +146,7 @@
 %<*trace>
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{ptrace}
-     [2017/02/20 v1.6f Standard pLaTeX package (font tracing)]
+     [2017/08/05 v1.6h Standard pLaTeX package (font tracing)]
 \RequirePackageWithOptions{tracefnt}
 %</trace>
 %    \end{macrocode}
@@ -1145,6 +1147,8 @@
     \set@fontsize\baselinestretch\f@size\f@baselineskip
   \fi
   \size@update}
+%</plcore|trace>
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1163,7 +1167,7 @@
 % |\fontsize|コマンドの内部形式です。
 % ベースラインの設定と、支柱の設定を行ないます。
 %    \begin{macrocode}
-%</plcore|trace>
+%</plcore>
 %<platexrelease|trace>\plIncludeInRelease{2017/04/08}{\set@fontsize}
 %<platexrelease|trace>                   {Construct \ystrutbox}%
 %<*plcore|platexrelease|trace>
@@ -1247,7 +1251,7 @@
 %</trace>
 %<platexrelease|trace>        \let\size@update\relax}}
 %<platexrelease|trace>\plEndIncludeInRelease
-%<*plcore|trace>
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1257,30 +1261,41 @@
 % 現在の欧文フォントの``/''の中央がくるようにベースラインシフトを設定します。
 % \changes{v1.0c}{1995/08/31}{欧文書体の基準を`M'から`/'に変更}
 % \changes{v1.2}{1995/11/21}{縦組時のみ調整するようにした}
-% \changes{v1.3j}{2000/10/24}{文頭に鈎括弧などがあるときに余計なアキがで
-%    る問題に対処}
-% \changes{v1.3l}{2002/04/05}{\cs{adjustbaseline}でフォントの基準値が縦書き
-%    以外では設定されないのを修正}
 %
 % 当初はまずベースラインシフト量をゼロにしていましたが、
 % \cs{tbaselineshift}を連続して変更した後に鈎括弧類を使うと余計なアキが
 % でる問題が起こるため、\cs{tbaselineshift}をゼロクリアする処理を削除し
 % ました。
+% \changes{v1.3j}{2000/10/24}{文頭に鈎括弧などがあるときに余計なアキがで
+%    る問題に対処}
 %
 % しかし、それではベースラインシフトを調整済みの欧文ボックスと比較して
 % しまうため、計算した値が大きくなってしまいます。そこで、このボックス
 % の中でゼロにするようにしました。また、``/''と比較していたのを``M''に 
 % しました。
-% \changes{v1.3k}{2001/05/10}{\cs{adjustbaseline}の調整量
-%    （再び`M'を基準にした）}
+% \changes{v1.3k}{2001/05/10}{欧文書体の基準を再び`/`から`M'に変更}
+% \changes{v1.3l}{2002/04/05}{\cs{adjustbaseline}でフォントの基準値が縦書き
+%    以外では設定されないのを修正}
+%
+% 全角空白（EUCコード\texttt{0xA1A1}）はJFMで特殊なタイプに分類される可能性
+% があるため、和文書体の基準を「漢」（JISコード\texttt{0x3441}）へ変更しました。
+% \changes{v1.6h}{2017/08/05}{和文書体の基準を全角空白から「漢」に変更}
+%
 %    \begin{macrocode}
 \newbox\adjust@box
 \newdimen\adjust@dimen
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease|trace>\plIncludeInRelease{2017/07/29}{\adjustbaseline}
+%<platexrelease|trace>                   {Change zenkaku reference}%
+%<*plcore|platexrelease|trace>
 \def\adjustbaseline{%
 %    \end{macrocode}
 % 和文フォントの基準値を設定します。
 %    \begin{macrocode}
-    \setbox\adjust@box\hbox{\char\euc"A1A1}%"
+    \setbox\adjust@box\hbox{\char\jis"3441}%"
     \cht\ht\adjust@box
     \cdp\dp\adjust@box
     \cwd\wd\adjust@box
@@ -1294,10 +1309,11 @@
 %
 % \begin{eqnarray*}
 % \textmc{ベースラインシフト量} &=&
-%   \{ (\textmc{全角空白の深さ}) - (\textmc{Mの深さ}) \} \\
-%       &&- \frac{(\textmc{全角空白の高さ$+$深さ})
+%   \{ (\textmc{漢の深さ}) - (\textmc{Mの深さ}) \} \\
+%       &&- \frac{(\textmc{漢の高さ$+$深さ})
 %              - (\textmc{Mの高さ$+$深さ})}{2}
 % \end{eqnarray*}
+% \changes{v1.6h}{2017/08/05}{traceのコードの\texttt{\%}忘れを修正}
 %
 %    \begin{macrocode}
   \iftdir
@@ -1309,11 +1325,38 @@
     \advance\adjust@dimen\cdp
     \advance\adjust@dimen-\dp\adjust@box
     \tbaselineshift\adjust@dimen
-%<trace>  \ifnum \tracingfonts>\tw@
-%<trace>    \typeout{baselineshift:\the\tbaselineshift}
-%<trace>  \fi
+%<trace>    \ifnum \tracingfonts>\tw@
+%<trace>      \typeout{baselineshift:\the\tbaselineshift}%
+%<trace>    \fi
   \fi}
-%</plcore|trace>
+%</plcore|platexrelease|trace>
+%<platexrelease|trace>\plEndIncludeInRelease
+%<platexrelease|trace>\plIncludeInRelease{0000/00/00}{\adjustbaseline}
+%<platexrelease|trace>                   {Change zenkaku reference}%
+%<platexrelease|trace>\def\adjustbaseline{%
+%<platexrelease|trace>    \setbox\adjust@box\hbox{\char\euc"A1A1}%"
+%<platexrelease|trace>    \cht\ht\adjust@box
+%<platexrelease|trace>    \cdp\dp\adjust@box
+%<platexrelease|trace>    \cwd\wd\adjust@box
+%<platexrelease|trace>    \cvs\normalbaselineskip
+%<platexrelease|trace>    \chs\cwd
+%<platexrelease|trace>    \cHT\cht \advance\cHT\cdp
+%<platexrelease|trace>  \iftdir
+%<platexrelease|trace>    \setbox\adjust@box\hbox{\tbaselineshift\z@ M}%
+%<platexrelease|trace>    \adjust@dimen\ht\adjust@box
+%<platexrelease|trace>    \advance\adjust@dimen\dp\adjust@box
+%<platexrelease|trace>    \advance\adjust@dimen-\cHT
+%<platexrelease|trace>    \divide\adjust@dimen\tw@
+%<platexrelease|trace>    \advance\adjust@dimen\cdp
+%<platexrelease|trace>    \advance\adjust@dimen-\dp\adjust@box
+%<platexrelease|trace>    \tbaselineshift\adjust@dimen
+%<*trace>
+%<platexrelease|trace>    \ifnum \tracingfonts>\tw@
+%<platexrelease|trace>      \typeout{baselineshift:\the\tbaselineshift}
+%<platexrelease|trace>    \fi
+%</trace>
+%<platexrelease|trace>  \fi}
+%<platexrelease|trace>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
 % \end{macro}
@@ -1407,7 +1450,9 @@
 }
 \let\kenc@update\relax
 %    \end{macrocode}
+% \end{macro}
 %
+% \begin{macro}{\@changed@kcmd}
 % |\@changed@cmd|の和文エンコーディングバージョン。
 % \changes{v1.3n}{2004/08/10}{和文エンコーディングの切り替えを有効化}
 %    \begin{macrocode}

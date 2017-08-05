@@ -214,6 +214,48 @@ of this package available from CTAN}
                 \@height.7\baselineskip \@depth.3\baselineskip}%
         \let\size@update\relax}}
 \plEndIncludeInRelease
+\plIncludeInRelease{2017/07/29}{\adjustbaseline}
+                   {Change zenkaku reference}%
+\def\adjustbaseline{%
+    \setbox\adjust@box\hbox{\char\jis"3441}%"
+    \cht\ht\adjust@box
+    \cdp\dp\adjust@box
+    \cwd\wd\adjust@box
+    \cvs\normalbaselineskip
+    \chs\cwd
+    \cHT\cht \advance\cHT\cdp
+  \iftdir
+    \setbox\adjust@box\hbox{\tbaselineshift\z@ M}%
+    \adjust@dimen\ht\adjust@box
+    \advance\adjust@dimen\dp\adjust@box
+    \advance\adjust@dimen-\cHT
+    \divide\adjust@dimen\tw@
+    \advance\adjust@dimen\cdp
+    \advance\adjust@dimen-\dp\adjust@box
+    \tbaselineshift\adjust@dimen
+  \fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\adjustbaseline}
+                   {Change zenkaku reference}%
+\def\adjustbaseline{%
+    \setbox\adjust@box\hbox{\char\euc"A1A1}%"
+    \cht\ht\adjust@box
+    \cdp\dp\adjust@box
+    \cwd\wd\adjust@box
+    \cvs\normalbaselineskip
+    \chs\cwd
+    \cHT\cht \advance\cHT\cdp
+  \iftdir
+    \setbox\adjust@box\hbox{\tbaselineshift\z@ M}%
+    \adjust@dimen\ht\adjust@box
+    \advance\adjust@dimen\dp\adjust@box
+    \advance\adjust@dimen-\cHT
+    \divide\adjust@dimen\tw@
+    \advance\adjust@dimen\cdp
+    \advance\adjust@dimen-\dp\adjust@box
+    \tbaselineshift\adjust@dimen
+  \fi}
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\textunderscore}
                    {Baseline shift for \textunderscore}%
 \DeclareTextCommandDefault{\textunderscore}{%
