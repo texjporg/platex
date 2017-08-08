@@ -11,7 +11,7 @@ is now maintained by [Japanese TeX Development Community](http://texjp.org).
 
 The original ASCII edition can be obtained from:
 
-- http://ascii.asciimw.jp/pb/ptex/
+- https://ctan.org/pkg/ptex-texmf
 
 ## Changes from the original ASCII edition
 
@@ -43,9 +43,9 @@ the following commands will be helpful:
 
 ## Character encoding
 
-All the text files containing Japanese characters in ptex-texmf are
-encoded in ISO-2022-JP. This is because ISO-2022-JP encoded texts
-are most suitable for the traditional pTeX engine.
+All the text files containing Japanese characters in this repository
+are encoded in ISO-2022-JP. This is because ISO-2022-JP encoded
+texts are most suitable for the traditional pTeX engine.
 
 ## Repository
 
