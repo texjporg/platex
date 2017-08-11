@@ -353,6 +353,53 @@
 %
 % p\LaTeXe{}カーネル(2017/04/08)に導入したため削除。
 %
+% さらに、例えば``see Appendix A.''のような記述が文末にあり、かつ
+% ``A''を相互参照で取得した場合のスペースファクターを補正するため、
+% |\spacefactor\@m{}|に修正しました。これで、``A.''の後のスペースが
+% 文末として扱われます。
+% （参考：\LaTeXe{}マクロ\&クラス プログラミング実践解説）
+% \changes{v????}{????/??/??}{スペースファクターを補正}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\@setref}
+%<platexrelease>                   {Spacing after \ref in moving arguments}%
+%<*plcore|platexrelease>
+\def\@setref#1#2#3{%
+  \ifx#1\relax
+    \protect\G@refundefinedtrue
+    \nfss@text{\reset@font\bfseries ??}%
+    \@latex@warning{Reference `#3' on page \thepage \space
+              undefined}%
+  \else
+    \expandafter#2#1\spacefactor\@m{}% change \null to \spacefactor\@m{}
+  \fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\@setref}
+%<platexrelease>                   {Spacing after \ref in moving arguments}%
+%<platexrelease>\def\@setref#1#2#3{%
+%<platexrelease>  \ifx#1\relax
+%<platexrelease>    \protect\G@refundefinedtrue
+%<platexrelease>    \nfss@text{\reset@font\bfseries ??}%
+%<platexrelease>    \@latex@warning{Reference `#3' on page \thepage \space
+%<platexrelease>              undefined}%
+%<platexrelease>  \else
+%<platexrelease>    \expandafter#2#1\relax{}% change \null to \relax{}
+%<platexrelease>  \fi}
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@setref}
+%<platexrelease>                   {Spacing after \ref in moving arguments}%
+%<platexrelease>\def\@setref#1#2#3{%
+%<platexrelease>  \ifx#1\relax
+%<platexrelease>    \protect\G@refundefinedtrue
+%<platexrelease>    \nfss@text{\reset@font\bfseries ??}%
+%<platexrelease>    \@latex@warning{Reference `#3' on page \thepage \space
+%<platexrelease>              undefined}%
+%<platexrelease>  \else
+%<platexrelease>    \expandafter#2#1\relax% change \null to \relax
+%<platexrelease>  \fi}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \section{脚注とボトムフロートの順序および垂直位置}

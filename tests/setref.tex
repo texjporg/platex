@@ -3,7 +3,10 @@
 \begin{document}
 % explicitly large xkanjiskip for visualization
 \xkanjiskip20pt
-\tableofcontents
+
+%% 目次の中で\ref{a}の後の空白が消えないことの確認
+%% \xkanjiskip も正常に挿入される
+\tableofcontents\newpage
 \section{Something}\label{a}
 \section{Section \ref{a} is empty}
 Section \ref{a} is empty.
@@ -17,4 +20,21 @@ Page \pageref{a} is not empty.
 ページ\pageref{a}は空ではない
 \section{Page\pageref{a}isnotempty}
 Page\pageref{a}isnotempty.
+
+%% \spacefactor の補正
+\setcounter{section}{10}
+% cf. 1) wrong spacing (inter-word)
+\section{See Appendix A. Here,}
+% cf. 2) correct spacing (sentence-ending)
+\section{See Appendix A\@. Here,}
+% test for \spacefactor (should be sentence-ending)
+\section{See Appendix \ref{testA}. Here,}
+% cf. 1) wrong spacing (inter-word)
+See Appendix A. Here,\par
+% cf. 2) correct spacing (sentence-ending)
+See Appendix A\@. Here,\par
+% test for \spacefactor (should be sentence-ending)
+See Appendix \ref{testA}. Here,\par
+\appendix
+\section{ここは第\ref{testA}章です。}\label{testA}
 \end{document}
