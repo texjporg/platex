@@ -420,6 +420,74 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
+% \section{verbの冒頭のスペース}
+%
+% \begin{macro}{\verb}
+% \changes{v1.1b}{1995/04/05}{互換モードのときは、pl209.defの定義を使う}
+% \changes{v1.1g}{1997/01/16}
+%    {\cs{verb}コマンドを\LaTeX\ \texttt{!<1996/06/01!>}に合わせて修正}
+% \LaTeX{}の|\verb|コマンドでは、数式モードでないときは、
+% |\leavevmode|で水平モードに入ったあと、|\null|を出力しています。
+% マクロ|\null|は|\hbox{}|として定義されていますので、
+% ここには和欧文間スペース（|\xkanjiskip|）が入りません。
+%
+% しかし、単に|\null|を除いてしまうと、今度は|\verb+ abc+|のように
+% |\verb|の冒頭に半角空白がある場合にこれが消えてしまいます(TeX.SX 170245)。
+% そこで、p\LaTeX{}では|\null|の代わりに
+% \begin{enumerate}
+%   \item 和欧文間スペースの挿入処理は透過する
+%   \item 行分割時に消える(discardable)ノードではない
+% \end{enumerate}
+% の両条件を満たすノードを挿入します。ここでは|\vadjust{}|としました。
+%
+% このマクロは、\file{ltmiscen.dtx}で定義されています。
+% \changes{v????}{????/??/??}{\cs{verb}の冒頭の半角空白を保持}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\verb}
+%<platexrelease>                   {Preserve beginning space characters}%
+%<*plcore|platexrelease>
+\if@compatibility\else
+\def\verb{\relax\ifmmode\hbox\else\leavevmode\vadjust{}\fi
+  \bgroup
+    \verb@eol@error \let\do\@makeother \dospecials
+    \verbatim@font\@noligs
+%    \end{macrocode}
+% \LaTeXe\ 2017-04-15に追随して、|\verb|の途中でハイフネーションが起きない
+% ように|\language|を設定します（参考：latex2e svn r1405）。
+% \changes{v1.2m}{2017/03/19}{\cs{verb}の途中でハイフネーションが起きない
+%    ように\cs{language}を設定(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
+%    \begin{macrocode}
+    \language\l@nohyphenation
+    \@ifstar\@sverb\@verb}
+\fi
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\verb}
+%<platexrelease>                   {Disable hyphenation in verb}%
+%<platexrelease>\if@compatibility\else
+%<platexrelease>\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+%<platexrelease>  \bgroup
+%<platexrelease>    \verb@eol@error \let\do\@makeother \dospecials
+%<platexrelease>    \verbatim@font\@noligs
+%<platexrelease>    \language\l@nohyphenation
+%<platexrelease>    \@ifstar\@sverb\@verb}
+%<platexrelease>\fi
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\verb}
+%<platexrelease>                   {Disable hyphenation in verb}%
+%<platexrelease>\if@compatibility\else
+%<platexrelease>\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+%<platexrelease>  \bgroup
+%<platexrelease>    \verb@eol@error \let\do\@makeother \dospecials
+%<platexrelease>    \verbatim@font\@noligs
+%<platexrelease>    \@ifstar\@sverb\@verb}
+%<platexrelease>\fi
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 % \section{tabular環境のセル内のJFMグル―}
 %
 % p\LaTeXe{}カーネル(2017/07/29)に導入したため削除。

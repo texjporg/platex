@@ -43,8 +43,15 @@
     \verb@eol@error \let\do\@makeother \dospecials
     \verbatim@font\@noligs
     \@ifstar\@sverb\@verb}
-%% pLaTeX (2017/04/08 candidate)
+%% pLaTeX (2017/04/08)
 \def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+  \bgroup
+    \verb@eol@error \let\do\@makeother \dospecials
+    \verbatim@font\@noligs
+    \language\l@nohyphenation
+    \@ifstar\@sverb\@verb}
+%% pLaTeX (candidate)
+\def\verb{\relax\ifmmode\hbox\else\leavevmode\vadjust{}\fi
   \bgroup
     \verb@eol@error \let\do\@makeother \dospecials
     \verbatim@font\@noligs
