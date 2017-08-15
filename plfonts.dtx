@@ -1799,42 +1799,6 @@
 % \end{macro}
 %
 %
-%
-% \subsection{デフォルト設定ファイルの読み込み}
-% 最後に、デフォルト設定ファイルである、\file{pldefs.ltx}を読み込みます。
-% このファイルについての詳細は、第\ref{plfonts:pldefs}節を参照してください。
-% \TeX{}の入力ファイル検索パスに設定されているディレクトリに\file{pldefs.cfg}%
-% ファイルがある場合は、そのファイルを使います。
-%    \begin{macrocode}
-\InputIfFileExists{pldefs.cfg}
-           {\typeout{*************************************^^J%
-                     * Local config file pldefs.cfg used^^J%
-                     *************************************}}%
-           {\input{pldefs.ltx}}
-%</plcore>
-%    \end{macrocode}
-%
-%
-%
-%
-% \section{デフォルト設定ファイル}\label{plfonts:pldefs}
-% ここでは、フォーマットファイルに読み込まれるデフォルト値を設定しています。
-% この節での内容は\file{pldefs.ltx}に出力されます。
-% このファイルの内容を\file{plcore.ltx}に含めてもよいのですが、
-% デフォルトの設定を参照しやすいように、別ファイルにしてあります。
-% \file{pldefs.ltx}は\file{plcore.ltx}から読み込まれます。
-%
-% プリロードサイズは、\dst{}プログラムのオプションで変更することができます。
-% これ以外の設定を変更したい場合は、\file{pldefs.ltx}を
-% 直接、修正するのではなく、このファイルを\file{pldefs.cfg}という名前で
-% コピーをして、そのファイルに対して修正を加えるようにしてください。
-%    \begin{macrocode}
-%<*pldefs>
-\ProvidesFile{pldefs.ltx}
-      [2016/06/26 v1.6e pLaTeX Kernel (Default settings)] 
-%</pldefs>
-%    \end{macrocode}
-%
 % \subsection{合成文字}
 % \LaTeXe{}のカーネルのコードをそのまま使うと、p\TeX{}のベースライン
 % 補正量がゼロでないときに合成文字がおかしくなっていたため、対策します。
@@ -1845,11 +1809,12 @@
 % $-1$が返ります。
 % \changes{v1.6c}{2016/06/06}{マクロ追加}
 %    \begin{macrocode}
+%</plcore>
 %<platexrelease>\plIncludeInRelease{2016/06/10}{\g@tlastchart@}
 %<platexrelease>                   {Added \g@tlastchart@}%
-%<*pldefs|platexrelease>
+%<*plcore|platexrelease>
 \def\g@tlastchart@#1{#1\ifx\lastnodechar\@undefined\m@ne\else\lastnodechar\fi}
-%</pldefs|platexrelease>
+%</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\g@tlastchart@}
 %<platexrelease>                   {Added \g@tlastchart@}%
@@ -1866,7 +1831,7 @@
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2016/06/10}{\pltx@isletter}
 %<platexrelease>                   {Added \pltx@isletter}%
-%<*pldefs|platexrelease>
+%<*plcore|platexrelease>
 \def\pltx@mark{\pltx@mark@}
 \let\pltx@scanstop\relax
 \long\def\pltx@cond#1\fi{%
@@ -1885,7 +1850,7 @@
     \pltx@cond{\ifnum0\ifcat A\noexpand#21\fi\ifcat=\noexpand#21\fi>\z@}\fi
       {\@firstoftwo}{\@secondoftwo}%
   }{\@secondoftwo}}
-%</pldefs|platexrelease>
+%</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\pltx@isletter}
 %<platexrelease>                   {Added \pltx@isletter}%
@@ -2024,9 +1989,45 @@
 %<platexrelease>   \fi
 %<platexrelease>   #1}
 %<platexrelease>\plEndIncludeInRelease
-%<*pldefs>
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
+%
+%
+% \subsection{デフォルト設定ファイルの読み込み}
+% 最後に、デフォルト設定ファイルである、\file{pldefs.ltx}を読み込みます。
+% このファイルについての詳細は、第\ref{plfonts:pldefs}節を参照してください。
+% \TeX{}の入力ファイル検索パスに設定されているディレクトリに\file{pldefs.cfg}%
+% ファイルがある場合は、そのファイルを使います。
+%    \begin{macrocode}
+\InputIfFileExists{pldefs.cfg}
+           {\typeout{*************************************^^J%
+                     * Local config file pldefs.cfg used^^J%
+                     *************************************}}%
+           {\input{pldefs.ltx}}
+%</plcore>
+%    \end{macrocode}
+%
+%
+%
+%
+% \section{デフォルト設定ファイル}\label{plfonts:pldefs}
+% ここでは、フォーマットファイルに読み込まれるデフォルト値を設定しています。
+% この節での内容は\file{pldefs.ltx}に出力されます。
+% このファイルの内容を\file{plcore.ltx}に含めてもよいのですが、
+% デフォルトの設定を参照しやすいように、別ファイルにしてあります。
+% \file{pldefs.ltx}は\file{plcore.ltx}から読み込まれます。
+%
+% プリロードサイズは、\dst{}プログラムのオプションで変更することができます。
+% これ以外の設定を変更したい場合は、\file{pldefs.ltx}を
+% 直接、修正するのではなく、このファイルを\file{pldefs.cfg}という名前で
+% コピーをして、そのファイルに対して修正を加えるようにしてください。
+%    \begin{macrocode}
+%<*pldefs>
+\ProvidesFile{pldefs.ltx}
+      [2017/08/05 v1.6h pLaTeX Kernel (Default settings)]
+%</pldefs>
+%    \end{macrocode}
 %
 % \subsection{イタリック補正}
 % \changes{v1.3i}{2000/07/13}{\cs{text..}コマンドの左側に\cs{xkanjiskip}が
@@ -2035,6 +2036,7 @@
 % 「\verb|あ\texttt{abc}い|」としたとき、書体の変更を指定された欧文の左側に
 % 和欧文間スペースが入らないのを修正します。
 %    \begin{macrocode}
+%<*pldefs>
 \def \check@nocorr@ #1#2\nocorr#3\@nil {%
   \let \check@icl \relax% \maybe@ic から変更
   \def \check@icr {\ifvmode \else \aftergroup \maybe@ic \fi}%
