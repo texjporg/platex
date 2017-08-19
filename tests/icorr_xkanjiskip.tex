@@ -1,0 +1,45 @@
+\documentclass{article}
+\begin{document}
+
+% \xkanjiskip が両側に入ることを確認
+\xkanjiskip10pt
+あ\texttt{abc}い\par
+\textbf{いいい}$a$\par
+
+% イタリック補正が入ることを確認(1)
+\setbox0=\hbox{\textit{f\textup{af}b}}
+\showboxdepth10000
+\showboxbreadth10000
+\tracingonline1
+\showbox0
+\box0
+\hbox{\textit{f\/\textup{af}b}} % 比較用
+
+% イタリック補正が入ることを確認(2)
+\begin{quote}\itshape
+You must think of \emph{what} to write
+before thinking of \emph{how} to write.
+\end{quote}
+\begin{quote}\itshape % 比較用
+You must think of\/ \emph{what} to write
+before thinking of\/ \emph{how} to write.
+\end{quote}
+
+% fと漢の間にイタリック補正(kern)と和欧文間空白の両方が入る
+string \textit{of}漢字\par
+string {\itshape of\/}漢字\par
+string {\itshape of}漢字\par % 比較用：これはイタリック補正なし
+
+% 必要なイタリック補正と和欧文間空白が入る
+漢\textbf{f}漢f\textbf{漢}f\par
+漢\textit{f}漢\par
+\textit{f\/\textup{漢}f}\par
+
+\end{document}
+
+%% 以下、参考 %%
+「\textbfと直後の欧文とのアキ」
+https://oku.edu.mie-u.ac.jp/~okumura/texfaq/qa
+55068-55069, 55073-55076, 55081, 55086
+「\text... の \xkanjiskip 対策は必要か？」
+https://github.com/texjporg/platex/issues/51
