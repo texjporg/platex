@@ -347,6 +347,75 @@
 % 行頭禁則文字の前での|\linebreak|の挙動の修正は、
 % p\LaTeXe{}カーネル(2017/05/05)に導入したため削除。
 %
+% \begin{macro}{\@no@lnbk}
+% \emph{日本語\TeX{}開発コミュニティによる追加}：
+% さらに、|\\|だけでなく|\linebreak|についても同様の対処をします。
+% \LaTeX{}の定義のままではマクロによるペナルティ$-10000$と
+% 行頭文字のペナルティ$10000$が加算されてしまうため、
+% |\hskip\z@\relax|を入れておきます。なお、|\linebreak|を発行して
+% 行分割が起きた場合、新しい行頭のJFMグル―は消えるという従来の
+% p\LaTeX{}の挙動も維持しています。
+% \changes{v1.2o}{2017/05/03}{行頭禁則文字の直前でも改行するようにした}
+%
+% 前回の|\hskip\z@\relax|の追加では、|\nolinebreak|の場合に|\kanjiskip|や
+% |\xkanjiskip|が入らない問題が起きてしまいました。そこで、
+% |\penalty\z@\relax|に変更しました。これは、明示的な|\penalty|プリミティブ
+% 同士の合算は行われないことを利用しています。
+% \changes{v????}{????/??/??}{\cs{nolinebreak}の場合に\cs{(x)kanjiskip}が
+%    入らなくなっていたのを修正}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\@no@lnbk}
+%<platexrelease>                   {Break before prebreakpenalty}%
+%<*plcore|platexrelease>
+\def\@no@lnbk #1[#2]{%
+  \ifvmode
+    \@nolnerr
+  \else
+    \@tempskipa\lastskip
+    \unskip
+    \penalty #1\@getpen{#2}%
+    \penalty\z@\relax %% added (????/??/??)
+    \ifdim\@tempskipa>\z@
+      \hskip\@tempskipa
+      \ignorespaces
+    \fi
+  \fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2017/05/05}{\@no@lnbk}
+%<platexrelease>                   {Break before prebreakpenalty}%
+%<platexrelease>\def\@no@lnbk #1[#2]{%
+%<platexrelease>  \ifvmode
+%<platexrelease>    \@nolnerr
+%<platexrelease>  \else
+%<platexrelease>    \@tempskipa\lastskip
+%<platexrelease>    \unskip
+%<platexrelease>    \penalty #1\@getpen{#2}%
+%<platexrelease>    \hskip\z@\relax %% added (2017/05/03)
+%<platexrelease>    \ifdim\@tempskipa>\z@
+%<platexrelease>      \hskip\@tempskipa
+%<platexrelease>      \ignorespaces
+%<platexrelease>    \fi
+%<platexrelease>  \fi}
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@no@lnbk}
+%<platexrelease>                   {Break before prebreakpenalty}%
+%<platexrelease>\def\@no@lnbk #1[#2]{%
+%<platexrelease>  \ifvmode
+%<platexrelease>    \@nolnerr
+%<platexrelease>  \else
+%<platexrelease>    \@tempskipa\lastskip
+%<platexrelease>    \unskip
+%<platexrelease>    \penalty #1\@getpen{#2}%
+%<platexrelease>    \ifdim\@tempskipa>\z@
+%<platexrelease>      \hskip\@tempskipa
+%<platexrelease>      \ignorespaces
+%<platexrelease>    \fi
+%<platexrelease>  \fi}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \section{相互参照}

@@ -26,6 +26,10 @@
 テスト\nolinebreak[2]！テスト\par
 テスト\nolinebreak[1]！テスト\par
 テスト\nolinebreak[0]！テスト\par
+%% 改行が起きない場合に \xkanjiskip と \kanjiskip が入るべき
+\xkanjiskip10pt\kanjiskip10pt
+テスト\nolinebreak abc\nolinebreak テスト
+テスト\nolinebreak 漢字\nolinebreak テスト
 \newpage
 %% 従来と同じでなければならない
 This is\linebreak a test.\par     % 強制改行
