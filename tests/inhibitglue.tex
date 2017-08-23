@@ -1,0 +1,38 @@
+\documentclass{article}
+\begin{document}
+\parindent0pt
+
+■■■■■■
+
+「ほげ」\par %% 行頭二分アキ
+\inhibitglue 「ほげ」\par %% 行頭天ツキにならない
+\leavevmode\inhibitglue 「ほげ」\par %% 行頭天ツキ
+
+「ほげ」\par %% 行頭二分アキ
+\<「ほげ」\par %% 行頭天ツキにならない
+\leavevmode\<「ほげ」\par %% 行頭天ツキ
+
+\fboxsep0pt
+\newcommand{\BOX}[1]{\fbox{\parbox{4zw}{#1}}}
+\newcommand{\TEST}[1]{\BOX{ほげ\\#1「ほげ」\par#1「ほげ」}}
+
+\TEST{}% グルーを消さない場合
+\TEST{\<}% マクロでグルーを消す場合：垂直モードでも効く
+\TEST{\leavevmode\<}%
+\TEST{\inhibitglue}% 垂直モードで効かない
+\TEST{\leavevmode\inhibitglue}%
+
+%% 左も右も効く
+あ）\<\<（あ
+
+\end{document}
+
+%% 候補たち
+% アスキー版；垂直モードで効かない
+\def\<{\inhibitglue}
+% 垂直モードで効かない
+\let\<\inhibitglue
+% 左側で効かない
+\DeclareRobustCommand*\<{\ifvmode\leavevmode\fi\inhibitglue}
+% e-TeX が必要
+\protected\def\<{\ifvmode\leavevmode\fi\inhibitglue}
