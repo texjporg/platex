@@ -6,21 +6,47 @@
 \publicationissue{c7}% 番号
 \author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
 
+\def\cs#1{\texttt{\char92 #1}}
 \def\pTeX{p\kern-.15em\TeX}
 \def\eTeX{$\varepsilon$-\TeX}
 \def\epTeX{$\varepsilon$-\pTeX}
 \def\pLaTeX{p\kern-.05em\LaTeX}
 \def\pLaTeXe{p\kern-.05em\LaTeXe}
 
+% ==== specific to 2017/07/29 ====
 \usepackage{booktabs}
+\let\origfootnoterule\footnoterule
+\usepackage{pxftnright}
+\let\footnoterule\origfootnoterule
+\makeatletter
+\renewcommand{\section}{%
+    \@startsection{section}{1}{\z@}
+       {1.5\Cvs \@plus.6\Cvs \@minus.2\Cvs}%
+       {.5\Cvs \@plus.3\Cvs}{\reset@font\large\bfseries}% \Large -> \large
+}
+\renewcommand{\maketitle}{%
+   \twocolumn[{%
+      \parbox[t][6\baselineskip]{\textwidth}{%
+         \@titlefont\@title\hspace{3mm}%
+         \normalsize 第{\@issue}号\\[\medskipamount]
+         \normalfont{\@year}年{\@month}月~発行\\
+         作成者：\begin{tabular}[t]{l}
+                 \@author
+                 \end{tabular}%
+      }
+      \parbox[t][3\baselineskip]{\textwidth}{%
+この文書はコミュニティ版\pLaTeXe\ \texttt{<2017/07/29>}について、
+\pLaTeXe\ \texttt{<2017/05/05>}からの更新箇所をまとめたものです\footnotemark。
+      }%
+   }]%
+}
+\makeatother
+% ==== end ====
 
 \begin{document}
 
 \maketitle
-
-この文書はコミュニティ版\pLaTeXe\ \texttt{<2017/07/29>}について、
-\pLaTeXe\ \texttt{<2017/05/05>}からの更新箇所をまとめたものです。
-
+\footnotetext{修正リリース\texttt{<2017/07/29>+1}での更新箇所を含みます。}
 
 \section{表のセル要素周囲のJFMグルーを抑制}
 表を作る|tabular|環境で、セルの要素が括弧類などで始まる、または括弧類
@@ -143,7 +169,7 @@ Lua\TeX-jaパッケージのドキュメントでの表記と一致させてあります）。
 \begin{itemize}
  \item[A] 周囲の組方向と中身の組方向が同じ場合
         （＝横組での|<y>|, |<z>|、縦組での|<t>|）
-  \begin{itemize}
+  \begin{itemize}\itemindent-18pt
    \item \texttt{[t]}指定のとき：
     中身の先頭行のベースラインが周囲のベースラインと一致する。
     表組で先頭行の上に罫線があった場合は、それが和文ベースラインの位置となる。
@@ -155,7 +181,7 @@ Lua\TeX-jaパッケージのドキュメントでの表記と一致させてあります）。
   \end{itemize}
  \item[B] 周囲の組方向と中身の組方向が90度ずれている場合
         （＝横組での|<t>|、縦組での|<y>|）
-  \begin{itemize}
+  \begin{itemize}\itemindent-18pt
    \item \texttt{[t]}指定のとき：
     表組においては、上端が周囲の和文ベースラインと一致する。
     |\parbox|や|minipage|環境においては、上端が周囲の和文文字の上端と一致する。
@@ -169,7 +195,7 @@ Lua\TeX-jaパッケージのドキュメントでの表記と一致させてあります）。
         （＝縦組での|<z>|） \\
   |\parbox|や|minipage|環境においては、上のBの場合と同じ。
   表組においては、
-  \begin{itemize}
+  \begin{itemize}\itemindent-18pt
    \item \texttt{[t]}指定のとき：
     中身の先頭行の欧文ベースラインが周囲の欧文ベースラインと一致する。
    \item \texttt{[c]}指定のとき：
@@ -190,6 +216,33 @@ Lua\TeX-jaパッケージのドキュメントでの表記と一致させてあります）。
 にエラーを出します。
 
 
+\section{禁則ペナルティの修正}
+昔のアスキー日本語\TeX{}の頃からペナルティ設定が誤っていた文字（|%&％＆|）を
+修正しました。
+u\pLaTeX{}ではさらに、中国語や韓国語で〈・〉の字形として\texttt{U+30FB}でなく
+\texttt{U+00B7}が使われることから、新たに|\prebreakpenalty|を設定しました
+\footnote{u\pLaTeX{}の場合は従来から、\texttt{U+00A0}--\texttt{U+00FF}の範囲
+にある文字について「これが約物であって、かつJIS X 0213に定義されている場合」は
+禁則ペナルティを設定していました。\texttt{U+00B7}もこれに該当するので、
+単に漏れていた可能性があります。一方で、この範囲の文字は8-bit Latinとも重複
+するので\textbf{「和文文字の前後に（半角空白を挟まず）連続するT1エンコードの
+文字」などが予期せず禁則対象になる可能性があることに注意が必要}です。}。
+
+
+\section{その他のバグ修正}
+旧版で混入したバグの修正：
+\begin{itemize}
+\item 行頭禁則文字の直前で|\linebreak|による強制改行が効かない問題に
+  対処した2017/05/05版で、今度は逆に|\nolinebreak|を挿入したその箇所で
+  |\(x)kanjiskip|が入らなくなった問題に対処。
+\end{itemize}
+その他の\pLaTeXe{}カーネルの修正点：
+\begin{itemize}
+\item |\adjustbaseline|の全角文字基準を、全角空白文字から「漢」という
+  文字に変更。
+\end{itemize}
+
+
 \section{開発版のテストのお願い}
 今後\pLaTeX{}に導入するかもしれない修正パッチや仕様変更のテストにご協力くだ
 さい。\TeX{}ファイルの冒頭（|\documentclass|より前）で
@@ -197,6 +250,19 @@ Lua\TeX-jaパッケージのドキュメントでの表記と一致させてあります）。
   \RequirePackage{exppl2e}
 \end{verbatim}
 と書くことで、現在の開発版をテストすることができます。
+現在は以下の修正を提供しています。
+最後の3つは欧文の\LaTeX{}との組版結果の互換性向上を目指しています。
+\begin{itemize}
+\item アクセント合成文字の前後に|\xkanjiskip|が入らない問題の修正
+\item |\<|という命令を段落頭でも効くようにする修正
+  \footnote{2010年の\pTeX{}の修正により\cs{inhibitglue}が垂直モード
+  で効かなくなったことへの対応。}
+\item |\verb|の中身が半角空白で始まる場合にそれが消滅する問題の修正
+\item |\ref|の結果が``A''のような英大文字の場合のスペースファクター
+  \footnote{文末空白か単語間空白かを決める因子。}の補正
+\item |\emph{f\textrm{a}}|のような場合の|\text..|命令の左側でイタリック補正
+  が効かない問題の修正
+\end{itemize}
 バグ報告やご意見を歓迎します。
 \TeX\ ForumやGitHubのIssueシステムが利用できます。
 \begin{itemize}
