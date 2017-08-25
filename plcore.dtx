@@ -68,13 +68,15 @@
 % \changes{v1.2n}{2017/04/23}{ドキュメントの追加}
 % \changes{v1.2o}{2017/05/03}{行頭禁則文字の直前でも改行するようにした}
 % \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
+% \changes{v1.2q}{2017/08/25}{\cs{nolinebreak}の場合に\cs{(x)kanjiskip}が
+%    入らなくなっていたのを修正}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2017/07/21 v1.2p pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2017/08/25 v1.2q pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -269,8 +271,15 @@
 % 行分割が起きた場合、新しい行頭のJFMグル―は消えるという従来の
 % p\LaTeX{}の挙動も維持しています。
 % \changes{v1.2o}{2017/05/03}{行頭禁則文字の直前でも改行するようにした}
+%
+% 前回の|\hskip\z@\relax|の追加では、|\nolinebreak|の場合に|\kanjiskip|や
+% |\xkanjiskip|が入らない問題が起きてしまいました。そこで、
+% |\penalty\z@\relax|に変更しました。これは、明示的な|\penalty|プリミティブ
+% 同士の合算は行われないことを利用しています。
+% \changes{v1.2q}{2017/08/25}{\cs{nolinebreak}の場合に\cs{(x)kanjiskip}が
+%    入らなくなっていたのを修正}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2017/05/05}{\@no@lnbk}
+%<platexrelease>\plIncludeInRelease{2017/07/29}{\@no@lnbk}
 %<platexrelease>                   {Break before prebreakpenalty}%
 %<*plcore|platexrelease>
 \def\@no@lnbk #1[#2]{%
@@ -280,13 +289,29 @@
     \@tempskipa\lastskip
     \unskip
     \penalty #1\@getpen{#2}%
-    \hskip\z@\relax %% added (2017/05/03)
+    \penalty\z@\relax %% added (2017/08/25)
     \ifdim\@tempskipa>\z@
       \hskip\@tempskipa
       \ignorespaces
     \fi
   \fi}
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2017/05/05}{\@no@lnbk}
+%<platexrelease>                   {Break before prebreakpenalty}%
+%<platexrelease>\def\@no@lnbk #1[#2]{%
+%<platexrelease>  \ifvmode
+%<platexrelease>    \@nolnerr
+%<platexrelease>  \else
+%<platexrelease>    \@tempskipa\lastskip
+%<platexrelease>    \unskip
+%<platexrelease>    \penalty #1\@getpen{#2}%
+%<platexrelease>    \hskip\z@\relax %% added (2017/05/03)
+%<platexrelease>    \ifdim\@tempskipa>\z@
+%<platexrelease>      \hskip\@tempskipa
+%<platexrelease>      \ignorespaces
+%<platexrelease>    \fi
+%<platexrelease>  \fi}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@no@lnbk}
 %<platexrelease>                   {Break before prebreakpenalty}%
