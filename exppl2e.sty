@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2017/08/25 v1.0o Experimental pLaTeX2e features]
+                [2017/08/26 v1.0p Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -495,6 +495,46 @@
 % \section{tabular環境のセル内のJFMグル―}
 %
 % p\LaTeXe{}カーネル(2017/07/29)に導入したため削除。
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \section{tabbing環境の行冒頭のJFMグル―}
+%
+% \begin{macro}{\@startline}
+% tabbing環境の行で、中身が始め括弧類などで始まる場合、
+% 最初の項目だけJFMグルーが消えない現象に対処します。
+% \changes{v????}{????/??/??}{tabbing環境の行冒頭のJFMグル―を削除}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\@startline}
+%<platexrelease>                   {Inhibit JFM glue at the beginning}%
+%<*plcore|platexrelease>
+\gdef\@startline{%
+     \ifnum \@nxttabmar >\@hightab
+       \@badtab
+       \global\@nxttabmar \@hightab
+     \fi
+     \global\@curtabmar \@nxttabmar
+     \global\@curtab \@curtabmar
+     \global\setbox\@curline \hbox {}%
+     \@startfield
+     \strut\inhibitglue}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@startline}
+%<platexrelease>                   {Inhibit JFM glue at the beginning}%
+%<platexrelease>\gdef\@startline{%
+%<platexrelease>     \ifnum \@nxttabmar >\@hightab
+%<platexrelease>       \@badtab
+%<platexrelease>       \global\@nxttabmar \@hightab
+%<platexrelease>     \fi
+%<platexrelease>     \global\@curtabmar \@nxttabmar
+%<platexrelease>     \global\@curtab \@curtabmar
+%<platexrelease>     \global\setbox\@curline \hbox {}%
+%<platexrelease>     \@startfield
+%<platexrelease>     \strut}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
