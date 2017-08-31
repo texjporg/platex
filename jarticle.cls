@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesClass{jarticle}
-  [2017/03/05 v1.7e
+  [2017/08/31 v1.7f
  Standard pLaTeX class]
 \newcounter{@paper}
 \newif\if@landscape \@landscapefalse

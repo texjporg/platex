@@ -91,6 +91,7 @@
 % \changes{v1.7e}{2017/03/05}{トンボに表示するジョブ情報の書式を変更}
 % \changes{v1.7e}{2017/03/05}{\cs{frontmatter}と\cs{mainmatter}を
 %   奇数ページに送るように変更}
+% \changes{v1.7f}{2017/08/31}{和文書体の基準を全角空白から「漢」に変更}
 % \fi
 %
 % \iffalse
@@ -120,7 +121,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2017/03/05 v1.7e
+  [2017/08/31 v1.7f
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -611,9 +612,11 @@
 % \begin{macro}{\Cvs}
 % \begin{macro}{\Chs}
 % 基準となる長さの設定をします。これらのパラメータは\file{plfonts.dtx}で定義
-% されています。
+% されています。基準とする文字を「全角空白」（EUCコード\texttt{0xA1A1}）から
+% 「漢」（JISコード\texttt{0x3441}）へ変更しました。
+% \changes{v1.7f}{2017/08/31}{和文書体の基準を全角空白から「漢」に変更}
 %    \begin{macrocode}
-\setbox0\hbox{\char\euc"A1A1}%
+\setbox0\hbox{\char\jis"3441}%
 \setlength\Cht{\ht0}
 \setlength\Cdp{\dp0}
 \setlength\Cwd{\wd0}
