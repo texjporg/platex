@@ -1829,7 +1829,7 @@
 %
 % \pstyle{jpl@in}スタイルは、クラスファイル内部で使用するものです。
 % \LaTeX{}では、bookクラスを\pstyle{headings}としています。
-% しかし、\cs{tableofcontnts}コマンドの内部では\pstyle{plain}として
+% しかし、\cs{tableofcontents}コマンドの内部では\pstyle{plain}として
 % 設定されるため、一つの文書でのページ番号の位置が上下に出力される
 % ことになります。
 %
@@ -2395,8 +2395,8 @@
 %\newcommand*{\sectionmark}[1]{}
 %\newcommand*{\subsectionmark}[1]{}
 %\newcommand*{\subsubsectionmark}[1]{}
-%\newcommand*{\paragraph}[1]{}
-%\newcommand*{\subparagraph}[1]{}
+%\newcommand*{\paragraphmark}[1]{}
+%\newcommand*{\subparagraphmark}[1]{}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -2464,10 +2464,10 @@
 % |\alph{|\Lcount{COUNTER}|}|は、\Lcount{COUNTER}の値を
 % $1=$~a, $2=$~b のようにして出力します。
 %
-% |\Roman{|\Lcount{COUNTER}|}|は、\Lcount{COUNTER}の値を
+% |\Alph{|\Lcount{COUNTER}|}|は、\Lcount{COUNTER}の値を
 % $1=$~A, $2=$~B のようにして出力します。
 %
-% |\kansuji{|\Lcount{COUNTER}|}|は、\Lcount{COUNTER}の値を
+% |\Kanji{|\Lcount{COUNTER}|}|は、\Lcount{COUNTER}の値を
 % 漢数字で出力します。
 %
 % |\rensuji{|\meta{obj}|}|は、\meta{obj}を横に並べて出力します。
