@@ -92,6 +92,7 @@
 % \changes{v1.7e}{2017/03/05}{\cs{frontmatter}と\cs{mainmatter}を
 %   奇数ページに送るように変更}
 % \changes{v1.7f}{2017/08/31}{和文書体の基準を全角空白から「漢」に変更}
+% \changes{v1.7g}{2017/09/19}{内部処理で使ったボックス0を空にした}
 % \fi
 %
 % \iffalse
@@ -121,7 +122,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2017/08/31 v1.7f
+  [2017/09/19 v1.7g
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -615,6 +616,7 @@
 % されています。基準とする文字を「全角空白」（EUCコード\texttt{0xA1A1}）から
 % 「漢」（JISコード\texttt{0x3441}）へ変更しました。
 % \changes{v1.7f}{2017/08/31}{和文書体の基準を全角空白から「漢」に変更}
+% \changes{v1.7g}{2017/09/19}{内部処理で使ったボックス0を空にした}
 %    \begin{macrocode}
 \setbox0\hbox{\char\jis"3441}%
 \setlength\Cht{\ht0}
@@ -622,6 +624,7 @@
 \setlength\Cwd{\wd0}
 \setlength\Cvs{\baselineskip}
 \setlength\Chs{\wd0}
+\setbox0=\box\voidb@x
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
