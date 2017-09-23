@@ -995,6 +995,32 @@ of this package available from CTAN}
     \@ifstar\@sverb\@verb}
 \fi
 \plEndIncludeInRelease
+\plIncludeInRelease{2017/10/14}{\@startline}
+                   {Inhibit JFM glue at the beginning}%
+\gdef\@startline{%
+     \ifnum \@nxttabmar >\@hightab
+       \@badtab
+       \global\@nxttabmar \@hightab
+     \fi
+     \global\@curtabmar \@nxttabmar
+     \global\@curtab \@curtabmar
+     \global\setbox\@curline \hbox {}%
+     \@startfield
+     \strut\inhibitglue}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@startline}
+                   {Inhibit JFM glue at the beginning}%
+\gdef\@startline{%
+     \ifnum \@nxttabmar >\@hightab
+       \@badtab
+       \global\@nxttabmar \@hightab
+     \fi
+     \global\@curtabmar \@nxttabmar
+     \global\@curtab \@curtabmar
+     \global\setbox\@curline \hbox {}%
+     \@startfield
+     \strut}
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/07/29}{\@tabclassz}
                    {Inhibit JFM glue in tabular cells}%
 \def\@tabclassz{%

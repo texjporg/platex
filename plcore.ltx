@@ -1021,6 +1021,16 @@
     \language\l@nohyphenation
     \@ifstar\@sverb\@verb}
 \fi
+\gdef\@startline{%
+     \ifnum \@nxttabmar >\@hightab
+       \@badtab
+       \global\@nxttabmar \@hightab
+     \fi
+     \global\@curtabmar \@nxttabmar
+     \global\@curtab \@curtabmar
+     \global\setbox\@curline \hbox {}%
+     \@startfield
+     \strut\inhibitglue}
 \gdef\@stopfield{\null\color@endgroup\egroup}
 \newcommand\printglossary{\@input@{\jobname.gls}}
 \newcount\hour
