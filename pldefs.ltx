@@ -57,7 +57,11 @@
 \xkanjiskip=.25zw plus1pt minus1pt
 \autoxspacing
 \jcharwidowpenalty=500
+\ifx\protected\@undefined
 \def\<{\inhibitglue}
+\else
+\protected\def\<{\ifvmode\leavevmode\fi\inhibitglue}
+\fi
 \endinput
 %%
 %% End of file `pldefs.ltx'.

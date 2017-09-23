@@ -541,6 +541,10 @@
 % \section{\cs{inhibitglue}の簡略形}
 %
 % \begin{macro}{\<}
+% 最後に、|\inhibitglue|の簡略形を定義します。
+% このコマンドは、和文フォントのメトリック情報から、自動的に挿入される
+% グルーの挿入を禁止します。
+%
 % 2014年のp\TeX{}の|\inhibitglue|のバグ修正に伴い、
 % |\inhibitglue|が垂直モードでは効かなくなりました。
 % \LaTeX{}では垂直モードと水平モードの区別が隠されていますので、
@@ -548,9 +552,9 @@
 %
 % |\DeclareRobustCommand|を使うと|\protect|の影響で前方の文字に対する
 % |\inhibitglue|が効かなくなるので、e-\TeX{}の|\protected|が必要です。
-% \changes{v????}{????/??/??}{\cs{<}が段落頭でも効くようにした}
+% \changes{v1.6i}{2017/09/24}{\cs{<}が段落頭でも効くようにした}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\<}
+%<platexrelease>\plIncludeInRelease{2017/10/14}{\<}
 %<platexrelease>                   {\inhibitglue in vertical mode}%
 %<*pldefs|platexrelease>
 \ifx\protected\@undefined

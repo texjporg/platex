@@ -480,6 +480,18 @@ of this package available from CTAN}
                        \mcfamily \upshape \else \gtfamily \itshape \fi}
 \let\eminnershape\@undefined
 \plEndIncludeInRelease
+\plIncludeInRelease{2017/10/14}{\<}
+                   {\inhibitglue in vertical mode}%
+\ifx\protected\@undefined
+\def\<{\inhibitglue}
+\else
+\protected\def\<{\ifvmode\leavevmode\fi\inhibitglue}
+\fi
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\<}
+                   {\inhibitglue in vertical mode}%
+\def\<{\inhibitglue}
+\plEndIncludeInRelease
 %% File: plcore.dtx
 \plIncludeInRelease{2017/07/29}{\@no@lnbk}
                    {Break before prebreakpenalty}%
