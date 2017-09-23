@@ -3,7 +3,7 @@
 %
 %  Copyright 1995,1996,1997  ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016 Japanese TeX Development Community
+%  Copyright (c) 2016-2017 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -19,11 +19,12 @@
 %     合わせて修正}
 % \changes{v1.0b}{1997/07/29}{\cs{}と\texttt{"}の\cs{xspcode}を変更}
 % \changes{v1.0c}{2016/07/25}{docパッケージが上書きする\cs{verb}を再々定義}
+% \changes{v1.0d}{2017/09/24}{\cs{vadjust\{\}}を追加}
 % \fi
 %
 % \iffalse
 %<class>\NeedsTeXFormat{pLaTeX2e}
-%<class>\ProvidesClass{jltxdoc}[2016/07/25 v1.0c Standard pLaTeX file]
+%<class>\ProvidesClass{jltxdoc}[2017/09/24 v1.0d Standard pLaTeX file]
 %<*driver>
 \documentclass{jltxdoc}
 \GetFileInfo{jltxdoc.cls}
@@ -176,10 +177,12 @@
 %       \ttfamily \verb@eol@error \let\do\@makeother \dospecials
 %       \@ifstar{\@sverb}{\@vobeyspaces \frenchspacing \@sverb}}
 %\end{verbatim}
-% となっていますので、|\null|を外します。
+% となっていますので、\file{plcore.dtx}と同様に|\null|を外して|\vadjust{}|を
+% 入れます。
 % \changes{v1.0c}{2016/07/25}{docパッケージが上書きする\cs{verb}を再々定義}
+% \changes{v1.0d}{2017/09/24}{\cs{vadjust\{\}}を追加}
 %    \begin{macrocode}
-\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+\def\verb{\relax\ifmmode\hbox\else\leavevmode\vadjust{}\fi
   \bgroup \let\do\do@noligs \verbatim@nolig@list
     \ttfamily \verb@eol@error \let\do\@makeother \dospecials
     \@ifstar{\@sverb}{\@vobeyspaces \frenchspacing \@sverb}}
