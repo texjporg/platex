@@ -927,6 +927,18 @@ of this package available from CTAN}
         \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
     \color@endgroup}}
 \plEndIncludeInRelease
+\plIncludeInRelease{2017/10/14}{\@setref}
+                   {Spacing after \ref in moving arguments}%
+\def\@setref#1#2#3{%
+  \ifx#1\relax
+    \protect\G@refundefinedtrue
+    \nfss@text{\reset@font\bfseries ??}%
+    \@latex@warning{Reference `#3' on page \thepage \space
+              undefined}%
+  \else
+    \expandafter#2#1\spacefactor\@m{}% change \null to \spacefactor\@m{}
+  \fi}
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\@setref}
                    {Spacing after \ref in moving arguments}%
 \def\@setref#1#2#3{%

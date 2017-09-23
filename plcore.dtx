@@ -70,13 +70,14 @@
 % \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
 % \changes{v1.2q}{2017/08/25}{\cs{nolinebreak}の場合に\cs{(x)kanjiskip}が
 %    入らなくなっていたのを修正}
+% \changes{v1.2r}{2017/09/24}{相互参照のスペースファクターを補正}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2017/08/25 v1.2q pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2017/09/24 v1.2r pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1374,9 +1375,16 @@
 % そこで、|\relax|のあとに|{}|を追加しました。従来も|\protect\ref|のように使えば
 % 問題ありませんでしたが、\LaTeX{}では展開されても問題が起きないrobustな実装に
 % なっていますので、これに従います。
+%
+% さらに、例えば``see Appendix A.''のような記述が文末にあり、かつ
+% ``A''を相互参照で取得した場合のスペースファクターを補正するため、
+% |\spacefactor\@m{}|に修正しました。これで、``A.''の後のスペースが
+% 文末として扱われます。
+% （参考：\LaTeXe{}マクロ\&クラス プログラミング実践解説）
+% \changes{v1.2r}{2017/09/24}{相互参照のスペースファクターを補正}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2017/04/08}{\@setref}
+%<platexrelease>\plIncludeInRelease{2017/10/14}{\@setref}
 %<platexrelease>                   {Spacing after \ref in moving arguments}%
 %<*plcore|platexrelease>
 \def\@setref#1#2#3{%
@@ -1386,9 +1394,21 @@
     \@latex@warning{Reference `#3' on page \thepage \space
               undefined}%
   \else
-    \expandafter#2#1\relax{}% change \null to \relax{}
+    \expandafter#2#1\spacefactor\@m{}% change \null to \spacefactor\@m{}
   \fi}
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\@setref}
+%<platexrelease>                   {Spacing after \ref in moving arguments}%
+%<platexrelease>\def\@setref#1#2#3{%
+%<platexrelease>  \ifx#1\relax
+%<platexrelease>    \protect\G@refundefinedtrue
+%<platexrelease>    \nfss@text{\reset@font\bfseries ??}%
+%<platexrelease>    \@latex@warning{Reference `#3' on page \thepage \space
+%<platexrelease>              undefined}%
+%<platexrelease>  \else
+%<platexrelease>    \expandafter#2#1\relax{}% change \null to \relax{}
+%<platexrelease>  \fi}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@setref}
 %<platexrelease>                   {Spacing after \ref in moving arguments}%
