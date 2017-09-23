@@ -1437,15 +1437,25 @@
 % |\leavevmode|で水平モードに入ったあと、|\null|を出力しています。
 % マクロ|\null|は|\hbox{}|として定義されていますので、
 % ここには和欧文間スペース（|\xkanjiskip|）が入りません。
-% そこで、|\null|を出力しないようマクロを修正します。
+%
+% しかし、単に|\null|を除いてしまうと、今度は|\verb+ abc+|のように
+% |\verb|の冒頭に半角空白がある場合にこれが消えてしまいます(TeX.SX 170245)。
+% そこで、p\LaTeX{}では|\null|の代わりに
+% \begin{enumerate}
+%   \item 和欧文間スペースの挿入処理は透過する
+%   \item 行分割時に消える(discardable)ノードではない
+% \end{enumerate}
+% の両条件を満たすノードを挿入します。ここでは|\vadjust{}|としました。
+%
 % このマクロは、\file{ltmiscen.dtx}で定義されています。
+% \changes{v1.2r}{2017/09/24}{\cs{verb}の冒頭の半角空白を保持}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2017/04/08}{\verb}
-%<platexrelease>                   {Disable hyphenation in verb}%
+%<platexrelease>\plIncludeInRelease{2017/10/14}{\verb}
+%<platexrelease>                   {Preserve beginning space characters}%
 %<*plcore|platexrelease>
 \if@compatibility\else
-\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+\def\verb{\relax\ifmmode\hbox\else\leavevmode\vadjust{}\fi
   \bgroup
     \verb@eol@error \let\do\@makeother \dospecials
     \verbatim@font\@noligs
@@ -1459,6 +1469,17 @@
     \@ifstar\@sverb\@verb}
 \fi
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\verb}
+%<platexrelease>                   {Disable hyphenation in verb}%
+%<platexrelease>\if@compatibility\else
+%<platexrelease>\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
+%<platexrelease>  \bgroup
+%<platexrelease>    \verb@eol@error \let\do\@makeother \dospecials
+%<platexrelease>    \verbatim@font\@noligs
+%<platexrelease>    \language\l@nohyphenation
+%<platexrelease>    \@ifstar\@sverb\@verb}
+%<platexrelease>\fi
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\verb}
 %<platexrelease>                   {Disable hyphenation in verb}%
