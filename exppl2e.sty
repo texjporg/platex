@@ -595,10 +595,10 @@
 % 無効化しているので、|\textit{f\textup{a}}|で本来入るべきイタリック補正が
 % 入りませんでした。p3.2以降ではp\TeX{}の|\xkanjiskip|対策が不要になって
 % いますので、コミュニティ版では削除しました。
-% \changes{v????}{????/??/??}{2010年のp\TeX{}本体の修正により、v1.3iで入れた
+% \changes{v1.6i}{2017/09/24}{2010年のp\TeX{}本体の修正により、v1.3iで入れた
 %    対処が不要になっていたので削除}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{????/??/??}{\check@nocorr@}
+%<platexrelease>\plIncludeInRelease{2017/10/14}{\check@nocorr@}
 %<platexrelease>                   {Italic correction before \textt...}%
 %<*pldefs|platexrelease>
 \def \check@nocorr@ #1#2\nocorr#3\@nil {%
@@ -626,7 +626,7 @@
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\check@nocorr@}
 %<platexrelease>                   {Italic correction before \textt...}%
 %<platexrelease>\def \check@nocorr@ #1#2\nocorr#3\@nil {%
-%<platexrelease>  \let \check@icl \relax% \maybe@ic から変更
+%<platexrelease>  \let \check@icl \relax % changed from \maybe@ic
 %<platexrelease>  \def \check@icr {\ifvmode \else \aftergroup \maybe@ic \fi}%
 %<platexrelease>  \def \reserved@a {\nocorr}%
 %<platexrelease>  \def \reserved@b {#1}%

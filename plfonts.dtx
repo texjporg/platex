@@ -66,13 +66,15 @@
 % \changes{v1.6g}{2017/03/07}{ベースライン補正量を修正}
 % \changes{v1.6h}{2017/08/05}{和文書体の基準を全角空白から「漢」に変更}
 % \changes{v1.6h}{2017/08/05}{traceのコードの\texttt{\%}忘れを修正}
+% \changes{v1.6i}{2017/09/24}{2010年のp\TeX{}本体の修正により、v1.3iで入れた
+%    対処が不要になっていたので削除}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2017/08/05 v1.6h pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2017/09/24 v1.6i pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -2029,34 +2031,81 @@
 %</pldefs>
 %    \end{macrocode}
 %
-% \subsection{イタリック補正}
-% \changes{v1.3i}{2000/07/13}{\cs{text..}コマンドの左側に\cs{xkanjiskip}が
-%    入らないのを修正（ありがとう、乙部＠東大さん）}
+% \subsection{イタリック補正と\cs{xkanjiskip}}
+%
 % \begin{macro}{\check@nocorr@}
 % 「\verb|あ\texttt{abc}い|」としたとき、書体の変更を指定された欧文の左側に
 % 和欧文間スペースが入らないのを修正します。
+% \changes{v1.3i}{2000/07/13}{\cs{text..}コマンドの左側に\cs{xkanjiskip}が
+%    入らないのを修正（ありがとう、乙部＠東大さん）}
+%
+% コミュニティ版の修正：p\TeX{}のバージョンp3.1.11以前は、イタリック補正
+% （以下|\/|と記す）と|\xkanjiskip|の挿入が衝突\footnote{和文のイタリック
+% 補正用kernが、通常のexplicitな（\cs{kern}による）kernと同じ扱いを受けて
+% いたため。}し
+% \begin{enumerate}
+% \item 「欧文文字 → |\/|」の場合には|\/|を無視する
+%       （つまり後に|\xkanjiskip|挿入可能）
+% \item 「和文文字 → |\/|」の場合にはこの後に|\xkanjiskip|は挿入できない
+% \end{enumerate}
+% という挙動になっていました。p3.2（2010年）の修正で
+% \begin{itemize}
+% \item |\xkanjiskip|挿入時にはいかなる場合も|\/|を無視する
+% \end{itemize}
+% という挙動に変更されました。p\LaTeX{}カーネルの|\check@nocorr@|の修正は、
+% p3.1.11以前の2.への対処でしたが、これは「|\text...{}|の左への|\/|挿入」を
+% 無効化しているので、|\textit{f\textup{a}}|で本来入るべきイタリック補正が
+% 入りませんでした。p3.2以降ではp\TeX{}の|\xkanjiskip|対策が不要になって
+% いますので、コミュニティ版では削除しました。
+% \changes{v1.6i}{2017/09/24}{2010年のp\TeX{}本体の修正により、v1.3iで入れた
+%    対処が不要になっていたので削除}
 %    \begin{macrocode}
-%<*pldefs>
-\def \check@nocorr@ #1#2\nocorr#3\@nil {%
-  \let \check@icl \relax% \maybe@ic から変更
-  \def \check@icr {\ifvmode \else \aftergroup \maybe@ic \fi}%
-  \def \reserved@a {\nocorr}%
-  \def \reserved@b {#1}%
-  \def \reserved@c {#3}%
-  \ifx \reserved@a \reserved@b
-    \ifx \reserved@c \@empty
-      \let \check@icl \@empty
-    \else
-      \let \check@icl \@empty
-      \let \check@icr \@empty
-    \fi
-  \else
-    \ifx \reserved@c \@empty
-    \else
-      \let \check@icr \@empty
-    \fi
-  \fi
-}
+%<platexrelease>\plIncludeInRelease{2017/10/14}{\check@nocorr@}
+%<platexrelease>                   {Italic correction before \textt...}%
+%<platexrelease>\def \check@nocorr@ #1#2\nocorr#3\@nil {%
+%<platexrelease>  \let \check@icl \maybe@ic
+%<platexrelease>  \def \check@icr {\ifvmode \else \aftergroup \maybe@ic \fi}%
+%<platexrelease>  \def \reserved@a {\nocorr}%
+%<platexrelease>  \def \reserved@b {#1}%
+%<platexrelease>  \def \reserved@c {#3}%
+%<platexrelease>  \ifx \reserved@a \reserved@b
+%<platexrelease>    \ifx \reserved@c \@empty
+%<platexrelease>      \let \check@icl \@empty
+%<platexrelease>    \else
+%<platexrelease>      \let \check@icl \@empty
+%<platexrelease>      \let \check@icr \@empty
+%<platexrelease>    \fi
+%<platexrelease>  \else
+%<platexrelease>    \ifx \reserved@c \@empty
+%<platexrelease>    \else
+%<platexrelease>      \let \check@icr \@empty
+%<platexrelease>    \fi
+%<platexrelease>  \fi
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\check@nocorr@}
+%<platexrelease>                   {Italic correction before \textt...}%
+%<platexrelease>\def \check@nocorr@ #1#2\nocorr#3\@nil {%
+%<platexrelease>  \let \check@icl \relax % changed from \maybe@ic
+%<platexrelease>  \def \check@icr {\ifvmode \else \aftergroup \maybe@ic \fi}%
+%<platexrelease>  \def \reserved@a {\nocorr}%
+%<platexrelease>  \def \reserved@b {#1}%
+%<platexrelease>  \def \reserved@c {#3}%
+%<platexrelease>  \ifx \reserved@a \reserved@b
+%<platexrelease>    \ifx \reserved@c \@empty
+%<platexrelease>      \let \check@icl \@empty
+%<platexrelease>    \else
+%<platexrelease>      \let \check@icl \@empty
+%<platexrelease>      \let \check@icr \@empty
+%<platexrelease>    \fi
+%<platexrelease>  \else
+%<platexrelease>    \ifx \reserved@c \@empty
+%<platexrelease>    \else
+%<platexrelease>      \let \check@icr \@empty
+%<platexrelease>    \fi
+%<platexrelease>  \fi
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2067,6 +2116,7 @@
 % \noindent
 % 縦横エンコード共通：
 %    \begin{macrocode}
+%<*pldefs>
 \DeclareKanjiEncodingDefaults{}{}
 \DeclareErrorKanjiFont{JY1}{mc}{m}{n}{10}
 %    \end{macrocode}

@@ -416,6 +416,52 @@ of this package available from CTAN}
    \fi
    #1}
 \plEndIncludeInRelease
+\plIncludeInRelease{2017/10/14}{\check@nocorr@}
+                   {Italic correction before \textt...}%
+\def \check@nocorr@ #1#2\nocorr#3\@nil {%
+  \let \check@icl \maybe@ic
+  \def \check@icr {\ifvmode \else \aftergroup \maybe@ic \fi}%
+  \def \reserved@a {\nocorr}%
+  \def \reserved@b {#1}%
+  \def \reserved@c {#3}%
+  \ifx \reserved@a \reserved@b
+    \ifx \reserved@c \@empty
+      \let \check@icl \@empty
+    \else
+      \let \check@icl \@empty
+      \let \check@icr \@empty
+    \fi
+  \else
+    \ifx \reserved@c \@empty
+    \else
+      \let \check@icr \@empty
+    \fi
+  \fi
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\check@nocorr@}
+                   {Italic correction before \textt...}%
+\def \check@nocorr@ #1#2\nocorr#3\@nil {%
+  \let \check@icl \relax % changed from \maybe@ic
+  \def \check@icr {\ifvmode \else \aftergroup \maybe@ic \fi}%
+  \def \reserved@a {\nocorr}%
+  \def \reserved@b {#1}%
+  \def \reserved@c {#3}%
+  \ifx \reserved@a \reserved@b
+    \ifx \reserved@c \@empty
+      \let \check@icl \@empty
+    \else
+      \let \check@icl \@empty
+      \let \check@icr \@empty
+    \fi
+  \else
+    \ifx \reserved@c \@empty
+    \else
+      \let \check@icr \@empty
+    \fi
+  \fi
+}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\eminnershape}{\eminnershape}%
 \DeclareRobustCommand\em
         {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
