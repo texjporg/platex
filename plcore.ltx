@@ -18,8 +18,8 @@
 %% File: plvers.dtx
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2017/07/29}
-\def\ppatch@level{1}
+   {2017/10/14}
+\def\ppatch@level{-1}
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
   {\@plIncludeInRelease{#1}[#1]}}
@@ -1112,11 +1112,15 @@
       \everyjob{\noexpand\typeout{%
         \pfmtname\space<\pfmtversion>\space
           (based on \expandafter\parse@@BANNER\platexBANNER)}}%
-    \else
+    \else\ifnum\ppatch@level>0
       \everyjob{\noexpand\typeout{%
         \pfmtname\space<\pfmtversion>+\ppatch@level\space
           (based on \expandafter\parse@@BANNER\platexBANNER)}}%
-    \fi
+    \else
+      \everyjob{\noexpand\typeout{%
+        \pfmtname\space<\pfmtversion>-pre\ppatch@level\space
+          (based on \expandafter\parse@@BANNER\platexBANNER)}}%
+    \fi\fi
   }
 \expandafter
 \endgroup \platexTMP

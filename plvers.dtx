@@ -56,12 +56,13 @@
 % \changes{v1.1b}{2017/03/19}{\cs{document@default@language}の定義を保証
 %    (sync with ltfinal 2017/03/09 v2.0t)}
 % \changes{v1.1c}{2017/04/23}{\LaTeX\ \texttt{!<2017/04/15!>}版対応確認}
+% \changes{v1.1d}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2017/04/23 v1.1c pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2017/09/24 v1.1d pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -127,10 +128,10 @@
 %</plcore>
 %<platexrelease>\edef\platexreleaseversion
 %<*plcore|platexrelease>
-   {2017/07/29}
+   {2017/10/14}
 %</plcore|platexrelease>
 %<*plcore>
-\def\ppatch@level{1}
+\def\ppatch@level{-1}
 %</plcore>
 %    \end{macrocode}
 % \end{macro}
@@ -194,6 +195,7 @@
 % \changes{v1.0w}{2016/05/12}{起動時の文字列に入れる\LaTeX{}のバージョンを
 %    元の\LaTeX{}のバナーから引き継ぐように改良}
 % \changes{v1.1}{2016/09/14}{起動時のバナーを取得するコードを改良}
+% \changes{v1.1d}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
 %    \begin{macrocode}
 \ifx\patch@level\@undefined % fallback if undefined in LaTeX
   \def\patch@level{0}\fi
@@ -206,11 +208,15 @@
       \everyjob{\noexpand\typeout{%
         \pfmtname\space<\pfmtversion>\space
           (based on \expandafter\parse@@BANNER\platexBANNER)}}%
-    \else
+    \else\ifnum\ppatch@level>0
       \everyjob{\noexpand\typeout{%
         \pfmtname\space<\pfmtversion>+\ppatch@level\space
           (based on \expandafter\parse@@BANNER\platexBANNER)}}%
-    \fi
+    \else
+      \everyjob{\noexpand\typeout{%
+        \pfmtname\space<\pfmtversion>-pre\ppatch@level\space
+          (based on \expandafter\parse@@BANNER\platexBANNER)}}%
+    \fi\fi
   }
 \expandafter
 \endgroup \platexTMP
