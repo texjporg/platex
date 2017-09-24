@@ -653,8 +653,12 @@
 \ifx\@date\X@date
   \def\Xpatch{0}
   \ifx\patchdate\Xpatch\else
+  % number is assumed
+  \ifx\patchdate>0
     \edef\@date{\@date\space Patch level\space\patchdate}
-  \fi
+  \else
+    \edef\@date{\@date\space Pre-Release\patchdate}
+  \fi\fi
 \else
    \@warning{plpatch.ltx does not match plvers.dtx!}
    \let\includeltpatch\relax
