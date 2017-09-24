@@ -3,7 +3,7 @@
 %
 %  Copyright 1995,1996 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016 Japanese TeX Development Community
+%  Copyright (c) 2016-2017 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -43,13 +43,14 @@
 % \changes{v1.0m}{2016/08/26}{\file{platex.cfg}の読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
 % \changes{v1.0n}{2016/09/14}{\LaTeX{}のバナーの保存しかたを改良}
+% \changes{v1.0o}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2016/09/14 v1.0n pLaTeX document file]
+\ProvidesFile{platex.dtx}[2017/09/24 v1.0o pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -617,6 +618,7 @@
 % \changes{v1.0c}{1997/01/29}{Rename pltpatch to plpatch.}
 % \changes{v1.0h}{2016/05/08}{ドキュメントから\file{plpatch.ltx}を除外}
 % \changes{v1.0l}{2016/06/19}{パッチレベルを\file{plvers.dtx}から取得}
+% \changes{v1.0o}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
 %    \begin{macrocode}
 \begin{document}
  \title{The p\LaTeXe\ Sources}
