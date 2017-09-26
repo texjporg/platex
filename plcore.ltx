@@ -18,8 +18,8 @@
 %% File: plvers.dtx
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2017/07/29}
-\def\ppatch@level{1}
+   {2017/09/26}
+\def\ppatch@level{0}
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
   {\@plIncludeInRelease{#1}[#1]}}
@@ -1042,11 +1042,11 @@
   \edef\@preamble{%
     \@preamble{%
       \ifcase\@chnum
-        \hfil\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % c
+        \hfil\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % c
       \or
-        \hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % l
+        \hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % l
       \or
-        \hfil\hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip % r
+        \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% % r
       \fi}}}
 \def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\mbox{}\inhibitglue\ignorespaces
 \@sharp\unskip\@endpbox}}

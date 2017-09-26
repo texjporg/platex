@@ -18,7 +18,7 @@
 \edef\p@known@latexreleaseversion
    {2017/04/15}
 \edef\platexreleaseversion
-   {2017/07/29}
+   {2017/09/26}
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
   {\@plIncludeInRelease{#1}[#1]}}
@@ -44,7 +44,7 @@
 %% File: platexrelease.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{platexrelease}
-                [2016/09/08 v1.0g latexrelease support for pLaTeX Kernel]
+                [2017/09/26 v1.0h latexrelease support for pLaTeX Kernel]
 \RequirePackageWithOptions{latexrelease}
 \ifnum\expandafter\@parse@version\latexreleaseversion//00\@nil
   >\expandafter\@parse@version\p@known@latexreleaseversion//00\@nil
@@ -100,6 +100,15 @@ of this package available from CTAN}
 \fi
 \let\pfmtversion\requestedplpatchdate
 \let\currentpLaTeXdate\requestedpLaTeXdate
+\plIncludeInRelease{2017/09/26}{\PackageWarning}{pLaTeX Info}%
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/07/29}{\PackageWarning}{pLaTeX Info}%
+  \PackageWarningNoLine{platexrelease}{%
+      You selected pLaTeX2e <\pfmtversion>, but\MessageBreak
+      this version of pLaTeX2e is known to have\MessageBreak
+      some critical bugs. We advise you to\MessageBreak
+      select another format date}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/09/08}{\PackageWarning}{pLaTeX Info}%
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/09/03}{\PackageWarning}{pLaTeX Info}%
@@ -971,6 +980,32 @@ of this package available from CTAN}
     \verbatim@font\@noligs
     \@ifstar\@sverb\@verb}
 \fi
+\plEndIncludeInRelease
+\plIncludeInRelease{2017/09/26}{\@tabclassz}
+                   {Inhibit JFM glue in tabular cells}%
+\def\@tabclassz{%
+  \ifcase\@lastchclass
+    \@acolampacol
+  \or
+    \@ampacol
+  \or
+  \or
+  \or
+    \@addamp
+  \or
+    \@acolampacol
+  \or
+    \@firstampfalse\@acol
+  \fi
+  \edef\@preamble{%
+    \@preamble{%
+      \ifcase\@chnum
+        \hfil\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % c
+      \or
+        \hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % l
+      \or
+        \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% % r
+      \fi}}}
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/07/29}{\@tabclassz}
                    {Inhibit JFM glue in tabular cells}%

@@ -70,13 +70,15 @@
 % \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
 % \changes{v1.2q}{2017/08/25}{\cs{nolinebreak}の場合に\cs{(x)kanjiskip}が
 %    入らなくなっていたのを修正}
+% \changes{v1.2r}{2017/09/26}{tabular環境の右揃え(r)で罫線がずれるように
+%    なっていたバグを修正}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2017/08/25 v1.2q pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2017/09/26 v1.2r pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1511,12 +1513,13 @@
 % しまうので、p\LaTeX{}では追加の対処を入れます。
 %
 % まず、|l|, |c|, |r|の場合です。
-% 最初に|\inhibitglue|を発行し、最後に余分な|\unskip|を発行する
-% ことで、セル要素の周囲のJFMグル―を消します。
+% セルの要素を|\mbox|に入れ、その最初で|\inhibitglue|を発行します。
 % \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
+% \changes{v1.2r}{2017/09/26}{tabular環境の右揃え(r)で罫線がずれるように
+%    なっていたバグを修正}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2017/07/29}{\@tabclassz}
+%<platexrelease>\plIncludeInRelease{2017/09/26}{\@tabclassz}
 %<platexrelease>                   {Inhibit JFM glue in tabular cells}%
 %<*plcore|platexrelease>
 \def\@tabclassz{%
@@ -1536,13 +1539,39 @@
   \edef\@preamble{%
     \@preamble{%
       \ifcase\@chnum
-        \hfil\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % c
+        \hfil\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % c
       \or
-        \hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % l
+        \hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % l
       \or
-        \hfil\hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip % r
+        \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% % r
       \fi}}}
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2017/07/29}{\@tabclassz}
+%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<platexrelease>\def\@tabclassz{%
+%<platexrelease>  \ifcase\@lastchclass
+%<platexrelease>    \@acolampacol
+%<platexrelease>  \or
+%<platexrelease>    \@ampacol
+%<platexrelease>  \or
+%<platexrelease>  \or
+%<platexrelease>  \or
+%<platexrelease>    \@addamp
+%<platexrelease>  \or
+%<platexrelease>    \@acolampacol
+%<platexrelease>  \or
+%<platexrelease>    \@firstampfalse\@acol
+%<platexrelease>  \fi
+%<platexrelease>  \edef\@preamble{%
+%<platexrelease>    \@preamble{%
+%<platexrelease>      \ifcase\@chnum
+%<platexrelease>        \hfil\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % c
+%<platexrelease>      \or
+%<platexrelease>        \hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % l
+%<platexrelease>      \or
+%<platexrelease>        \hfil\hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip % r
+%<platexrelease>      \fi}}}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@tabclassz}
 %<platexrelease>                   {Inhibit JFM glue in tabular cells}%
