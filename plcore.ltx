@@ -1052,11 +1052,11 @@
   \edef\@preamble{%
     \@preamble{%
       \ifcase\@chnum
-        \hfil\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % c
+        \hfil\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % c
       \or
-        \hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip\hfil % l
+        \hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % l
       \or
-        \hfil\hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\unskip % r
+        \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% % r
       \fi}}}
 \def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\mbox{}\inhibitglue\ignorespaces
 \@sharp\unskip\@endpbox}}
