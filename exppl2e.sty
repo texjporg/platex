@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2017/08/26 v1.0p Experimental pLaTeX2e features]
+                [2017/10/26 v1.0q Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -357,52 +357,7 @@
 %
 % p\LaTeXe{}カーネル(2017/04/08)に導入したため削除。
 %
-% さらに、例えば``see Appendix A.''のような記述が文末にあり、かつ
-% ``A''を相互参照で取得した場合のスペースファクターを補正するため、
-% |\spacefactor\@m{}|に修正しました。これで、``A.''の後のスペースが
-% 文末として扱われます。
-% （参考：\LaTeXe{}マクロ\&クラス プログラミング実践解説）
-% \changes{v1.2s}{2017/09/27}{相互参照のスペースファクターを補正}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2017/10/14}{\@setref}
-%<platexrelease>                   {Spacing after \ref in moving arguments}%
-%<*plcore|platexrelease>
-\def\@setref#1#2#3{%
-  \ifx#1\relax
-    \protect\G@refundefinedtrue
-    \nfss@text{\reset@font\bfseries ??}%
-    \@latex@warning{Reference `#3' on page \thepage \space
-              undefined}%
-  \else
-    \expandafter#2#1\spacefactor\@m{}% change \null to \spacefactor\@m{}
-  \fi}
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2017/04/08}{\@setref}
-%<platexrelease>                   {Spacing after \ref in moving arguments}%
-%<platexrelease>\def\@setref#1#2#3{%
-%<platexrelease>  \ifx#1\relax
-%<platexrelease>    \protect\G@refundefinedtrue
-%<platexrelease>    \nfss@text{\reset@font\bfseries ??}%
-%<platexrelease>    \@latex@warning{Reference `#3' on page \thepage \space
-%<platexrelease>              undefined}%
-%<platexrelease>  \else
-%<platexrelease>    \expandafter#2#1\relax{}% change \null to \relax{}
-%<platexrelease>  \fi}
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\@setref}
-%<platexrelease>                   {Spacing after \ref in moving arguments}%
-%<platexrelease>\def\@setref#1#2#3{%
-%<platexrelease>  \ifx#1\relax
-%<platexrelease>    \protect\G@refundefinedtrue
-%<platexrelease>    \nfss@text{\reset@font\bfseries ??}%
-%<platexrelease>    \@latex@warning{Reference `#3' on page \thepage \space
-%<platexrelease>              undefined}%
-%<platexrelease>  \else
-%<platexrelease>    \expandafter#2#1\relax% change \null to \relax
-%<platexrelease>  \fi}
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
+% さらなる修正もp\LaTeXe{}カーネル(2017/10/28)に導入したため削除。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -426,69 +381,7 @@
 %
 % \section{verbの冒頭のスペース}
 %
-% \begin{macro}{\verb}
-% \changes{v1.1b}{1995/04/05}{互換モードのときは、pl209.defの定義を使う}
-% \changes{v1.1g}{1997/01/16}
-%    {\cs{verb}コマンドを\LaTeX\ \texttt{!<1996/06/01!>}に合わせて修正}
-% \LaTeX{}の|\verb|コマンドでは、数式モードでないときは、
-% |\leavevmode|で水平モードに入ったあと、|\null|を出力しています。
-% マクロ|\null|は|\hbox{}|として定義されていますので、
-% ここには和欧文間スペース（|\xkanjiskip|）が入りません。
-%
-% しかし、単に|\null|を除いてしまうと、今度は|\verb+ abc+|のように
-% |\verb|の冒頭に半角空白がある場合にこれが消えてしまいます(TeX.SX 170245)。
-% そこで、p\LaTeX{}では|\null|の代わりに
-% \begin{enumerate}
-%   \item 和欧文間スペースの挿入処理は透過する
-%   \item 行分割時に消える(discardable)ノードではない
-% \end{enumerate}
-% の両条件を満たすノードを挿入します。ここでは|\vadjust{}|としました。
-%
-% このマクロは、\file{ltmiscen.dtx}で定義されています。
-% \changes{v1.2s}{2017/09/27}{\cs{verb}の冒頭の半角空白を保持}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2017/10/14}{\verb}
-%<platexrelease>                   {Preserve beginning space characters}%
-%<*plcore|platexrelease>
-\if@compatibility\else
-\def\verb{\relax\ifmmode\hbox\else\leavevmode\vadjust{}\fi
-  \bgroup
-    \verb@eol@error \let\do\@makeother \dospecials
-    \verbatim@font\@noligs
-%    \end{macrocode}
-% \LaTeXe\ 2017-04-15に追随して、|\verb|の途中でハイフネーションが起きない
-% ように|\language|を設定します（参考：latex2e svn r1405）。
-% \changes{v1.2m}{2017/03/19}{\cs{verb}の途中でハイフネーションが起きない
-%    ように\cs{language}を設定(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
-%    \begin{macrocode}
-    \language\l@nohyphenation
-    \@ifstar\@sverb\@verb}
-\fi
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2017/04/08}{\verb}
-%<platexrelease>                   {Disable hyphenation in verb}%
-%<platexrelease>\if@compatibility\else
-%<platexrelease>\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
-%<platexrelease>  \bgroup
-%<platexrelease>    \verb@eol@error \let\do\@makeother \dospecials
-%<platexrelease>    \verbatim@font\@noligs
-%<platexrelease>    \language\l@nohyphenation
-%<platexrelease>    \@ifstar\@sverb\@verb}
-%<platexrelease>\fi
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\verb}
-%<platexrelease>                   {Disable hyphenation in verb}%
-%<platexrelease>\if@compatibility\else
-%<platexrelease>\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
-%<platexrelease>  \bgroup
-%<platexrelease>    \verb@eol@error \let\do\@makeother \dospecials
-%<platexrelease>    \verbatim@font\@noligs
-%<platexrelease>    \@ifstar\@sverb\@verb}
-%<platexrelease>\fi
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
+% p\LaTeXe{}カーネル(2017/10/28)に導入したため削除。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -505,7 +398,7 @@
 % 最初の項目だけJFMグルーが消えない現象に対処します。
 % \changes{v1.2s}{2017/09/27}{tabbing環境の行冒頭のJFMグル―を削除}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2017/10/14}{\@startline}
+%<platexrelease>\plIncludeInRelease{2017/10/28}{\@startline}
 %<platexrelease>                   {Inhibit JFM glue at the beginning}%
 %<*plcore|platexrelease>
 \gdef\@startline{%
@@ -554,7 +447,7 @@
 % |\inhibitglue|が効かなくなるので、e-\TeX{}の|\protected|が必要です。
 % \changes{v1.6i}{2017/09/24}{\cs{<}が段落頭でも効くようにした}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2017/10/14}{\<}
+%<platexrelease>\plIncludeInRelease{2017/10/28}{\<}
 %<platexrelease>                   {\inhibitglue in vertical mode}%
 %<*pldefs|platexrelease>
 \ifx\protected\@undefined
@@ -575,83 +468,7 @@
 %
 % \section{イタリック補正と\cs{xkanjiskip}}
 %
-% \begin{macro}{\check@nocorr@}
-% 「\verb|あ\texttt{abc}い|」としたとき、書体の変更を指定された欧文の左側に
-% 和欧文間スペースが入らないのを修正します。
-% \changes{v1.3i}{2000/07/13}{\cs{text..}コマンドの左側に\cs{xkanjiskip}が
-%    入らないのを修正（ありがとう、乙部＠東大さん）}
-%
-% コミュニティ版の修正：p\TeX{}のバージョンp3.1.11以前は、イタリック補正
-% （以下|\/|と記す）と|\xkanjiskip|の挿入が衝突\footnote{和文のイタリック
-% 補正用kernが、通常のexplicitな（\cs{kern}による）kernと同じ扱いを受けて
-% いたため。}し
-% \begin{enumerate}
-% \item 「欧文文字 → |\/|」の場合には|\/|を無視する
-%       （つまり後に|\xkanjiskip|挿入可能）
-% \item 「和文文字 → |\/|」の場合にはこの後に|\xkanjiskip|は挿入できない
-% \end{enumerate}
-% という挙動になっていました。p3.2（2010年）の修正で
-% \begin{itemize}
-% \item |\xkanjiskip|挿入時にはいかなる場合も|\/|を無視する
-% \end{itemize}
-% という挙動に変更されました。p\LaTeX{}カーネルの|\check@nocorr@|の修正は、
-% p3.1.11以前の2.への対処でしたが、これは「|\text...{}|の左への|\/|挿入」を
-% 無効化しているので、|\textit{f\textup{a}}|で本来入るべきイタリック補正が
-% 入りませんでした。p3.2以降ではp\TeX{}の|\xkanjiskip|対策が不要になって
-% いますので、コミュニティ版では削除しました。
-% \changes{v1.6i}{2017/09/24}{2010年のp\TeX{}本体の修正により、v1.3iで入れた
-%    対処が不要になっていたので削除}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2017/10/14}{\check@nocorr@}
-%<platexrelease>                   {Italic correction before \textt...}%
-%<*pldefs|platexrelease>
-\def \check@nocorr@ #1#2\nocorr#3\@nil {%
-  \let \check@icl \maybe@ic
-  \def \check@icr {\ifvmode \else \aftergroup \maybe@ic \fi}%
-  \def \reserved@a {\nocorr}%
-  \def \reserved@b {#1}%
-  \def \reserved@c {#3}%
-  \ifx \reserved@a \reserved@b
-    \ifx \reserved@c \@empty
-      \let \check@icl \@empty
-    \else
-      \let \check@icl \@empty
-      \let \check@icr \@empty
-    \fi
-  \else
-    \ifx \reserved@c \@empty
-    \else
-      \let \check@icr \@empty
-    \fi
-  \fi
-}
-%</pldefs|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\check@nocorr@}
-%<platexrelease>                   {Italic correction before \textt...}%
-%<platexrelease>\def \check@nocorr@ #1#2\nocorr#3\@nil {%
-%<platexrelease>  \let \check@icl \relax % changed from \maybe@ic
-%<platexrelease>  \def \check@icr {\ifvmode \else \aftergroup \maybe@ic \fi}%
-%<platexrelease>  \def \reserved@a {\nocorr}%
-%<platexrelease>  \def \reserved@b {#1}%
-%<platexrelease>  \def \reserved@c {#3}%
-%<platexrelease>  \ifx \reserved@a \reserved@b
-%<platexrelease>    \ifx \reserved@c \@empty
-%<platexrelease>      \let \check@icl \@empty
-%<platexrelease>    \else
-%<platexrelease>      \let \check@icl \@empty
-%<platexrelease>      \let \check@icr \@empty
-%<platexrelease>    \fi
-%<platexrelease>  \else
-%<platexrelease>    \ifx \reserved@c \@empty
-%<platexrelease>    \else
-%<platexrelease>      \let \check@icr \@empty
-%<platexrelease>    \fi
-%<platexrelease>  \fi
-%<platexrelease>}
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
+% p\LaTeXe{}カーネル(2017/10/28)に導入したため削除。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
