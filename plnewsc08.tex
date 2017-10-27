@@ -1,0 +1,93 @@
+%% <2017/09/26> and <2017/10/28>
+\documentclass{plnews}
+
+\publicationyear{2017}% 発行年
+\publicationmonth{10}% 発行月
+\publicationissue{c8}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\cs#1{\texttt{\char92 #1}}
+\def\pTeX{p\kern-.15em\TeX}
+\def\eTeX{$\varepsilon$-\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+
+\begin{document}
+
+\maketitle
+
+この文書はコミュニティ版\pLaTeXe\ \texttt{<2017/10/28>}について、
+\pLaTeXe\ \texttt{<2017/07/29>}からの更新箇所をまとめたものです
+\footnote{途中のリリース\texttt{<2017/09/26>}での更新箇所を含みます。}。
+
+
+\section{旧版のtabular環境のバグ修正}
+\pLaTeXe\ \texttt{<2017/07/29>}のリリースで修正した|tabular|環境に、
+右揃え(|r|)のセルがずれるバグが混入していたのを修正しました。
+
+
+\section{tabbing環境のJFMグルー対策}
+|tabular|環境と同様に|tabbing|環境でも、行の最初の項目だけ、括弧類などで
+始まる場合にJFMグルーが入っていました。
+新しいバージョン\pLaTeXe\ \texttt{<2017/10/28>}では、一律に冒頭の
+JFMグルーが入らないようにしました。
+
+
+\section{\LaTeXe{}との互換性向上}
+\pLaTeXe{}で加えられた修正によって\LaTeXe{}の挙動が壊れていた箇所を、
+以下のように改良しました。
+\subsection{\cs{ref}直後のスペースファクター}
+\<「|\ref|命令直後の和文文字との間に|\xkanjiskip|が挿入されるように」
+というアスキー\pLaTeXe{}の変更には、本家\LaTeXe{}と比べて
+\begin{itemize}
+\item 目次に現れる項目で|\ref|が使われた場合に、後続の半角空白が消える
+\item |\ref|の結果が``A''のような英大文字の場合に、スペースファクター
+\footnote{文末空白か単語間空白かを決める因子。}が正しく扱われない
+\end{itemize}
+という問題がありました。前者の問題はコミュニティ版
+\pLaTeXe\ \texttt{<2017/04/08>}で対処済みでしたが、後者の問題は
+残っていたので修正しました
+（参考：\LaTeXe{}マクロ\&クラス プログラミング実践解説）。
+\subsection{\cs{verb}の冒頭の空白}
+\<「|\verb|命令直前で|\xkanjiskip|が適切に挿入されるように」
+というアスキー\pLaTeXe{}の変更には、「|\verb|の冒頭に半角空白がある場合
+（例えば|\verb+ abc+|など）にそれが消えてしまう」という問題がありました
+ので、これを修正しました。
+\subsection{\cs{text..}命令のイタリック補正}
+従来の\pLaTeXe{}は、「{\gtfamily あ\null\verb|\texttt{abc}|い} のような
+書体変更時に|\xkanjiskip|が入らない」という現象に対処するため、
+「イタリック補正を犠牲にして|\xkanjiskip|を入れる」という回避策をとって
+いました。この回避策は2010年の\pTeX{}側の修正で不要となったため、
+\pLaTeXe{}の当該コードを削除して本家\LaTeXe{}の定義に戻しました。
+これで例えば|\emph{f\textrm{a}}|のような場合に|\text..|命令の左側に
+イタリック補正が効くようになりました。
+
+
+\section{\cs{inhibitglue}の省略形の改良}
+\pLaTeXe{}は、|\inhibitglue|の省略形として使える|\<|という命令を提供して
+いました。しかし、2014年の\pTeX{}の修正に伴い、|\<|が段落頭で効かなく
+なっていました\footnote{\cs{inhibitglue}が\pTeX{}の挙動変更により
+垂直モードで効かなくなったため。}ので、定義を改良しました。
+
+
+\section{標準クラスの修正}
+\pLaTeXe{}標準クラスの|\Cht|などの全角文字基準を、全角空白文字から「漢」に
+変更しました。
+
+
+\section{開発版のテストのお願い}
+今後\pLaTeX{}に導入するかもしれない修正パッチや仕様変更のテストにご協力くだ
+さい。\TeX{}ファイルの冒頭（|\documentclass|より前）で
+\begin{verbatim}
+  \RequirePackage{exppl2e}
+\end{verbatim}
+と書くことで、開発版をテストすることができます。
+バグ報告やご意見を歓迎します。
+\TeX\ ForumやGitHubのIssueシステムが利用できます。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
