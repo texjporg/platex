@@ -37,6 +37,7 @@ JFMグルーが入らないようにしました。
 \section{\LaTeXe{}との互換性向上}
 \pLaTeXe{}で加えられた修正によって\LaTeXe{}の挙動が壊れていた箇所を、
 以下のように改良しました。
+
 \subsection{\cs{ref}直後のスペースファクター}
 \<「|\ref|命令直後の和文文字との間に|\xkanjiskip|が挿入されるように」
 というアスキー\pLaTeXe{}の変更には、本家\LaTeXe{}と比べて
@@ -49,13 +50,15 @@ JFMグルーが入らないようにしました。
 \pLaTeXe\ \texttt{<2017/04/08>}で対処済みでしたが、後者の問題は
 残っていたので修正しました
 （参考：\LaTeXe{}マクロ\&クラス プログラミング実践解説）。
+
 \subsection{\cs{verb}の冒頭の空白}
 \<「|\verb|命令直前で|\xkanjiskip|が適切に挿入されるように」
 というアスキー\pLaTeXe{}の変更には、「|\verb|の冒頭に半角空白がある場合
 （例えば|\verb+ abc+|など）にそれが消えてしまう」という問題がありました
 ので、これを修正しました。
+
 \subsection{\cs{text..}命令のイタリック補正}
-従来の\pLaTeXe{}は、「{\gtfamily あ\null\verb|\texttt{abc}|い} のような
+アスキー\pLaTeXe{}は、「{\gtfamily あ\null\verb|\texttt{abc}|い} のような
 書体変更時に|\xkanjiskip|が入らない」という現象に対処するため、
 「イタリック補正を犠牲にして|\xkanjiskip|を入れる」という回避策をとって
 いました。この回避策は2010年の\pTeX{}側の修正で不要となったため、
