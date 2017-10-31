@@ -75,13 +75,15 @@
 % \changes{v1.2s}{2017/09/27}{相互参照のスペースファクターを補正}
 % \changes{v1.2s}{2017/09/27}{\cs{verb}の冒頭の半角空白を保持}
 % \changes{v1.2s}{2017/09/27}{tabbing環境の行冒頭のJFMグル―を削除}
+% \changes{v1.2t}{2017/10/31}{v1.2sの変更に伴い、\cs{ref}が数式モードで
+%    エラーになっていたのを修正}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2017/09/27 v1.2s pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2017/10/31 v1.2t pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1384,8 +1386,11 @@
 % ``A''を相互参照で取得した場合のスペースファクターを補正するため、
 % |\spacefactor\@m{}|に修正しました。これで、``A.''の後のスペースが
 % 文末として扱われます。
-% （参考：\LaTeXe{}マクロ\&クラス プログラミング実践解説）
+% 「\LaTeXe{}マクロ\&クラス プログラミング実践解説」のコードを参考に
+% しましたが、数式モード内でもエラーにならないように改良しています。
 % \changes{v1.2s}{2017/09/27}{相互参照のスペースファクターを補正}
+% \changes{v1.2t}{2017/10/31}{v1.2sの変更に伴い、\cs{ref}が数式モードで
+%    エラーになっていたのを修正}
 %    \begin{macrocode}
 %</plcore>
 %<platexrelease>\plIncludeInRelease{2017/10/28}{\@setref}
@@ -1398,8 +1403,9 @@
     \@latex@warning{Reference `#3' on page \thepage \space
               undefined}%
   \else
-    \expandafter#2#1\spacefactor\@m{}% change \null to \spacefactor\@m{}
+    \expandafter#2#1\protect\@setref@{}% change \null to \protect\@setref@{}
   \fi}
+\def\@setref@{\ifmmode\else\spacefactor\@m\fi}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2017/04/08}{\@setref}
@@ -1413,6 +1419,7 @@
 %<platexrelease>  \else
 %<platexrelease>    \expandafter#2#1\relax{}% change \null to \relax{}
 %<platexrelease>  \fi}
+%<platexrelease>\let\@setref@\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@setref}
 %<platexrelease>                   {Spacing after \ref in moving arguments}%
@@ -1425,6 +1432,7 @@
 %<platexrelease>  \else
 %<platexrelease>    \expandafter#2#1\relax% change \null to \relax
 %<platexrelease>  \fi}
+%<platexrelease>\let\@setref@\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
