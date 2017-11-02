@@ -656,7 +656,7 @@
   \def\Xpatch{0}
   \ifx\patchdate\Xpatch\else
   % number is assumed
-  \ifx\patchdate>0
+  \ifnum\patchdate>0
     \edef\@date{\@date\space Patch level\space\patchdate}
   \else
     \edef\@date{\@date\space Pre-Release\patchdate}
