@@ -1,0 +1,61 @@
+\documentclass{jarticle}
+\usepackage[noreplace]{otf}
+\usepackage{amsmath} 
+
+% 「参照先の数値を出力せず、取得するだけ」という \ref の使い方は、
+% 垂直モードでの挙動から鑑みるに、本家 LaTeX も想定していないと
+% 思われる（本家 LaTeX の \@setref の定義では、\leavevmode してから
+% 取得しないと「段落頭で余分な空行が入る」という問題が発生するため。）
+% しかし pLaTeX では、\@setref の \null が \relax に変更された
+% ことで、この「\leavevmode すべき」という事実が偶然隠されてきた。
+
+% 以下のコードは、この「偶然」により問題が起きなかったコードである。
+% pLaTeX2e <2017/10/28> 及び pLaTeX2e <2017/10/28>+1 では
+% \spacefactor\@m が垂直モードで実行されようとしてエラーになった。
+
+\makeatletter
+% based on emath.sty [2015/09/05 2.76] and
+% https://oku.edu.mie-u.ac.jp/%7Eokumura/texfaq/qa/45421.html
+% slightly improved to omit \ref@chk
+\def\tagform@#1{\maketag@@@{$\cdots$\ignorespaces
+  \ajMaru{\number#1}\unskip\@@italiccorr}}
+\def\marusuuref#1{%
+    \expandafter\ifx\csname r@#1\endcsname\relax
+      \protect\G@refundefinedtrue
+      \nfss@text{\reset@font\bfseries ??}%
+      \@latex@warning{Reference `#1' on page \thepage \space
+             undefined}%
+    \else
+      {\count255=\ref{#1}\ajMaru{\number\count255}}%
+    \fi
+}
+\makeatother
+
+% pLaTeX2e <2017/10/28>+2 ではエラーを回避するようにした。
+
+% 以下のように \marusuuref が \leavevmode を実行していれば、
+% そもそも pLaTeX で対処する必要はないし、
+% 本家 LaTeX の \@setref の上でも破綻しない。
+
+%\makeatletter
+%\DeclareRobustCommand*{\marusuuref}[1]{%
+%    \expandafter\ifx\csname r@#1\endcsname\relax
+%      \protect\G@refundefinedtrue
+%      \nfss@text{\reset@font\bfseries ??}%
+%      \@latex@warning{Reference `#1' on page \thepage \space
+%             undefined}%
+%    \else
+%      {\leavevmode\count255=\ref{#1}\ajMaru{\number\count255}}%
+%    \fi
+%}
+%\makeatother
+
+\begin{document}
+\begin{align}
+f(x) \label{数式}
+\end{align}
+
+\ref{数式} % → ただの "1" が出力される
+
+\marusuuref{数式} % → 丸数字の 1 が出力される
+\end{document}
