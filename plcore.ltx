@@ -1013,7 +1013,7 @@
   \else
     \expandafter#2#1\protect\@setref@{}% change \null to \protect\@setref@{}
   \fi}
-\def\@setref@{\ifmmode\else\spacefactor\@m\fi}
+\def\@setref@{\ifhmode\spacefactor\@m\fi}
 \if@compatibility\else
 \def\verb{\relax\ifmmode\hbox\else\leavevmode\vadjust{}\fi
   \bgroup
