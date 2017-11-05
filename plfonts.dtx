@@ -69,6 +69,8 @@
 % \changes{v1.6i}{2017/09/24}{2010年のp\TeX{}本体の修正により、v1.3iで入れた
 %    対処が不要になっていたので削除}
 % \changes{v1.6i}{2017/09/24}{\cs{<}が段落頭でも効くようにした}
+% \changes{v1.6j}{2017/11/06}{\cs{cy@encoding}と\cs{ct@encoding}を
+%    具体的な値ではなく「空」で初期化}
 % \changes{v1.6j}{2017/11/06}{縦横のエンコーディングのセット化を
 %    plcoreからpldefsへ移動}
 % \fi
@@ -168,12 +170,21 @@
 % |\ck@encoding|は、最後に選択された和文エンコード名を示しています。
 % |\cy@encoding|と|\ct@encoding|はそれぞれ、最後に選択された、
 % 横組用と縦組用の和文エンコード名を示しています。
+%
+% ここでは単に「空」に初期化するだけにしています。
+% \iffalse
+% アスキー版はJY1やJT1という具体的な値で初期化していたが、これらの値は
+% \file{pldefs.ltx}で定義するものであるから、\file{plcore.ltx}で
+% それを使うのはおかしい。
+% \fi
+% \changes{v1.6j}{2017/11/06}{\cs{cy@encoding}と\cs{ct@encoding}を
+%    具体的な値ではなく「空」で初期化}
 %    \begin{macrocode}
 %<*plcore>
 \let\k@encoding\@empty
 \let\ck@encoding\@empty
-\def\cy@encoding{JY1}
-\def\ct@encoding{JT1}
+\let\cy@encoding\@empty
+\let\ct@encoding\@empty
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
