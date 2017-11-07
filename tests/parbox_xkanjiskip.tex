@@ -1,0 +1,24 @@
+\documentclass{article}
+\begin{document}
+
+%% pTeX への追随：\parbox の周囲に \xkanjiskip を入れない
+{\TeX}は\parbox[t]{3zw}{なんとかかんとか}アレ。
+\par\medskip
+{\TeX}は\parbox[c]{3zw}{なんとかかんとか}アレ。
+\par\medskip
+{\TeX}は\parbox[b]{3zw}{なんとかかんとか}アレ。
+\par\medskip
+
+%% pTeX への追随：\parbox の周囲に \xkanjiskip を入れない
+{\TeX}は\begin{minipage}[t]{3zw}なんとかかんとか\end{minipage}アレ。
+\par\medskip
+{\TeX}は\begin{minipage}[c]{3zw}なんとかかんとか\end{minipage}アレ。
+\par\medskip
+{\TeX}は\begin{minipage}[b]{3zw}なんとかかんとか\end{minipage}アレ。
+\par\medskip
+
+\end{document}
+
+%% 以下、参考 %%
+「脚注番号前後のアキ対応」
+https://github.com/texjporg/ptex-texmf/issues/2

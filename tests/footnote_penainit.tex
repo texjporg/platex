@@ -1,0 +1,37 @@
+\documentclass{article}
+% 何が起きても必ず \pltx@foot@penalty は脚注の処理後は
+% ゼロに初期化されなければならない
+\textwidth20zw
+\parindent0zw
+\makeatletter
+\def\PENALTYINFO{\the\pltx@foot@penalty}
+\makeatother
+\begin{document}
+
+最初：\PENALTYINFO
+
+あああああああああああああああ
+あああああ（\footnotetext[1]{いいいいい}うううううううう\par
+
+ここでもゼロ：\PENALTYINFO
+
+あああああああああああああああ
+あああああ\footnote{いいいいい}うううううううう\par
+
+ここでもゼロ：\PENALTYINFO
+
+%% なんらかのパッケージが \footnote の定義を
+%% 書き換えた状況を想定：
+\makeatletter
+\def\footnote{%\inhibitglue\pltx@foot@penalty\z@
+     \@ifnextchar[\@xfootnote{\stepcounter\@mpfn
+     \protected@xdef\@thefnmark{\thempfn}%
+     \@footnotemark\@footnotetext}}
+\makeatother
+
+あああああああああああああああ
+あああああ\footnote{いいいいい}うううううううう\par
+
+やっぱりゼロ：\PENALTYINFO
+
+\end{document}

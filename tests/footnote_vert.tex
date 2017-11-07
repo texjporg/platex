@@ -1,0 +1,29 @@
+\documentclass{article}
+\begin{document}
+
+% 垂直モードで \footnotetext すると余分な空行が入る
+% という 2016/09/03 のバグを 2016/09/08 で修正
+
+% ! You can't use `\unpenalty' in vertical mode.
+% エラーも出てはいけない
+
+\section{hoge}\label{fuga}
+\footnotetext{piyo}
+
+\footnotetext{あああああ}%
+\footnotetext{あああああ}%
+\footnotetext{あああああ}%
+\footnotetext{あああああ}%
+\footnotetext{あああああ}%
+\footnotetext{あああああ}%
+
+あああああ
+
+$\footnotetext{guha}$
+\end{document}
+
+%% 以下、参考 %%
+「\footnote の合印直後の改行」
+https://github.com/texjporg/platex/issues/16
+「電子情報通信学会のテンプレートでレイアウトが乱れる」
+https://github.com/texjporg/platex/issues/23

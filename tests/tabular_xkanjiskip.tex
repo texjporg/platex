@@ -1,0 +1,23 @@
+\documentclass{article}
+\begin{document}
+\fboxsep0pt
+
+% pTeX への追随：表の周囲に \xkanjiskip を入れない
+{\TeX}は\begin{tabular}[t]{l}ほげ\\なんとか\end{tabular}アレ。
+\par\medskip
+{\TeX}は\begin{tabular}[c]{l}ほげ\\なんとか\end{tabular}アレ。
+\par\medskip
+{\TeX}は\begin{tabular}[b]{l}ほげ\\なんとか\end{tabular}アレ。
+\par\medskip
+{\TeX}は\fbox{\begin{tabular}[t]{l}ほげ\\なんとか\end{tabular}}アレ。
+\par\medskip
+{\TeX}は\fbox{\begin{tabular}[c]{l}ほげ\\なんとか\end{tabular}}アレ。
+\par\medskip
+{\TeX}は\fbox{\begin{tabular}[b]{l}ほげ\\なんとか\end{tabular}}アレ。
+\par\medskip
+
+\end{document}
+
+%% 以下、参考 %%
+「脚注番号前後のアキ対応」
+https://github.com/texjporg/ptex-texmf/issues/2
