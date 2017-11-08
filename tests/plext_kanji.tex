@@ -1,11 +1,5 @@
-\documentclass{jarticle}
-\usepackage{../plext}
-\makeatletter
-% カウンタ引数の後続の数字が漢数字になるのを防ぐ半角スペース
-%\def\@Kanji#1{\expandafter\kansuji\number #1 }
-% より簡潔な定義
-%\def\@Kanji#1{\kansuji #1}
-\makeatother
+\documentclass{article}
+\usepackage{plext}
 \begin{document}
 \tableofcontents
 \section{テスト}
@@ -21,4 +15,24 @@ Num123 \Kanji{section} 123Num
 \section{和文 \Kanji{section} 和文}
 \section{English \Kanji{section} English}
 \section{Num123 \Kanji{section} 123Num}
+
+\bigskip
+%% from abenori
+\renewcommand{\theenumi}{\Kanji{enumi}}
+\begin{enumerate}
+\item ほげ
+\begin{enumerate}
+\item ふが
+\end{enumerate}
+\end{enumerate}
+
 \end{document}
+
+% カウンタ引数の後続の数字が漢数字になるのを防ぐ半角スペース
+\def\@Kanji#1{\expandafter\kansuji\number #1 }
+% より簡潔な定義…こちらを最終的には採用
+\def\@Kanji#1{\kansuji #1}
+
+%% 以下、参考 %%
+「plext の \@Kanji」
+https://github.com/texjporg/platex/issues/33

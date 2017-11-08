@@ -1,5 +1,4 @@
-%#!ptex2pdf -l setref
-\documentclass[twocolumn]{jarticle}
+\documentclass[twocolumn]{article}
 \begin{document}
 % explicitly large xkanjiskip for visualization
 \xkanjiskip20pt
@@ -29,6 +28,7 @@ Page\pageref{a}isnotempty.
 \section{See Appendix A\@. Here,}
 % test for \spacefactor (should be sentence-ending)
 \section{See Appendix \ref{testA}. Here,}
+This line\par
 % cf. 1) wrong spacing (inter-word)
 See Appendix A. Here,\par
 % cf. 2) correct spacing (sentence-ending)
@@ -38,3 +38,7 @@ See Appendix \ref{testA}. Here,\par
 \appendix
 \section{ここは第\ref{testA}章です。}\label{testA}
 \end{document}
+
+%% 以下、参考 %%
+「目次の中の \ref で後ろの空白が喰われる ＋ スペースファクター」
+https://github.com/texjporg/platex/issues/31

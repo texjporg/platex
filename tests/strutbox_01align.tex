@@ -4,15 +4,15 @@
 \setlength{\textwidth}{8cm}
 \begin{document}
 
-% strutboxパッチなしでは数式や数式番号が揃わない
+% strutbox パッチなしでは数式や数式番号が揃わない
 
-align環境、\verb+&+が1つ %% 少し上へ
+align環境、\verb+&+が1つ %% 少し上へずれ…てはいけない！
 \begin{align}
 a_1& =b_1+c_1\\
 a_2& =b_2+c_2-d_2+e_2
 \end{align}
 
-align環境、\verb+&+が3つ %% 少し上へ
+align環境、\verb+&+が3つ %% 少し上へずれ…てはいけない！
 \begin{align}
 a_{11}& =b_{11}&
   a_{12}& =b_{12}\\
@@ -34,3 +34,7 @@ a_1=b_1+c_1
 \end{align}
 
 \end{document}
+
+%% 以下、参考 %%
+「\strutbox の仕様」
+https://github.com/texjporg/platex/issues/20

@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{plext}
+\begin{document}
+
+% Incompatible direction list can't be unboxed. エラーが
+% 出てはいけない
+\begin{tabular}<t>{|l|c|r|}
+\hline
+\multicolumn{3}{|c|}{セル1}\\ \hline
+\multicolumn{2}{|c|}{セル2} & セル3 \\ \hline
+セル4 & セル5 & セル6 \\ \hline
+\end{tabular}
+
+\end{document}
+
+%% 以下、参考 %%
+「縦書きテーブルで\multicolumnを使う方法」
+http://qiita.com/yyu/items/4817879f9c4e68debd12
+「横ディレクション中の縦組の表の \multicolumn」
+https://github.com/texjporg/platex/issues/17
