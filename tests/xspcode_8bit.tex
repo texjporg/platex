@@ -1,9 +1,21 @@
 \documentclass{article}
-\usepackage[LY1]{fontenc} % LY1 / TS1 / T1 / OT1
+\usepackage[TS1,LY1]{fontenc}% OT1/T1 は pre-loaded
 \usepackage{lmodern}
 \begin{document}
-\xkanjiskip2zw
-著作は\textcopyright マーク
+\xkanjiskip20pt
+%% T1 では \^e も \'e も一文字で出るので \xkanjiskip が入る
+\fontencoding{T1}\selectfont
+allerの複合過去形は\^etre all\'eです。\par
+%% LY1 / TS1 --- 一文字で出るので \xkanjiskip が入る
+\fontencoding{LY1}\selectfont
+著作は\textcopyright マーク\par
+\fontencoding{TS1}\selectfont
+著作は\textcopyright マーク\par
+%% OT1 / T1  --- 合成文字で出るので \xkanjiskip が入らない
+\fontencoding{OT1}\selectfont
+著作は\textcopyright マーク\par
+\fontencoding{T1}\selectfont
+著作は\textcopyright マーク\par
 \end{document}
 
 %% 以下、参考 %%

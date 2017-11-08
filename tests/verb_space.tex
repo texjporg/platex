@@ -1,4 +1,6 @@
-\documentclass{jarticle}
+\makeatletter\ifx\documentclass\@twoclasseserror\else
+\documentclass[twocolumn]{article}
+\fi\makeatother
 \textwidth10zw
 \begin{document}
 \parindent0pt\xkanjiskip=10pt % 強調
@@ -9,3 +11,7 @@ x\linebreak
 \verb|   bcd|e         % \verb の冒頭に複数の空白
 
 \end{document}
+
+%% 以下、参考 %%
+「\verb の冒頭の空白」
+https://github.com/texjporg/platex/issues/49

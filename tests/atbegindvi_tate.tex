@@ -1,0 +1,12 @@
+\documentclass{tarticle}
+% 新しい dvips.def [2016/06/02 v3.0l] 以降でも
+% Incompatible direction list can't be unboxed.
+% エラーが出てはいけないので、本質的部分だけ抽出。
+\AtBeginDocument{\AtBeginDvi{}}
+\begin{document}
+漢字
+\end{document}
+
+%% 以下、参考 %%
+「新しい dvips.def の setpagesize」
+https://oku.edu.mie-u.ac.jp/tex/mod/forum/discuss.php?d=1956
