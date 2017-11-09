@@ -69,13 +69,17 @@
 % \changes{v1.6i}{2017/09/24}{2010年のp\TeX{}本体の修正により、v1.3iで入れた
 %    対処が不要になっていたので削除}
 % \changes{v1.6i}{2017/09/24}{\cs{<}が段落頭でも効くようにした}
+% \changes{v1.6j}{2017/11/06}{\cs{cy@encoding}と\cs{ct@encoding}を
+%    具体的な値ではなく「空」で初期化}
+% \changes{v1.6j}{2017/11/06}{縦横のエンコーディングのセット化を
+%    plcoreからpldefsへ移動}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2017/09/24 v1.6i pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2017/11/06 v1.6j pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -166,12 +170,21 @@
 % |\ck@encoding|は、最後に選択された和文エンコード名を示しています。
 % |\cy@encoding|と|\ct@encoding|はそれぞれ、最後に選択された、
 % 横組用と縦組用の和文エンコード名を示しています。
+%
+% ここでは単に「空」に初期化するだけにしています。
+% \iffalse
+% アスキー版はJY1やJT1という具体的な値で初期化していたが、これらの値は
+% \file{pldefs.ltx}で定義するものであるから、\file{plcore.ltx}で
+% それを使うのはおかしい。
+% \fi
+% \changes{v1.6j}{2017/11/06}{\cs{cy@encoding}と\cs{ct@encoding}を
+%    具体的な値ではなく「空」で初期化}
 %    \begin{macrocode}
 %<*plcore>
 \let\k@encoding\@empty
 \let\ck@encoding\@empty
-\def\cy@encoding{JY1}
-\def\ct@encoding{JT1}
+\let\cy@encoding\@empty
+\let\ct@encoding\@empty
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -722,6 +735,16 @@
 % \end{macro}
 %
 %
+% \begin{macro}{\KanjiEncodingPair}
+% 和文の縦横のエンコーディングはそれぞれ対にして扱うため、セット化するための
+% コマンドを定義します。
+% \changes{v1.3n}{2004/08/10}{和文エンコーディングの切り替えを有効化}
+%    \begin{macrocode}
+\def\KanjiEncodingPair#1#2{\@namedef{t@enc@#1}{#2}\@namedef{y@enc@#2}{#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
 % \begin{macro}{\DeclareFontFamily}
 % 欧文ファミリを宣言するためのコマンドです。
 % |\ffam@list|を作るように再定義をします。
@@ -1154,17 +1177,6 @@
 %<*plcore>
 %    \end{macrocode}
 % \end{macro}
-%
-%
-% \begin{macro}{\KanjiEncodingPair}
-% 和文の縦横のエンコーディングはそれぞれ対にして扱うため、セット化します
-% \changes{v1.3n}{2004/08/10}{和文エンコーディングの切り替えを有効化}
-%    \begin{macrocode}
-\def\KanjiEncodingPair#1#2{\@namedef{t@enc@#1}{#2}\@namedef{y@enc@#2}{#1}}
-\KanjiEncodingPair{JY1}{JT1}
-%    \end{macrocode}
-% \end{macro}
-%
 %
 % \begin{macro}{\set@fontsize}
 % |\fontsize|コマンドの内部形式です。
@@ -1797,7 +1809,6 @@
 %<platexrelease>  \iftdir\raise-\tbaselineshift\fi
 %<platexrelease>  \vbox{\hrule\@width.3em}}
 %<platexrelease>\plEndIncludeInRelease
-%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1812,7 +1823,6 @@
 % $-1$が返ります。
 % \changes{v1.6c}{2016/06/06}{マクロ追加}
 %    \begin{macrocode}
-%</plcore>
 %<platexrelease>\plIncludeInRelease{2016/06/10}{\g@tlastchart@}
 %<platexrelease>                   {Added \g@tlastchart@}%
 %<*plcore|platexrelease>
@@ -1992,45 +2002,9 @@
 %<platexrelease>   \fi
 %<platexrelease>   #1}
 %<platexrelease>\plEndIncludeInRelease
-%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %
-%
-% \subsection{デフォルト設定ファイルの読み込み}
-% 最後に、デフォルト設定ファイルである、\file{pldefs.ltx}を読み込みます。
-% このファイルについての詳細は、第\ref{plfonts:pldefs}節を参照してください。
-% \TeX{}の入力ファイル検索パスに設定されているディレクトリに\file{pldefs.cfg}%
-% ファイルがある場合は、そのファイルを使います。
-%    \begin{macrocode}
-\InputIfFileExists{pldefs.cfg}
-           {\typeout{*************************************^^J%
-                     * Local config file pldefs.cfg used^^J%
-                     *************************************}}%
-           {\input{pldefs.ltx}}
-%</plcore>
-%    \end{macrocode}
-%
-%
-%
-%
-% \section{デフォルト設定ファイル}\label{plfonts:pldefs}
-% ここでは、フォーマットファイルに読み込まれるデフォルト値を設定しています。
-% この節での内容は\file{pldefs.ltx}に出力されます。
-% このファイルの内容を\file{plcore.ltx}に含めてもよいのですが、
-% デフォルトの設定を参照しやすいように、別ファイルにしてあります。
-% \file{pldefs.ltx}は\file{plcore.ltx}から読み込まれます。
-%
-% プリロードサイズは、\dst{}プログラムのオプションで変更することができます。
-% これ以外の設定を変更したい場合は、\file{pldefs.ltx}を
-% 直接、修正するのではなく、このファイルを\file{pldefs.cfg}という名前で
-% コピーをして、そのファイルに対して修正を加えるようにしてください。
-%    \begin{macrocode}
-%<*pldefs>
-\ProvidesFile{pldefs.ltx}
-      [2017/08/05 v1.6h pLaTeX Kernel (Default settings)]
-%</pldefs>
-%    \end{macrocode}
 %
 % \subsection{イタリック補正と\cs{xkanjiskip}}
 %
@@ -2111,6 +2085,42 @@
 % \end{macro}
 %
 %
+% \subsection{デフォルト設定ファイルの読み込み}
+% 最後に、デフォルト設定ファイルである、\file{pldefs.ltx}を読み込みます。
+% このファイルについての詳細は、第\ref{plfonts:pldefs}節を参照してください。
+% \TeX{}の入力ファイル検索パスに設定されているディレクトリに\file{pldefs.cfg}%
+% ファイルがある場合は、そのファイルを使います。
+%    \begin{macrocode}
+%<*plcore>
+\InputIfFileExists{pldefs.cfg}
+           {\typeout{*************************************^^J%
+                     * Local config file pldefs.cfg used^^J%
+                     *************************************}}%
+           {\input{pldefs.ltx}}
+%</plcore>
+%    \end{macrocode}
+%
+%
+%
+%
+% \section{デフォルト設定ファイル}\label{plfonts:pldefs}
+% ここでは、フォーマットファイルに読み込まれるデフォルト値を設定しています。
+% この節での内容は\file{pldefs.ltx}に出力されます。
+% このファイルの内容を\file{plcore.ltx}に含めてもよいのですが、
+% デフォルトの設定を参照しやすいように、別ファイルにしてあります。
+% \file{pldefs.ltx}は\file{plcore.ltx}から読み込まれます。
+%
+% プリロードサイズは、\dst{}プログラムのオプションで変更することができます。
+% これ以外の設定を変更したい場合は、\file{pldefs.ltx}を
+% 直接、修正するのではなく、このファイルを\file{pldefs.cfg}という名前で
+% コピーをして、そのファイルに対して修正を加えるようにしてください。
+%    \begin{macrocode}
+%<*pldefs>
+\ProvidesFile{pldefs.ltx}
+      [2017/11/06 v1.6j pLaTeX Kernel (Default settings)]
+%</pldefs>
+%    \end{macrocode}
+%
 % \subsection{テキストフォント}
 % テキストフォントのための属性やエラー書体などの宣言です。
 %
@@ -2130,6 +2140,12 @@
 %    \begin{macrocode}
 \DeclareTateKanjiEncoding{JT1}{}{}
 \DeclareKanjiSubstitution{JT1}{mc}{m}{n}
+%    \end{macrocode}
+% 縦横のエンコーディングのセット化：
+% \changes{v1.6j}{2017/11/06}{縦横のエンコーディングのセット化を
+%    plcoreからpldefsへ移動}
+%    \begin{macrocode}
+\KanjiEncodingPair{JY1}{JT1}
 %    \end{macrocode}
 % フォント属性のデフォルト値：
 %    \begin{macrocode}

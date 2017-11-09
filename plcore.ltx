@@ -45,8 +45,8 @@
 %% File: plfonts.dtx
 \let\k@encoding\@empty
 \let\ck@encoding\@empty
-\def\cy@encoding{JY1}
-\def\ct@encoding{JT1}
+\let\cy@encoding\@empty
+\let\ct@encoding\@empty
 \let\k@family\@empty
 \let\k@series\@empty
 \let\k@shape\@empty
@@ -194,6 +194,7 @@
 \let\default@KT\@empty
 \let\default@KM\@empty
 \@onlypreamble\DeclareKanjiEncodingDefaults
+\def\KanjiEncodingPair#1#2{\@namedef{t@enc@#1}{#2}\@namedef{y@enc@#2}{#1}}
 \def\DeclareFontFamily#1#2#3{%
  \@ifundefined{T@#1}%
     {\@latex@error{Encoding scheme `#1' unknown}\@eha}%
@@ -417,8 +418,6 @@
     \set@fontsize\baselinestretch\f@size\f@baselineskip
   \fi
   \size@update}
-\def\KanjiEncodingPair#1#2{\@namedef{t@enc@#1}{#2}\@namedef{y@enc@#2}{#1}}
-\KanjiEncodingPair{JY1}{JT1}
 \def\set@fontsize#1#2#3{%
     \@defaultunits\@tempdimb#2pt\relax\@nnil
     \edef\f@size{\strip@pt\@tempdimb}%
