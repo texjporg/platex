@@ -26,14 +26,14 @@
 \def\@plIncludeInRelease#1[#2]{\@plIncludeInRele@se{#2}}
 \def\@plIncludeInRele@se#1#2#3{%
   \toks@{[#1] #3}%
-  \expandafter\ifx\csname\string#2+\@currname+IIR\endcsname\relax
+  \expandafter\ifx\csname\string#2+\@currname+plIIR\endcsname\relax
     \ifnum\expandafter\@parse@version#1//00\@nil
           >\expandafter\@parse@version\pfmtversion//00\@nil
       \GenericInfo{}{Skipping: \the\toks@}%
      \expandafter\expandafter\expandafter\@gobble@plIncludeInRelease
     \else
       \GenericInfo{}{Applying: \the\toks@}%
-      \expandafter\let\csname\string#2+\@currname+IIR\endcsname\@empty
+      \expandafter\let\csname\string#2+\@currname+plIIR\endcsname\@empty
     \fi
   \else
     \GenericInfo{}{Already applied: \the\toks@}%
