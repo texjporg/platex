@@ -20,6 +20,7 @@
 \def\pfmtversion
    {2017/10/28}
 \def\ppatch@level{2}
+\edef\platexBANNER{\the\everyjob\noexpand\typeout{}\relax}% save LaTeX banner
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
   {\@plIncludeInRelease{#1}[#1]}}

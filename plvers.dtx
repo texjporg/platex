@@ -59,12 +59,14 @@
 % \changes{v1.1d}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
 % \changes{v1.1e}{2017/11/09}{\file{latexrelease}と
 %    \cs{platexrelease}のエミュレート内部処理を分離}
+% \changes{v1.1f}{2017/11/11}{\LaTeX{}のバナーを保存するコードを
+%    \file{platex.ltx}から\file{plcore.ltx}へ移動}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2017/11/09 v1.1e pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2017/11/01 v1.1f pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -78,10 +80,9 @@
 %</driver>
 % \fi
 %
-% \section{バージョンの設定}
+% \section{p\LaTeXe{}のバージョンの設定}
 % まず、このディストリビューションでのp\LaTeXe{}の日付とバージョン番号
-% を定義します。また、p\LaTeXe{}が起動されたときに表示される文字列の
-% 設定もします。
+% を定義します。
 %
 % \changes{v1.0}{1995/05/16}{p\LaTeXe\ 用に\file{ltvers.dtx}を修正}
 % \changes{v1.0a}{1995/08/30}{\LaTeX\ \texttt{!<1995/06/01!>}版用に修正}
@@ -140,6 +141,53 @@
 % \end{macro}
 % \end{macro}
 %
+% \section{\LaTeXe{}のバージョンの取得}
+% このファイルの直前で\LaTeXe{}の\file{latex.ltx}が読み込まれているはず
+% なので、その起動時のバナーを保存します。
+%
+% 2016/05/07の実装では、\file{platex.ltx}のなかで
+%\begin{verbatim}
+% \edef\platexBANNER{\the\everyjob}
+%\end{verbatim}
+% としてバナーを保存し、この内容が
+%\begin{verbatim}
+%   \typeout{LaTeX2e version}\typeout{Babel version}
+%\end{verbatim}
+% という4つのトークンから成ると仮定して、\file{plcore.ltx}のなかで
+%\begin{verbatim}
+%   \def\parse@@BANNER#1#2#3#4{#2}
+%\end{verbatim}
+% のようにパースしていました。ところが、この「4つのトークンから成る」と
+% いう仮定はBabel由来の\file{hyphen.cfg}を使用した場合のみ成り立ち、
+% それ以外の特別な\file{hyphen.cfg}や\file{hyphen.ltx}を使用した場合に
+% エラーになってしまいます。
+% そこで、新たに2016/09/14の実装では、\file{platex.ltx}のなかで
+%\begin{verbatim}
+% \edef\platexBANNER{\the\everyjob\noexpand\typeout{}\relax}
+%\end{verbatim}
+% としてダミーを追加します（|\relax|はただの区切りトークンの役割）。
+% こうすると、|\platexBANNER|の内容は、Babelの\file{hyphen.cfg}のとき
+%\begin{verbatim}
+%   \typeout{LaTeX2e version}\typeout{Babel version}\typeout{}\relax
+%\end{verbatim}
+% となり、それ以外のとき
+%\begin{verbatim}
+%   \typeout{LaTeX2e version}\typeout{}\relax
+%\end{verbatim}
+% となるはずです。このように、少なくとも|\typeout|が2回含まれています
+% ので、\file{plcore.ltx}のなかで
+%\begin{verbatim}
+%   \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#1}
+%\end{verbatim}
+% とパースすることができるようになります。
+% \changes{v1.1f}{2017/11/11}{\LaTeX{}のバナーを保存するコードを
+%    \file{platex.ltx}から\file{plcore.ltx}へ移動}
+%    \begin{macrocode}
+%<*plcore>
+\edef\platexBANNER{\the\everyjob\noexpand\typeout{}\relax}% save LaTeX banner
+%</plcore>
+%    \end{macrocode}
+%
 % \subsection{パッチファイルのロード}
 %
 % 次の部分は、p\LaTeXe{}のパッチファイルをロードするためのコードです。
@@ -186,12 +234,8 @@
 % \subsection{起動時に表示するバナー}
 %
 % \begin{macro}{\everyjob}
-% 起動時に表示される文字列です。
-% \LaTeX{}にパッチがあてられている場合は、それも表示します。
-%
-%\iffalse
-% この実装については\file{platex.dtx}のコメントを参照。(2016/09/14)
-%\fi
+% p\LaTeXe{}が起動されたときに表示される文字列です。
+% \LaTeXe{}のバージョンも併せて表示します。
 %
 % \changes{v1.0v}{2016/05/07}{起動時の文字列を最新の\LaTeX{}に合わせた。}
 % \changes{v1.0w}{2016/05/12}{起動時の文字列に入れる\LaTeX{}のバージョンを
