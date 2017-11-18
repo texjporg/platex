@@ -128,7 +128,7 @@
 %
 % \subsection{プリアンブルコマンド}
 % 文書ファイルが必要とするフォーマットファイルの指定をするコマンドを
-% 拡張子、p\LaTeXe{}フォーマットファイルも認識するようにします。
+% 拡張し、p\LaTeXe{}フォーマットファイルも認識するようにします。
 %
 % \begin{macro}{\NeedsTeXFormat}
 % \begin{macro}{\@needsPformat}
@@ -743,7 +743,7 @@
 % デフォルトでは何も出力しません。
 % |\@bannerfont|フォントは、その文字列を出力するためのフォントです。
 % 9ポイントのタイプライタ体としています。
-% \changes{v1.1f}{1996/09/03}{Add \cs{@bannerbox}.}
+% \changes{v1.1f}{1996/09/03}{Add \cs{@bannertoken}.}
 %    \begin{macrocode}
 \font\@bannerfont=cmtt9
 \newtoks\@bannertoken
@@ -1867,7 +1867,8 @@
 % ^^A なお、p\TeX{}-ngはe-p\TeX{}と同様にpdf\TeX{}拡張の
 % ^^A 一部（e-p\TeX{}と範囲が一致しない）を持っていること、
 % ^^A また|\lastnodechar|などのe-p\TeX{}独自のプリミティブを
-% ^^A 持っていないことにも注意。
+% ^^A 持っていないことにも注意…だったが、2017/09/06付で
+% ^^A p\TeX{}-ngにも|\lastnodechar|が追加された。
 %    \begin{macrocode}
     \mathchardef\e@alloc@top=32767
     \let\e@alloc@chardef\mathchardef
