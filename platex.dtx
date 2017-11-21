@@ -10,14 +10,26 @@
 %
 % \fi
 %
+% \iffalse
+%<*driver>
+\ifx\JAPANESEtrue\undefined
+  \newif\ifJAPANESE \JAPANESEtrue %\fi ^^A <= dummy \fi
+\fi
+%</driver>
+% \fi
 %
 % \setcounter{StandardModuleDepth}{1}
 % \makeatletter
+%\ifJAPANESE
 % \def\chuui{\@ifnextchar[{\@chuui}{\@chuui[注意：]}}
+%\else
+% \def\chuui{\@ifnextchar[{\@chuui}{\@chuui[Attention: ]}}
+%\fi
 % \def\@chuui[#1]{\par\vskip.5\baselineskip
 %   \noindent{\em #1}\par\bgroup\gtfamily\sffamily}
 % \def\endchuui{\egroup\vskip.5\baselineskip}
 % \makeatother
+% \def\eTeX{$\varepsilon$-\pTeX}
 % \def\pTeX{p\kern-.15em\TeX}
 % \def\epTeX{$\varepsilon$-\pTeX}
 % \def\pLaTeX{p\kern-.05em\LaTeX}
@@ -59,13 +71,23 @@
 \GetFileInfo{platex.dtx}
 \title{p\LaTeXe{}について}
 \author{Ken Nakano \& Japanese \TeX\ Development Community}
+\ifJAPANESE
 \date{作成日：\filedate}
 \renewcommand{\refname}{参考文献}
 \GlossaryPrologue{\section*{変更履歴}%
                   \markboth{変更履歴}{変更履歴}%
                   \addcontentsline{toc}{section}{変更履歴}}
+\else
+\date{Date: \filedate}
+\renewcommand{\refname}{References}
+\GlossaryPrologue{\section*{Changes}%
+                  \markboth{Changes}{Changes}%
+                  \addcontentsline{toc}{section}{Changes}}
+\fi
 \makeatletter
+\ifJAPANESE
 \def\levelchar{>・}
+\fi
 \def\changes@#1#2#3{%
   \let\protect\@unexpandable@protect
   \edef\@tempa{\noexpand\glossary{#2\space#1\levelchar
@@ -99,15 +121,35 @@
 % \fi
 %
 %
+%\ifJAPANESE
 % \changes{v1.0f}{2016/04/12}{ドキュメントを更新}
 % \changes{v1.0k}{2016/05/21}{変更履歴も出力するようにした}
+%\else
+% \changes{v1.0f}{2016/04/12}{Update document.}
+% \changes{v1.0k}{2016/05/21}{Print also changes.}
+%\fi
 % \begin{chuui}
-% これは、株式会社アスキー（現アスキー・メディアワークス\footnote{アスキー
-% 日本語\TeX{}（\pTeX{}）、\texttt{http://ascii.asciimw.jp/pb/ptex/}}）が
-% 配布している\pLaTeXe{}の付属文書ではありません。アスキーのオリジナル版
-% からforkしたコミュニティ版\pLaTeXe{}の付属文書です。
+%\ifJAPANESE
+% この文書は、株式会社アスキー（現アスキー・メディアワークス
+% \footnote{アスキー日本語\TeX{}（\pTeX{}）、
+% \texttt{http://ascii.asciimw.jp/pb/ptex/}}）が配布している
+% \pLaTeXe{}（以下、アスキー版）からforkした、
+% 「コミュニティ版\pLaTeXe{}」の付属文書です。
+%\else
+% This document provides a brief description of \pLaTeXe, the Japanese
+% extended version of \LaTeXe. The original version of
+% \pLaTeXe (`ASCII \pLaTeXe') was developed by ASCII MEDIA
+% WORKS\footnote{\texttt{http://ascii.asciimw.jp/pb/ptex/}}
+% (formerly ASCII CORPORATION) during 1995 and 2006.
+% The current version, which is now distributed in CTAN and
+% \TeX\ Live, is a forked version called
+% `\pLaTeXe\ Community Edition.'
+% It is now maintained by Japanese \TeX\ Development
+% Community\footnote{\texttt{https://texjp.org}}.
+%\fi
 % \end{chuui}
 %
+%\ifJAPANESE
 % 2010年以降、アスキー\pTeX{}は、国際的に広く使われている\TeX\ Liveという
 % ディストリビューションに取り込まれ、そこで独自の改良や仕様変更が加えられ
 % てきました。最近の\TeX\ LiveやW32\TeX{}では、\pLaTeX{}も元々の\pTeX{}で
@@ -124,6 +166,40 @@
 %
 % この文書(platex.pdf)はコミュニティ版\pLaTeX{}の概要を説明した
 % もので、実際の\pLaTeX{}のソースコードはpldoc.pdfで説明しています。
+%\else
+% \def\JLaTeX{\leavevmode\lower.5ex\hbox{J}\kern-.15em\LaTeXe}
+% \pLaTeX\ is a Japanese \LaTeX\ format, which is adjusted/extended
+% to be more suitable for writing Japanese documents.
+% It requires \pTeX\ (\TeX\ engine with extensions for Japanese
+% typesetting; it is designed for high-quality Japanese book publishing,
+% and the `p' stands for `publishing'\footnote{There is another
+% old implementation of Japanese \LaTeX, called \JLaTeX\ (but
+% not includeded in \TeX\ Live). Also, MiK\TeX\ has another program
+% called `platex,' but it has nothing to do with our
+% Japanese \pLaTeX!}), and the developent of both \pTeX\ and
+% \pLaTeX\ was done by ASCII Corporation.
+%
+% In 2010, ASCII \pTeX\ was incorporated into the
+% world-wide \TeX\ distribution `\TeX\ Live.' Since then, \pTeX\ has
+% been maintained/improved/changed along with \TeX\ Live sources.
+% In recent versions of \TeX\ Live and W32\TeX, the default engine of
+% \pLaTeX\ changed from original \pTeX\ to \epTeX\ (\pTeX\ with
+% \eTeX\ extension), and the original \LaTeX\ itself is also frequently
+% updated. On the other hand, \pLaTeX\ remained unchanged since 2006,
+% which resulted in some incompatibility and limitations.
+%
+% To follow these upstream changes, we (Japanese \TeX\ Development
+% Community) decided to fork ASCII \pLaTeX\ and distribute the
+% `community edition.' The development version is available from
+% GitHub repository\footnote{\texttt{https://github.com/texjporg/platex}}.
+% The forked community edition is different from the original ASCII
+% edition, so any bug reports and requests should be sent to
+% Japanese \TeX\ Development Community, using GitHub Issue system.
+%
+% This document (platex-en.pdf) is a brief explanation of
+% the \pLaTeXe\ community edition. The detail of source codes
+% are described separately in pldoc-en.pdf.
+%\fi
 %
 %
 % \clearpage
