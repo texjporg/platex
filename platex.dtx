@@ -37,7 +37,8 @@
 % \StopEventually{}
 %
 % \iffalse
-% \changes{v1.0}{1995/05/08}{first edition}
+%\ifJAPANESE
+% \changes{v1.0}{1995/05/08}{最初のバージョン}
 % \changes{v1.0a}{1995/08/25}{互換性について、\dst{}の使い方、参考文献を追加}
 % \changes{v1.0b}{1996/02/01}{\file{omake-sh.ins}, \file{omake-pl.ins}を
 %     \dst{}の変更にともなう変更をした}
@@ -58,6 +59,13 @@
 % \changes{v1.0o}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
 % \changes{v1.0p}{2017/11/11}{\LaTeX{}のバナーを保存するコードを
 %    \file{platex.ltx}から\file{plcore.ltx}へ移動}
+%\else
+% \changes{v1.0}{1995/05/08}{first edition}
+% \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
+%    and `References'}
+% \changes{v1.0f}{2016/04/12}{Update document.}
+% \changes{v1.0k}{2016/05/21}{Print also changes.}
+%\fi
 % \fi
 %
 % \iffalse
@@ -164,8 +172,12 @@
 % バグレポートはアスキー宛てではなく、日本語\TeX{}開発コミュニティに報告
 % してください。\TeX\ ForumやGitHubのIssueシステムが利用できます。
 %
-% この文書(platex.pdf)はコミュニティ版\pLaTeX{}の概要を説明した
-% もので、実際の\pLaTeX{}のソースコードはpldoc.pdfで説明しています。
+% この文書(platex.pdf)はコミュニティ版\pLaTeX{}の概要を説明したものです
+% が、内容はアスキー版（1995年頃）からほとんど変わっていませんので、
+% 今では歴史的な文書ということにしておきます。
+% 最近の\pLaTeX{}の更新内容は\pLaTeX{}ニュース（アスキー版：plnews*.pdf、
+% コミュニティ版：plnewsc*.pdf）を参照してください。また、
+% 実際の\pLaTeX{}のソースコードはpldoc.pdfで説明しています。
 %\else
 % \def\JLaTeX{\leavevmode\lower.5ex\hbox{J}\kern-.15em\LaTeXe}
 % \pLaTeX\ is a Japanese \LaTeX\ format, which is adjusted/extended
@@ -197,18 +209,22 @@
 % Japanese \TeX\ Development Community, using GitHub Issue system.
 %
 % This document (platex-en.pdf) is a brief explanation of
-% the \pLaTeXe\ community edition. The detail of source codes
-% are described separately in pldoc-en.pdf.
+% the \pLaTeXe\ community edition. It is somewhat of a historical
+% document now, since \pLaTeXe\ came into existence in 1995
+% (although the English translation has been done by
+% Japanese \TeX\ Development Community since 2017).
+% The detail of source codes are described separately in pldoc-en.pdf.
 %\fi
 %
 %
 % \clearpage
 %
+%\ifJAPANESE
 % \section{概要}\label{platex:intro}
 % この文書は、p\LaTeXe{}の概要を示していますが、使い方のガイドでは
 % ありません。p\LaTeXe{}の機能についての説明は、\cite{platex2e-book}を
 % 参照してください。日本語\TeX{}については\cite{jtex-tech}を参照してください。
-% \changes{v1.0}{1995/05/08}{first edition}
+% \changes{v1.0}{1995/05/08}{最初のバージョン}
 % \changes{v1.0a}{1995/08/25}{互換性について、\dst{}の使い方、参考文献を追加}
 %
 % p\LaTeXe{}では\cite{tate-book}で説明されている、いくつかの拡張コマンドの
@@ -217,7 +233,18 @@
 %
 % \LaTeX{}の機能については、\cite{latex-book2}や\cite{latex-comp}などを
 % 参照してください。新しい機能については\file{usrguide.tex}を参照してください。
+%\else
+% \section{Introduction}\label{platex:intro}
+% This document briefly describes \pLaTeXe, but is not a manual of \pLaTeXe.
+% For the basic functions of \pLaTeXe\ (and \LaTeXe), see \cite{platex2e-book}.
+% For \pTeX, please refer to \cite{jtex-tech}.
+% (Both books were published from ASCII Corporation, and written in Japanese.)
+% \changes{v1.0}{1995/05/08}{first edition}
+% \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
+%    and `References'}
+%\fi
 %
+%\ifJAPANESE
 % この文書の構成は次のようになっています。
 %
 % \begin{quote}
@@ -246,9 +273,37 @@
 %  説明しています。
 % \end{description}
 % \end{quote}
+%\else
+% This document consists of following parts:
+%
+% \begin{quote}
+% \begin{description}
+% \item[Section \ref{platex:intro}]
+%  This section; describes this document itself.
+%
+% \item[Section \ref{platex:plcore}]
+%  Brief explanation of extensions in p\LaTeXe.
+%  Also describes the standard classes and packages.
+%
+% \item[Section \ref{platex:compatibility}]
+%  The compatibility note for users of the old version of
+%  \pLaTeXe\ (\pLaTeX\ 2.09).
+%
+% \item[Appendix \ref{app:dst}]
+%  Describes \dst\ Options for this document.
+%
+% \item[Appendix \ref{app:pldoc}]
+%  Description of `pldoc.tex' (counterpart for `source2e.tex' in \LaTeXe).
+%
+% \item[Appendix \ref{app:omake}]
+%  Description of shell script to process `pldoc.tex', and
+%  a tiny perl program to check \dst\ guards.
+% \end{description}
+% \end{quote}
+%\fi
 %
 %
-%
+%\ifJAPANESE
 % \section{p\LaTeXe{}の機能について}\label{platex:plcore}
 % p\LaTeXe{}の機能は、いくつものファイルに分割されて実装されています。
 % これらのファイルはつぎの３種類に分類することができます。
@@ -268,7 +323,14 @@
 % パッケージファイルはマクロの拡張を定義するファイルです。
 % 前者は|\documentclass|コマンドを用いて読み込み、
 % 後者は|\usepackage|コマンドを用いて読み込みます。
+%\else
+% \section{About Functions of p\LaTeXe}\label{platex:plcore}
+% The structure of p\LaTeXe\ is similar to that of \LaTeXe;
+% it consists of 3 types of files: a format (platex.ltx),
+% classes and packages.
+%\fi
 %
+%\ifJAPANESE
 % \begin{chuui}[古いp\LaTeX~2.09ユーザへの注意：]\normalfont
 % クラスファイルとパッケージファイルは、従来、スタイルファイルと呼ばれていた
 % ものです。\LaTeXe{}ではそれらを、レイアウトに関するものをクラスファイルと
@@ -285,7 +347,14 @@
 % 旧版では、|\documentstyle|のオプションでマクロファイルを読み込んで
 % いましたが、\LaTeX{}では、|\usepackage|コマンドを用いて読み込みます。
 % \end{chuui}
+%\else
+% \begin{chuui}[Note for old users] \normalfont
+% \pLaTeXe\ has `\pLaTeX~2.09 compatibiliry mode';
+% use |\documentstyle| to enter it, but the support might be limited.
+% \end{chuui}
+%\fi
 %
+%\ifJAPANESE
 % \subsection{フォーマットファイル}
 % フォーマットファイルには、基本的な機能が定義されていますが、
 % これらは\TeX{}の内部形式に変換された形式となっています。
@@ -294,6 +363,12 @@
 % ただし、\TeX\ LiveやW32\TeX{}ではこの処理を簡単にする|fmtutil-sys|あるいは
 % |fmtutil|というプログラムが用意されています。
 % 以下を実行すれば、フォーマットファイル\file{platex.fmt}が作成されます。
+%\else
+% \subsection{About the Format}
+% Process ``platex.ltx'' with INI mode of |(e)ptex|.
+% A handy command `fmtutil-sys' (or `fmtutil') for this purpose
+% is available in \TeX\ Live. The following command generates \file{platex.fmt}.
+%\fi
 %\begin{verbatim}
 %   fmtutil-sys --byfmt platex
 %\end{verbatim}
