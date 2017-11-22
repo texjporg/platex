@@ -29,11 +29,17 @@
 %   \noindent{\em #1}\par\bgroup\gtfamily\sffamily}
 % \def\endchuui{\egroup\vskip.5\baselineskip}
 % \makeatother
-% \def\eTeX{$\varepsilon$-\pTeX}
-% \def\pTeX{p\kern-.15em\TeX}
-% \def\epTeX{$\varepsilon$-\pTeX}
-% \def\pLaTeX{p\kern-.05em\LaTeX}
-% \def\pLaTeXe{p\kern-.05em\LaTeXe}
+%
+% \iffalse
+%<*driver|pldoc>
+\def\eTeX{$\varepsilon$-\pTeX}
+\def\pTeX{p\kern-.15em\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+%</driver|pldoc>
+% \fi
+%
 % \StopEventually{}
 %
 % \iffalse
@@ -44,7 +50,7 @@
 %     \dst{}の変更にともなう変更をした}
 % \changes{v1.0c}{1997/01/23}{\LaTeX\ \textt{!<1996/12/01!>}に合わせて修正}
 % \changes{v1.0d}{2016/01/27}{\file{mkpldoc.sh}を改善。
-%     p\LaTeXe{}に付属するファイルの説明を更新}
+%     \pLaTeXe{}に付属するファイルの説明を更新}
 % \changes{v1.0e}{2016/02/16}{platexreleaseの説明を追加}
 % \changes{v1.0f}{2016/04/12}{ドキュメントを更新}
 % \changes{v1.0g}{2016/05/07}{フォーマット作成時に\LaTeX{}のバナーを一旦保存}
@@ -77,7 +83,7 @@
 \documentclass{jltxdoc}
 \usepackage{plext}
 \GetFileInfo{platex.dtx}
-\title{p\LaTeXe{}について}
+\title{\pLaTeXe{}について}
 \author{Ken Nakano \& Japanese \TeX\ Development Community}
 \ifJAPANESE
 \date{作成日：\filedate}
@@ -221,13 +227,13 @@
 %
 %\ifJAPANESE
 % \section{概要}\label{platex:intro}
-% この文書は、p\LaTeXe{}の概要を示していますが、使い方のガイドでは
-% ありません。p\LaTeXe{}の機能についての説明は、\cite{platex2e-book}を
+% この文書は、\pLaTeXe{}の概要を示していますが、使い方のガイドでは
+% ありません。\pLaTeXe{}の機能についての説明は、\cite{platex2e-book}を
 % 参照してください。日本語\TeX{}については\cite{jtex-tech}を参照してください。
 % \changes{v1.0}{1995/05/08}{最初のバージョン}
 % \changes{v1.0a}{1995/08/25}{互換性について、\dst{}の使い方、参考文献を追加}
 %
-% p\LaTeXe{}では\cite{tate-book}で説明されている、いくつかの拡張コマンドの
+% \pLaTeXe{}では\cite{tate-book}で説明されている、いくつかの拡張コマンドの
 % 動作を修正しています。その詳細については、\file{plext.dtx}を参照して
 % ください。
 %
@@ -253,18 +259,18 @@
 %  この節です。この文書についての概要を述べています。
 %
 % \item[第\ref{platex:plcore}節]
-%  p\LaTeXe{}で拡張した機能についての概要です。
+%  \pLaTeXe{}で拡張した機能についての概要です。
 %  付属のクラスファイルやパッケージファイルについても簡単に
 %  説明しています。
 %
 % \item[第\ref{platex:compatibility}節]
-%  旧バージョンのp\LaTeX{}との互換性について述べています。
+%  旧バージョンの\pLaTeX{}との互換性について述べています。
 %
 % \item[付録\ref{app:dst}]
 %  この文書ソースの\dst{}のためのオプションについて述べています。
 %
 % \item[付録\ref{app:pldoc}]
-%  p\LaTeXe{}のdtxファイルをまとめて一つのDVIファイルにするための
+%  \pLaTeXe{}のdtxファイルをまとめて一つのDVIファイルにするための
 %  文書ファイルの説明をしています。
 %
 % \item[付録\ref{app:omake}]
@@ -282,7 +288,7 @@
 %  This section; describes this document itself.
 %
 % \item[Section \ref{platex:plcore}]
-%  Brief explanation of extensions in p\LaTeXe.
+%  Brief explanation of extensions in \pLaTeXe.
 %  Also describes the standard classes and packages.
 %
 % \item[Section \ref{platex:compatibility}]
@@ -304,9 +310,9 @@
 %
 %
 %\ifJAPANESE
-% \section{p\LaTeXe{}の機能について}\label{platex:plcore}
-% p\LaTeXe{}の機能は、いくつものファイルに分割されて実装されています。
-% これらのファイルはつぎの３種類に分類することができます。
+% \section{\pLaTeXe{}の機能について}\label{platex:plcore}
+% \pLaTeXe{}の機能は、いくつものファイルに分割されて実装されています。
+% これらのファイルはつぎの3種類に分類することができます。
 %
 % \begin{itemize}
 % \item フォーマットファイル
@@ -315,43 +321,26 @@
 % \end{itemize}
 %
 % フォーマットファイルには、基本的な機能が定義されており、
-% p\LaTeXe{}の核となるファイルです。このファイルに定義されているマクロは、
-% 実行時の速度を高めるために、あらかじめ\TeX の内部形式の形で保存されて
+% \pLaTeXe{}の核となるファイルです。このファイルに定義されているマクロは、
+% 実行時の速度を高めるために、あらかじめ\TeX{}の内部形式の形で保存されて
 % います。
 %
 % クラスファイルは文書のレイアウトを設定するファイル、
 % パッケージファイルはマクロの拡張を定義するファイルです。
 % 前者は|\documentclass|コマンドを用いて読み込み、
 % 後者は|\usepackage|コマンドを用いて読み込みます。
-%\else
-% \section{About Functions of p\LaTeXe}\label{platex:plcore}
-% The structure of p\LaTeXe\ is similar to that of \LaTeXe;
-% it consists of 3 types of files: a format (platex.ltx),
-% classes and packages.
-%\fi
 %
-%\ifJAPANESE
-% \begin{chuui}[古いp\LaTeX~2.09ユーザへの注意：]\normalfont
+% \begin{chuui}[古い\pLaTeX~2.09ユーザへの注意：]\normalfont
 % クラスファイルとパッケージファイルは、従来、スタイルファイルと呼ばれていた
 % ものです。\LaTeXe{}ではそれらを、レイアウトに関するものをクラスファイルと
 % 呼び、マクロの拡張をするものをパッケージファイルと呼んで区別するように
 % なりました。
-%
-% \TeX{}文書が使用するクラスは、文書のプリアンブルで|\documentclass|コマンド
-% を用いて指定します。|\documentclass|ではなく、旧版の|\documentstyle|を
-% 用いると、自動的に\emph{2.09互換モード}に入ります。
-% 互換モードは旧版の文書を組版するためだけに作られていますので、
-% 新しく文書を作成する場合は、|\documentclass|コマンドを用いてください。
-% 互換モードでは\LaTeX{}の新機能も使えなくなります。
-%
-% 旧版では、|\documentstyle|のオプションでマクロファイルを読み込んで
-% いましたが、\LaTeX{}では、|\usepackage|コマンドを用いて読み込みます。
 % \end{chuui}
 %\else
-% \begin{chuui}[Note for old users] \normalfont
-% \pLaTeXe\ has `\pLaTeX~2.09 compatibiliry mode';
-% use |\documentstyle| to enter it, but the support might be limited.
-% \end{chuui}
+% \section{About Functions of \pLaTeXe}\label{platex:plcore}
+% The structure of \pLaTeXe\ is similar to that of \LaTeXe;
+% it consists of 3 types of files: a format (platex.ltx),
+% classes and packages.
 %\fi
 %
 %\ifJAPANESE
@@ -374,12 +363,12 @@
 %\end{verbatim}
 %
 % 次のリストが、``platex.ltx''の内容です。
-% ただし、このバージョンでは、\LaTeX{}からp\LaTeXe{}への拡張を
+% ただし、このバージョンでは、\LaTeX{}から\pLaTeXe{}への拡張を
 % \file{plcore.ltx}をロードすることで行ない、
 % \file{latex.ltx}には直接、手を加えないようにしています。
 % したがって\file{platex.ltx}はとても短いものとなっています。
 % \file{latex.ltx}には\LaTeX{}のコマンドが、
-% \file{plcore.ltx}にはp\LaTeXe{}で拡張したコマンドが定義されています。
+% \file{plcore.ltx}には\pLaTeXe{}で拡張したコマンドが定義されています。
 %    \begin{macrocode}
 %<*plcore>
 %    \end{macrocode}
@@ -402,7 +391,7 @@
 \input latex.ltx
 %    \end{macrocode}
 %
-% \file{plcore.ltx}を読み込み、このp\LaTeX{}のバージョンを表示します。
+% \file{plcore.ltx}を読み込み、この\pLaTeX{}のバージョンを表示します。
 %    \begin{macrocode}
 \typeout{**************************^^J%
          *^^J%
@@ -444,11 +433,11 @@
 %</plcore>
 %    \end{macrocode}
 %
-% 実際にp\LaTeXe{}への拡張を行なっている\file{plcore.ltx}は、
+% 実際に\pLaTeXe{}への拡張を行なっている\file{plcore.ltx}は、
 % \dst{}プログラムによって、次のファイルの断片が連結されたものです。
 %
 % \begin{itemize}
-% \item \file{plvers.dtx}は、p\LaTeXe{}のフォーマットバージョンを
+% \item \file{plvers.dtx}は、\pLaTeXe{}のフォーマットバージョンを
 %   定義しています。
 % \item \file{plfonts.dtx}は、\NFSS2を拡張しています。
 % \item \file{plcore.dtx}は、上記以外のコマンドでフォーマットファイルに
@@ -458,23 +447,23 @@
 % プリロードフォントや組版パラメータなどの設定は、
 % \file{pldefs.ltx}をロードすることで行なっています。
 % このファイルに記述されている設定を変更すれば、
-% p\LaTeXe{}をカスタマイズすることができます。
+% \pLaTeXe{}をカスタマイズすることができます。
 % カスタマイズする場合は、このファイルを直接、修正するのではなく、
 % \file{pldefs.cfg}という名前でコピーをして、そのファイルを編集します。
 % \file{pldefs.cfg}は\file{pldefs.ltx}の代わりに読み込まれます。
 %
 %
 % \subsubsection{バージョン}
-% p\LaTeXe{}のバージョンやフォーマットファイル名は、
+% \pLaTeXe{}のバージョンやフォーマットファイル名は、
 % \file{plvers.dtx}で定義しています。
 %
 %
 % \subsubsection{\NFSS2コマンド}
 % \LaTeX{}では、フォント選択機構として\NFSS2を用いています。
-% p\LaTeXe{}では、オリジナルの\NFSS2 と同様のインターフェイスで、
+% \pLaTeXe{}では、オリジナルの\NFSS2 と同様のインターフェイスで、
 % 和文フォントを選択できるように、\file{plfonts.dtx}で\NFSS2を拡張しています。
 %
-% p\LaTeXe{}の\NFSS2は、フォントを切替えるコマンドを指定するときに、
+% \pLaTeXe{}の\NFSS2は、フォントを切替えるコマンドを指定するときに、
 % それが欧文書体か和文書体のいずれかを対象とするものかを、
 % できるだけ意識しないようにする方向で拡張しています。
 % いいかえれば、コマンドが（可能な限りの）判断をします。
@@ -511,12 +500,12 @@
 % ^^A 呼び、マクロの拡張をするものをパッケージファイルと呼んで区別するように
 % ^^A なりました。
 %
-% p\LaTeXe{}が提供をする、クラスファイルやパッケージファイルのいくつかは、
+% \pLaTeXe{}が提供をする、クラスファイルやパッケージファイルのいくつかは、
 % オリジナルのファイルを修正しています。
 % ^^A 修正箇所には``\texttt{platex}''条件が付けられています。
 %
-% p\LaTeXe{}に付属のクラスファイルは、次のとおりです。
-% \changes{v1.0d}{2016/01/27}{p\LaTeXe{}に付属するファイルの説明を更新}
+% \pLaTeXe{}に付属のクラスファイルは、次のとおりです。
+% \changes{v1.0d}{2016/01/27}{\pLaTeXe{}に付属するファイルの説明を更新}
 % \changes{v1.0j}{2016/05/20}{pfltraceの説明を追加}
 %
 % \begin{itemize}
@@ -531,19 +520,19 @@
 %   \file{jltxdoc.dtx}から作成される。
 % \end{itemize}
 %
-% また、p\LaTeXe{}に付属のパッケージファイルは、次のとおりです。
+% また、\pLaTeXe{}に付属のパッケージファイルは、次のとおりです。
 %
 % \begin{itemize}
 % \item plext.sty\par
 %   縦組用の拡張コマンドなどが定義されているファイル。
 %
 % \item oldpfont.sty\par
-%   p\LaTeX~2.09のフォントコマンドを提供するパッケージ。
+%   \pLaTeX~2.09のフォントコマンドを提供するパッケージ。
 %   \file{pl209.dtx}から作成される。
 %
 % \item ptrace.sty\par
 %   \LaTeX{}でフォント選択コマンドのトレースに使う\file{tracefnt.sty}が
-%   再定義してしまう\NFSS2コマンドを、p\LaTeXe{}用に再々定義するための
+%   再定義してしまう\NFSS2コマンドを、\pLaTeXe{}用に再々定義するための
 %   パッケージ。
 %   \file{plfonts.dtx}から作成される。
 %
@@ -551,12 +540,12 @@
 %   \LaTeX{}でフロート関連コマンドのトレースに使う\file{fltrace.sty}%
 %   \footnote{\LaTeX\ 2014/05/01で追加されました。参考：
 %   \LaTeXe\ News Issue 21 (ltnews21.tex)}が再定義してしまうコマンド
-%   を、p\LaTeXe{}用に再々定義するためのパッケージ。
+%   を、\pLaTeXe{}用に再々定義するためのパッケージ。
 %   \file{plcore.dtx}から作成される。
 %
 % \item ascmac.sty, tascmac.sty\par
 %   \LaTeX{}の標準機能の範囲で、図や罫線で囲んだボックスを出力する命令
-%   などを提供するパッケージ。旧バージョンのp\LaTeX{}でも配布されていた。
+%   などを提供するパッケージ。旧バージョンの\pLaTeX{}でも配布されていた。
 %
 % \item nidanfloat.sty\par
 %   二段組時に段抜きのフロートをページ下部にも配置可能にする
@@ -568,28 +557,50 @@
 % ここでは、このバージョンと以前のバージョンとの互換性や拡張部分について
 % 説明をしています。
 %
-% \subsection{p\LaTeX~2.09との互換性}
-% p\LaTeXe{}は、\LaTeX{}の上位互換という形を取っていますが、
+% \subsection{\LaTeXe{}との互換性}
+% \pLaTeXe{}は、\LaTeXe{}の上位互換という形を取っていますが、
 % いくつかのパラメータなども変更しています。
-% したがって英文書など、\LaTeX{}でも処理できるファイルを
-% p\LaTeXe{}で処理しても、完全に同じ結果になるとは限りません。
-% これは、英語版の\LaTeX{}でも同じです。
-% 詳細は、\LaTeXe に付属の\file{usrguide.tex}を参照してください。
+% したがって英文書など、\LaTeXe{}でも処理できるファイルを
+% \pLaTeXe{}で処理しても、完全に同じ結果になるとは限りません。
 %
-% 多くのクラスファイルやパッケージファイルはそのまま使えると思います。
-% ただし、それらがp\LaTeXe{}で拡張しているコマンドと同じ名前のコマンドを
-% 再定義している場合は、コマンドの拡張の仕方によってはエラーになることも
-% あります。用いようとしている、クラスファイルやパッケージファイルが
+% \LaTeXe{}向けに書かれた多くのクラスファイルやパッケージファイルは、
+% そのまま使えると思います。ただし、それらが\pLaTeXe{}で
+% 拡張しているコマンドと同じ名前のコマンドを再定義している場合は、
+% その拡張の仕方によってはエラーになることもあります。
+% 用いようとしているクラスファイルやパッケージファイルが
 % うまく動くかどうかを、完全に確かめる方法は残念ながらありません。
 % 一番簡単なのは、動かしてみることです。不幸にもうまく動かない場合は、
 % ログファイルや付属の文書ファイルを参考に原因を調べてください。
 %
+%\ifJAPANESE
+% \subsection{\pLaTeX~2.09との互換性}
+% \pLaTeXe{}では、文書が使用するクラスを、
+% プリアンブルで|\documentclass|コマンドにより指定します。
+% ここで|\documentclass|の代わりに|\documentstyle|を
+% 用いると、\pLaTeXe{}は自動的に\emph{2.09互換モード}に入ります。
+% これは\LaTeXe{}が\LaTeX~2.09互換モードに入るのと同様で、
+% 互換モードは古い文書を組版するためだけに作られています。
+% 新しく文書を作成する場合は、|\documentclass|コマンドを用いてください。
+%
+% 互換モードでは(p)\LaTeXe{}の新しい機能を利用できず、
+% また古いネイティブな\pLaTeX~2.09環境と微妙に異なる結果になる
+% 可能性もあるという点は、英語版の\LaTeXe{}でも同じです。
+% 詳細は、\LaTeXe に付属の\file{usrguide.tex}を参照してください。
+%\else
+% \pLaTeXe\ has `\pLaTeX~2.09 compatibility mode'; use
+% |\documentstyle| to enter it, but the support might be limited.
+% Note that the 2.09 compatibility mode is provided solely to
+% allow you to process very old documents,
+% which were written for a very old system.
+%\fi
+%
+%
 % \subsection{latexreleaseパッケージへの対応}
 % \changes{v1.0e}{2016/02/16}{platexreleaseの説明を追加}
 % \LaTeX\ \texttt{<2015/01/01>}で導入されたlatexreleaseパッケージを
-% もとに、新しいp\LaTeX{}ではplatexreleaseパッケージを用意しました。
-% platexreleaseパッケージを用いると、過去のp\LaTeX{}をエミュレート
-% したり、フォーマットを作り直すことなく新しいp\LaTeX{}を試したりする
+% もとに、新しい\pLaTeX{}ではplatexreleaseパッケージを用意しました。
+% platexreleaseパッケージを用いると、過去の\pLaTeX{}をエミュレート
+% したり、フォーマットを作り直すことなく新しい\pLaTeX{}を試したりする
 % ことができます。詳細はplatexreleaseのドキュメントを参照してください。
 %
 %
@@ -608,7 +619,7 @@
 % \begin{tabular}{l|p{.8\linewidth}}
 % \emph{オプション} & \emph{意味}\\\hline
 % plcore & フォーマットファイルを作るためのファイルを生成\\
-% pldoc  & p\LaTeXe{}のソースファイルをまとめて組版するための
+% pldoc  & \pLaTeXe{}のソースファイルをまとめて組版するための
 %          文書ファイルを生成\\[2mm]
 % shprog & 上記のファイルを作成するためのshスクリプトを生成\\
 % plprog & 入れ子構造を調べる簡単なperlスクリプトを生成\\
@@ -737,7 +748,7 @@
 % \changes{v1.0o}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
 %    \begin{macrocode}
 \begin{document}
- \title{The p\LaTeXe\ Sources}
+ \title{The \pLaTeXe\ Sources}
  \author{Ken Nakano \& Japanese \TeX\ Development Community}
 
 % This command will be used to input the patch file
@@ -853,7 +864,7 @@
 % \section{おまけプログラム}\label{app:omake}
 %
 % \subsection{シェルスクリプト\file{mkpldoc.sh}}\label{app:shprog}
-% p\LaTeXe{}のマクロ定義ファイルをまとめて組版するときに便利なシェルスクリプトです。
+% \pLaTeXe{}のマクロ定義ファイルをまとめて組版するときに便利なシェルスクリプトです。
 % このシェルスクリプト\footnote{このシェルスクリプトはUNIX用です。
 % しかしrmコマンドをdeleteコマンドにするなどすれば、簡単にDOSなどのバッチ
 % ファイルに修正することができます。}の使用方法は次のとおりです。
