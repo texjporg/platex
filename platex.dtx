@@ -70,7 +70,15 @@
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
 %    and `References'}
 % \changes{v1.0f}{2016/04/12}{Update document.}
+% \changes{v1.0g}{2016/05/07}{Save \LaTeX\ banner}
+% \changes{v1.0i}{2016/05/12}{Undefine temporary command
+%    \cs{orgdump} in the end.}
 % \changes{v1.0k}{2016/05/21}{Print also changes.}
+% \changes{v1.0m}{2016/08/26}{Moved loading \file{platex.cfg}
+%    from \file{plcore.ltx} to \file{platex.ltx}}
+% \changes{v1.0n}{2016/09/14}{Improved banner saving method}
+% \changes{v1.0p}{2017/11/11}{Moved banner saving code from
+%    \file{platex.ltx} to \file{plcore.ltx}}
 %\fi
 % \fi
 %
@@ -362,36 +370,60 @@
 %   fmtutil-sys --byfmt platex
 %\end{verbatim}
 %
-% 次のリストが、``platex.ltx''の内容です。
+%\ifJAPANESE
+% 次のリストが、\file{platex.ltx}の内容です。
 % ただし、このバージョンでは、\LaTeX{}から\pLaTeXe{}への拡張を
 % \file{plcore.ltx}をロードすることで行ない、
 % \file{latex.ltx}には直接、手を加えないようにしています。
 % したがって\file{platex.ltx}はとても短いものとなっています。
 % \file{latex.ltx}には\LaTeX{}のコマンドが、
 % \file{plcore.ltx}には\pLaTeXe{}で拡張したコマンドが定義されています。
+%\else
+% The content of \file{platex.ltx} is shown below.
+% In the current version of \pLaTeX,
+% first we simply load \file{latex.ltx} and
+% modify/extend some definitions by loading \file{plore.ltx}.
+%\fi
 %    \begin{macrocode}
 %<*plcore>
 %    \end{macrocode}
 %
+%\ifJAPANESE
 % \file{latex.ltx}の末尾で使われている|\dump|をいったん無効化します。
+%\else
+% Temporarily disable |\dump| at the end of \file{latex.ltx}.
+%\fi
 %    \begin{macrocode}
 \let\orgdump\dump
 \let\dump\relax
 %    \end{macrocode}
 %
+%\ifJAPANESE
 % \file{latex.ltx}を読み込みます。
 % \TeX\ Liveの標準的インストールでは、この中でBabel由来のハイフネーション・
 % パターン\file{hyphen.cfg}が読み込まれるはずです。
-%
 % \changes{v1.0g}{2016/05/07}{フォーマット作成時に\LaTeX{}のバナーを一旦保存}
 % \changes{v1.0n}{2016/09/14}{\LaTeX{}のバナーの保存しかたを改良}
 % \changes{v1.0p}{2017/11/11}{\LaTeX{}のバナーを保存するコードを
 %    \file{platex.ltx}から\file{plcore.ltx}へ移動}
+%\else
+% Load \file{latex.ltx} here.
+% Within the standard installation of \TeX\ Live, \file{hyphen.cfg}
+% provided by ``Babel'' package will be used.
+% \changes{v1.0g}{2016/05/07}{Save \LaTeX\ banner}
+% \changes{v1.0n}{2016/09/14}{Improved banner saving method}
+% \changes{v1.0p}{2017/11/11}{Moved banner saving code from
+%    \file{platex.ltx} to \file{plcore.ltx}}
+%\fi
 %    \begin{macrocode}
 \input latex.ltx
 %    \end{macrocode}
 %
-% \file{plcore.ltx}を読み込み、この\pLaTeX{}のバージョンを表示します。
+%\ifJAPANESE
+% \file{plcore.ltx}を読み込み、この\pLaTeX{}のバージョンを端末に表示します。
+%\else
+% Load \file{plcore.ltx} and display \pLaTeX\ version on the terminal.
+%\fi
 %    \begin{macrocode}
 \typeout{**************************^^J%
          *^^J%
@@ -403,11 +435,17 @@
 \the\everyjob
 %    \end{macrocode}
 %
+%\ifJAPANESE
 % 起動時に\file{platex.cfg}がある場合、それを読み込むようにします。
 % バージョン2016/07/01ではコードを\file{plcore.ltx}に入れていました
 % が、\file{platex.ltx}へ移動しました。
 % \changes{v1.0m}{2016/08/26}{\file{platex.cfg}の読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
+%\else
+% Load \file{platex.cfg} if it exists at runtime.
+% \changes{v1.0m}{2016/08/26}{Moved loading \file{platex.cfg}
+%    from \file{plcore.ltx} to \file{platex.ltx}}
+%\fi
 %    \begin{macrocode}
 \everyjob\expandafter{%
   \the\everyjob
@@ -419,8 +457,14 @@
 }
 %    \end{macrocode}
 %
+%\ifJAPANESE
 % フォーマットファイルにダンプします。
 % \changes{v1.0i}{2016/05/12}{一時コマンド\cs{orgdump}を最終的に未定義へ}
+%\else
+% Dump to the format file.
+% \changes{v1.0i}{2016/05/12}{Undefine temporary command
+%    \cs{orgdump} in the end.}
+%\fi
 %    \begin{macrocode}
 \let\dump\orgdump
 \let\orgdump\@undefined
@@ -433,6 +477,7 @@
 %</plcore>
 %    \end{macrocode}
 %
+%\ifJAPANESE
 % 実際に\pLaTeXe{}への拡張を行なっている\file{plcore.ltx}は、
 % \dst{}プログラムによって、次のファイルの断片が連結されたものです。
 %
@@ -450,17 +495,44 @@
 % \pLaTeXe{}をカスタマイズすることができます。
 % カスタマイズする場合は、このファイルを直接、修正するのではなく、
 % \file{pldefs.cfg}という名前でコピーをして、そのファイルを編集します。
-% \file{pldefs.cfg}は\file{pldefs.ltx}の代わりに読み込まれます。
+% フォーマット作成時に\file{pldefs.cfg}が存在した場合は、そちらが
+% \file{pldefs.ltx}の代わりに読み込まれます。
+%\else
+% The file \file{plcore.ltx}, which provides modifications/extensions
+% to make \pLaTeXe, is a concatenation of stripped files below
+% using \dst\ program.
+%
+% \begin{itemize}
+% \item \file{plvers.dtx} defines the format version of \pLaTeXe.
+% \item \file{plfonts.dtx} extends \NFSS2 for Japanese font selection.
+% \item \file{plcore.dtx} defines other modifications to \LaTeXe.
+% \end{itemize}
+%
+% Default settings of pre-loaded fonts and typesetting parameters
+% are done by loading \file{pldefs.ltx}. You can customize
+% \pLaTeXe\ by tuning these settings.
+% If you need to change anything in \file{pldefs.ltx},
+% copy/rename it as \file{pldefs.cfg} and edit it.
+% If a file named \file{pldefs.cfg} is found at a format creation
+% time, it will be read as a substitute of \file{pldefs.ltx}.
+%\fi
 %
 %
+%\ifJAPANESE
 % \subsubsection{バージョン}
 % \pLaTeXe{}のバージョンやフォーマットファイル名は、
 % \file{plvers.dtx}で定義しています。
+%\else
+% \subsubsection{Version}
+% The version (like ``\pfmtversion'') and the format name
+% (``\pfmtname'') of \pLaTeXe\ are defined in \file{plvers.dtx}.
+%\fi
 %
 %
+%\ifJAPANESE
 % \subsubsection{\NFSS2コマンド}
-% \LaTeX{}では、フォント選択機構として\NFSS2を用いています。
-% \pLaTeXe{}では、オリジナルの\NFSS2 と同様のインターフェイスで、
+% \LaTeXe{}では、フォント選択機構として\NFSS2を用いています。
+% \pLaTeXe{}では、オリジナルの\NFSS2と同様のインターフェイスで、
 % 和文フォントを選択できるように、\file{plfonts.dtx}で\NFSS2を拡張しています。
 %
 % \pLaTeXe{}の\NFSS2は、フォントを切替えるコマンドを指定するときに、
@@ -474,10 +546,31 @@
 % フォントの設定、和文エンコードの定義、組版パラメータなどの設定、
 % フォント定義ファイルなどの記述も含まれています。
 %
-% \NFSS2についての詳細は、\LaTeXe に付属の\file{fntguide.tex}を参照して
+% \NFSS2についての詳細は、\LaTeXe{}に付属の\file{fntguide.tex}を参照して
 % ください。
+%\else
+% \subsubsection{\NFSS2 Commands}
+% \LaTeXe\ uses \NFSS2 as a font selection scheme, however, it
+% supports only alphabetic fonts.
+% \pLaTeXe\ extends \NFSS2 to enable selection of Japanese fonts in
+% a consistent manner with the original \NFSS2.
+%
+% Most of the interface commands are defined to be clever enough,
+% so that it can automatically judge whether it is going to
+% change alphpabetic fonts or Japanese fonts.
+% It works almost fine with most of the widely used classes and
+% packages, without any modification.
+%
+% The file \file{plfonts.dtx} includes not only \NFSS2 extensions,
+% but also settings of preloaded fonts, definitions of Japanese
+% encodings, typesetting parameters and font defintion (.fd) files.
+%
+% For the defail of (the original) \NFSS2, please refer to
+% \file{fntguide.tex} in \LaTeXe.
+%\fi
 %
 %
+%\ifJAPANESE
 % \subsubsection{出力ルーチンとフロート}
 % \file{plcore.dtx}は、次の項目に関するコマンドを日本語処理用に修正や拡張
 % をしています。
@@ -492,13 +585,25 @@
 % \item 相互参照
 % \item 疑似タイプ入力
 % \end{itemize}
+%\else
+% \subsubsection{Output Routine and Floats}
+% \file{plcore.dtx} modifies and extends some \LaTeXe\ commands
+% for Japanese processing.
+%
+% \begin{itemize}
+% \item Preamble commands
+% \item Page breaking
+% \item Line breaking
+% \item The order of float objects
+% \item Crop marks (``tombow'')
+% \item Footnote macros
+% \item Cross-referencing
+% \item Verbatim
+% \end{itemize}
+%\fi
 %
 %
 % \subsection{クラスファイルとパッケージファイル}
-% ^^A クラスファイルとパッケージファイルは、従来、スタイルファイルと呼ばれていた
-% ^^A ものです。\LaTeX{}ではそれらを、レイアウトに関するものをクラスファイルと
-% ^^A 呼び、マクロの拡張をするものをパッケージファイルと呼んで区別するように
-% ^^A なりました。
 %
 % \pLaTeXe{}が提供をする、クラスファイルやパッケージファイルのいくつかは、
 % オリジナルのファイルを修正しています。
