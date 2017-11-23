@@ -11,11 +11,11 @@
 % \fi
 %
 % \iffalse
-%<*driver>
+%<*driver|pldoc>
 \ifx\JAPANESEtrue\undefined
   \newif\ifJAPANESE \JAPANESEtrue %\fi ^^A <= dummy \fi
 \fi
-%</driver>
+%</driver|pldoc>
 % \fi
 %
 % \setcounter{StandardModuleDepth}{1}
@@ -49,6 +49,8 @@
 % \changes{v1.0b}{1996/02/01}{\file{omake-sh.ins}, \file{omake-pl.ins}を
 %     \dst{}の変更にともなう変更をした}
 % \changes{v1.0c}{1997/01/23}{\LaTeX\ \textt{!<1996/12/01!>}に合わせて修正}
+% \changes{v1.0c}{1997/01/25}{pldoc.dicをfilecontents環境により作成}
+% \changes{v1.0c}{1997/01/29}{\file{pltpatch.ltx}を\file{plpatch.ltx}に名称変更}
 % \changes{v1.0d}{2016/01/27}{\file{mkpldoc.sh}を改善。
 %     \pLaTeXe{}に付属するファイルの説明を更新}
 % \changes{v1.0e}{2016/02/16}{platexreleaseの説明を追加}
@@ -69,6 +71,8 @@
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
 %    and `References'}
+% \changes{v1.0c}{1997/01/25}{Add to filecontents environment for pldoc.dic.}
+% \changes{v1.0c}{1997/01/29}{Rename \file{pltpatch.ltx} to \file{plpatch.ltx}.}
 % \changes{v1.0d}{2016/01/27}{Updated descriptions of \pLaTeXe\ files}
 % \changes{v1.0e}{2016/02/16}{Add a description of platexrelease}
 % \changes{v1.0f}{2016/04/12}{Update document.}
@@ -105,9 +109,9 @@
 \else
 \date{Date: \filedate}
 \renewcommand{\refname}{References}
-\GlossaryPrologue{\section*{Changes}%
-                  \markboth{Changes}{Changes}%
-                  \addcontentsline{toc}{section}{Changes}}
+\GlossaryPrologue{\section*{Change History}%
+                  \markboth{Change History}{Change History}%
+                  \addcontentsline{toc}{section}{Change History}}
 \fi
 \makeatletter
 \ifJAPANESE
@@ -806,10 +810,12 @@
 %
 % \appendix
 %
+%\ifJAPANESE
 % \section{\dst{}プログラムのためのオプション}\label{app:dst}
-% この文書のソース(platex.dtx)を\dst{}プログラムによって処理することによって、
+% この文書のソース(\file{platex.dtx})を\dst{}プログラムで
+% 処理することによって、
 % いくつかの異なるファイルを生成することができます。
-% \dst プログラムの詳細は、\file{docstrip.dtx}を参照してください。
+% \dst{}プログラムの詳細は、\file{docstrip.dtx}を参照してください。
 %
 % この文書の\dst{}プログラムのためのオプションは、次のとおりです。
 %
@@ -819,15 +825,38 @@
 % \emph{オプション} & \emph{意味}\\\hline
 % plcore & フォーマットファイルを作るためのファイルを生成\\
 % pldoc  & \pLaTeXe{}のソースファイルをまとめて組版するための
-%          文書ファイルを生成\\[2mm]
+%          文書ファイル(pldoc.tex)を生成\\[2mm]
 % shprog & 上記のファイルを作成するためのshスクリプトを生成\\
 % plprog & 入れ子構造を調べる簡単なperlスクリプトを生成\\
 % Xins   & 上記のshスクリプトやperlスクリプトを取り出すための
-%            \dst{}バッチファイルを生成\\
+%          \dst{}バッチファイル(Xins.ins)を生成\\
 % \end{tabular}
 % \end{center}
 % \MakeShortVerb{\|}
+%\else
+% \section{\dst\ Options}\label{app:dst}
+% By processing \file{platex.dtx} with \dst\ program,
+% different files can be generated.
+% Here are the \dst\ options for this document:
 %
+% \DeleteShortVerb{\|}
+% \begin{center}
+% \begin{tabular}{l|p{.8\linewidth}}
+% \emph{Option} & \emph{Function}\\\hline
+% plcore & Generates a fragment of format sources\\
+% pldoc  & Generates `pldoc.tex' for typesetting
+%          \pLaTeXe\ sources\\[2mm]
+% shprog & Generates a shell script to process `pldoc.tex'\\
+% plprog & Generates a tiny perl program to check
+%          \dst\ guards nesting\\
+% Xins   & Generates a \dst\ batch file `Xins.ins' for
+%          generating the above shell/perl scripts\\
+% \end{tabular}
+% \end{center}
+% \MakeShortVerb{\|}
+%\fi
+%
+%\ifJAPANESE
 % \subsection{ファイルの取り出し方}
 %
 % たとえば、この文書の``plcore''の部分を``\file{platex.ltx}''という
@@ -853,18 +882,38 @@
 %   \input docstrip.tex
 %   \generateFile{platex.ltx}{t}{\from{platex.dtx}{plcore}}
 %\end{verbatim}
+%\else
+% ^^A (- English version omitted, not so useful -)
+%\fi
 %
 %
+%\ifJAPANESE
 % \section{文書ファイル}\label{app:pldoc}
-% \changes{v1.0c}{1997/01/25}{Add to filecontents environment for pldoc.dic.}
+% \changes{v1.0c}{1997/01/25}{pldoc.dicをfilecontents環境により作成}
 % ここでは、このパッケージに含まれているdtxファイルをまとめて組版をするための
 % 文書ファイルについて説明をしています。個別に処理した場合と異なり、
-% 変更履歴や索引も付きます。全体で、およそ150ページ程度になります。
+% 変更履歴や索引も付きます。全体で、およそ200ページ程度になります。
 %
 % |filecontents|環境は、引数に指定されたファイルが存在するときは何も
 % しませんが、存在しないときは、環境内の内容でファイルを作成します。
 % \file{pldoc.dic}ファイルは、mendexプログラムで索引を処理するときに
 % \cs{西暦}, \cs{和暦}に対する「読み」を付けるために必要です。
+%\else
+% \section{Documentation of \pLaTeXe\ sources}\label{app:pldoc}
+% \changes{v1.0c}{1997/01/25}{Add to filecontents environment for pldoc.dic.}
+% The contents of `pldoc.tex' for typesetting \pLaTeXe\ sources
+% is described here. Compared to individual processings,
+% batch processing using `pldoc.tex' prints also changes and an index.
+% The whole document will have about 200 pages.
+%
+% First, create \file{pldoc.dic}; it serves as a dictionary
+% for `mendex' (Japanese index processor\footnote{Developed by
+% ASCII Corporation; the program `makeindex' cannot handle
+% Japanese characters properly, especially Kanji characters
+% which should be sorted by its readings.}), which is necessary
+% for indexing control sequences containing Japanese characters
+% (\cs{西暦} and \cs{和暦}).
+%\fi
 %    \begin{macrocode}
 %<*pldoc>
 \begin{filecontents}{pldoc.dic}
@@ -872,16 +921,29 @@
 和暦    われき
 \end{filecontents}
 %    \end{macrocode}
+%
+%\ifJAPANESE
 % 文書クラスには、\file{jltxdoc}クラスを用います。
 % \file{plext.dtx}の中でサンプルを組み立てていますので、
 % \file{plext}パッケージが必要です。
+%\else
+% We use \file{jltxdoc} class; we also require \file{plext} package,
+% since \file{plext.dtx} contains several examples of partial
+% vertical writing.
+%\fi
 %    \begin{macrocode}
 \documentclass{jltxdoc}
 \usepackage{plext}
 \listfiles
 
 %    \end{macrocode}
-% いくつかの\TeX{}プリミティブとコマンドを索引に出力しないようにします。
+%\ifJAPANESE
+% いくつかの\TeX{}プリミティブとplain \TeX{}コマンドを
+% 索引に出力しないようにします。
+%\else
+% Do not index some \TeX\ primitives, and some common
+% plain \TeX\ commands.
+%\fi
 %    \begin{macrocode}
 \DoNotIndex{\def,\long,\edef,\xdef,\gdef,\let,\global}
 \DoNotIndex{\if,\ifnum,\ifdim,\ifcat,\ifmmode,\ifvmode,\ifhmode,%
@@ -902,21 +964,45 @@
 \DoNotIndex{\newcommand, \renewcommand}
 
 %    \end{macrocode}
-% 索引と変更履歴の見出しに\cs{part}を用いるように設定をします。
+%\ifJAPANESE
+% 索引と変更履歴の見出しに|\part|を用いるように設定をします。
+%\else
+% Set up the Index and Change History to use |\part|.
+%\fi
 %    \begin{macrocode}
+\ifJAPANESE
 \IndexPrologue{\part*{索 引}%
                  \markboth{索 引}{索 引}%
                  \addcontentsline{toc}{part}{索 引}%
 イタリック体の数字は、その項目が説明されているページを示しています。
 下線の引かれた数字は、定義されているページを示しています。
 その他の数字は、その項目が使われているページを示しています。}
+\else
+\IndexPrologue{\part*{Index}%
+                 \markboth{Index}{Index}%
+                 \addcontentsline{toc}{part}{Index}%
+The italic numbers denote the pages where the corresponding entry
+is described, numbers underlined point to the definition,
+all others indicate the places where it is used.}
+\fi
 %
+\ifJAPANESE
 \GlossaryPrologue{\part*{変更履歴}%
                  \markboth{変更履歴}{変更履歴}%
                  \addcontentsline{toc}{part}{変更履歴}}
+\else
+\GlossaryPrologue{\part*{Change History}%
+                 \markboth{Change History}{Change History}%
+                 \addcontentsline{toc}{part}{Change History}}
+\fi
 
 %    \end{macrocode}
+%\ifJAPANESE
 % 標準の|\changes|コマンドを、複数ファイルの文書に合うように修正しています。
+%\else
+% Modify the standard |\changes| command slightly, to better cope with
+% this multiple file document.
+%\fi
 %    \begin{macrocode}
 \makeatletter
 \def\changes@#1#2#3{%
@@ -934,17 +1020,32 @@
                :\levelchar #3}}%
   \@tempa\endgroup\@esphack}
 \makeatother
+%    \end{macrocode}
+%\ifJAPANESE
+% 変更履歴と2段組の索引を作成します。
+%\else
+% Produce a Change Log and (2 column) Index.
+%\fi
+%    \begin{macrocode}
 \RecordChanges
 \CodelineIndex
 \EnableCrossrefs
 \setcounter{IndexColumns}{2}
 \settowidth\MacroIndent{\ttfamily\scriptsize 000\ }
 %    \end{macrocode}
+%\ifJAPANESE
 % ここからが本文ページとなります。
-% \changes{v1.0c}{1997/01/29}{Rename pltpatch to plpatch.}
+% \changes{v1.0c}{1997/01/29}{\file{pltpatch.ltx}を\file{plpatch.ltx}に名称変更}
 % \changes{v1.0h}{2016/05/08}{ドキュメントから\file{plpatch.ltx}を除外}
 % \changes{v1.0l}{2016/06/19}{パッチレベルを\file{plvers.dtx}から取得}
 % \changes{v1.0o}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
+%\else
+% Here starts the document body.
+% \changes{v1.0c}{1997/01/29}{Rename \file{pltpatch.ltx} to \file{plpatch.ltx}.}
+% \changes{v1.0h}{2016/05/08}{Exclude \file{plpatch.ltx} from the document}
+% \changes{v1.0l}{2016/06/19}{Get the patch level from \file{plvers.dtx}}
+% \changes{v1.0o}{2017/09/24}{Allow negative patch level for pre-release}
+%\fi
 %    \begin{macrocode}
 \begin{document}
  \title{The \pLaTeXe\ Sources}
@@ -1019,15 +1120,25 @@
 %\includeltpatch       % patch file (comment out May 8, 2016)
 
 %    \end{macrocode}
+%\ifJAPANESE
 % \file{ltxdoc.cfg}に|\AtEndOfClass{\OnlyDescription}|が指定されている場合は、
 % ここで終了します。
+%\else
+% Stop here if ltxdoc.cfg says \AtEndOfClass{\OnlyDescription}
+%\fi
 %    \begin{macrocode}
 \StopEventually{\end{document}}
 
 %    \end{macrocode}
+%\ifJAPANESE
 % 変更履歴と索引を組版します。
 % 変更履歴ファイルと索引の作り方の詳細については、
 % おまけ\ref{app:shprog}を参照してください。
+%\else
+% Print Change History and Index.
+% Please refer to Appendix \ref{app:shprog} for
+% processing of Change History and Index.
+%\fi
 %    \begin{macrocode}
 \clearpage
 \pagestyle{headings}
@@ -1048,9 +1159,14 @@
   \PrintIndex
 \endgroup
 %    \end{macrocode}
-% \file{ltxdoc.cfg}に２度目の|\PrintIndex|が指定されているかもしれません。
-% そこで、最後に、変更履歴や索引が２度組版されないように|\PrintChanges|および
+%\ifJAPANESE
+% \file{ltxdoc.cfg}に2度目の|\PrintIndex|が指定されているかもしれません。
+% そこで、最後に、変更履歴や索引が2度組版されないように|\PrintChanges|および
 % |\PrintIndex|コマンドを何も実行しないようにします。
+%\else
+% Make sure that the index is not printed twice
+% (ltxdoc.cfg might have a second \PrintIndex command).
+%\fi
 %    \begin{macrocode}
 \let\PrintChanges\relax
 \let\PrintIndex\relax
