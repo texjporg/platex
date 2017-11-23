@@ -69,10 +69,13 @@
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
 %    and `References'}
+% \changes{v1.0d}{2016/01/27}{Updated descriptions of \pLaTeXe\ files}
+% \changes{v1.0e}{2016/02/16}{Add a description of platexrelease}
 % \changes{v1.0f}{2016/04/12}{Update document.}
 % \changes{v1.0g}{2016/05/07}{Save \LaTeX\ banner}
 % \changes{v1.0i}{2016/05/12}{Undefine temporary command
 %    \cs{orgdump} in the end.}
+% \changes{v1.0j}{2016/05/20}{Add description of `pfltrace'}
 % \changes{v1.0k}{2016/05/21}{Print also changes.}
 % \changes{v1.0m}{2016/08/26}{Moved loading \file{platex.cfg}
 %    from \file{plcore.ltx} to \file{platex.ltx}}
@@ -603,11 +606,11 @@
 %\fi
 %
 %
+%\ifJAPANESE
 % \subsection{クラスファイルとパッケージファイル}
 %
 % \pLaTeXe{}が提供をする、クラスファイルやパッケージファイルのいくつかは、
 % オリジナルのファイルを修正しています。
-% ^^A 修正箇所には``\texttt{platex}''条件が付けられています。
 %
 % \pLaTeXe{}に付属のクラスファイルは、次のとおりです。
 % \changes{v1.0d}{2016/01/27}{\pLaTeXe{}に付属するファイルの説明を更新}
@@ -624,12 +627,38 @@
 %   日本語の\file{.dtx}ファイルを組版するためのクラスファイル。
 %   \file{jltxdoc.dtx}から作成される。
 % \end{itemize}
+%\else
+% \subsection{Classes and Packages}
 %
+% Classes and packages bundled with \pLaTeXe\ is based on
+% those in original \LaTeXe, with some Japanese localization.
+%
+% \pLaTeXe\ classes:
+% \changes{v1.0d}{2016/01/27}{Updated descriptions of \pLaTeXe\ files}
+% \changes{v1.0j}{2016/05/20}{Add description of `pfltrace'}
+%
+% \begin{itemize}
+% \item jbook.cls, jarticle.cls, jreport.cls\par
+%   Standard \emph{yoko-kumi} (horizontal writing) classes;
+%   stripped from \file{jclasses.dtx}.
+%
+% \item tbook.cls, tarticle.cls, treport.cls\par
+%   Standard \emph{tate-kumi} (vertical writing) classes;
+%   stripped from \file{jclasses.dtx}.
+%
+% \item jltxdoc.cls\par
+%   Class for typesetting Japanese \file{.dtx} file;
+%   stripped from \file{jltxdoc.dtx}.
+% \end{itemize}
+%\fi
+%
+%\ifJAPANESE
 % また、\pLaTeXe{}に付属のパッケージファイルは、次のとおりです。
 %
 % \begin{itemize}
 % \item plext.sty\par
 %   縦組用の拡張コマンドなどが定義されているファイル。
+%   \file{plext.dtx}から作成される。
 %
 % \item oldpfont.sty\par
 %   \pLaTeX~2.09のフォントコマンドを提供するパッケージ。
@@ -643,7 +672,7 @@
 %
 % \item pfltrace.sty\par
 %   \LaTeX{}でフロート関連コマンドのトレースに使う\file{fltrace.sty}%
-%   \footnote{\LaTeX\ 2014/05/01で追加されました。参考：
+%   \footnote{\LaTeXe\ 2014/05/01で追加されました。参考：
 %   \LaTeXe\ News Issue 21 (ltnews21.tex)}が再定義してしまうコマンド
 %   を、\pLaTeXe{}用に再々定義するためのパッケージ。
 %   \file{plcore.dtx}から作成される。
@@ -656,11 +685,45 @@
 %   二段組時に段抜きのフロートをページ下部にも配置可能にする
 %   パッケージ。
 % \end{itemize}
+%\else
+% \pLaTeXe\ packages:
+%
+% \begin{itemize}
+% \item plext.sty\par
+%   Useful macros and extensions for vertical writing;
+%   stripped from \file{plext.dtx}.
+%
+% \item oldpfont.sty\par
+%   Provides \pLaTeX~2.09 font commands; stripped from \file{pl209.dtx}.
+%
+% \item ptrace.sty\par
+%   \pLaTeXe\ version of \file{tracefnt.sty};
+%   the package \file{tracefnt.sty} overwrites \pLaTeXe-style \NFSS2
+%   commands, so \file{ptrace.sty} provides redefinitions to recover
+%   \pLaTeXe\ extensions.
+%   Stripped from \file{plfonts.dtx}.
+%
+% \item pfltrace.sty\par
+%   \pLaTeXe\ version of \file{fltrace.sty} (introduced in
+%   \LaTeXe\ 2014/05/01);
+%   stripped from \file{plcore.dtx}.
+%
+% \item ascmac.sty, tascmac.sty\par
+%   Create fancy boxes etc., within the scope of native
+%   \LaTeXe\ picture commands (thus driver-independent).
+%
+% \item nidanfloat.sty\par
+%   Enable bottom (|b|) placement option for double float in
+%   two column mode (\emph{nidan-kumi}).
+% \end{itemize}
+%\fi
 %
 %
-% \section{旧バージョンとの互換性}\label{platex:compatibility}
-% ここでは、このバージョンと以前のバージョンとの互換性や拡張部分について
-% 説明をしています。
+%\ifJAPANESE
+% \section{他のフォーマット・旧バージョンとの互換性}
+% \label{platex:compatibility}
+% ここでは、この\pLaTeXe{}のバージョンと以前のバージョンとの互換性や
+% 拡張部分について説明をしています。
 %
 % \subsection{\LaTeXe{}との互換性}
 % \pLaTeXe{}は、\LaTeXe{}の上位互換という形を取っていますが、
@@ -676,6 +739,26 @@
 % うまく動くかどうかを、完全に確かめる方法は残念ながらありません。
 % 一番簡単なのは、動かしてみることです。不幸にもうまく動かない場合は、
 % ログファイルや付属の文書ファイルを参考に原因を調べてください。
+%\else
+% \section{Compatibility with Other Formats and Older Versions}
+% \label{platex:compatibility}
+% Here we provide some information about the compatibility between
+% current \pLaTeXe\ and older versions or original \LaTeXe.
+%
+% \subsection{Compatibility with \LaTeXe}
+% \pLaTeXe\ is in most part upper compatible with \LaTeXe,
+% but some parameters are adjusted to be suitable for Japanese.
+% Therefore, you should not expect identical output, even though
+% the same source can be processed on both \LaTeXe\ and \pLaTeXe.
+%
+% We hope that most classes and packages meant for \LaTeXe\ works
+% also for \pLaTeXe\ without any modification. However for example,
+% if a class or a package redefines a command which is already
+% modified by \pLaTeXe, it might cause an error at the worst case.
+% We cannot tell whether a class or a package works fine with
+% \pLaTeXe\ beforehand; the easiest way is to try to use it.
+% If it fails, please refer to the log file or a package manual.
+%\fi
 %
 %\ifJAPANESE
 % \subsection{\pLaTeX~2.09との互換性}
@@ -692,6 +775,7 @@
 % 可能性もあるという点は、英語版の\LaTeXe{}でも同じです。
 % 詳細は、\LaTeXe に付属の\file{usrguide.tex}を参照してください。
 %\else
+% \subsection{Compatibility with \pLaTeX~2.09}
 % \pLaTeXe\ has `\pLaTeX~2.09 compatibility mode'; use
 % |\documentstyle| to enter it, but the support might be limited.
 % Note that the 2.09 compatibility mode is provided solely to
@@ -700,6 +784,7 @@
 %\fi
 %
 %
+%\ifJAPANESE
 % \subsection{latexreleaseパッケージへの対応}
 % \changes{v1.0e}{2016/02/16}{platexreleaseの説明を追加}
 % \LaTeX\ \texttt{<2015/01/01>}で導入されたlatexreleaseパッケージを
@@ -707,6 +792,15 @@
 % platexreleaseパッケージを用いると、過去の\pLaTeX{}をエミュレート
 % したり、フォーマットを作り直すことなく新しい\pLaTeX{}を試したりする
 % ことができます。詳細はplatexreleaseのドキュメントを参照してください。
+%\else
+% \subsection{Support for Package `latexrelease'}
+% \changes{v1.0e}{2016/02/16}{Add a description of platexrelease}
+% \pLaTeX\ provides `platexrelease' package, which is based on
+% `latexrelease' package (introduced in \LaTeX\ \texttt{<2015/01/01>}).
+% It may be used to ensure stability where needed, by emulating
+% the specified format date without regenerating the format file.
+% For more detail, please refer to its documentation.
+%\fi
 %
 %
 %
