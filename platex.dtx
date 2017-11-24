@@ -13,7 +13,8 @@
 % \iffalse
 %<*driver|pldoc>
 \ifx\JAPANESEtrue\undefined
-  \newif\ifJAPANESE \JAPANESEtrue %\fi ^^A <= dummy \fi
+  \expandafter\newif\csname ifJAPANESE\endcsname
+  \JAPANESEtrue
 \fi
 %</driver|pldoc>
 % \fi
@@ -167,7 +168,7 @@
 %\else
 % This document provides a brief description of \pLaTeXe, the Japanese
 % extended version of \LaTeXe. The original version of
-% \pLaTeXe (`ASCII \pLaTeXe') was developed by ASCII MEDIA
+% \pLaTeXe\ (`ASCII \pLaTeXe') was developed by ASCII MEDIA
 % WORKS\footnote{\texttt{http://ascii.asciimw.jp/pb/ptex/}}
 % (formerly ASCII CORPORATION) during 1995 and 2006.
 % The current version, which is now distributed in CTAN and
@@ -890,14 +891,19 @@
 %\ifJAPANESE
 % \section{文書ファイル}\label{app:pldoc}
 % \changes{v1.0c}{1997/01/25}{pldoc.dicをfilecontents環境により作成}
-% ここでは、このパッケージに含まれているdtxファイルをまとめて組版をするための
-% 文書ファイルについて説明をしています。個別に処理した場合と異なり、
+% ここでは、このパッケージに含まれているdtxファイルをまとめて組版し、
+% ソースコード説明書を得るための文書ファイル\file{pldoc.tex}について
+% 説明をしています。個別に処理した場合と異なり、
 % 変更履歴や索引も付きます。全体で、およそ200ページ程度になります。
 %
-% |filecontents|環境は、引数に指定されたファイルが存在するときは何も
-% しませんが、存在しないときは、環境内の内容でファイルを作成します。
-% \file{pldoc.dic}ファイルは、mendexプログラムで索引を処理するときに
-% \cs{西暦}, \cs{和暦}に対する「読み」を付けるために必要です。
+% デフォルトではソースコードの説明が日本語で書かれます。
+% もし英語の説明書を読みたい場合は、\par\medskip
+% \begin{minipage}{.5\textwidth}\ttfamily
+% | |\cs{def}\cs{JAPANESEtrue}|{}|
+% | |\cs{let}\cs{ifJAPANESE}\cs{iffalse}
+% \end{minipage}\par\medskip\noindent
+% という内容の\file{platex.cfg}を予め用意してから\file{pldoc.tex}を
+% 処理してください（2016年7月1日以降のコミュニティ版\pLaTeXe{}が必要）。
 %\else
 % \section{Documentation of \pLaTeXe\ sources}\label{app:pldoc}
 % \changes{v1.0c}{1997/01/25}{Add to filecontents environment for pldoc.dic.}
@@ -906,6 +912,22 @@
 % batch processing using `pldoc.tex' prints also changes and an index.
 % The whole document will have about 200 pages.
 %
+% By default, the description of \pLaTeXe\ sources is written in
+% Japanese. If you need English version, first save\par\medskip
+% \begin{minipage}{.5\textwidth}\ttfamily
+% | |\cs{def}\cs{JAPANESEtrue}|{}|
+% | |\cs{let}\cs{ifJAPANESE}\cs{iffalse}
+% \end{minipage}\par\medskip\noindent
+% as \file{platex.cfg}, and process \file{pldoc.tex}
+% (\pLaTeXe\ Community Edition newer than July 2016 is required).
+%\fi
+%
+%\ifJAPANESE
+% |filecontents|環境は、引数に指定されたファイルが存在するときは何も
+% しませんが、存在しないときは、環境内の内容でファイルを作成します。
+% \file{pldoc.dic}ファイルは、mendexプログラムで索引を処理するときに
+% \cs{西暦}, \cs{和暦}に対する「読み」を付けるために必要です。
+%\else
 % First, create \file{pldoc.dic}; it serves as a dictionary
 % for `mendex' (Japanese index processor\footnote{Developed by
 % ASCII Corporation; the program `makeindex' cannot handle
@@ -1124,7 +1146,7 @@ all others indicate the places where it is used.}
 % \file{ltxdoc.cfg}に|\AtEndOfClass{\OnlyDescription}|が指定されている場合は、
 % ここで終了します。
 %\else
-% Stop here if ltxdoc.cfg says \AtEndOfClass{\OnlyDescription}
+% Stop here if ltxdoc.cfg says |\AtEndOfClass{\OnlyDescription}|.
 %\fi
 %    \begin{macrocode}
 \StopEventually{\end{document}}
