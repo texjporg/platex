@@ -50,10 +50,12 @@
 % \changes{v1.0b}{1996/02/01}{\file{omake-sh.ins}, \file{omake-pl.ins}を
 %     \dst{}の変更にともなう変更をした}
 % \changes{v1.0c}{1997/01/23}{\LaTeX\ \textt{!<1996/12/01!>}に合わせて修正}
+% \changes{v1.0c}{1997/01/23}{gind.istとgglo.istを
+%        \$TEXMF/tex/latex2e/baseディレクトリからコピーしないようにした}
 % \changes{v1.0c}{1997/01/25}{pldoc.dicをfilecontents環境により作成}
 % \changes{v1.0c}{1997/01/29}{\file{pltpatch.ltx}を\file{plpatch.ltx}に名称変更}
-% \changes{v1.0d}{2016/01/27}{\file{mkpldoc.sh}を改善。
-%     \pLaTeXe{}に付属するファイルの説明を更新}
+% \changes{v1.0d}{2016/01/27}{\pLaTeXe{}に付属するファイルの説明を更新}
+% \changes{v1.0d}{2016/01/27}{rmコマンド実行前に存在確認するようにした}
 % \changes{v1.0e}{2016/02/16}{platexreleaseの説明を追加}
 % \changes{v1.0f}{2016/04/12}{ドキュメントを更新}
 % \changes{v1.0g}{2016/05/07}{フォーマット作成時に\LaTeX{}のバナーを一旦保存}
@@ -72,9 +74,12 @@
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
 %    and `References'}
+% \changes{v1.0c}{1997/01/23}{Don't copy gind.ist and gglo.ist from
+%        \$TEXMF/tex/latex2e/base directory.}
 % \changes{v1.0c}{1997/01/25}{Add to filecontents environment for pldoc.dic.}
 % \changes{v1.0c}{1997/01/29}{Rename \file{pltpatch.ltx} to \file{plpatch.ltx}.}
 % \changes{v1.0d}{2016/01/27}{Updated descriptions of \pLaTeXe\ files}
+% \changes{v1.0d}{2016/01/27}{Add -e test before rm command}
 % \changes{v1.0e}{2016/02/16}{Add a description of platexrelease}
 % \changes{v1.0f}{2016/04/12}{Update document.}
 % \changes{v1.0g}{2016/05/07}{Save \LaTeX\ banner}
@@ -99,15 +104,17 @@
 \documentclass{jltxdoc}
 \usepackage{plext}
 \GetFileInfo{platex.dtx}
-\title{\pLaTeXe{}について}
-\author{Ken Nakano \& Japanese \TeX\ Development Community}
 \ifJAPANESE
+\title{\pLaTeXe{}について}
+\author{中野 賢 \& 日本語\TeX{}開発コミュニティ}
 \date{作成日：\filedate}
 \renewcommand{\refname}{参考文献}
 \GlossaryPrologue{\section*{変更履歴}%
                   \markboth{変更履歴}{変更履歴}%
                   \addcontentsline{toc}{section}{変更履歴}}
 \else
+\title{About \pLaTeXe{}}
+\author{Ken Nakano \& Japanese \TeX\ Development Community}
 \date{Date: \filedate}
 \renewcommand{\refname}{References}
 \GlossaryPrologue{\section*{Change History}%
@@ -899,8 +906,7 @@
 % デフォルトではソースコードの説明が日本語で書かれます。
 % もし英語の説明書を読みたい場合は、\par\medskip
 % \begin{minipage}{.5\textwidth}\ttfamily
-% | |\cs{def}\cs{JAPANESEtrue}|{}|
-% | |\cs{let}\cs{ifJAPANESE}\cs{iffalse}
+% | |\cs{newif}\cs{ifJAPANESE}
 % \end{minipage}\par\medskip\noindent
 % という内容の\file{platex.cfg}を予め用意してから\file{pldoc.tex}を
 % 処理してください（2016年7月1日以降のコミュニティ版\pLaTeXe{}が必要）。
@@ -915,8 +921,7 @@
 % By default, the description of \pLaTeXe\ sources is written in
 % Japanese. If you need English version, first save\par\medskip
 % \begin{minipage}{.5\textwidth}\ttfamily
-% | |\cs{def}\cs{JAPANESEtrue}|{}|
-% | |\cs{let}\cs{ifJAPANESE}\cs{iffalse}
+% | |\cs{newif}\cs{ifJAPANESE}
 % \end{minipage}\par\medskip\noindent
 % as \file{platex.cfg}, and process \file{pldoc.tex}
 % (\pLaTeXe\ Community Edition newer than July 2016 is required).
@@ -1198,39 +1203,66 @@ all others indicate the places where it is used.}
 %
 %
 %
+%\ifJAPANESE
 % \section{おまけプログラム}\label{app:omake}
 %
 % \subsection{シェルスクリプト\file{mkpldoc.sh}}\label{app:shprog}
-% \pLaTeXe{}のマクロ定義ファイルをまとめて組版するときに便利なシェルスクリプトです。
+% \pLaTeXe{}のマクロ定義ファイルをまとめて組版し、変更履歴と索引も
+% 付けるときに便利なシェルスクリプトです。
 % このシェルスクリプト\footnote{このシェルスクリプトはUNIX用です。
 % しかしrmコマンドをdeleteコマンドにするなどすれば、簡単にDOSなどのバッチ
 % ファイルに修正することができます。}の使用方法は次のとおりです。
 %\begin{verbatim}
 %    sh mkpldoc.sh
 %\end{verbatim}
+%\else
+% \section{Additional Utility Programs}\label{app:omake}
 %
+% \subsection{Shell Script \file{mkpldoc.sh}}\label{app:shprog}
+% A shell script to process `pldoc.tex' and produce a fully indexed
+% source code description. Run |sh mkpldoc.sh| to use it.
+%\fi
+%
+%\ifJAPANESE
 % \subsubsection{\file{mkpldoc.sh}の内容}
 % まず、以前に\file{pldoc.tex}を処理したときに作成された、
 % 目次ファイルや索引ファイルなどを削除します。
+% \changes{v1.0c}{1997/01/23}{gind.istとgglo.istを
+%        \$TEXMF/tex/latex2e/baseディレクトリからコピーしないようにした}
+% \changes{v1.0d}{2016/01/27}{rmコマンド実行前に存在確認するようにした}
+%\else
+% \subsubsection{Content of \file{mkpldoc.sh}}
+% First, delete auxiliary files which might be created in the
+% previous runs.
 % \changes{v1.0c}{1997/01/23}{Don't copy gind.ist and gglo.ist from
 %        \$TEXMF/tex/latex2e/base directory.}
-% \changes{v1.0d}{2016/01/27}{\file{mkpldoc.sh}を改善}
+% \changes{v1.0d}{2016/01/27}{Add -e test before rm command}
+%\fi
 %    \begin{macrocode}
 %<*shprog>
 for f in pldoc.toc pldoc.idx pldoc.glo ; do
 if [ -e $f ]; then rm $f; fi
 done
 %    \end{macrocode}
+%\ifJAPANESE
 % そして、\file{ltxdoc.cfg}を空にします。
 % このファイルは、\file{jltxdoc.cls}の定義を変更するものですが、
 % ここでは、変更されたくありません。
+%\else
+% First run: empty the config file \file{ltxdoc.cfg}.
+%\fi
 %    \begin{macrocode}
 echo "" > ltxdoc.cfg
 %    \end{macrocode}
+%\ifJAPANESE
 % そして、\file{pldoc.tex}を処理します。
+%\else
+% Now process \file{pldoc.tex}.
+%\fi
 %    \begin{macrocode}
 platex pldoc.tex
 %    \end{macrocode}
+%\ifJAPANESE
 % 索引と変更履歴を作成します。
 % このスクリプトでは、変更履歴や索引を生成するのにmendexプログラムを用いて
 % います。mendexはmakeindexの上位互換のファイル整形コマンドで、
@@ -1244,10 +1276,25 @@ platex pldoc.tex
 %
 % |-f|は、項目に``読み''がなくてもエラーとしないオプションです。
 % makeindexコマンドには、このオプションがありません。
+%\else
+% Make the Change log and Glossary (Change History) using mendex.
+% `Mendex' is a Japanese index processor, which is mostly upper
+% compatible with `makeindex' and automatically handles readings
+% of Kanji words.
+%
+% Option |-s| employs a style file for formatting.
+% Here we use \file{gind.ist} and \file{gglo.ist} from \LaTeXe.
+%
+% Option |-o| specifies output index file name.
+%
+% Option |-f| forces to output Kanji characters even non-existent
+% in dictionaries. (Makeindex does not have this option.)
+%\fi
 %    \begin{macrocode}
 mendex -s gind.ist -d pldoc.dic -o pldoc.ind pldoc.idx
 mendex -f -s gglo.ist -o pldoc.gls pldoc.glo
 %    \end{macrocode}
+%\ifJAPANESE
 % \file{ltxdoc.cfg}の内容を|\includeonly{}|にし、\file{pldoc.tex}を処理します。
 % このコマンドは、引数に指定されたファイルだけを``|\include|''するための
 % コマンドですが、ここでは何も|\include|したく\emph{ない}ので、
@@ -1255,13 +1302,23 @@ mendex -f -s gglo.ist -o pldoc.gls pldoc.glo
 % しかし、|\input|で指定されているファイルは読み込まれます。
 % したがって、目次や索引や変更履歴のファイルが処理されます。
 % この処理は、主に、これらでエラーが出るかどうかの確認です。
+%\else
+% Second run: append |\includeonly{}| to \file{ltxdoc.cfg} to
+% speed up things. This run is needed only to get changes and index
+% listed in \file{.toc} file.
+%\fi
 %    \begin{macrocode}
 echo "\includeonly{}" > ltxdoc.cfg
 platex pldoc.tex
 %    \end{macrocode}
+%\ifJAPANESE
 % 最後に、再び\file{ltxdoc.cfg}を空にして、\file{pldoc.tex}を処理をします。
-% 本文を１ページから開始していますので、この後、もう一度処理をする
+% 本文を1ページから開始していますので、この後、もう一度処理をする
 % 必要はありません。
+%\else
+% Third and final run: restore the cfg file to put
+% everything together.
+%\fi
 %    \begin{macrocode}
 echo "" > ltxdoc.cfg
 platex pldoc.tex
