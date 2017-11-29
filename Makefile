@@ -1,9 +1,11 @@
 STRIPTARGET = platex.ltx jarticle.cls pl209.def platexrelease.sty \
 	nidanfloat.sty tascmac.sty jltxdoc.cls
 PDFTARGET = platex.pdf platexrelease.pdf pldoc.pdf \
-	nidanfloat.pdf ascmac.pdf exppl2e.pdf
+	nidanfloat.pdf ascmac.pdf exppl2e.pdf \
+	platex-en.pdf
 DVITARGET = platex.dvi platexrelease.dvi pldoc.dvi \
-	nidanfloat.dvi ascmac.dvi exppl2e.dvi
+	nidanfloat.dvi ascmac.dvi exppl2e.dvi \
+	platex-en.dvi
 KANJI = -kanji=jis
 FONTMAP = -f ipaex.map -f ptex-ipaex.map
 TEXMF = $(shell kpsewhich -var-value=TEXMFHOME)
@@ -86,6 +88,7 @@ jltxdoc.cls: jltxdoc.dtx
 	rm pldocs.log pldoc.tex Xins.ins
 
 platex.dvi: $(INTRODOC_SRC)
+	rm -f platex.cfg
 	platex $(KANJI) platex.dtx
 	mendex -J -f -s gglo.ist -o platex.gls platex.glo
 	platex $(KANJI) platex.dtx
@@ -93,11 +96,13 @@ platex.dvi: $(INTRODOC_SRC)
 	rm platex.glo platex.gls platex.ilg
 
 platexrelease.dvi: $(PLRELDOC_SRC)
+	rm -f platex.cfg
 	platex $(KANJI) platexrelease.dtx
 	platex $(KANJI) platexrelease.dtx
 	rm platexrelease.aux platexrelease.log
 
 pldoc.dvi: $(PLDOC_SRC)
+	rm -f platex.cfg
 	rm -f jltxdoc.cls pldoc.tex Xins.ins
 	platex $(KANJI) pldocs.ins
 	rm -f mkpldoc.sh dstcheck.pl
@@ -108,32 +113,48 @@ pldoc.dvi: $(PLDOC_SRC)
 	rm ltxdoc.cfg pldoc.dic mkpldoc.sh dstcheck.pl
 
 nidanfloat.dvi: $(NIDAN_SRC)
+	rm -f platex.cfg
 	platex $(KANJI) nidanfloat.dtx
 	platex $(KANJI) nidanfloat.dtx
 	rm nidanfloat.aux nidanfloat.log
 
 ascmac.dvi: $(ASCMAC_SRC)
+	rm -f platex.cfg
 	platex $(KANJI) ascmac.dtx
 	platex $(KANJI) ascmac.dtx
 	rm ascmac.aux ascmac.log ascmac.toc
 
 exppl2e.dvi: exppl2e.sty
+	rm -f platex.cfg
 	platex $(KANJI) exppl2e.sty
 	platex $(KANJI) exppl2e.sty
 	rm exppl2e.aux exppl2e.log
 
+platex-en.dvi: $(INTRODOC_SRC)
+	# built-in echo in shell is troublesome, so use perl instead
+	perl -e "print \"\\\\newif\\\\ifJAPANESE\\n"\" >platex.cfg
+	platex $(KANJI) platex.dtx
+	mendex -J -f -s gglo.ist -o platex.gls platex.glo
+	platex $(KANJI) platex.dtx
+	rm platex.aux platex.log
+	rm platex.glo platex.gls platex.ilg
+	rm platex.cfg
+	mv platex.dvi platex-en.dvi
+
 platex.pdf: platex.dvi
-	dvipdfmx $(FONTMAP) platex.dvi
+	dvipdfmx $(FONTMAP) $<
 platexrelease.pdf: platexrelease.dvi
-	dvipdfmx $(FONTMAP) platexrelease.dvi
+	dvipdfmx $(FONTMAP) $<
 pldoc.pdf: pldoc.dvi
-	dvipdfmx $(FONTMAP) pldoc.dvi
+	dvipdfmx $(FONTMAP) $<
 nidanfloat.pdf: nidanfloat.dvi
-	dvipdfmx $(FONTMAP) nidanfloat.dvi
+	dvipdfmx $(FONTMAP) $<
 ascmac.pdf: ascmac.dvi
-	dvipdfmx $(FONTMAP) ascmac.dvi
+	dvipdfmx $(FONTMAP) $<
 exppl2e.pdf: exppl2e.dvi
-	dvipdfmx $(FONTMAP) exppl2e.dvi
+	dvipdfmx $(FONTMAP) $<
+platex-en.pdf: platex-en.dvi
+	dvipdfmx $(FONTMAP) $<
 
 .PHONY: install clean cleanstrip cleanall cleandoc
 install:
