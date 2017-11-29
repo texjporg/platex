@@ -1,11 +1,9 @@
 STRIPTARGET = platex.ltx jarticle.cls pl209.def platexrelease.sty \
 	nidanfloat.sty tascmac.sty jltxdoc.cls
-PDFTARGET = platex.pdf platexrelease.pdf pldoc.pdf \
-	nidanfloat.pdf ascmac.pdf exppl2e.pdf \
-	platex-en.pdf
-DVITARGET = platex.dvi platexrelease.dvi pldoc.dvi \
-	nidanfloat.dvi ascmac.dvi exppl2e.dvi \
-	platex-en.dvi
+DOCTARGET = platex platexrelease pldoc nidanfloat ascmac exppl2e \
+	platex-en
+PDFTARGET = $(addsuffix .pdf,$(DOCTARGET))
+DVITARGET = $(addsuffix .dvi,$(DOCTARGET))
 KANJI = -kanji=jis
 FONTMAP = -f ipaex.map -f ptex-ipaex.map
 TEXMF = $(shell kpsewhich -var-value=TEXMFHOME)
@@ -133,13 +131,12 @@ exppl2e.dvi: exppl2e.sty
 platex-en.dvi: $(INTRODOC_SRC)
 	# built-in echo in shell is troublesome, so use perl instead
 	perl -e "print \"\\\\newif\\\\ifJAPANESE\\n"\" >platex.cfg
-	platex $(KANJI) platex.dtx
-	mendex -J -f -s gglo.ist -o platex.gls platex.glo
-	platex $(KANJI) platex.dtx
-	rm platex.aux platex.log
-	rm platex.glo platex.gls platex.ilg
+	platex -jobname=platex-en $(KANJI) platex.dtx
+	mendex -J -f -s gglo.ist -o platex-en.gls platex-en.glo
+	platex -jobname=platex-en $(KANJI) platex.dtx
+	rm platex-en.aux platex-en.log
+	rm platex-en.glo platex-en.gls platex-en.ilg
 	rm platex.cfg
-	mv platex.dvi platex-en.dvi
 
 platex.pdf: platex.dvi
 	dvipdfmx $(FONTMAP) $<
