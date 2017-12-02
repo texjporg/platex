@@ -72,6 +72,7 @@
 % \changes{v1.0p}{2017/11/11}{\LaTeX{}のバナーを保存するコードを
 %    \file{platex.ltx}から\file{plcore.ltx}へ移動}
 % \changes{v1.0q}{2017/11/29}{英語版ドキュメントを追加}
+% \changes{v1.0r}{2017/12/02}{英語の参考文献も追加}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -102,6 +103,7 @@
 % \changes{v1.0p}{2017/11/11}{Moved banner saving code from
 %    \file{platex.ltx} to \file{plcore.ltx}}
 % \changes{v1.0q}{2017/11/29}{New English documentation added!}
+% \changes{v1.0r}{2017/12/02}{English references added}
 %\fi
 % \fi
 %
@@ -109,7 +111,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2017/11/29 v1.0q pLaTeX document file]
+\ProvidesFile{platex.dtx}[2017/12/02 v1.0r pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -179,11 +181,12 @@
 %\fi
 % \begin{chuui}
 %\ifJAPANESE
-% この文書は、株式会社アスキー（現アスキー・メディアワークス
+% この文書では「コミュニティ版\pLaTeXe{}」について簡単に説明します。
+% 株式会社アスキー（現アスキー・メディアワークス
 % \footnote{アスキー日本語\TeX{}（\pTeX{}）、
 % \texttt{http://ascii.asciimw.jp/pb/ptex/}}）が配布している
-% \pLaTeXe{}（以下、アスキー版）からforkした、
-% 「コミュニティ版\pLaTeXe{}」の付属文書です。
+% \pLaTeXe{}（以下、アスキー版\pLaTeXe{}）とは異なる内容ですので、
+% 注意してください。
 %\else
 % This document provides a brief description of \pLaTeXe, the Japanese
 % extended version of \LaTeXe. The original version of
@@ -261,28 +264,38 @@
 % \clearpage
 %
 %\ifJAPANESE
-% \section{概要}\label{platex:intro}
-% この文書は、\pLaTeXe{}の概要を示していますが、使い方のガイドでは
-% ありません。\pLaTeXe{}の機能についての説明は、\cite{platex2e-book}を
-% 参照してください。日本語\TeX{}については\cite{jtex-tech}を参照してください。
-% \changes{v1.0}{1995/05/08}{最初のバージョン}
-% \changes{v1.0a}{1995/08/25}{互換性について、\dst{}の使い方、参考文献を追加}
+% \section{この文書について}\label{platex:intro}
+% この文書は\pLaTeXe{}の概要を示していますが、使い方のガイドではありません。
+% \pLaTeXe{}の機能全般については、\cite{platex2e-book}を参照してください。
+% また、\cite{tate-book}で説明されていた縦組向けの拡張コマンドに
+% ついては、\file{pldoc.pdf}の中の\file{plext.dtx}の項目を参照してください。
 %
-% \pLaTeXe{}では\cite{tate-book}で説明されている、いくつかの拡張コマンドの
-% 動作を修正しています。その詳細については、\file{plext.dtx}を参照して
-% ください。
+% 日本語の組版処理については、
+% \pTeX{}（あるいはその前身の「日本語\TeX{}」）に関する文献
+% \cite{jtex-tech}や\cite{ajt2008okumura}（英語）, \cite{tb29hamano}（英語）も
+% 併せてご参照ください。
 %
 % \LaTeX{}の機能については、\cite{latex-book2}や\cite{latex-comp}などを
 % 参照してください。新しい機能については\file{usrguide.tex}を参照してください。
+% \changes{v1.0}{1995/05/08}{最初のバージョン}
+% \changes{v1.0a}{1995/08/25}{互換性について、\dst{}の使い方、参考文献を追加}
+% \changes{v1.0r}{2017/12/02}{英語の参考文献も追加}
 %\else
-% \section{Introduction}\label{platex:intro}
+% \section{Introduction to this document}\label{platex:intro}
 % This document briefly describes \pLaTeXe, but is not a manual of \pLaTeXe.
-% For the basic functions of \pLaTeXe\ (and \LaTeXe), see \cite{platex2e-book}.
-% For \pTeX, please refer to \cite{jtex-tech}.
-% (Both books were published from ASCII Corporation, and written in Japanese.)
+% For the basic functions of \pLaTeXe, see \cite{platex2e-book} (in Japanese).
+% For extensions of some commands for vertical writing (which were first
+% described in \cite{tate-book} in Japanese), see \file{plext.dtx} section
+% in \file{pldoc-en.pdf}.
+%
+% For Japanese typesetting, please refer to the documentation of \pTeX\ (or
+% ``Japanese \TeX''; the preliminary version of \pTeX),
+% \cite{jtex-tech} (in Japanese), \cite{ajt2008okumura} (in English)
+% and \cite{tb29hamano} (in English).
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
 %    and `References'}
+% \changes{v1.0r}{2017/12/02}{English references added}
 %\fi
 %
 %\ifJAPANESE
@@ -303,14 +316,15 @@
 % \LaTeX{}との互換性について述べています。
 %
 % \item[付録\ref{app:dst}]
-%  この文書ソースの\dst{}のためのオプションについて述べています。
+%  この文書ソース(platex.dtx)の
+%  \dst{}のためのオプションについて述べています。
 %
 % \item[付録\ref{app:pldoc}]
-%  \pLaTeXe{}のdtxファイルをまとめて一つのDVIファイルにするための
-%  文書ファイルの説明をしています。
+%  \pLaTeXe{}のdtxファイルをまとめて、一つのソースコード説明書に
+%  するための文書ファイルの説明をしています。
 %
 % \item[付録\ref{app:omake}]
-%  付録\ref{app:pldoc}で説明をした文書ファイルを処理するshスクリプト（手順）、
+%  付録\ref{app:pldoc}で説明した文書ファイルを処理するshスクリプト（手順）、
 %  \dst{}文書ファイル内の入れ子の対応を調べるperlスクリプトなどについて
 %  説明しています。
 % \end{description}
@@ -338,8 +352,8 @@
 %  Description of `pldoc.tex' (counterpart for `source2e.tex' in \LaTeXe).
 %
 % \item[Appendix \ref{app:omake}]
-%  Description of shell script to process `pldoc.tex', and
-%  a tiny perl program to check \dst\ guards.
+%  Description of a shell script to process `pldoc.tex', and
+%  a tiny perl program to check \dst\ guards, etc.
 % \end{description}
 % \end{quote}
 %\fi
@@ -347,8 +361,7 @@
 %
 %\ifJAPANESE
 % \section{\pLaTeXe{}の機能について}\label{platex:plcore}
-% \pLaTeXe{}の機能は、いくつものファイルに分割されて実装されています。
-% これらのファイルはつぎの3種類に分類することができます。
+% \pLaTeXe{}が提供するファイルは、次の3種類に分類することができます。
 %
 % \begin{itemize}
 % \item フォーマットファイル
@@ -357,9 +370,9 @@
 % \end{itemize}
 %
 % フォーマットファイルには、基本的な機能が定義されており、
-% \pLaTeXe{}の核となるファイルです。このファイルに定義されているマクロは、
-% 実行時の速度を高めるために、あらかじめ\TeX{}の内部形式の形で保存されて
-% います。
+% \pLaTeXe{}の核となるファイルです。
+% このファイルに定義されているマクロは、実行時の速度を高めるために、
+% あらかじめ\TeX{}の内部形式の形で保存されています。
 %
 % クラスファイルは文書のレイアウトを設定するファイル、
 % パッケージファイルはマクロの拡張を定義するファイルです。
@@ -381,16 +394,20 @@
 %
 %\ifJAPANESE
 % \subsection{フォーマットファイル}
-% フォーマットファイルには、基本的な機能が定義されていますが、
-% これらは\TeX{}の内部形式に変換された形式となっています。
-% フォーマットファイルを作成するには、
-% ソースファイル``platex.ltx''を|iniptex|プログラムで処理します。
+% \pLaTeX{}のフォーマットファイルを作成するには、
+% ソースファイル``platex.ltx''を\epTeX{}のINIモードで処理します
+% \footnote{2016年以前は\pTeX{}と\epTeX{}のどちらでもフォーマットを作成する
+% ことができましたが、2017年に\LaTeX{}が\eTeX{}必須となったことに伴い、
+% \pLaTeX{}も\epTeX{}が必須となりました。}。
 % ただし、\TeX\ LiveやW32\TeX{}ではこの処理を簡単にする|fmtutil-sys|あるいは
 % |fmtutil|というプログラムが用意されています。
 % 以下を実行すれば、フォーマットファイル\file{platex.fmt}が作成されます。
 %\else
 % \subsection{About the Format}
-% Process ``platex.ltx'' with INI mode of |(e)ptex|.
+% To make a format for \pLaTeX,
+% process ``platex.ltx'' with INI mode of \epTeX.\footnote{Formerly
+% both \pTeX\ and \epTeX\ can make the format file for \pLaTeX, however,
+% it's not true anymore because \LaTeX\ requires \eTeX\ since 2017.}
 % A handy command `fmtutil-sys' (or `fmtutil') for this purpose
 % is available in \TeX\ Live. The following command generates \file{platex.fmt}.
 %\fi
@@ -464,7 +481,8 @@
 %    \end{macrocode}
 %
 %\ifJAPANESE
-% 起動時に\file{platex.cfg}がある場合、それを読み込むようにします。
+% \pLaTeXe{}の起動時に\file{platex.cfg}がある場合、それを読み込む
+% ようにします。
 % バージョン2016/07/01ではコードを\file{plcore.ltx}に入れていました
 % が、\file{platex.ltx}へ移動しました。
 % \changes{v1.0m}{2016/08/26}{\file{platex.cfg}の読み込みを
@@ -517,14 +535,17 @@
 %   格納されるコマンドを定義しています。
 % \end{itemize}
 %
-% プリロードフォントや組版パラメータなどの設定は、
-% \file{pldefs.ltx}をロードすることで行なっています。
-% このファイルに記述されている設定を変更すれば、
-% \pLaTeXe{}をカスタマイズすることができます。
-% カスタマイズする場合は、このファイルを直接、修正するのではなく、
-% \file{pldefs.cfg}という名前でコピーをして、そのファイルを編集します。
+% また、プリロードフォントや組版パラメータなどのデフォルト設定は、
+% \file{plcore.ltx}の中で\file{pldefs.ltx}をロードすることにより行います。
+% このファイル\file{pldefs.ltx}も\file{plfonts.dtx}から生成されます。
+% \begin{chuui}
+% このファイルに記述されている設定を変更すれば
+% \pLaTeXe{}をカスタマイズすることができますが、
+% その場合は\file{pldefs.ltx}を直接修正するのではなく、いったん
+% \file{pldefs.cfg}という名前でコピーして、そのファイルを編集してください。
 % フォーマット作成時に\file{pldefs.cfg}が存在した場合は、そちらが
 % \file{pldefs.ltx}の代わりに読み込まれます。
+% \end{chuui}
 %\else
 % The file \file{plcore.ltx}, which provides modifications/extensions
 % to make \pLaTeXe, is a concatenation of stripped files below
@@ -536,13 +557,16 @@
 % \item \file{plcore.dtx} defines other modifications to \LaTeXe.
 % \end{itemize}
 %
-% Default settings of pre-loaded fonts and typesetting parameters
-% are done by loading \file{pldefs.ltx}. You can customize
-% \pLaTeXe\ by tuning these settings.
-% If you need to change anything in \file{pldefs.ltx},
-% copy/rename it as \file{pldefs.cfg} and edit it.
+% Moreover, default settings of pre-loaded fonts and typesetting parameters
+% are done by loading \file{pldefs.ltx} inside \file{plcore.ltx}.
+% This file \file{pldefs.ltx} is also stripped from \file{plfonts.dtx}.
+% \begin{chuui}
+% You can customize \pLaTeXe\ by tuning these settings.
+% If you need to do that, copy/rename it as \file{pldefs.cfg} and edit it,
+% instead of overwriting \file{pldefs.ltx} itself.
 % If a file named \file{pldefs.cfg} is found at a format creation
 % time, it will be read as a substitute of \file{pldefs.ltx}.
+% \end{chuui}
 %\fi
 %
 %
@@ -570,10 +594,6 @@
 % したがって数多くある英語版のクラスファイルやパッケージファイルなどで
 % 書体の変更を行っている箇所を修正する必要はあまりありません。
 %
-% \file{plfonts.dtx}ファイルでは、\NFSS2コマンドの定義のほか、プリロード
-% フォントの設定、和文エンコードの定義、組版パラメータなどの設定、
-% フォント定義ファイルなどの記述も含まれています。
-%
 % \NFSS2についての詳細は、\LaTeXe{}に付属の\file{fntguide.tex}を参照して
 % ください。
 %\else
@@ -588,10 +608,6 @@
 % change alphpabetic fonts or Japanese fonts.
 % It works almost fine with most of the widely used classes and
 % packages, without any modification.
-%
-% The file \file{plfonts.dtx} includes not only \NFSS2 extensions,
-% but also settings of preloaded fonts, definitions of Japanese
-% encodings, typesetting parameters and font defintion (.fd) files.
 %
 % For the defail of (the original) \NFSS2, please refer to
 % \file{fntguide.tex} in \LaTeXe.
@@ -634,19 +650,19 @@
 %\ifJAPANESE
 % \subsection{クラスファイルとパッケージファイル}
 %
-% \pLaTeXe{}が提供をする、クラスファイルやパッケージファイルのいくつかは、
-% オリジナルのファイルを修正しています。
+% \pLaTeXe{}が提供をするクラスファイルやパッケージファイルは、
+% オリジナルのファイルを基にしています。
 %
 % \pLaTeXe{}に付属のクラスファイルは、次のとおりです。
-% \changes{v1.0d}{2016/01/27}{\pLaTeXe{}に付属するファイルの説明を更新}
-% \changes{v1.0j}{2016/05/20}{pfltraceの説明を追加}
 %
 % \begin{itemize}
-% \item jbook.cls, jarticle.cls, jreport.cls\par
-%   横組用の標準クラスファイル。\file{jclasses.dtx}から作成される。
+% \item jarticle.cls, jbook.cls, jreport.cls\par
+%   横組用の標準クラスファイル。
+%   \file{jclasses.dtx}から作成される。
 %
-% \item tbook.cls, tarticle.cls, treport.cls\par
-%   縦組用の標準クラスファイル。\file{jclasses.dtx}から作成される。
+% \item tarticle.cls, tbook.cls, treport.cls\par
+%   縦組用の標準クラスファイル。
+%   \file{jclasses.dtx}から作成される。
 %
 % \item jltxdoc.cls\par
 %   日本語の\file{.dtx}ファイルを組版するためのクラスファイル。
@@ -655,19 +671,17 @@
 %\else
 % \subsection{Classes and Packages}
 %
-% Classes and packages bundled with \pLaTeXe\ is based on
+% Classes and packages bundled with \pLaTeXe\ are based on
 % those in original \LaTeXe, with some Japanese localization.
 %
 % \pLaTeXe\ classes:
-% \changes{v1.0d}{2016/01/27}{Updated descriptions of \pLaTeXe\ files}
-% \changes{v1.0j}{2016/05/20}{Add description of `pfltrace'}
 %
 % \begin{itemize}
-% \item jbook.cls, jarticle.cls, jreport.cls\par
+% \item jarticle.cls, jbook.cls, jreport.cls\par
 %   Standard \emph{yoko-kumi} (horizontal writing) classes;
 %   stripped from \file{jclasses.dtx}.
 %
-% \item tbook.cls, tarticle.cls, treport.cls\par
+% \item tarticle.cls, tbook.cls, treport.cls\par
 %   Standard \emph{tate-kumi} (vertical writing) classes;
 %   stripped from \file{jclasses.dtx}.
 %
@@ -679,15 +693,13 @@
 %
 %\ifJAPANESE
 % また、\pLaTeXe{}に付属のパッケージファイルは、次のとおりです。
+% \changes{v1.0d}{2016/01/27}{\pLaTeXe{}に付属するファイルの説明を更新}
+% \changes{v1.0j}{2016/05/20}{pfltraceの説明を追加}
 %
 % \begin{itemize}
 % \item plext.sty\par
 %   縦組用の拡張コマンドなどが定義されているファイル。
 %   \file{plext.dtx}から作成される。
-%
-% \item oldpfont.sty\par
-%   \pLaTeX~2.09のフォントコマンドを提供するパッケージ。
-%   \file{pl209.dtx}から作成される。
 %
 % \item ptrace.sty\par
 %   \LaTeX{}でフォント選択コマンドのトレースに使う\file{tracefnt.sty}が
@@ -702,6 +714,10 @@
 %   を、\pLaTeXe{}用に再々定義するためのパッケージ。
 %   \file{plcore.dtx}から作成される。
 %
+% \item oldpfont.sty\par
+%   \pLaTeX~2.09のフォントコマンドを提供するパッケージ。
+%   \file{pl209.dtx}から作成される。
+%
 % \item ascmac.sty, tascmac.sty\par
 %   \LaTeX{}の標準機能の範囲で、図や罫線で囲んだボックスを出力する命令
 %   などを提供するパッケージ。旧バージョンの\pLaTeX{}でも配布されていた。
@@ -712,14 +728,13 @@
 % \end{itemize}
 %\else
 % \pLaTeXe\ packages:
+% \changes{v1.0d}{2016/01/27}{Updated descriptions of \pLaTeXe\ files}
+% \changes{v1.0j}{2016/05/20}{Add description of `pfltrace'}
 %
 % \begin{itemize}
 % \item plext.sty\par
 %   Useful macros and extensions for vertical writing;
 %   stripped from \file{plext.dtx}.
-%
-% \item oldpfont.sty\par
-%   Provides \pLaTeX~2.09 font commands; stripped from \file{pl209.dtx}.
 %
 % \item ptrace.sty\par
 %   \pLaTeXe\ version of \file{tracefnt.sty};
@@ -732,6 +747,10 @@
 %   \pLaTeXe\ version of \file{fltrace.sty} (introduced in
 %   \LaTeXe\ 2014/05/01);
 %   stripped from \file{plcore.dtx}.
+%
+% \item oldpfont.sty\par
+%   Provides \pLaTeX~2.09 font commands;
+%   stripped from \file{pl209.dtx}.
 %
 % \item ascmac.sty, tascmac.sty\par
 %   Create fancy boxes etc., within the scope of native
@@ -752,13 +771,14 @@
 %
 % \subsection{\LaTeXe{}との互換性}
 % \pLaTeXe{}は、\LaTeXe{}の上位互換という形を取っていますが、
-% いくつかのパラメータなども変更しています。
+% いくつかの命令の定義やパラメータなども変更しています。
 % したがって英文書など、\LaTeXe{}でも処理できるファイルを
 % \pLaTeXe{}で処理しても、完全に同じ結果になるとは限りません。
 %
 % \LaTeXe{}向けに書かれた多くのクラスファイルやパッケージファイルは、
-% そのまま使えると思います。ただし、それらが\pLaTeXe{}で
-% 拡張しているコマンドと同じ名前のコマンドを再定義している場合は、
+% そのまま使えると思います。
+% ただし、それらが\pLaTeXe{}で拡張しているコマンドと同じ名前の
+% コマンドを再定義している場合は、
 % その拡張の仕方によってはエラーになることもあります。
 % 用いようとしているクラスファイルやパッケージファイルが
 % うまく動くかどうかを、完全に確かめる方法は残念ながらありません。
@@ -1581,23 +1601,40 @@ exit;
 %    \end{macrocode}
 %
 % \newpage
-% \begin{thebibliography}{1}
-% \bibitem{tex-book}
-% Donald~E. Knuth.
-% \newblock ``{\em The \TeX book}''.
-% \newblock Addison-Wesley, 1984.
-% \newblock (邦訳：斎藤信男監修, 鷺谷好輝訳,
-%             \TeX ブック 改訂新版, アスキー出版局, 1989)
+% \begin{thebibliography}{99}
+% \bibitem{platex2e-book}
+% 中野 賢
+% \newblock 『日本語\LaTeXe ブック』
+% \newblock アスキー, 1996.
 %
 % \bibitem{tate-book}
 % インプレス・ラボ監修, アスキー書籍編集部編
 % \newblock 『縦組対応 パーソナル日本語\TeX{}』
 % \newblock アスキー出版局, 1994
 %
-% \bibitem{latex-comp}
-% Michel Goossens, Frank Mittelbach, Alexander Samarin.
-% \newblock ``{\em The {\LaTeX} Companion}''.
-% \newblock Addison-Wesley, 1994.
+% \bibitem{jtex-tech}
+% アスキー出版技術部責任編集
+% \newblock 『日本語\TeX テクニカルブックI』
+% \newblock アスキー, 1990.
+%
+% \bibitem{ajt2008okumura}
+% Haruhiko Okumura
+% \newblock \pTeX\ and Japanese Typesetting
+% \newblock The Asian Journal of \TeX, Volume~2, No.~1, 2008.
+% (\texttt{http://ajt.ktug.org/2008/0201okumura.pdf})
+%
+% \bibitem{tb29hamano}
+% Hisato Hamano
+% \newblock Vertical Typesetting with \TeX.
+% \newblock TUGboat issue 11:3, 1990.
+% (\texttt{https://tug.org/TUGboat/tb11-3/tb29hamano.pdf})
+%
+% \bibitem{tex-book}
+% Donald~E. Knuth.
+% \newblock ``{\em The \TeX book}''.
+% \newblock Addison-Wesley, 1984.
+% \newblock (邦訳：斎藤信男監修, 鷺谷好輝訳,
+%             \TeX ブック 改訂新版, アスキー出版局, 1989)
 %
 % \bibitem{latex-book2}
 % Laslie Lamport.
@@ -1611,18 +1648,13 @@ exit;
 % \newblock (邦訳：倉沢良一監修, 大野俊治・小暮博通・藤浦はる美訳,
 %            文書処理システム \LaTeX, アスキー, 1990)
 %
-% \bibitem{jtex-tech}
-% アスキー出版技術部責任編集
-% \newblock 『日本語\TeX テクニカルブックI』
-% \newblock アスキー, 1990.
-%
-% \bibitem{platex2e-book}
-% 中野 賢
-% \newblock 『日本語\LaTeXe ブック』
-% \newblock アスキー, 1996.
+% \bibitem{latex-comp}
+% Michel Goossens, Frank Mittelbach, Alexander Samarin.
+% \newblock ``{\em The {\LaTeX} Companion}''.
+% \newblock Addison-Wesley, 1994.
 %
 % \bibitem{perl}
-% 河野真治著
+% 河野 真治
 % \newblock 『入門Perl』
 % \newblock アスキー出版局, 1994
 % \end{thebibliography}
