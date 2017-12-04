@@ -1118,38 +1118,27 @@
   \def\ppatch@level{0}\fi
 \begingroup
   \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#1}
-  \edef\platexTMP{%
-    \ifnum\ppatch@level=0
-      \everyjob{\noexpand\typeout{%
-        \noexpand\pfmtname\noexpand\space<\noexpand\pfmtversion>%
-          \noexpand\space
-          (based on \expandafter\parse@@BANNER\platexBANNER)}}%
-    \else\ifnum\ppatch@level>0
-      \everyjob{\noexpand\typeout{%
-        \noexpand\pfmtname\noexpand\space<\noexpand\pfmtversion>%
-          +\noexpand\ppatch@level\noexpand\space
-          (based on \expandafter\parse@@BANNER\platexBANNER)}}%
-    \else
-      \everyjob{\noexpand\typeout{%
-        \noexpand\pfmtname\noexpand\space<\noexpand\pfmtversion>%
-          -pre\noexpand\ppatch@level\noexpand\space
-          (based on \expandafter\parse@@BANNER\platexBANNER)}}%
-    \fi\fi
-  }
-\expandafter
-\endgroup \platexTMP
+  \toks0=\expandafter\expandafter\expandafter{%
+           \expandafter\parse@@BANNER\platexBANNER}
+  \ifnum\ppatch@level=0
+    \toks2={\pfmtname\space<\pfmtversion>\space}%
+  \else\ifnum\ppatch@level>0
+    \toks2={\pfmtname\space<\pfmtversion>+\ppatch@level\space}%
+  \else
+    \toks2={\pfmtname\space<\pfmtversion>-pre\ppatch@level\space}%
+  \fi\fi
+  \edef\platexBANNER{\the\toks2 (based on \the\toks0)}
+  \global\everyjob\expandafter{%
+    \expandafter\typeout\expandafter{\platexBANNER}}%
+\endgroup
 \begingroup
   \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#2}
-  \edef\platexTMP{%
-    \the\everyjob\noexpand\typeout{\expandafter\parse@@BANNER\platexBANNER}%
-  }
-  \everyjob=\expandafter{\platexTMP}%
-  \edef\platexTMP{%
-    \noexpand\let\noexpand\platexBANNER=\noexpand\@undefined
-    \noexpand\everyjob={\the\everyjob}%
-  }
-  \expandafter
-\endgroup \platexTMP
+  \toks0=\expandafter\expandafter\expandafter{%
+           \expandafter\parse@@BANNER\platexBANNER}
+  \edef\platexBANNER{\the\everyjob \noexpand\typeout{\the\toks0}}
+  \global\everyjob\expandafter{\platexBANNER}%
+\endgroup
+\let\platexBANNER=\@undefined
 \ifx\l@nohyphenation \@undefined
   \newlanguage\l@nohyphenation
 \fi
