@@ -1121,15 +1121,18 @@
   \edef\platexTMP{%
     \ifnum\ppatch@level=0
       \everyjob{\noexpand\typeout{%
-        \pfmtname\space<\pfmtversion>\space
+        \noexpand\pfmtname\noexpand\space<\noexpand\pfmtversion>%
+          \noexpand\space
           (based on \expandafter\parse@@BANNER\platexBANNER)}}%
     \else\ifnum\ppatch@level>0
       \everyjob{\noexpand\typeout{%
-        \pfmtname\space<\pfmtversion>+\ppatch@level\space
+        \noexpand\pfmtname\noexpand\space<\noexpand\pfmtversion>%
+          +\noexpand\ppatch@level\noexpand\space
           (based on \expandafter\parse@@BANNER\platexBANNER)}}%
     \else
       \everyjob{\noexpand\typeout{%
-        \pfmtname\space<\pfmtversion>-pre\ppatch@level\space
+        \noexpand\pfmtname\noexpand\space<\noexpand\pfmtversion>%
+          -pre\noexpand\ppatch@level\noexpand\space
           (based on \expandafter\parse@@BANNER\platexBANNER)}}%
     \fi\fi
   }

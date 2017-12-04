@@ -61,12 +61,14 @@
 %    \cs{platexrelease}のエミュレート内部処理を分離}
 % \changes{v1.1f}{2017/11/11}{\LaTeX{}のバナーを保存するコードを
 %    \file{platex.ltx}から\file{plcore.ltx}へ移動}
+% \changes{v1.1g}{2017/12/04}{\pLaTeX{}のバナーの定義時に
+%    \cs{pfmtname}, \cs{pfmtversion}, \cs{ppatch@level}を展開しないように}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2017/11/11 v1.1f pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2017/12/04 v1.1g pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -242,6 +244,8 @@
 %    元の\LaTeX{}のバナーから引き継ぐように改良}
 % \changes{v1.1}{2016/09/14}{起動時のバナーを取得するコードを改良}
 % \changes{v1.1d}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
+% \changes{v1.1g}{2017/12/04}{\pLaTeX{}のバナーの定義時に
+%    \cs{pfmtname}, \cs{pfmtversion}, \cs{ppatch@level}を展開しないように}
 %    \begin{macrocode}
 \ifx\patch@level\@undefined % fallback if undefined in LaTeX
   \def\patch@level{0}\fi
@@ -252,15 +256,18 @@
   \edef\platexTMP{%
     \ifnum\ppatch@level=0
       \everyjob{\noexpand\typeout{%
-        \pfmtname\space<\pfmtversion>\space
+        \noexpand\pfmtname\noexpand\space<\noexpand\pfmtversion>%
+          \noexpand\space
           (based on \expandafter\parse@@BANNER\platexBANNER)}}%
     \else\ifnum\ppatch@level>0
       \everyjob{\noexpand\typeout{%
-        \pfmtname\space<\pfmtversion>+\ppatch@level\space
+        \noexpand\pfmtname\noexpand\space<\noexpand\pfmtversion>%
+          +\noexpand\ppatch@level\noexpand\space
           (based on \expandafter\parse@@BANNER\platexBANNER)}}%
     \else
       \everyjob{\noexpand\typeout{%
-        \pfmtname\space<\pfmtversion>-pre\ppatch@level\space
+        \noexpand\pfmtname\noexpand\space<\noexpand\pfmtversion>%
+          -pre\noexpand\ppatch@level\noexpand\space
           (based on \expandafter\parse@@BANNER\platexBANNER)}}%
     \fi\fi
   }
