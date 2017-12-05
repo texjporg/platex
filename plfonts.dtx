@@ -73,13 +73,15 @@
 %    具体的な値ではなく「空」で初期化}
 % \changes{v1.6j}{2017/11/06}{縦横のエンコーディングのセット化を
 %    plcoreからpldefsへ移動}
+% \changes{v1.6k}{2017/12/05}{デフォルト設定ファイルの読み込みを
+%    \file{plcore.ltx}から\file{platex.ltx}へ移動}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2017/11/06 v1.6j pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2017/12/05 v1.6k pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -2086,19 +2088,12 @@
 %
 %
 % \subsection{デフォルト設定ファイルの読み込み}
-% 最後に、デフォルト設定ファイルである、\file{pldefs.ltx}を読み込みます。
-% このファイルについての詳細は、第\ref{plfonts:pldefs}節を参照してください。
-% \TeX{}の入力ファイル検索パスに設定されているディレクトリに\file{pldefs.cfg}%
-% ファイルがある場合は、そのファイルを使います。
-%    \begin{macrocode}
-%<*plcore>
-\InputIfFileExists{pldefs.cfg}
-           {\typeout{*************************************^^J%
-                     * Local config file pldefs.cfg used^^J%
-                     *************************************}}%
-           {\input{pldefs.ltx}}
-%</plcore>
-%    \end{macrocode}
+% デフォルト設定ファイル\file{pldefs.ltx}は、もともと\file{plcore.ltx}の途中で
+% 読み込んでいましたが、2018年以降の新しいコミュニティ版\pLaTeX{}では
+% \file{platex.ltx}から読み込むことにしました。
+% 実際の中身については、第\ref{plfonts:pldefs}節を参照してください。
+% \changes{v1.6k}{2017/12/05}{デフォルト設定ファイルの読み込みを
+%    \file{plcore.ltx}から\file{platex.ltx}へ移動}
 %
 %
 %

@@ -73,6 +73,8 @@
 %    \file{platex.ltx}から\file{plcore.ltx}へ移動}
 % \changes{v1.0q}{2017/11/29}{英語版ドキュメントを追加}
 % \changes{v1.0r}{2017/12/02}{英語の参考文献も追加}
+% \changes{v1.0s}{2017/12/05}{デフォルト設定ファイルの読み込みを
+%    \file{plcore.ltx}から\file{platex.ltx}へ移動}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -104,6 +106,8 @@
 %    \file{platex.ltx} to \file{plcore.ltx}}
 % \changes{v1.0q}{2017/11/29}{New English documentation added!}
 % \changes{v1.0r}{2017/12/02}{English references added}
+% \changes{v1.0s}{2017/12/05}{Moved loading default settings
+%    from \file{plcore.ltx} to \file{platex.ltx}}
 %\fi
 % \fi
 %
@@ -111,7 +115,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2017/12/02 v1.0r pLaTeX document file]
+\ProvidesFile{platex.dtx}[2017/12/05 v1.0s pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -477,6 +481,31 @@
          **************************}
 \makeatletter
 \input plcore.ltx
+%    \end{macrocode}
+%
+%\ifJAPANESE
+% フォント関連のデフォルト設定ファイルである、
+% \file{pldefs.ltx}を読み込みます。
+% \TeX{}の入力ファイル検索パスに設定されている
+% ディレクトリに\file{pldefs.cfg}ファイルがある場合は、
+% そのファイルを使います。
+% \changes{v1.0s}{2017/12/05}{デフォルト設定ファイルの読み込みを
+%    \file{plcore.ltx}から\file{platex.ltx}へ移動}
+%\else
+% Load font-related default settings, \file{pldefs.ltx}.
+% If a file \file{pldefs.cfg} is found, then that file will be
+% used instead.
+% \changes{v1.0s}{2017/12/05}{Moved loading default settings
+%    from \file{plcore.ltx} to \file{platex.ltx}}
+%\fi
+%    \begin{macrocode}
+%<*plcore>
+\InputIfFileExists{pldefs.cfg}
+           {\typeout{*************************************^^J%
+                     * Local config file pldefs.cfg used^^J%
+                     *************************************}}%
+           {\input{pldefs.ltx}}
+%</plcore>
 %    \end{macrocode}
 %
 %\ifJAPANESE

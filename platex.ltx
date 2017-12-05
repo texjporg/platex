@@ -23,6 +23,11 @@
          **************************}
 \makeatletter
 \input plcore.ltx
+\InputIfFileExists{pldefs.cfg}
+           {\typeout{*************************************^^J%
+                     * Local config file pldefs.cfg used^^J%
+                     *************************************}}%
+           {\input{pldefs.ltx}}
 \the\everyjob
 \everyjob\expandafter{%
   \the\everyjob
