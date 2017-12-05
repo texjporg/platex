@@ -575,7 +575,10 @@
 % \end{itemize}
 %
 % また、プリロードフォントや組版パラメータなどのデフォルト設定は、
-% \file{plcore.ltx}の中で\file{pldefs.ltx}をロードすることにより行います。
+% \file{platex.ltx}の中で\file{pldefs.ltx}をロードすることにより行います
+% \footnote{アスキー版では\file{plcore.ltx}の中でロードしていましたが、
+% 2018年以降の新しいコミュニティ版\pLaTeX{}では
+% \file{platex.ltx}から読み込むことにしました。}。
 % このファイル\file{pldefs.ltx}も\file{plfonts.dtx}から生成されます。
 % \begin{chuui}
 % このファイルに記述されている設定を変更すれば
@@ -597,7 +600,10 @@
 % \end{itemize}
 %
 % Moreover, default settings of pre-loaded fonts and typesetting parameters
-% are done by loading \file{pldefs.ltx} inside \file{plcore.ltx}.
+% are done by loading \file{pldefs.ltx} inside
+% \file{platex.ltx}.\footnote{ASCII \pLaTeX\ loaded \file{pldefs.ltx}
+% inside \file{plcore.ltx}; however, \pLaTeX\ community edition newer than
+% 2018 loads \file{pldefs.ltx} inside \file{platex.ltx}.}
 % This file \file{pldefs.ltx} is also stripped from \file{plfonts.dtx}.
 % \begin{chuui}
 % You can customize \pLaTeXe\ by tuning these settings.
