@@ -465,9 +465,9 @@
 %    \end{macrocode}
 %
 %\ifJAPANESE
-% \file{plcore.ltx}を読み込み、この\pLaTeX{}のバージョンを端末に表示します。
+% \file{plcore.ltx}を読み込みます。
 %\else
-% Load \file{plcore.ltx} and display \pLaTeX\ version on the terminal.
+% Load \file{plcore.ltx}.
 %\fi
 %    \begin{macrocode}
 \typeout{**************************^^J%
@@ -477,6 +477,16 @@
          **************************}
 \makeatletter
 \input plcore.ltx
+%    \end{macrocode}
+%
+%\ifJAPANESE
+% フォーマット作成時に\pLaTeX{}のバージョンがわかるように、
+% 端末に表示します。
+%\else
+% Display \pLaTeX\ version on the terminal, so that
+% it can be easily recognized during format creation.
+%\fi
+%    \begin{macrocode}
 \the\everyjob
 %    \end{macrocode}
 %
