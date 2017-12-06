@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2017/10/26 v1.0q Experimental pLaTeX2e features]
+                [2017/12/06 v1.0r Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -393,76 +393,13 @@
 %
 % \section{tabbing環境の行冒頭のJFMグル―}
 %
-% \begin{macro}{\@startline}
-% tabbing環境の行で、中身が始め括弧類などで始まる場合、
-% 最初の項目だけJFMグルーが消えない現象に対処します。
-% \changes{v1.2s}{2017/09/27}{tabbing環境の行冒頭のJFMグル―を削除}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2017/10/28}{\@startline}
-%<platexrelease>                   {Inhibit JFM glue at the beginning}%
-%<*plcore|platexrelease>
-\gdef\@startline{%
-     \ifnum \@nxttabmar >\@hightab
-       \@badtab
-       \global\@nxttabmar \@hightab
-     \fi
-     \global\@curtabmar \@nxttabmar
-     \global\@curtab \@curtabmar
-     \global\setbox\@curline \hbox {}%
-     \@startfield
-     \strut\inhibitglue}
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\@startline}
-%<platexrelease>                   {Inhibit JFM glue at the beginning}%
-%<platexrelease>\gdef\@startline{%
-%<platexrelease>     \ifnum \@nxttabmar >\@hightab
-%<platexrelease>       \@badtab
-%<platexrelease>       \global\@nxttabmar \@hightab
-%<platexrelease>     \fi
-%<platexrelease>     \global\@curtabmar \@nxttabmar
-%<platexrelease>     \global\@curtab \@curtabmar
-%<platexrelease>     \global\setbox\@curline \hbox {}%
-%<platexrelease>     \@startfield
-%<platexrelease>     \strut}
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
+% p\LaTeXe{}カーネル(2017/10/28)に導入したため削除。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \section{\cs{inhibitglue}の簡略形}
 %
-% \begin{macro}{\<}
-% 最後に、|\inhibitglue|の簡略形を定義します。
-% このコマンドは、和文フォントのメトリック情報から、自動的に挿入される
-% グルーの挿入を禁止します。
-%
-% 2014年のp\TeX{}の|\inhibitglue|のバグ修正に伴い、
-% |\inhibitglue|が垂直モードでは効かなくなりました。
-% \LaTeX{}では垂直モードと水平モードの区別が隠されていますので、
-% p\LaTeX{}の追加命令である|\<|は段落頭でも効くように修正します。
-%
-% |\DeclareRobustCommand|を使うと|\protect|の影響で前方の文字に対する
-% |\inhibitglue|が効かなくなるので、e-\TeX{}の|\protected|が必要です。
-% \changes{v1.6i}{2017/09/24}{\cs{<}が段落頭でも効くようにした}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2017/10/28}{\<}
-%<platexrelease>                   {\inhibitglue in vertical mode}%
-%<*pldefs|platexrelease>
-\ifx\protected\@undefined
-\def\<{\inhibitglue}
-\else
-\protected\def\<{\ifvmode\leavevmode\fi\inhibitglue}
-\fi
-%</pldefs|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\<}
-%<platexrelease>                   {\inhibitglue in vertical mode}%
-%<platexrelease>\def\<{\inhibitglue}
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
+% p\LaTeXe{}カーネル(2017/10/28)に導入したため削除。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
