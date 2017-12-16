@@ -121,7 +121,7 @@
 % \begin{center}
 % \begin{tabular}{l|p{0.7\linewidth}}
 % \emph{オプション} & \emph{意味}\\\hline
-% plcore & \file{plfonts.ltx}を生成します。\\
+% plcore & \file{plcore.ltx}の断片を生成します。\\
 % trace  & \file{ptrace.sty}を生成します。\\
 % JY1mc  & 横組用、明朝体のフォント定義ファイルを生成します。\\
 % JY1gt  & 横組用、ゴシック体のフォント定義ファイルを生成します。\\
@@ -2118,7 +2118,7 @@
 %
 % \subsection{テキストフォント}
 % テキストフォントのための属性やエラー書体などの宣言です。
-%
+% p\LaTeX{}のデフォルトの横組エンコードはJY1、縦組エンコードはJT1とします。
 % \noindent
 % 縦横エンコード共通：
 %    \begin{macrocode}
@@ -2227,7 +2227,7 @@
 % \subsection{プリロードフォント}
 % あらかじめフォーマットファイルにロードされるフォントの宣言です。
 % \dst{}プログラムのオプションでロードされるフォントのサイズを
-% 変更することができます。\file{platex.ins}では|xpt|を指定しています。
+% 変更することができます。\file{plfmt.ins}では|xpt|を指定しています。
 %    \begin{macrocode}
 %<*xpt>
 \DeclarePreloadSizes{JY1}{mc}{m}{n}{5,7,10,12}
@@ -2360,6 +2360,8 @@
 % \changes{v1.2}{1995/11/24}{it, sl, sc の宣言を外した}
 % \changes{v1.3b}{1997/01/29}{フォント定義ファイルのサイズ指定の調整}
 % \changes{v1.3b}{1997/03/11}{すべてのサイズをロード可能にした}
+%
+% p\LaTeX{}では従属書体にOT1エンコーディングを指定しています。
 %    \begin{macrocode}
 %<*JY1mc>
 \DeclareKanjiFamily{JY1}{mc}{}
