@@ -1154,16 +1154,6 @@ all others indicate the places where it is used.}
  \title{The \pLaTeXe\ Sources}
  \author{Ken Nakano \& Japanese \TeX\ Development Community}
 
-% This command will be used to input the patch file
-% if that file exists.
-\newcommand{\includeltpatch}{%
-  \def\currentfile{plpatch.ltx}
-  \part{plpatch}
-  {\let\ttfamily\relax
-    \xdef\filekey{\filekey, \thepart={\ttfamily\currentfile}}}%
-  Things we did wrong\ldots
-  \IndexInput{plpatch.ltx}}
-
 % Get the date and patch level from plvers.dtx
 \makeatletter
 \let\patchdate=\@empty
@@ -1171,30 +1161,17 @@ all others indicate the places where it is used.}
    \def\ProvidesFile#1\pfmtversion#2#3\ppatch@level#4{%
       \date{#2}\xdef\patchdate{#4}\endinput}
    \input{plvers.dtx}
-\global\let\X@date=\@date
-
-% Add the patch version if available.
-   \long\def\Xdef#1#2#3\def#4#5{%
-    \xdef\X@date{#2}%
-    \xdef\patchdate{#5}%
-    \endinput}%
-   \InputIfFileExists{plpatch.ltx}
-    {\let\def\Xdef}{\global\let\includeltpatch\relax}
 \endgroup
 
-\ifx\@date\X@date
-  \def\Xpatch{0}
-  \ifx\patchdate\Xpatch\else
-  % number is assumed
-  \ifnum\patchdate>0
-    \edef\@date{\@date\space Patch level\space\patchdate}
-  \else
-    \edef\@date{\@date\space Pre-Release\patchdate}
-  \fi\fi
+% Add the patch version if available.
+\def\Xpatch{0}
+\ifx\patchdate\Xpatch\else
+% number is assumed
+\ifnum\patchdate>0
+  \edef\@date{\@date\space Patch level\space\patchdate}
 \else
-   \@warning{plpatch.ltx does not match plvers.dtx!}
-   \let\includeltpatch\relax
-\fi
+  \edef\@date{\@date\space Pre-Release\patchdate}
+\fi\fi
 \makeatother
 
 \pagenumbering{roman}
