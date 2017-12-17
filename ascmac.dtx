@@ -11,6 +11,8 @@
 %
 % \iffalse
 %
+% 2017/12/17 v2.0f
+%     - Fix a bug.
 % 2017/12/06 v2.0e
 %     - Again works with non-e-TeX engines.
 % 2017/07/22 v2.0d
@@ -67,7 +69,7 @@
 %</driver>
 %<tascmac>\ProvidesPackage{tascmac}
 %<ascmac>\ProvidesPackage{ascmac}
-  [2017/12/06 v2.0e
+  [2017/12/17 v2.0f
 %<driver|tascmac>  ascmac package (community edition)
 %<ascmac>  ascmac wrapper (community edition)
   ]
@@ -329,21 +331,24 @@
 % 使用できるように設定します。
 % \changes{2016/08/21}{v2.0c}{pdf\LaTeX{}でascgrpのType1フォントを使用}
 % \changes{2017/12/06}{v2.0e}{念のためe-拡張なしのエンジンでのエラーを防止}
+% \changes{2017/12/17}{v2.0f}{判定が逆になっていたのを修正}
 %    \begin{macrocode}
 %%
 %% Use Type1 font for ascgrp (pdfLaTeX, LuaLaTeX)
 \ifascmac@ptex\else
   \ifx\pdfextension\@undefined
+    \ifx\pdfmapline\@undefined\else
+      % pdfTeX, LuaTeX (<=0.81)
+      \pdfmapline{+ascgrp <ascgrp.pfb}
+      \pdfmapline{+ascii10 <ascii10.pfb}
+      \pdfmapline{+ascii36 <ascii36.pfb}
+    \fi
+  \else
     % LuaTeX (>=0.85)
     \pdfextension mapline{+ascgrp <ascgrp.pfb}
     \pdfextension mapline{+ascii10 <ascii10.pfb}
     \pdfextension mapline{+ascii36 <ascii36.pfb}
-  \else\ifx\pdfmapline\@undefined
-    % pdfTeX, LuaTeX (<=0.81)
-    \pdfmapline{+ascgrp <ascgrp.pfb}
-    \pdfmapline{+ascii10 <ascii10.pfb}
-    \pdfmapline{+ascii36 <ascii36.pfb}
-  \fi\fi
+  \fi
 \fi
 %    \end{macrocode}
 %
