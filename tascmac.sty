@@ -53,16 +53,18 @@
 %% Use Type1 font for ascgrp (pdfLaTeX, LuaLaTeX)
 \ifascmac@ptex\else
   \ifx\pdfextension\@undefined
-    % pdfTeX, LuaTeX (<=0.81)
-    \pdfmapline{+ascgrp <ascgrp.pfb}
-    \pdfmapline{+ascii10 <ascii10.pfb}
-    \pdfmapline{+ascii36 <ascii36.pfb}
-  \else\ifx\pdfmapline\@undefined
+    \ifx\pdfmapline\@undefined\else
+      % pdfTeX, LuaTeX (<=0.81)
+      \pdfmapline{+ascgrp <ascgrp.pfb}
+      \pdfmapline{+ascii10 <ascii10.pfb}
+      \pdfmapline{+ascii36 <ascii36.pfb}
+    \fi
+  \else
     % LuaTeX (>=0.85)
     \pdfextension mapline{+ascgrp <ascgrp.pfb}
     \pdfextension mapline{+ascii10 <ascii10.pfb}
     \pdfextension mapline{+ascii36 <ascii36.pfb}
-  \fi\fi
+  \fi
 \fi
 %%
 %% ascmac.sty 10/28 '88
