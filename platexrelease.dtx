@@ -22,15 +22,19 @@
 % \changes{v1.0g}{2016/09/08}{p\LaTeX\ \texttt{!<2016/09/03!>}版に警告}
 % \changes{v1.0h}{2017/09/26}{p\LaTeX\ \texttt{!<2017/07/29!>}版に警告}
 % \changes{v1.0i}{2017/12/06}{タイポ修正}
+% \changes{v1.0j}{2017/12/17}{Add \cs{platexreleaseversion} info
+%      to \cs{ProvidesPackage} output (sync with latexrelease.dtx v1.0i)}
 % \fi
 %
 % \iffalse
 \NeedsTeXFormat{pLaTeX2e}
 %<*driver>
+\def\platexreleaseversion{<date only known in .sty file>}
 \ProvidesFile{platexrelease.dtx}
 %</driver>
 %<platexrelease>\ProvidesPackage{platexrelease}
-                [2017/12/06 v1.0i latexrelease support for pLaTeX Kernel]
+          [2017/12/18 v1.0j latexrelease support for pLaTeX Kernel
+              (including releases up to \platexreleaseversion)]
 %<*driver>
 \documentclass{jltxdoc}
 \GetFileInfo{platexrelease.dtx}
