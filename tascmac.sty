@@ -23,7 +23,7 @@
 %%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{tascmac}
-  [2017/12/17 v2.0f
+  [2017/12/22 v2.0g
   ascmac package (community edition)
   ]
 %%
@@ -106,7 +106,35 @@ Q   \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift
 %%
 %% screen environment
 \newdimen\@scw
-\def\@hobox#1#2#3{\hbox to\@scw{\oval(#3,#3)[#1]\hfil\oval(#3,#3)[#2]%
+\newbox\ascmac@hoboxa
+\newbox\ascmac@hoboxb
+\def\ascmac@parse@ovarg#1{%
+Q \iftdir
+Q   \def\ascmac@ovarg{}%
+Q   \@tfor\reserved@a:=#1\do{%
+Q     \if l\reserved@a \edef\ascmac@ovarg{\ascmac@ovarg t}%
+Q     \else\if t\reserved@a \edef\ascmac@ovarg{\ascmac@ovarg r}%
+Q     \else\if r\reserved@a \edef\ascmac@ovarg{\ascmac@ovarg b}%
+Q     \else\if b\reserved@a \edef\ascmac@ovarg{\ascmac@ovarg l}%
+Q     \fi\fi\fi\fi}%
+Q \else
+    \def\ascmac@ovarg{#1}%
+Q \fi
+}
+\def\ascmac@pass@oval#1#2{\oval(#2,#2)[#1]}
+\def\@hobox#1#2#3{%
+  \ascmac@parse@ovarg{#1}\setbox\ascmac@hoboxa=\hbox{%
+Q   \yoko
+    \expandafter\ascmac@pass@oval\expandafter{\ascmac@ovarg}{#3}\hss}%
+  \ascmac@parse@ovarg{#2}\setbox\ascmac@hoboxb=\hbox{%
+Q   \yoko
+    \expandafter\ascmac@pass@oval\expandafter{\ascmac@ovarg}{#3}\hss}%
+  \wd\ascmac@hoboxa=\z@ \wd\ascmac@hoboxb=\z@
+  % the following two lines are unnecessary for (u)pLaTeX, but
+  % added intentionally for LuaTeX-ja (\wd <-> \ltjsetwd incompatible)
+  \ht\ascmac@hoboxa=\z@ \ht\ascmac@hoboxb=\z@
+  \dp\ascmac@hoboxa=\z@ \dp\ascmac@hoboxb=\z@
+  \hbox to\@scw{\box\ascmac@hoboxa\hfil\box\ascmac@hoboxb\relax
   \dimen\z@=#3\unitlength\advance\dimen\z@\@wholewidth
   \vrule\@width\z@\@height\z@\@depth.5\dimen\z@}}
 \def\@vrf@#1#2{\vskip#1\leaders\vrule width#2\vfil\vskip#1}

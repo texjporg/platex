@@ -11,6 +11,8 @@
 %
 % \iffalse
 %
+% 2017/12/22 v2.0g
+%     - Made compatible with pict2e also for tate-gumi.
 % 2017/12/17 v2.0f
 %     - Fix a bug.
 % 2017/12/06 v2.0e
@@ -69,7 +71,7 @@
 %</driver>
 %<tascmac>\ProvidesPackage{tascmac}
 %<ascmac>\ProvidesPackage{ascmac}
-  [2017/12/17 v2.0f
+  [2017/12/22 v2.0g
 %<driver|tascmac>  ascmac package (community edition)
 %<ascmac>  ascmac wrapper (community edition)
   ]
@@ -425,10 +427,43 @@ Q   \ybaselineshift\@saveybaselineshift \tbaselineshift\@savetbaselineshift
 % \end{environment}
 %
 % |screen| 環境などで使う命令の準備です。
+% コミュニティ版では、縦組でpict2eパッケージと共存しても壊れないように、
+% |\oval| を常に横組ボックスの中で呼び出すようにしました。
+% このときに |\oval| の引数を正しく渡す処理も追加しています。
+% \changes{2017/12/22}{v2.0g}{縦組でpict2eと共存しても壊れないように、
+%    \cs{oval}を常に横組ボックスの中で呼び出すようにした}
 %    \begin{macrocode}
 %% screen environment
 \newdimen\@scw
-\def\@hobox#1#2#3{\hbox to\@scw{\oval(#3,#3)[#1]\hfil\oval(#3,#3)[#2]%
+\newbox\ascmac@hoboxa
+\newbox\ascmac@hoboxb
+\def\ascmac@parse@ovarg#1{%
+Q \iftdir
+Q   \def\ascmac@ovarg{}%
+Q   \@tfor\reserved@a:=#1\do{%
+Q     \if l\reserved@a \edef\ascmac@ovarg{\ascmac@ovarg t}%
+Q     \else\if t\reserved@a \edef\ascmac@ovarg{\ascmac@ovarg r}%
+Q     \else\if r\reserved@a \edef\ascmac@ovarg{\ascmac@ovarg b}%
+Q     \else\if b\reserved@a \edef\ascmac@ovarg{\ascmac@ovarg l}%
+Q     \fi\fi\fi\fi}%
+Q \else
+    \def\ascmac@ovarg{#1}%
+Q \fi
+}
+\def\ascmac@pass@oval#1#2{\oval(#2,#2)[#1]}
+\def\@hobox#1#2#3{%
+  \ascmac@parse@ovarg{#1}\setbox\ascmac@hoboxa=\hbox{%
+Q   \yoko
+    \expandafter\ascmac@pass@oval\expandafter{\ascmac@ovarg}{#3}\hss}%
+  \ascmac@parse@ovarg{#2}\setbox\ascmac@hoboxb=\hbox{%
+Q   \yoko
+    \expandafter\ascmac@pass@oval\expandafter{\ascmac@ovarg}{#3}\hss}%
+  \wd\ascmac@hoboxa=\z@ \wd\ascmac@hoboxb=\z@
+  % the following two lines are unnecessary for (u)pLaTeX, but
+  % added intentionally for LuaTeX-ja (\wd <-> \ltjsetwd incompatible)
+  \ht\ascmac@hoboxa=\z@ \ht\ascmac@hoboxb=\z@
+  \dp\ascmac@hoboxa=\z@ \dp\ascmac@hoboxb=\z@
+  \hbox to\@scw{\box\ascmac@hoboxa\hfil\box\ascmac@hoboxb\relax
   \dimen\z@=#3\unitlength\advance\dimen\z@\@wholewidth
   \vrule\@width\z@\@height\z@\@depth.5\dimen\z@}}
 %    \end{macrocode}
