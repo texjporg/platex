@@ -19,7 +19,15 @@
    {2017/04/15}
 \edef\platexreleaseversion
    {2017/12/10}
-\def\plIncludeInRelease#1{\kernel@ifnextchar[%
+\newif\if@plincludeinrelease
+\@plincludeinreleasefalse
+\def\plIncludeInRelease#1{%
+  \if@plincludeinrelease
+    \PackageError{platexrelease}
+      {mis-matched \string\plIncludeInRelease}{}%
+    \@plincludeinreleasefalse
+  \fi
+  \kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
   {\@plIncludeInRelease{#1}[#1]}}
 \def\@plIncludeInRelease#1[#2]{\@plIncludeInRele@se{#2}}
@@ -32,6 +40,7 @@
      \expandafter\expandafter\expandafter\@gobble@plIncludeInRelease
     \else
       \GenericInfo{}{Applying: \the\toks@}%
+      \@plincludeinreleasetrue
       \expandafter\let\csname\string#2+\@currname+plIIR\endcsname\@empty
     \fi
   \else
@@ -39,8 +48,23 @@
     \expandafter\@gobble@plIncludeInRelease
   \fi
 }
-\long\def\@gobble@plIncludeInRelease#1\plEndIncludeInRelease{}
-\let\plEndIncludeInRelease\relax
+\def\plEndIncludeInRelease{%
+  \if@plincludeinrelease
+    \@plincludeinreleasefalse
+  \else
+    \PackageError{platexrelease}
+      {mis-matched \string\plEndIncludeInRelease}{}%
+  \fi}
+\long\def\@gobble@plIncludeInRelease#1\plEndIncludeInRelease{%
+  \@plincludeinreleasefalse
+  \@check@plIncludeInRelease#1\plIncludeInRelease
+    \@check@plIncludeInRelease\@end@check@plIncludeInRelease}
+\long\def\@check@plIncludeInRelease#1\plIncludeInRelease
+  #2#3\@end@check@plIncludeInRelease{%
+  \ifx\@check@plIncludeInRelease#2\else
+    \PackageError{platexrelease}
+      {skipped \string\plIncludeInRelease}{}%
+  \fi}
 %% File: platexrelease.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{platexrelease}

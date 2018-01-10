@@ -1,0 +1,16 @@
+% Check that platexrelease generates no errors,
+% eg from mis-matched \(End)plIncludeInRelease
+% based on tlb-latexrelease-002.lvt
+
+% silence normal (p)latexrelease logging
+\def\GenericInfo#1#2{}
+
+% 本来のテストであれば、以下の行を有効にすべき。
+% しかし、tests/ に
+% \RequirePackage{exppl2e}
+% という内容の platex.cfg が置かれているので、
+% その時点で platexrelease が読まれているはず。
+
+%\RequirePackage[0000/00/00]{platexrelease}
+
+\stop
