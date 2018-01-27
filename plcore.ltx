@@ -19,7 +19,7 @@
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
    {2017/10/28}
-\def\ppatch@level{3}
+\def\ppatch@level{4}
 \edef\platexBANNER{\the\everyjob\noexpand\typeout{}\relax}% save LaTeX banner
 \def\plIncludeInRelease#1{\kernel@ifnextchar[%
   {\@plIncludeInRelease{#1}}
@@ -711,19 +711,6 @@
   \else
     \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \null
     \ignorespaces
-  \fi}
-\def\@no@lnbk #1[#2]{%
-  \ifvmode
-    \@nolnerr
-  \else
-    \@tempskipa\lastskip
-    \unskip
-    \penalty #1\@getpen{#2}%
-    \penalty\z@\relax %% added (2017/08/25)
-    \ifdim\@tempskipa>\z@
-      \hskip\@tempskipa
-      \ignorespaces
-    \fi
   \fi}
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%

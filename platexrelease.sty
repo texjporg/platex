@@ -502,6 +502,21 @@ of this package available from CTAN}
 \def\<{\inhibitglue}
 \plEndIncludeInRelease
 %% File: plcore.dtx
+\plIncludeInRelease{2017/10/28}{\@no@lnbk}
+                   {Break before prebreakpenalty}%
+\def\@no@lnbk #1[#2]{%
+  \ifvmode
+    \@nolnerr
+  \else
+    \@tempskipa\lastskip
+    \unskip
+    \penalty #1\@getpen{#2}%
+    \ifdim\@tempskipa>\z@
+      \hskip\@tempskipa
+      \ignorespaces
+    \fi
+  \fi}
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/07/29}{\@no@lnbk}
                    {Break before prebreakpenalty}%
 \def\@no@lnbk #1[#2]{%

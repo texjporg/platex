@@ -3,7 +3,7 @@
 %
 %  Copyright 1994-2001 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016-2017 Japanese TeX Development Community
+%  Copyright (c) 2016-2018 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -78,13 +78,15 @@
 % \changes{v1.2t}{2017/10/31}{v1.2sの変更に伴い、\cs{ref}が数式モードで
 %    エラーになっていたのを修正}
 % \changes{v1.2u}{2017/11/04}{emathの\cs{marusuuref}対策}
+% \changes{v1.2v}{2018/01/27}{v1.2oとv1.2qの修正で\cs{nolinebreak}が
+%    効かない場合があったので、元に戻した}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2017/11/04 v1.2u pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2018/01/27 v1.2v pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -286,24 +288,42 @@
 % 同士の合算は行われないことを利用しています。
 % \changes{v1.2q}{2017/08/25}{\cs{nolinebreak}の場合に\cs{(x)kanjiskip}が
 %    入らなくなっていたのを修正}
+%
+% ところが、その変更によってそもそも|\nolinebreak|が効かない場合が
+% 生じたので、変更全体をいったんキャンセルして元に戻します。
+% \changes{v1.2v}{2018/01/27}{v1.2oとv1.2qの修正で\cs{nolinebreak}が
+%    効かない場合があったので、元に戻した}
 %    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2017/10/28}{\@no@lnbk}
+%<platexrelease>                   {Break before prebreakpenalty}%
+%<platexrelease>\def\@no@lnbk #1[#2]{%
+%<platexrelease>  \ifvmode
+%<platexrelease>    \@nolnerr
+%<platexrelease>  \else
+%<platexrelease>    \@tempskipa\lastskip
+%<platexrelease>    \unskip
+%<platexrelease>    \penalty #1\@getpen{#2}%
+%<platexrelease>    \ifdim\@tempskipa>\z@
+%<platexrelease>      \hskip\@tempskipa
+%<platexrelease>      \ignorespaces
+%<platexrelease>    \fi
+%<platexrelease>  \fi}
+%<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2017/07/29}{\@no@lnbk}
 %<platexrelease>                   {Break before prebreakpenalty}%
-%<*plcore|platexrelease>
-\def\@no@lnbk #1[#2]{%
-  \ifvmode
-    \@nolnerr
-  \else
-    \@tempskipa\lastskip
-    \unskip
-    \penalty #1\@getpen{#2}%
-    \penalty\z@\relax %% added (2017/08/25)
-    \ifdim\@tempskipa>\z@
-      \hskip\@tempskipa
-      \ignorespaces
-    \fi
-  \fi}
-%</plcore|platexrelease>
+%<platexrelease>\def\@no@lnbk #1[#2]{%
+%<platexrelease>  \ifvmode
+%<platexrelease>    \@nolnerr
+%<platexrelease>  \else
+%<platexrelease>    \@tempskipa\lastskip
+%<platexrelease>    \unskip
+%<platexrelease>    \penalty #1\@getpen{#2}%
+%<platexrelease>    \penalty\z@\relax %% added (2017/08/25)
+%<platexrelease>    \ifdim\@tempskipa>\z@
+%<platexrelease>      \hskip\@tempskipa
+%<platexrelease>      \ignorespaces
+%<platexrelease>    \fi
+%<platexrelease>  \fi}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2017/05/05}{\@no@lnbk}
 %<platexrelease>                   {Break before prebreakpenalty}%
