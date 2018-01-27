@@ -1,7 +1,7 @@
 % \iffalse meta-comment
 %% File: platexrelease.dtx
 %
-%  Copyright (c) 2016 Japanese TeX Development Community
+%  Copyright (c) 2016-2018 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -22,7 +22,8 @@
 % \changes{v1.0g}{2016/09/08}{p\LaTeX\ \texttt{!<2016/09/03!>}版に警告}
 % \changes{v1.0h}{2017/09/26}{p\LaTeX\ \texttt{!<2017/07/29!>}版に警告}
 % \changes{v1.0i}{2017/12/06}{タイポ修正}
-% \changes{v1.0j}{2017/12/17}{Add \cs{platexreleaseversion} info
+% \changes{v1.0j}{2018/01/27}{p\LaTeX\ \texttt{!<2017/09/26!>}版に警告}
+% \changes{v1.0k}{2018/01/27}{Add \cs{platexreleaseversion} info
 %      to \cs{ProvidesPackage} output (sync with latexrelease.dtx v1.0i)}
 % \fi
 %
@@ -33,7 +34,7 @@
 \ProvidesFile{platexrelease.dtx}
 %</driver>
 %<platexrelease>\ProvidesPackage{platexrelease}
-          [2017/12/18 v1.0j latexrelease support for pLaTeX Kernel
+          [2018/01/27 v1.0k latexrelease support for pLaTeX Kernel
               (including releases up to \platexreleaseversion)]
 %<*driver>
 \documentclass{jltxdoc}
@@ -304,35 +305,56 @@ of this package available from CTAN}
 % \changes{v1.0g}{2016/09/08}{p\LaTeX\ \texttt{!<2016/09/03!>}版に警告}
 % \changes{v1.0h}{2017/09/26}{p\LaTeX\ \texttt{!<2017/07/29!>}版に警告}
 % \changes{v1.0i}{2017/12/06}{タイポ修正}
+% \changes{v1.0j}{2018/01/27}{p\LaTeX\ \texttt{!<2017/09/26!>}版に警告}
 %    \begin{macrocode}
-\plIncludeInRelease{2017/09/26}{\PackageWarning}{pLaTeX Info}%
+\def\pliirpkg@ver@warn{%
+      You selected pLaTeX2e <\pfmtversion>, but\MessageBreak
+      this version of pLaTeX2e is known to have\MessageBreak
+      some critical bugs. We advise you to\MessageBreak
+      select another format date}
+\plIncludeInRelease{2017/10/28}{\PackageWarning}{pLaTeX Info}%
+  % * <2017/10/28>+4
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/07/29}{\PackageWarning}{pLaTeX Info}%
-  \PackageWarningNoLine{platexrelease}{%
-      You selected pLaTeX2e <\pfmtversion>, but\MessageBreak
-      this version of pLaTeX2e is known to have\MessageBreak
-      some critical bugs. We advise you to\MessageBreak
-      select another format date}
+  % * <2017/10/28>+3
+  % * <2017/10/28>+2
+  % * <2017/10/28>+1
+  % * <2017/10/28>
+  % * <2017/09/26>
+  % * <2017/07/29>+1
+  %   - Enabling \linebreak before prebreakpenalty caused
+  %     ineffective \nolinebreak (fixed in <2017/10/28>+4)
+  % * <2017/07/29>
+  %   - Inhibit JFM glue in tabular cells resulted in
+  %     misplaced right alignment (fixed in <2017/09/26>)
+  \PackageWarningNoLine{platexrelease}{\pliirpkg@ver@warn}
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/09/08}{\PackageWarning}{pLaTeX Info}%
+  % * <2017/05/05>
+  % * <2017/04/08>
+  % * <2016/11/29>
+  % * <2016/09/08>
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/09/03}{\PackageWarning}{pLaTeX Info}%
-  \PackageWarningNoLine{platexrelease}{%
-      You selected pLaTeX2e <\pfmtversion>, but\MessageBreak
-      this version of pLaTeX2e is known to have\MessageBreak
-      some critical bugs. We advise you to\MessageBreak
-      select another format date}
+  % * <2016/09/03>
+  %   - \footnotetext in vertical mode resulted in extra
+  %     vertical space (fixed in <2016/09/08>)
+  \PackageWarningNoLine{platexrelease}{\pliirpkg@ver@warn}
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/07/01}{\PackageWarning}{pLaTeX Info}%
+  % * <2016/07/01>
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\PackageWarning}{pLaTeX Info}%
-  \PackageWarningNoLine{platexrelease}{%
-      You selected pLaTeX2e <\pfmtversion>, but\MessageBreak
-      this version of pLaTeX2e is known to have\MessageBreak
-      some critical bugs. We advise you to\MessageBreak
-      select another format date}
+  % * <2016/06/10>+1
+  % * <2016/06/10>
+  % * <2016/05/07>
+  % * <2016/04/17>
+  %   - Fix for non-zero baselineshift in accent composition
+  %     was problematic (fixed in <2016/07/01>)
+  \PackageWarningNoLine{platexrelease}{\pliirpkg@ver@warn}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\PackageWarning}{pLaTeX Info}%
+  % * <2006/11/10>
 \plEndIncludeInRelease
 %    \end{macrocode}
 %
