@@ -44,7 +44,7 @@
 %% File: platexrelease.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{platexrelease}
-                [2017/12/06 v1.0i latexrelease support for pLaTeX Kernel]
+                [2018/01/27 v1.0j latexrelease support for pLaTeX Kernel]
 \RequirePackageWithOptions{latexrelease}
 \ifnum\expandafter\@parse@version\latexreleaseversion//00\@nil
   >\expandafter\@parse@version\p@known@latexreleaseversion//00\@nil
@@ -100,34 +100,54 @@ of this package available from CTAN}
 \fi
 \let\pfmtversion\requestedplpatchdate
 \let\currentpLaTeXdate\requestedpLaTeXdate
-\plIncludeInRelease{2017/09/26}{\PackageWarning}{pLaTeX Info}%
+\def\pliirpkg@ver@warn{%
+      You selected pLaTeX2e <\pfmtversion>, but\MessageBreak
+      this version of pLaTeX2e is known to have\MessageBreak
+      some critical bugs. We advise you to\MessageBreak
+      select another format date}
+\plIncludeInRelease{2017/10/28}{\PackageWarning}{pLaTeX Info}%
+  % * <2017/10/28>+4
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/07/29}{\PackageWarning}{pLaTeX Info}%
-  \PackageWarningNoLine{platexrelease}{%
-      You selected pLaTeX2e <\pfmtversion>, but\MessageBreak
-      this version of pLaTeX2e is known to have\MessageBreak
-      some critical bugs. We advise you to\MessageBreak
-      select another format date}
+  % * <2017/10/28>+3
+  % * <2017/10/28>+2
+  % * <2017/10/28>+1
+  % * <2017/10/28>
+  % * <2017/09/26>
+  % * <2017/07/29>+1
+  %   - Enabling \linebreak before prebreakpenalty caused
+  %     ineffective \nolinebreak (fixed in <2017/10/28>+4)
+  % * <2017/07/29>
+  %   - Inhibit JFM glue in tabular cells resulted in
+  %     misplaced right alignment (fixed in <2017/09/26>)
+  \PackageWarningNoLine{platexrelease}{\pliirpkg@ver@warn}
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/09/08}{\PackageWarning}{pLaTeX Info}%
+  % * <2017/05/05>
+  % * <2017/04/08>
+  % * <2016/11/29>
+  % * <2016/09/08>
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/09/03}{\PackageWarning}{pLaTeX Info}%
-  \PackageWarningNoLine{platexrelease}{%
-      You selected pLaTeX2e <\pfmtversion>, but\MessageBreak
-      this version of pLaTeX2e is known to have\MessageBreak
-      some critical bugs. We advise you to\MessageBreak
-      select another format date}
+  % * <2016/09/03>
+  %   - \footnotetext in vertical mode resulted in extra
+  %     vertical space (fixed in <2016/09/08>)
+  \PackageWarningNoLine{platexrelease}{\pliirpkg@ver@warn}
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/07/01}{\PackageWarning}{pLaTeX Info}%
+  % * <2016/07/01>
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\PackageWarning}{pLaTeX Info}%
-  \PackageWarningNoLine{platexrelease}{%
-      You selected pLaTeX2e <\pfmtversion>, but\MessageBreak
-      this version of pLaTeX2e is known to have\MessageBreak
-      some critical bugs. We advise you to\MessageBreak
-      select another format date}
+  % * <2016/06/10>+1
+  % * <2016/06/10>
+  % * <2016/05/07>
+  % * <2016/04/17>
+  %   - Fix for non-zero baselineshift in accent composition
+  %     was problematic (fixed in <2016/07/01>)
+  \PackageWarningNoLine{platexrelease}{\pliirpkg@ver@warn}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\PackageWarning}{pLaTeX Info}%
+  % * <2006/11/10>
 \plEndIncludeInRelease
 %% File: plfonts.dtx
 \plIncludeInRelease{2017/04/08}{\ystrutbox}
