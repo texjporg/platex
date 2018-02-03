@@ -93,6 +93,7 @@
 %   奇数ページに送るように変更}
 % \changes{v1.7f}{2017/08/31}{和文書体の基準を全角空白から「漢」に変更}
 % \changes{v1.7g}{2017/09/19}{内部処理で使ったボックス0を空にした}
+% \changes{v1.7h}{2018/02/04}{和文スケール値\cs{Cjascale}を定義}
 % \fi
 %
 % \iffalse
@@ -122,7 +123,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2017/09/19 v1.7g
+  [2018/02/04 v1.7h
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -753,6 +754,22 @@
 % \end{macro}
 % \end{macro}
 % \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\Cjascale}
+% このクラスファイルが意図する和文スケール値
+% （$1\,\mathrm{zw} \div \textmc{要求サイズ}$）を
+% 表す実数値マクロ|\Cjascale|を定義します。
+% このp\LaTeXe{}の標準クラスでは、フォーマット作成時に読み込まれた
+% フォント定義ファイル（\file{jy1mc.fd} / \file{jy1gt.fd} /
+% \file{jt1mc.fd} / \file{jt1gt.fd}）での和文スケール値がそのまま
+% 有効ですので、これは0.962216です。
+% \changes{v1.7h}{2018/02/04}{和文スケール値\cs{Cjascale}を定義}
+%    \begin{macrocode}
+%<*article|report|book>
+\def\Cjascale{0.962216}
+%</article|report|book>
+%    \end{macrocode}
 % \end{macro}
 %
 %

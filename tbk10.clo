@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesFile{tbk10.clo}
-  [2017/09/19 v1.7g
+  [2018/02/04 v1.7h
   Standard pLaTeX file (size option)]
 \renewcommand{\normalsize}{%
     \@setfontsize\normalsize\@xpt{17}%

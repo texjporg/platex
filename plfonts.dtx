@@ -75,13 +75,14 @@
 %    plcoreからpldefsへ移動}
 % \changes{v1.6k}{2017/12/05}{デフォルト設定ファイルの読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
+% \changes{v1.6l}{2018/02/04}{和文スケール値を明文化}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2017/12/05 v1.6k pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2018/02/04 v1.6l pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -2111,7 +2112,7 @@
 %    \begin{macrocode}
 %<*pldefs>
 \ProvidesFile{pldefs.ltx}
-      [2017/11/06 v1.6j pLaTeX Kernel (Default settings)]
+      [2018/02/04 v1.6l pLaTeX Kernel (Default settings)]
 %</pldefs>
 %    \end{macrocode}
 %
@@ -2163,7 +2164,7 @@
 \input{jt1mc.fd}
 \input{jt1gt.fd}
 %    \end{macrocode}
-% フォントを有効にする
+% フォントを有効にします。
 %    \begin{macrocode}
 \fontencoding{JT1}\selectfont
 \fontencoding{JY1}\selectfont
@@ -2352,7 +2353,7 @@
 %<JY1gt>\ProvidesFile{jy1gt.fd}
 %<JT1mc>\ProvidesFile{jt1mc.fd}
 %<JT1gt>\ProvidesFile{jt1gt.fd}
-%<JY1mc,JY1gt,JT1mc,JT1gt>       [1997/01/24 v1.3 KANJI font defines]
+%<JY1mc,JY1gt,JT1mc,JT1gt>       [2018/02/04 v1.6l KANJI font defines]
 %    \end{macrocode}
 % 横組用、縦組用ともに、
 % 明朝体のシリーズ|bx|がゴシック体となるように宣言しています。
@@ -2361,6 +2362,13 @@
 % \changes{v1.3b}{1997/03/11}{すべてのサイズをロード可能にした}
 %
 % p\LaTeX{}では従属書体にOT1エンコーディングを指定しています。
+% また、要求サイズ（指定されたフォントサイズ）が10ptのとき、
+% 全角幅の実寸が9.62216ptとなるようにしますので、
+% 和文スケール値（$1\,\mathrm{zw} \div \textmc{要求サイズ}$）は
+% $9.62216\,\mathrm{pt}/10\,\mathrm{pt}=0.962216$です。
+% min10系のメトリックは全角幅が9.62216ptでデザインされているので、
+% これを1倍で読込みます。
+% \changes{v1.6l}{2018/02/04}{和文スケール値を明文化}
 %    \begin{macrocode}
 %<*JY1mc>
 \DeclareKanjiFamily{JY1}{mc}{}

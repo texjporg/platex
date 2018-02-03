@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesClass{tarticle}
-  [2017/09/19 v1.7g
+  [2018/02/04 v1.7h
  Standard pLaTeX class]
 \newcounter{@paper}
 \newif\if@landscape \@landscapefalse
@@ -124,6 +124,7 @@
 \ProcessOptions\relax
 \input{tsize1\@ptsize.clo}
 \RequirePackage{plext}
+\def\Cjascale{0.962216}
 \if@stysize
   \setlength\columnsep{3\Cwd}
 \else

@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesClass{jbook}
-  [2017/09/19 v1.7g
+  [2018/02/04 v1.7h
  Standard pLaTeX class]
 \newcounter{@paper}
 \newif\if@landscape \@landscapefalse
@@ -133,6 +133,7 @@
 \ExecuteOptions{a4paper,10pt,twoside,onecolumn,final,openright}
 \ProcessOptions\relax
 \input{jbk1\@ptsize.clo}
+\def\Cjascale{0.962216}
 \if@stysize
   \setlength\columnsep{2\Cwd}
 \else
