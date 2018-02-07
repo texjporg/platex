@@ -19,7 +19,7 @@ See the documents (platex.pdf, pldoc.pdf, platexrelease.pdf) for more informatio
 
 - Fix macros which are inconsistent with the latest e-pTeX
   (e.g. \footnote, tabular, \parbox, \underline).
-- Fix several bugs in pLaTeX2e and ascmac.sty.
+- Fix several bugs in pLaTeX2e format and packages.
 - Add platexrelease.sty. As with the latexrelease package, this
   package enables us to use the old versions of pLaTeX2e (from
   2006/11/10 the ASCII edition).

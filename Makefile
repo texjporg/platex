@@ -1,6 +1,6 @@
 STRIPTARGET = platex.ltx jarticle.cls pl209.def platexrelease.sty \
-	nidanfloat.sty tascmac.sty jltxdoc.cls
-DOCTARGET = platex platexrelease pldoc nidanfloat ascmac exppl2e \
+	nidanfloat.sty jltxdoc.cls
+DOCTARGET = platex platexrelease pldoc nidanfloat exppl2e \
 	platex-en
 PDFTARGET = $(addsuffix .pdf,$(DOCTARGET))
 DVITARGET = $(addsuffix .dvi,$(DOCTARGET))
@@ -39,10 +39,6 @@ NIDAN = nidanfloat.sty
 
 NIDAN_SRC = nidanfloat.dtx
 
-ASCMAC = tascmac.sty ascmac.sty
-
-ASCMAC_SRC = ascmac.dtx
-
 INTRODOC_SRC = platex.dtx
 
 PLRELDOC_SRC = platexrelease.dtx
@@ -74,11 +70,6 @@ nidanfloat.sty: $(NIDAN_SRC)
 	rm -f $(NIDAN)
 	platex $(KANJI) nidanfloat.ins
 	rm nidanfloat.log
-
-tascmac.sty: $(ASCMAC_SRC)
-	rm -f $(ASCMAC)
-	platex $(KANJI) ascmac.ins
-	rm ascmac.log
 
 jltxdoc.cls: jltxdoc.dtx
 	rm -f jltxdoc.cls pldoc.tex Xins.ins
@@ -116,12 +107,6 @@ nidanfloat.dvi: $(NIDAN_SRC)
 	platex $(KANJI) nidanfloat.dtx
 	rm nidanfloat.aux nidanfloat.log
 
-ascmac.dvi: $(ASCMAC_SRC)
-	rm -f platex.cfg
-	platex $(KANJI) ascmac.dtx
-	platex $(KANJI) ascmac.dtx
-	rm ascmac.aux ascmac.log ascmac.toc
-
 exppl2e.dvi: exppl2e.sty
 	rm -f platex.cfg
 	platex $(KANJI) exppl2e.sty
@@ -145,8 +130,6 @@ platexrelease.pdf: platexrelease.dvi
 pldoc.pdf: pldoc.dvi
 	dvipdfmx $(FONTMAP) $<
 nidanfloat.pdf: nidanfloat.dvi
-	dvipdfmx $(FONTMAP) $<
-ascmac.pdf: ascmac.dvi
 	dvipdfmx $(FONTMAP) $<
 exppl2e.pdf: exppl2e.dvi
 	dvipdfmx $(FONTMAP) $<
@@ -177,16 +160,16 @@ install:
 	cp ./platex.ini ${TEXMF}/tex/platex/config/
 clean:
 	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
-	$(NIDAN) $(ASCMAC) \
+	$(NIDAN) \
 	$(DVITARGET) \
 	jltxdoc.cls pldoc.tex Xins.ins
 cleanstrip:
 	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
-	$(NIDAN) $(ASCMAC) \
+	$(NIDAN) \
 	jltxdoc.cls pldoc.tex Xins.ins
 cleanall:
 	rm -f $(PLFMT) $(PLCLS) $(PL209) $(PLREL) \
-	$(NIDAN) $(ASCMAC) \
+	$(NIDAN) \
 	$(DVITARGET) $(PDFTARGET) \
 	jltxdoc.cls pldoc.tex Xins.ins
 cleandoc:

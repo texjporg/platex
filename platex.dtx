@@ -75,6 +75,7 @@
 % \changes{v1.0r}{2017/12/02}{英語の参考文献も追加}
 % \changes{v1.0s}{2017/12/05}{デフォルト設定ファイルの読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
+% \changes{v1.0t}{2018/02/07}{ascmacパッケージを独立させた}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -108,6 +109,7 @@
 % \changes{v1.0r}{2017/12/02}{English references added}
 % \changes{v1.0s}{2017/12/05}{Moved loading default settings
 %    from \file{plcore.ltx} to \file{platex.ltx}}
+% \changes{v1.0t}{2018/02/07}{Moved ascmac package to separate bundle}
 %\fi
 % \fi
 %
@@ -115,7 +117,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2017/12/05 v1.0s pLaTeX document file]
+\ProvidesFile{platex.dtx}[2018/02/07 v1.0t pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -761,14 +763,14 @@
 %   \pLaTeX~2.09のフォントコマンドを提供するパッケージ。
 %   \file{pl209.dtx}から作成される。
 %
-% \item ascmac.sty, tascmac.sty\par
-%   \LaTeX{}の標準機能の範囲で、図や罫線で囲んだボックスを出力する命令
-%   などを提供するパッケージ。旧バージョンの\pLaTeX{}でも配布されていた。
-%
 % \item nidanfloat.sty\par
 %   二段組時に段抜きのフロートをページ下部にも配置可能にする
 %   パッケージ。
 % \end{itemize}
+%
+% なお、以前のバージョンに同梱していたascmacパッケージは
+% 別のバンドルとして独立させました。
+% \changes{v1.0t}{2018/02/07}{ascmacパッケージを独立させた}
 %\else
 % \pLaTeXe\ packages:
 % \changes{v1.0d}{2016/01/27}{Updated descriptions of \pLaTeXe\ files}
@@ -795,14 +797,14 @@
 %   Provides \pLaTeX~2.09 font commands;
 %   stripped from \file{pl209.dtx}.
 %
-% \item ascmac.sty, tascmac.sty\par
-%   Create fancy boxes etc., within the scope of native
-%   \LaTeXe\ picture commands (thus driver-independent).
-%
 % \item nidanfloat.sty\par
 %   Enable bottom (|b|) placement option for double float in
 %   two column mode (\emph{nidan-kumi}).
 % \end{itemize}
+%
+% The package ``ascmac.sty'', which had been included in previous
+% versions of \pLaTeX, is now distributed as a separate bundle.
+% \changes{v1.0t}{2018/02/07}{Moved ascmac package to separate bundle}
 %\fi
 %
 %
