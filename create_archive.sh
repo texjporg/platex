@@ -26,7 +26,7 @@ mv $TMP/$PROJECT/*.txt $TMP/$PROJECT/doc/platex/base/
 
 mkdir -p $TMP/$PROJECT/source/platex/base
 mv $TMP/$PROJECT/Makefile $TMP/$PROJECT/source/platex/base/
-mv $TMP/$PROJECT/plnews* $TMP/$PROJECT/source/platex/base/
+mv $TMP/$PROJECT/plnews*.tex $TMP/$PROJECT/source/platex/base/
 mv $TMP/$PROJECT/*.dtx $TMP/$PROJECT/source/platex/base/
 mv $TMP/$PROJECT/*.ins $TMP/$PROJECT/source/platex/base/
 

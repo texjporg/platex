@@ -128,13 +128,13 @@ install:
 	cp ./*.txt ${TEXMF}/doc/platex/base/
 	mkdir -p ${TEXMF}/source/platex/base
 	cp ./Makefile ${TEXMF}/source/platex/base/
-	cp ./plnews* ${TEXMF}/source/platex/base/
+	cp ./plnews*.tex ${TEXMF}/source/platex/base/
 	cp ./*.dtx ${TEXMF}/source/platex/base/
 	cp ./*.ins ${TEXMF}/source/platex/base/
 	mkdir -p ${TEXMF}/tex/platex/base
 	cp ./kinsoku.tex ${TEXMF}/tex/platex/base/
 	cp ./*.clo ${TEXMF}/tex/platex/base/
-	ls ./*.cls | grep -v plnews.cls | xargs -I % cp % ${TEXMF}/tex/platex/base
+	cp ./*.cls ${TEXMF}/tex/platex/base/
 	cp ./*.def ${TEXMF}/tex/platex/base/
 	cp ./*.fd  ${TEXMF}/tex/platex/base/
 	cp ./*.ltx ${TEXMF}/tex/platex/base/
