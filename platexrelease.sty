@@ -1319,6 +1319,21 @@ of this package available from CTAN}
   \ifmmode\@@underline{#1}%
   \else $\@@underline{\hbox{#1}}\m@th$\relax\fi}
 \plEndIncludeInRelease
+\plIncludeInRelease{2018/03/18}%
+                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+\ifx\omathchar\@undefined
+  \ifx\widowpenalties\@undefined
+    \mathchardef\e@alloc@top=255
+    \let\e@alloc@chardef\chardef
+  \else
+    \mathchardef\e@alloc@top=32767
+    \let\e@alloc@chardef\mathchardef
+  \fi
+\else
+    \omathchardef\e@alloc@top=65535
+    \let\e@alloc@chardef\omathchardef
+\fi
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/11/29}%
                    {\e@alloc@chardef}{Extended Allocation (FAM256)}%
 \ifx\omathchar\@undefined

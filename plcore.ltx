@@ -1104,13 +1104,8 @@
     \let\e@alloc@chardef\mathchardef
   \fi
 \else
-  \ifx\enablecjktoken\@undefined % pTeX
     \omathchardef\e@alloc@top=65535
     \let\e@alloc@chardef\omathchardef
-  \else                          % upTeX
-    \chardef\e@alloc@top=65535
-    \let\e@alloc@chardef\chardef
-  \fi
 \fi
 \ifx\omathchar\@undefined
   \chardef\e@mathgroup@top=16 % LaTeX2e kernel standard

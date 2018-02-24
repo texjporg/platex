@@ -80,13 +80,14 @@
 % \changes{v1.2u}{2017/11/04}{emathの\cs{marusuuref}対策}
 % \changes{v1.2v}{2018/01/27}{v1.2oとv1.2qの修正で\cs{nolinebreak}が
 %    効かない場合があったので、元に戻した}
+% \changes{v1.2w}{2018/02/24}{e-up\TeX{}でも\cs{omathchardef}を使用}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2018/01/27 v1.2v pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2018/02/24 v1.2w pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1864,7 +1865,7 @@
 % ので、e-p\TeX{}の拡張レジスタを利用できるように設定します。
 % \changes{v1.2j}{2016/11/09}{FAM256パッチ適用e-p\TeX{}に対応}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2016/11/29}%
+%<platexrelease>\plIncludeInRelease{2018/03/18}%
 %<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
 %<*plcore|platexrelease>
 %    \end{macrocode}
@@ -1879,16 +1880,17 @@
   \else
 %    \end{macrocode}
 % e-\TeX{}拡張で$2^{15}$個のレジスタが利用できます。
-% ^^A 「FAM256なしのe-(u)p\TeX{}」は事実上存在しないはず。
+% ^^A 備忘録：「FAM256なしのe-(u)p\TeX{}」は事実上存在しないはず。
 % ^^A ただし、たとえばe-(u)p\TeX{}をベースにした
 % ^^A p\TeX{}-ng (Asiatic pTeX)はe-\TeX{}拡張を持っていて、
 % ^^A FAM256パッチは適用されていないため、ここに該当する。
 % ^^A   cf: https://github.com/clerkma/ptex-ng
 % ^^A なお、p\TeX{}-ngはe-p\TeX{}と同様にpdf\TeX{}拡張の
 % ^^A 一部（e-p\TeX{}と範囲が一致しない）を持っていること、
-% ^^A また|\lastnodechar|などのe-p\TeX{}独自のプリミティブを
-% ^^A 持っていないことにも注意…だったが、2017/09/06付で
-% ^^A p\TeX{}-ngにも|\lastnodechar|が追加された。
+% ^^A また|\epTeXinputencoding|などのe-p\TeX{}独自のプリミティブを
+% ^^A 持っていないことにも注意。
+% ^^A （|\lastnodechar|もe-p\TeX{}独自だったが、2017/09/06付で
+% ^^A p\TeX{}-ngにも追加されている。）
 %    \begin{macrocode}
     \mathchardef\e@alloc@top=32767
     \let\e@alloc@chardef\mathchardef
@@ -1896,18 +1898,38 @@
 \else
 %    \end{macrocode}
 % FAM256パッチが適用されたe-p\TeX{}の場合は、$2^{16}$個のレジスタが利用できます。
+% \changes{v1.2w}{2018/02/24}{e-up\TeX{}でも\cs{omathchardef}を使用}
+% ^^A 備忘録：up\TeX{}では|\omathchardef|でなく|\chardef|も可だが、
+% ^^A フォーマット作成時に|-kanji-internal=euc|が指定される可能性が
+% ^^A ないとは言い切れないので、FAM256パッチ適用済e-(u)p\TeX{}ならば
+% ^^A 常に|\omathchardef|を用いることにする。
 %    \begin{macrocode}
-  \ifx\enablecjktoken\@undefined % pTeX
     \omathchardef\e@alloc@top=65535
     \let\e@alloc@chardef\omathchardef
-  \else                          % upTeX
-    \chardef\e@alloc@top=65535
-    \let\e@alloc@chardef\chardef
-  \fi
 \fi
 %    \end{macrocode}
 %    \begin{macrocode}
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/11/29}%
+%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+%<platexrelease>\ifx\omathchar\@undefined
+%<platexrelease>  \ifx\widowpenalties\@undefined
+%<platexrelease>    \mathchardef\e@alloc@top=255
+%<platexrelease>    \let\e@alloc@chardef\chardef
+%<platexrelease>  \else
+%<platexrelease>    \mathchardef\e@alloc@top=32767
+%<platexrelease>    \let\e@alloc@chardef\mathchardef
+%<platexrelease>  \fi
+%<platexrelease>\else
+%<platexrelease>  \ifx\enablecjktoken\@undefined % pTeX
+%<platexrelease>    \omathchardef\e@alloc@top=65535
+%<platexrelease>    \let\e@alloc@chardef\omathchardef
+%<platexrelease>  \else                          % upTeX
+%<platexrelease>    \chardef\e@alloc@top=65535
+%<platexrelease>    \let\e@alloc@chardef\chardef
+%<platexrelease>  \fi
+%<platexrelease>\fi
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2015/01/01}%
 %<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
