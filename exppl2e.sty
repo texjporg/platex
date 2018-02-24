@@ -387,7 +387,49 @@
 %
 % \section{tabular環境のセル内のJFMグル―}
 %
-% p\LaTeXe{}カーネル(2017/07/29)に導入したため削除。
+% 2017/07/29の修正では，以下のように|p|指定のセルの最初で|\par|として
+% 改段落を発行すると，一行空いてしまうという症状が起きてしまいます(platex/\#63)．
+%
+% \begin{verbatim}
+% \begin{tabular}{p{5cm}}
+% A\\
+% \relax\par
+% A
+% \end{tabular}
+% \end{verbatim}
+% \begin{macro}{\pltx@next@inhibitglue}
+% \begin{macro}{\@classv}
+%
+% ここでは，2017/07/29の修正から方針を改め，|\everypar|内に|\inhibitglue|を
+% 仕込むという方針で対応します．
+%
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{????/??/??}{\@classv}
+%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<*plcore|platexrelease>
+\protected\def\pltx@next@inhibitglue{%
+  \edef\@tempa{\everypar{\inhibitglue
+    \everypar{\unexpanded\expandafter{\the\everypar}}%
+    \unexpanded\expandafter{\the\everypar}}}%
+  \@tempa}
+\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\pltx@next@inhibitglue\ignorespaces
+\@sharp\unskip\@endpbox}}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2017/07/29}{\@classv}
+%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<platexrelease>\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\mbox{}\inhibitglue\ignorespaces
+%<platexrelease>\@sharp\unskip\@endpbox}}
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@classv}
+%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<platexrelease>\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\ignorespaces
+%<platexrelease>\@sharp\@endpbox}}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% % p\LaTeXe{}カーネル(2017/07/29)に導入したため削除。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
