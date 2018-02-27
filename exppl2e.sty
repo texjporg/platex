@@ -408,10 +408,11 @@
 %<platexrelease>                   {Inhibit JFM glue in tabular cells}%
 %<*plcore|platexrelease>
 \protected\def\pltx@next@inhibitglue{%
+  \ifhmode\inhibitglue\else
   \edef\@tempa{\everypar{\inhibitglue
     \everypar{\unexpanded\expandafter{\the\everypar}}%
     \unexpanded\expandafter{\the\everypar}}}%
-  \@tempa}
+  \@tempa\fi}
 \def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\pltx@next@inhibitglue\ignorespaces
 \@sharp\unskip\@endpbox}}
 %</plcore|platexrelease>
