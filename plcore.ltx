@@ -712,6 +712,18 @@
 \def\documentstyle{%
   \makeatletter\input{pl209.def}\makeatother
   \documentclass}
+\ifx\lastnodesubtype\@undefined
+  \let\removejfmglue\@undefined
+\else
+  \def\pltx@gluetype{11}
+  \def\pltx@jfmgluesubtype{21}
+  \protected\def\removejfmglue{%
+    \ifnum\lastnodetype=\pltx@gluetype\relax
+      \ifnum\lastnodesubtype=\pltx@jfmgluesubtype\relax
+        \unskip
+      \fi
+    \fi}
+\fi
 \def\cleardoublepage{\clearpage\if@twoside
   \ifodd\c@page
     \iftdir
@@ -1042,6 +1054,7 @@
 \newcommand\printglossary{\@input@{\jobname.gls}}
 \newcount\hour
 \newcount\minute
+\ifx\removejfmglue\@undefined
 \def\@tabclassz{%
   \ifcase\@lastchclass
     \@acolampacol
@@ -1065,8 +1078,39 @@
       \or
         \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% % r
       \fi}}}
-\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\mbox{}\inhibitglue\ignorespaces
+\else
+\def\@tabclassz{%
+  \ifcase\@lastchclass
+    \@acolampacol
+  \or
+    \@ampacol
+  \or
+  \or
+  \or
+    \@addamp
+  \or
+    \@acolampacol
+  \or
+    \@firstampfalse\@acol
+  \fi
+  \edef\@preamble{%
+    \@preamble{%
+      \ifcase\@chnum
+        \hfil\inhibitglue\ignorespaces\@sharp\unskip\removejfmglue\hfil % c
+      \or
+        \hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\removejfmglue\hfil % l
+      \or
+        \hfil\hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\removejfmglue % r
+      \fi}}}
+\fi
+\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\pltx@next@inhibitglue\ignorespaces
 \@sharp\unskip\@endpbox}}
+\protected\def\pltx@next@inhibitglue{%
+  \ifhmode\inhibitglue\else
+  \edef\@tempa{\everypar{\inhibitglue
+    \everypar{\unexpanded\expandafter{\the\everypar}}%
+    \unexpanded\expandafter{\the\everypar}}}%
+  \@tempa\fi}
 \def\@tabular{\leavevmode \null\hbox \bgroup $\let\@acol\@tabacol
    \let\@classz\@tabclassz
    \let\@classiv\@tabclassiv \let\\\@tabularcr\@tabarray}

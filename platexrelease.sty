@@ -547,6 +547,25 @@ of this package available from CTAN}
 \def\<{\inhibitglue}
 \plEndIncludeInRelease
 %% File: plcore.dtx
+\plIncludeInRelease{2018/03/18}%
+                   {\removejfmglue}{Macro added}%
+\ifx\lastnodesubtype\@undefined
+  \let\removejfmglue\@undefined
+\else
+  \def\pltx@gluetype{11}
+  \def\pltx@jfmgluesubtype{21}
+  \protected\def\removejfmglue{%
+    \ifnum\lastnodetype=\pltx@gluetype\relax
+      \ifnum\lastnodesubtype=\pltx@jfmgluesubtype\relax
+        \unskip
+      \fi
+    \fi}
+\fi
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}%
+                   {\removejfmglue}{Macro added}%
+\let\removejfmglue\@undefined
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/10/28}{\@no@lnbk}
                    {Break before prebreakpenalty}%
 \def\@no@lnbk #1[#2]{%
@@ -1151,6 +1170,58 @@ of this package available from CTAN}
      \@startfield
      \strut}
 \plEndIncludeInRelease
+\plIncludeInRelease{2018/03/18}{\@tabclassz}
+                   {Inhibit JFM glue in tabular cells}%
+\ifx\removejfmglue\@undefined
+\def\@tabclassz{%
+  \ifcase\@lastchclass
+    \@acolampacol
+  \or
+    \@ampacol
+  \or
+  \or
+  \or
+    \@addamp
+  \or
+    \@acolampacol
+  \or
+    \@firstampfalse\@acol
+  \fi
+  \edef\@preamble{%
+    \@preamble{%
+      \ifcase\@chnum
+        \hfil\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % c
+      \or
+        \hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % l
+      \or
+        \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% % r
+      \fi}}}
+\else
+\def\@tabclassz{%
+  \ifcase\@lastchclass
+    \@acolampacol
+  \or
+    \@ampacol
+  \or
+  \or
+  \or
+    \@addamp
+  \or
+    \@acolampacol
+  \or
+    \@firstampfalse\@acol
+  \fi
+  \edef\@preamble{%
+    \@preamble{%
+      \ifcase\@chnum
+        \hfil\inhibitglue\ignorespaces\@sharp\unskip\removejfmglue\hfil % c
+      \or
+        \hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\removejfmglue\hfil % l
+      \or
+        \hfil\hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\removejfmglue % r
+      \fi}}}
+\fi
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/09/26}{\@tabclassz}
                    {Inhibit JFM glue in tabular cells}%
 \def\@tabclassz{%
@@ -1229,6 +1300,11 @@ of this package available from CTAN}
         \hfil\hskip1sp\ignorespaces\@sharp\unskip
       \fi}}}
 \plEndIncludeInRelease
+\plIncludeInRelease{2018/03/18}{\@classv}
+                   {Inhibit JFM glue in tabular cells}%
+\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\pltx@next@inhibitglue\ignorespaces
+\@sharp\unskip\@endpbox}}
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/07/29}{\@classv}
                    {Inhibit JFM glue in tabular cells}%
 \def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\mbox{}\inhibitglue\ignorespaces
@@ -1238,6 +1314,19 @@ of this package available from CTAN}
                    {Inhibit JFM glue in tabular cells}%
 \def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\ignorespaces
 \@sharp\@endpbox}}
+\plEndIncludeInRelease
+\plIncludeInRelease{2018/03/18}{\pltx@next@inhibitglue}
+                   {Add \pltx@next@inhibitglue}%
+\protected\def\pltx@next@inhibitglue{%
+  \ifhmode\inhibitglue\else
+  \edef\@tempa{\everypar{\inhibitglue
+    \everypar{\unexpanded\expandafter{\the\everypar}}%
+    \unexpanded\expandafter{\the\everypar}}}%
+  \@tempa\fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\pltx@next@inhibitglue}
+                   {Add \pltx@next@inhibitglue}%
+\let\pltx@next@inhibitglue\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@tabular}
                    {Remove extra \xkanjiskip}%
