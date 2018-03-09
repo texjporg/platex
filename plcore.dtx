@@ -206,7 +206,7 @@
 % |\lastnodesubtype|プリミティブが必要です。
 % \changes{v1.2x}{2018/03/01}{JFMグルーノードを削除するマクロ追加}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2018/03/18}%
+%<platexrelease>\plIncludeInRelease{2018/03/09}%
 %<platexrelease>                   {\removejfmglue}{Macro added}%
 %<*plcore|platexrelease>
 %    \end{macrocode}
@@ -1672,7 +1672,7 @@
 % まず、|l|, |c|, |r|の場合です。
 % 2017/09/26の修正では「セルの要素を|\mbox|に入れ、
 % その最初で|\inhibitglue|を発行する」という方針でしたが、
-% 2018/03/18の修正では「|\removejfmglue|マクロが定義されている場合は
+% 2018/03/09の修正では「|\removejfmglue|マクロが定義されている場合は
 % 最初に|\inhibitglue|を発行し、最後に|\removejfmglue|を発行する」という
 % 方針にします。こうすれば少々\LaTeX{}との互換性が向上します。
 % \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
@@ -1681,7 +1681,7 @@
 % \changes{v1.2x}{2018/03/01}{\cs{removejfmglue}があれば利用するようにした}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2018/03/18}{\@tabclassz}
+%<platexrelease>\plIncludeInRelease{2018/03/09}{\@tabclassz}
 %<platexrelease>                   {Inhibit JFM glue in tabular cells}%
 %<*plcore|platexrelease>
 \ifx\removejfmglue\@undefined
@@ -1833,7 +1833,7 @@
 % \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
 % \changes{v1.2x}{2018/03/01}{セル最初の\cs{par}で空行が入らないようにした}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2018/03/18}{\@classv}
+%<platexrelease>\plIncludeInRelease{2018/03/09}{\@classv}
 %<platexrelease>                   {Inhibit JFM glue in tabular cells}%
 %<*plcore|platexrelease>
 \def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\pltx@next@inhibitglue\ignorespaces
@@ -1858,7 +1858,7 @@
 % |\everypar|内に|\inhibitglue|を仕込みます。
 % \changes{v1.2x}{2018/03/01}{\cs{everypar}に\cs{inhibitglue}を仕込むマクロ追加}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2018/03/18}{\pltx@next@inhibitglue}
+%<platexrelease>\plIncludeInRelease{2018/03/09}{\pltx@next@inhibitglue}
 %<platexrelease>                   {Add \pltx@next@inhibitglue}%
 %<*plcore|platexrelease>
 \protected\def\pltx@next@inhibitglue{%
@@ -2008,7 +2008,7 @@
 % ので、e-p\TeX{}の拡張レジスタを利用できるように設定します。
 % \changes{v1.2j}{2016/11/09}{FAM256パッチ適用e-p\TeX{}に対応}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2018/03/18}%
+%<platexrelease>\plIncludeInRelease{2018/03/09}%
 %<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
 %<*plcore|platexrelease>
 %    \end{macrocode}
