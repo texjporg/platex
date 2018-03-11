@@ -1,0 +1,81 @@
+%% <2018/03/09>
+\documentclass{plnews}
+
+\publicationyear{2018}% 発行年
+\publicationmonth{03}% 発行月
+\publicationissue{c9}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\cs#1{\texttt{\char92 #1}}
+\def\pTeX{p\kern-.15em\TeX}
+\def\eTeX{$\varepsilon$-\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+
+\begin{document}
+
+\maketitle
+
+この文書はコミュニティ版\pLaTeXe\ \texttt{<2018/03/09>}について、
+\pLaTeXe\ \texttt{<2017/10/28>}からの更新箇所をまとめたものです。
+
+
+\section{tabular環境の改良}
+\pLaTeXe\ \texttt{<2017/07/29>}で導入した|tabular|環境の修正方針を
+転換し、より\LaTeXe{}との互換性を高めました。具体的には
+\begin{verbatim}
+  \begin{tabular}{p{5cm}}
+  A\\
+  \relax\par
+  A
+  \end{tabular}
+\end{verbatim}
+のようなソースで余分な空行が入らないようにしました。
+これを実現するために後述する|\removejfmglue|命令を使用しています。
+
+
+\section{\cs{removejfmglue}命令の追加}
+\<「最後のノードがJFM グルーであった場合にそれを削除する」という機能を
+持つ|\removejfmglue|命令を追加しました。ただし、これは\epTeX\ 180226以降に
+実装された|\lastnodesubtype|というプリミティブが利用可能な場合のみ使えます。
+
+
+\section{和文スケール値の新規約}
+日本語用クラスファイルの新たな共通規約として、新たに
+「クラスファイルが意図する和文スケール値
+（$1\,\mathrm{zw} \div \textmc{要求サイズ}$）」
+を数値マクロ|\Cjascale|で定義することにしました。今後は
+\begin{itemize}
+\item 日本語クラスファイルの作成者は、
+      原則として|\Cjascale|を和文スケール値に設定する。
+\item 日本語フォントを変更するパッケージなどの作者は、
+      原則としてクラスファイルが定める|\Cjascale|を参照する。
+\end{itemize}
+という運用を推奨します。
+
+
+\section{\pLaTeX{}とu\pLaTeX{}の共通化}
+2016年以降、\pLaTeX{}とu\pLaTeX{}をともに日本語\TeX{}開発コミュニティが
+管理するようになったことから、\TeX\ Live 2018以降では\pLaTeX{}と
+u\pLaTeX{}のフォーマット作成時に使われる|.ltx|ファイル群を
+大幅に共通化しました。これにより、従来はu\pLaTeX{}を\pLaTeX{}と独立に
+インストールすることができましたが、今後はu\pLaTeX{}が\pLaTeX{}に
+依存することになります。
+
+
+\section{開発版のテストのお願い}
+今後\pLaTeX{}に導入するかもしれない修正パッチや仕様変更のテストにご協力くだ
+さい。\TeX{}ファイルの冒頭（|\documentclass|より前）で
+\begin{verbatim}
+  \RequirePackage{exppl2e}
+\end{verbatim}
+と書くことで、開発版をテストすることができます。
+バグ報告やご意見を歓迎します。
+\TeX\ ForumやGitHubのIssueシステムが利用できます。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
