@@ -19,7 +19,7 @@
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
    {2018/03/09}
-\def\ppatch@level{0}
+\def\ppatch@level{1}
 \edef\platexBANNER{\the\everyjob\noexpand\typeout{}\relax}% save LaTeX banner
 \newif\if@plincludeinrelease
 \@plincludeinreleasefalse
@@ -1107,9 +1107,9 @@
 \@sharp\unskip\@endpbox}}
 \protected\def\pltx@next@inhibitglue{%
   \ifhmode\inhibitglue\else
-  \edef\@tempa{\everypar{\inhibitglue
+  \edef\@tempa{\everypar{%
     \everypar{\unexpanded\expandafter{\the\everypar}}%
-    \unexpanded\expandafter{\the\everypar}}}%
+    \unexpanded\expandafter{\the\everypar}\inhibitglue}}%
   \@tempa\fi}
 \def\@tabular{\leavevmode \null\hbox \bgroup $\let\@acol\@tabacol
    \let\@classz\@tabclassz

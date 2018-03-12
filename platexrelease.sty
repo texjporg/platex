@@ -1319,9 +1319,9 @@ of this package available from CTAN}
                    {Add \pltx@next@inhibitglue}%
 \protected\def\pltx@next@inhibitglue{%
   \ifhmode\inhibitglue\else
-  \edef\@tempa{\everypar{\inhibitglue
+  \edef\@tempa{\everypar{%
     \everypar{\unexpanded\expandafter{\the\everypar}}%
-    \unexpanded\expandafter{\the\everypar}}}%
+    \unexpanded\expandafter{\the\everypar}\inhibitglue}}%
   \@tempa\fi}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\pltx@next@inhibitglue}

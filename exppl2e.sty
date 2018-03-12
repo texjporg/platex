@@ -2,7 +2,7 @@
 %
 % This is file `exppl2e.sty', for experimental pLaTeX2e.
 %
-% Copyright (c) 2016-2017 Japanese TeX Development Community
+% Copyright (c) 2016-2018 Japanese TeX Development Community
 %
 % This file is part of the pLaTeX2e system (community edition).
 % -------------------------------------------------------------
@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2017/12/06 v1.0r Experimental pLaTeX2e features]
+                [2018/03/12 v1.0t Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -542,15 +542,16 @@
 % 水平モードであればそのまま|\inhibitglue|を発行し、それ以外であれば
 % |\everypar|内に|\inhibitglue|を仕込みます。
 % \changes{v1.2x}{2018/03/01}{\cs{everypar}に\cs{inhibitglue}を仕込むマクロ追加}
+% \changes{v1.2y}{2018/03/12}{\cs{inhibitglue}を\cs{everypar}の末尾に移動}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2018/03/09}{\pltx@next@inhibitglue}
 %<platexrelease>                   {Add \pltx@next@inhibitglue}%
 %<*plcore|platexrelease>
 \protected\def\pltx@next@inhibitglue{%
   \ifhmode\inhibitglue\else
-  \edef\@tempa{\everypar{\inhibitglue
+  \edef\@tempa{\everypar{%
     \everypar{\unexpanded\expandafter{\the\everypar}}%
-    \unexpanded\expandafter{\the\everypar}}}%
+    \unexpanded\expandafter{\the\everypar}\inhibitglue}}%
   \@tempa\fi}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease

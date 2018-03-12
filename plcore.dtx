@@ -85,13 +85,14 @@
 % \changes{v1.2x}{2018/03/01}{\cs{removejfmglue}があれば利用するようにした}
 % \changes{v1.2x}{2018/03/01}{セル最初の\cs{par}で空行が入らないようにした}
 % \changes{v1.2x}{2018/03/01}{\cs{everypar}に\cs{inhibitglue}を仕込むマクロ追加}
+% \changes{v1.2y}{2018/03/12}{\cs{inhibitglue}を\cs{everypar}の末尾に移動}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2018/03/01 v1.2x pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2018/03/12 v1.2y pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1857,15 +1858,16 @@
 % 水平モードであればそのまま|\inhibitglue|を発行し、それ以外であれば
 % |\everypar|内に|\inhibitglue|を仕込みます。
 % \changes{v1.2x}{2018/03/01}{\cs{everypar}に\cs{inhibitglue}を仕込むマクロ追加}
+% \changes{v1.2y}{2018/03/12}{\cs{inhibitglue}を\cs{everypar}の末尾に移動}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2018/03/09}{\pltx@next@inhibitglue}
 %<platexrelease>                   {Add \pltx@next@inhibitglue}%
 %<*plcore|platexrelease>
 \protected\def\pltx@next@inhibitglue{%
   \ifhmode\inhibitglue\else
-  \edef\@tempa{\everypar{\inhibitglue
+  \edef\@tempa{\everypar{%
     \everypar{\unexpanded\expandafter{\the\everypar}}%
-    \unexpanded\expandafter{\the\everypar}}}%
+    \unexpanded\expandafter{\the\everypar}\inhibitglue}}%
   \@tempa\fi}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
