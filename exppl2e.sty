@@ -359,6 +359,21 @@
 %
 % さらなる修正もp\LaTeXe{}カーネル(2017/10/28)に導入したため削除。
 %
+% さらに、参照した結果が「空」の場合
+%\begin{verbatim}
+% \documentclass{article}
+% \pagenumbering{gobble}
+% \begin{document}
+% \pageref{a}\label{a}
+% \end{document}
+%\end{verbatim}
+% に相互参照が収束しなくなるのを防ぐため、水平モード以外では
+% やはり|\null|を発行してみます。
+%    \begin{macrocode}
+\def\@setref@{\ifhmode\spacefactor\@m\else\null\fi}
+%    \end{macrocode}
+% \end{macro}
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \section{脚注とボトムフロートの順序および垂直位置}
