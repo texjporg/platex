@@ -465,13 +465,13 @@
   \Huge\bfseries#1\par}%
   \@endpart}
 \def\@endpart{\vfil\newpage
-  \if@twoside
-   \if@openleft %% \if@openleft added (2017/02/15)
-    \null\thispagestyle{empty}\newpage
-   \else\if@openright %% \if@openright added (2016/12/18)
-    \null\thispagestyle{empty}\newpage
-   \fi\fi %% added (2016/12/18, 2017/02/15)
-  \fi
+   \if@twoside
+    \if@openleft %% \if@openleft added (2017/02/15)
+     \null\thispagestyle{empty}\newpage
+    \else\if@openright %% \if@openright added (2016/12/18)
+     \null\thispagestyle{empty}\newpage
+    \fi\fi %% added (2016/12/18, 2017/02/15)
+   \fi
    \if@tempswa\twocolumn\fi}
 \newcommand{\chapter}{%
   \if@openleft \cleardoublepage \else
