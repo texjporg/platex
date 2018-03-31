@@ -66,12 +66,13 @@
 % \changes{v1.1h}{2018/01/10}{Modify \cs{plIncludeInRelease} code
 %    to check matching \cs{plEndIncluderelease}
 %    (sync with ltvers 2018/01/08 v1.1a)}
+% \changes{v1.1i}{2018/03/31}{\LaTeXe\ 2017-04-15以降必須}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2018/01/10 v1.1h pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2018/03/31 v1.1i pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -129,6 +130,7 @@
 % YYYY/MM/DD形式からYYYY-MM-DDに変更され、またハイフネーションに関係する
 % パラメータ|\document@default@language|等が導入されています。
 % ^^A \LaTeXe\ 2017/01/01以降はe-\TeX{}必須になっています。
+% \changes{v1.1i}{2018/03/31}{\LaTeXe\ 2017-04-15以降必須}
 %    \begin{macrocode}
 %<*plcore>
 \ifx\fmtversion\@undefined
