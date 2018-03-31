@@ -1,0 +1,25 @@
+% pdfLaTeX (2017-04-15): OK
+% pdfLaTeX (2018-04-01): OK
+% LaTeX (2017-04-15) + pLaTeX (2018/03/09+1): OK
+% LaTeX (2018-04-01) + pLaTeX (2018/03/09+1): NG
+% LaTeX (2018-04-01) + pLaTeX (2018-04-01): should be OK
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[LY1]{fontenc}
+%\makeatletter\input{ly1enc.dfu}\makeatother
+\begin{document}
+[ƒ]\par
+\end{document}
+
+% ===== NG error =====
+! Package inputenc Error: Unicode char Æ^^92 (U+192)
+(inputenc)                not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.6 [^^c6^^92
+             ]\par
+? 
+% ====================
