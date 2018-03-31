@@ -16,10 +16,25 @@
 %% -------------------------------------------------------------
 %% 
 %% File: plvers.dtx
+\ifx\fmtversion\@undefined
+    \errhelp{Please reinstall LaTeX.}%
+    \errmessage{This cannot happen!^^JYour file `latex.ltx'
+                might be broken}\@@end
+\else
+  \ifnum\expandafter\@parse@version\fmtversion//00\@nil<20170415
+    \errhelp{Please update your TeX installation; if not available,
+             obtain it^^Jmanually from CTAN
+             (https://ctan.org/pkg/latex-base) or from^^JGitHub
+             (https://github.com/latex3/latex2e).}%
+    \errmessage{This version of pLaTeX2e requires LaTeX2e 2017-04-15
+                or newer!^^JObtain a newer version of `latex',
+                otherwise pLaTeX2e setup will^^Jnever succeed}\@@end
+  \fi
+\fi
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2018/03/09}
-\def\ppatch@level{1}
+   {2018-04-01}
+\def\ppatch@level{-1}
 \edef\platexBANNER{\the\everyjob\noexpand\typeout{}\relax}% save LaTeX banner
 \newif\if@plincludeinrelease
 \@plincludeinreleasefalse
@@ -1201,12 +1216,6 @@
   \global\everyjob\expandafter{\platexBANNER}%
 \endgroup
 \let\platexBANNER=\@undefined
-\ifx\l@nohyphenation \@undefined
-  \newlanguage\l@nohyphenation
-\fi
-\ifx\document@default@language \@undefined
-  \let\document@default@language\m@ne
-\fi
 \AtBeginDocument{%
   \@ifpackageloaded{latexrelease}{%
     \@ifpackageloaded{platexrelease}{}{%
