@@ -215,8 +215,17 @@
 \ifx\lastnodesubtype\@undefined
   \let\removejfmglue\@undefined
 \else
-  \def\pltx@gluetype{11}
-  \def\pltx@jfmgluesubtype{21}
+  \setbox0\hbox{%
+    \ifdefined\ucs %% upTeX check
+      \jfont\tenmin=upjisr-h at 9.62216pt
+    \else
+      \jfont\tenmin=min10
+    \fi\tenmin
+    ）\null\setbox0\lastbox
+    \global\chardef\pltx@gluetype\lastnodetype
+    \global\chardef\pltx@jfmgluesubtype\lastnodesubtype
+  }
+  \setbox0=\box\voidb@x
   \protected\def\removejfmglue{%
     \ifnum\lastnodetype=\pltx@gluetype\relax
       \ifnum\lastnodesubtype=\pltx@jfmgluesubtype\relax
