@@ -134,6 +134,14 @@
                     {\default@family}{\default@series}%
                     {\default@shape}}%
      \expandafter\let\csname#1-cmd\endcsname\@changed@cmd
+     \begingroup
+       \wlog{Now handling font encoding #1 ...}%
+       \lowercase{%
+         \InputIfFileExists{#1enc.dfu}}%
+            {\wlog{... processing UTF-8 mapping file for font %
+                       encoding #1}}%
+            {\wlog{... no UTF-8 mapping file for font encoding #1}}%
+     \endgroup
      \def\enc@elt{\noexpand\enc@elt}%
      \xdef\fenc@list{\fenc@list\enc@elt<#1>}%
   \else
@@ -715,8 +723,17 @@
 \ifx\lastnodesubtype\@undefined
   \let\removejfmglue\@undefined
 \else
-  \def\pltx@gluetype{11}
-  \def\pltx@jfmgluesubtype{21}
+  \setbox0\hbox{%
+    \ifdefined\ucs %% upTeX check
+      \jfont\tenmin=upjisr-h at 9.62216pt
+    \else
+      \jfont\tenmin=min10
+    \fi\tenmin
+    ）\null\setbox0\lastbox
+    \global\chardef\pltx@gluetype\lastnodetype
+    \global\chardef\pltx@jfmgluesubtype\lastnodesubtype
+  }
+  \setbox0=\box\voidb@x
   \protected\def\removejfmglue{%
     \ifnum\lastnodetype=\pltx@gluetype\relax
       \ifnum\lastnodesubtype=\pltx@jfmgluesubtype\relax

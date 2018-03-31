@@ -220,6 +220,54 @@ of this package available from CTAN}
                    {Add \ystrut}%
 \let\ystrut\@undefined
 \plEndIncludeInRelease
+\plIncludeInRelease{2018/04/01}{\DeclareFontEncoding@}
+                   {UTF-8 Encoding}%
+\def\DeclareFontEncoding@#1#2#3{%
+  \expandafter
+  \ifx\csname T@#1\endcsname\relax
+     \def\cdp@elt{\noexpand\cdp@elt}%
+     \xdef\cdp@list{\cdp@list\cdp@elt{#1}%
+                    {\default@family}{\default@series}%
+                    {\default@shape}}%
+     \expandafter\let\csname#1-cmd\endcsname\@changed@cmd
+     \begingroup
+       \wlog{Now handling font encoding #1 ...}%
+       \lowercase{%
+         \InputIfFileExists{#1enc.dfu}}%
+            {\wlog{... processing UTF-8 mapping file for font %
+                       encoding #1}}%
+            {\wlog{... no UTF-8 mapping file for font encoding #1}}%
+     \endgroup
+     \def\enc@elt{\noexpand\enc@elt}%
+     \xdef\fenc@list{\fenc@list\enc@elt<#1>}%
+  \else
+     \@font@info{Redeclaring font encoding #1}%
+  \fi
+  \global\@namedef{T@#1}{#2}%
+  \global\@namedef{M@#1}{\default@M#3}%
+  \xdef\LastDeclaredEncoding{#1}%
+  }
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\DeclareFontEncoding@}
+                   {UTF-8 Encoding}%
+\def\DeclareFontEncoding@#1#2#3{%
+  \expandafter
+  \ifx\csname T@#1\endcsname\relax
+     \def\cdp@elt{\noexpand\cdp@elt}%
+     \xdef\cdp@list{\cdp@list\cdp@elt{#1}%
+                    {\default@family}{\default@series}%
+                    {\default@shape}}%
+     \expandafter\let\csname#1-cmd\endcsname\@changed@cmd
+     \def\enc@elt{\noexpand\enc@elt}%
+     \xdef\fenc@list{\fenc@list\enc@elt<#1>}%
+  \else
+     \@font@info{Redeclaring font encoding #1}%
+  \fi
+  \global\@namedef{T@#1}{#2}%
+  \global\@namedef{M@#1}{\default@M#3}%
+  \xdef\LastDeclaredEncoding{#1}%
+  }
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\set@fontsize}
                    {Construct \ystrutbox}%
 \def\set@fontsize#1#2#3{%
@@ -554,8 +602,17 @@ of this package available from CTAN}
 \ifx\lastnodesubtype\@undefined
   \let\removejfmglue\@undefined
 \else
-  \def\pltx@gluetype{11}
-  \def\pltx@jfmgluesubtype{21}
+  \setbox0\hbox{%
+    \ifdefined\ucs %% upTeX check
+      \jfont\tenmin=upjisr-h at 9.62216pt
+    \else
+      \jfont\tenmin=min10
+    \fi\tenmin
+    ）\null\setbox0\lastbox
+    \global\chardef\pltx@gluetype\lastnodetype
+    \global\chardef\pltx@jfmgluesubtype\lastnodesubtype
+  }
+  \setbox0=\box\voidb@x
   \protected\def\removejfmglue{%
     \ifnum\lastnodetype=\pltx@gluetype\relax
       \ifnum\lastnodesubtype=\pltx@jfmgluesubtype\relax

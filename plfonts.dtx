@@ -612,6 +612,10 @@
   \expandafter\endgroup
   \DeclareFontEncoding@}
 %
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2018/04/01}{\DeclareFontEncoding@}
+%<platexrelease>                   {UTF-8 Encoding}%
+%<*plcore|platexrelease>
 \def\DeclareFontEncoding@#1#2#3{%
   \expandafter
   \ifx\csname T@#1\endcsname\relax
@@ -620,6 +624,14 @@
                     {\default@family}{\default@series}%
                     {\default@shape}}%
      \expandafter\let\csname#1-cmd\endcsname\@changed@cmd
+     \begingroup
+       \wlog{Now handling font encoding #1 ...}%
+       \lowercase{%
+         \InputIfFileExists{#1enc.dfu}}%
+            {\wlog{... processing UTF-8 mapping file for font %
+                       encoding #1}}%
+            {\wlog{... no UTF-8 mapping file for font encoding #1}}%
+     \endgroup
      \def\enc@elt{\noexpand\enc@elt}%
      \xdef\fenc@list{\fenc@list\enc@elt<#1>}%
   \else
@@ -629,6 +641,29 @@
   \global\@namedef{M@#1}{\default@M#3}%
   \xdef\LastDeclaredEncoding{#1}%
   }
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\DeclareFontEncoding@}
+%<platexrelease>                   {UTF-8 Encoding}%
+%<platexrelease>\def\DeclareFontEncoding@#1#2#3{%
+%<platexrelease>  \expandafter
+%<platexrelease>  \ifx\csname T@#1\endcsname\relax
+%<platexrelease>     \def\cdp@elt{\noexpand\cdp@elt}%
+%<platexrelease>     \xdef\cdp@list{\cdp@list\cdp@elt{#1}%
+%<platexrelease>                    {\default@family}{\default@series}%
+%<platexrelease>                    {\default@shape}}%
+%<platexrelease>     \expandafter\let\csname#1-cmd\endcsname\@changed@cmd
+%<platexrelease>     \def\enc@elt{\noexpand\enc@elt}%
+%<platexrelease>     \xdef\fenc@list{\fenc@list\enc@elt<#1>}%
+%<platexrelease>  \else
+%<platexrelease>     \@font@info{Redeclaring font encoding #1}%
+%<platexrelease>  \fi
+%<platexrelease>  \global\@namedef{T@#1}{#2}%
+%<platexrelease>  \global\@namedef{M@#1}{\default@M#3}%
+%<platexrelease>  \xdef\LastDeclaredEncoding{#1}%
+%<platexrelease>  }
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}

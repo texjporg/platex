@@ -1,0 +1,22 @@
+\batchmode
+\documentclass{article}
+\usepackage{etoolbox}
+\makeatletter
+\errorstopmode
+\patchcmd\DeclareFontEncoding@{UTF-8}{UTF-8}
+  {\message{U Y}}{\message{U N}}
+\patchcmd\DeclareFontEncoding@{\fenc@list}{\fenc@list}
+  {\message{P Y}}{\message{P N}}
+\batchmode
+\ifdefined\xkanjiskip
+\usepackage[0000-00-00]{platexrelease}
+\else
+\usepackage[0000-00-00]{latexrelease}
+\fi
+\errorstopmode
+\patchcmd\DeclareFontEncoding@{UTF-8}{UTF-8}
+  {\message{U Y}}{\message{U N}}
+\patchcmd\DeclareFontEncoding@{\fenc@list}{\fenc@list}
+  {\message{P Y}}{\message{P N}}
+\begin{document}
+\end{document}
