@@ -124,6 +124,31 @@
 %</2ekernel|latexrelease|platexrelease>
 %    \end{macrocode}
 %
+% まず、次のバージョンの\LaTeX{}が利用可能なことを確認します。
+% \LaTeXe\ 2017-04-15で、バージョン番号（日付）のフォーマットが
+% YYYY/MM/DD形式からYYYY-MM-DDに変更され、またハイフネーションに関係する
+% パラメータ|\document@default@language|等が導入されています。
+% ^^A \LaTeXe\ 2017/01/01以降はe-\TeX{}必須になっています。
+%    \begin{macrocode}
+%<*plcore>
+\ifx\fmtversion\@undefined
+    \errhelp{Please reinstall LaTeX.}%
+    \errmessage{This cannot happen!^^JYour file `latex.ltx'
+                might be broken}\@@end
+\else
+  \ifnum\expandafter\@parse@version\fmtversion//00\@nil<20170415
+    \errhelp{Please update your TeX installation; if not available,
+             obtain it^^Jmanually from CTAN
+             (https://ctan.org/pkg/latex-base) or from^^JGitHub
+             (https://github.com/latex3/latex2e).}%
+    \errmessage{This version of pLaTeX2e requires LaTeX2e 2017-04-15
+                or newer!^^JObtain a newer version of `latex',
+                otherwise pLaTeX2e setup will^^Jnever succeed}\@@end
+  \fi
+\fi
+%</plcore>
+%    \end{macrocode}
+%
 % \begin{macro}{\pfmtname}
 % \begin{macro}{\pfmtversion}
 % \begin{macro}{\ppatch@level}
@@ -195,17 +220,19 @@
 %
 % \subsection{パッチファイルのロード}
 %
+% コミュニティ版\pLaTeXe{}ではパッチファイルを使用しないので、
+% コメントアウトしました。
+% \changes{v1.0v}{2016/05/07}{パッチファイルをロードするのをやめた。}
+%
+% \iffalse
 % 次の部分は、p\LaTeXe{}のパッチファイルをロードするためのコードです。
 % バグを修正するためのパッチを配布するかもしれません。
-%
-% パッチファイルをロードするコードはコメントアウトしました。
-% \changes{v1.0v}{2016/05/07}{パッチファイルをロードするのをやめた。}
 %    \begin{macrocode}
 %<*plfinal>
 %\IfFileExists{plpatch.ltx}
-%  {\typeout{************************************^^J%
-%            * Appliying patch file plpatch.ltx *^^J%
-%            ************************************}
+%  {\typeout{***********************************^^J%
+%            * Applying patch file plpatch.ltx *^^J%
+%            ***********************************}
 %  \def\pfmtversion@topatch{unknown}
 %  \input{plpatch.ltx}
 %  \ifx\pfmtversion\pfmtversion@topatch
@@ -234,7 +261,9 @@
 %  \fi
 %  \let\pfmtversion@topatch\relax
 %  }{}
+%</plfinal>
 %    \end{macrocode}
+% \fi
 %
 % \subsection{起動時に表示するバナー}
 %
@@ -250,6 +279,7 @@
 % \changes{v1.1g}{2017/12/04}{\pLaTeX{}のバナーの定義時に
 %    \cs{pfmtname}, \cs{pfmtversion}, \cs{ppatch@level}を展開しないように}
 %    \begin{macrocode}
+%<*plfinal>
 \ifx\patch@level\@undefined % fallback if undefined in LaTeX
   \def\patch@level{0}\fi
 \ifx\ppatch@level\@undefined % fallback if undefined in pLaTeX
@@ -297,6 +327,7 @@
 % \changes{v1.0z}{2016/08/26}{\file{platex.cfg}の読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
 %
+% \iffalse
 % \subsection{ハイフネーション関連}
 %
 % \begin{macro}{\l@nohyphenation}
@@ -309,9 +340,9 @@
 %    (sync with ltfinal 2017/03/09 v2.0t)}
 %    \begin{macrocode}
 %<*plfinal>
-\ifx\l@nohyphenation \@undefined
-  \newlanguage\l@nohyphenation
-\fi
+%\ifx\l@nohyphenation \@undefined
+%  \newlanguage\l@nohyphenation
+%\fi
 %    \end{macrocode}
 % \end{macro}
 %
@@ -324,12 +355,13 @@
 % \changes{v1.1b}{2017/03/19}{\cs{document@default@language}の定義を保証
 %    (sync with ltfinal 2017/03/09 v2.0t)}
 %    \begin{macrocode}
-\ifx\document@default@language \@undefined
-  \let\document@default@language\m@ne
-\fi
+%\ifx\document@default@language \@undefined
+%  \let\document@default@language\m@ne
+%\fi
 %</plfinal>
 %    \end{macrocode}
 % \end{macro}
+% \fi
 %
 % \subsection{latexreleaseパッケージへの対応}
 %
