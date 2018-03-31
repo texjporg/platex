@@ -282,8 +282,6 @@
 %    \cs{pfmtname}, \cs{pfmtversion}, \cs{ppatch@level}を展開しないように}
 %    \begin{macrocode}
 %<*plfinal>
-\ifx\patch@level\@undefined % fallback if undefined in LaTeX
-  \def\patch@level{0}\fi
 \ifx\ppatch@level\@undefined % fallback if undefined in pLaTeX
   \def\ppatch@level{0}\fi
 \begingroup
