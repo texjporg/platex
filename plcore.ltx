@@ -141,6 +141,25 @@
   \nfss@catcodes
   \expandafter\endgroup
   \DeclareFontEncoding@}
+\ifx\IeC\@undefined
+\def\DeclareFontEncoding@#1#2#3{%
+  \expandafter
+  \ifx\csname T@#1\endcsname\relax
+     \def\cdp@elt{\noexpand\cdp@elt}%
+     \xdef\cdp@list{\cdp@list\cdp@elt{#1}%
+                    {\default@family}{\default@series}%
+                    {\default@shape}}%
+     \expandafter\let\csname#1-cmd\endcsname\@changed@cmd
+     \def\enc@elt{\noexpand\enc@elt}%
+     \xdef\fenc@list{\fenc@list\enc@elt<#1>}%
+  \else
+     \@font@info{Redeclaring font encoding #1}%
+  \fi
+  \global\@namedef{T@#1}{#2}%
+  \global\@namedef{M@#1}{\default@M#3}%
+  \xdef\LastDeclaredEncoding{#1}%
+  }
+\else
 \def\DeclareFontEncoding@#1#2#3{%
   \expandafter
   \ifx\csname T@#1\endcsname\relax
@@ -166,6 +185,7 @@
   \global\@namedef{M@#1}{\default@M#3}%
   \xdef\LastDeclaredEncoding{#1}%
   }
+\fi
 \def\DeclareKanjiEncoding#1{%
   \@latex@warning{%
      The \string\DeclareKanjiEncoding\space is obsoleted command.  Please use

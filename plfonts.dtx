@@ -611,11 +611,45 @@
   \nfss@catcodes
   \expandafter\endgroup
   \DeclareFontEncoding@}
-%
 %</plcore>
 %<platexrelease>\plIncludeInRelease{2018/04/01}{\DeclareFontEncoding@}
 %<platexrelease>                   {UTF-8 Encoding}%
 %<*plcore|platexrelease>
+%    \end{macrocode}
+%
+% まず、\LaTeXe\ 2017-04-15以前の場合のコードです。
+%    \begin{macrocode}
+\ifx\IeC\@undefined
+% for compatibility with LaTeX2e 2017-04-15 or earlier.
+% this code is used if MLTeX is enabled
+\def\DeclareFontEncoding@#1#2#3{%
+  \expandafter
+  \ifx\csname T@#1\endcsname\relax
+     \def\cdp@elt{\noexpand\cdp@elt}%
+     \xdef\cdp@list{\cdp@list\cdp@elt{#1}%
+                    {\default@family}{\default@series}%
+                    {\default@shape}}%
+     \expandafter\let\csname#1-cmd\endcsname\@changed@cmd
+%    \end{macrocode}
+% 以下の2行がp\LaTeXe{}による追加部分です。
+%    \begin{macrocode}
+     \def\enc@elt{\noexpand\enc@elt}%
+     \xdef\fenc@list{\fenc@list\enc@elt<#1>}%
+%    \end{macrocode}
+%    \begin{macrocode}
+  \else
+     \@font@info{Redeclaring font encoding #1}%
+  \fi
+  \global\@namedef{T@#1}{#2}%
+  \global\@namedef{M@#1}{\default@M#3}%
+  \xdef\LastDeclaredEncoding{#1}%
+  }
+%    \end{macrocode}
+%
+% 次に、\LaTeXe\ 2018-04-01以降の場合のコードです。
+%    \begin{macrocode}
+\else
+% for LaTeX2e with UTF-8 input.
 \def\DeclareFontEncoding@#1#2#3{%
   \expandafter
   \ifx\csname T@#1\endcsname\relax
@@ -655,6 +689,7 @@
   \global\@namedef{M@#1}{\default@M#3}%
   \xdef\LastDeclaredEncoding{#1}%
   }
+\fi
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\DeclareFontEncoding@}

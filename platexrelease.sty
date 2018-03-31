@@ -222,6 +222,25 @@ of this package available from CTAN}
 \plEndIncludeInRelease
 \plIncludeInRelease{2018/04/01}{\DeclareFontEncoding@}
                    {UTF-8 Encoding}%
+\ifx\IeC\@undefined
+\def\DeclareFontEncoding@#1#2#3{%
+  \expandafter
+  \ifx\csname T@#1\endcsname\relax
+     \def\cdp@elt{\noexpand\cdp@elt}%
+     \xdef\cdp@list{\cdp@list\cdp@elt{#1}%
+                    {\default@family}{\default@series}%
+                    {\default@shape}}%
+     \expandafter\let\csname#1-cmd\endcsname\@changed@cmd
+     \def\enc@elt{\noexpand\enc@elt}%
+     \xdef\fenc@list{\fenc@list\enc@elt<#1>}%
+  \else
+     \@font@info{Redeclaring font encoding #1}%
+  \fi
+  \global\@namedef{T@#1}{#2}%
+  \global\@namedef{M@#1}{\default@M#3}%
+  \xdef\LastDeclaredEncoding{#1}%
+  }
+\else
 \def\DeclareFontEncoding@#1#2#3{%
   \expandafter
   \ifx\csname T@#1\endcsname\relax
@@ -247,6 +266,7 @@ of this package available from CTAN}
   \global\@namedef{M@#1}{\default@M#3}%
   \xdef\LastDeclaredEncoding{#1}%
   }
+\fi
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\DeclareFontEncoding@}
                    {UTF-8 Encoding}%
