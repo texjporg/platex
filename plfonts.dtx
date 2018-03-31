@@ -624,6 +624,15 @@
                     {\default@family}{\default@series}%
                     {\default@shape}}%
      \expandafter\let\csname#1-cmd\endcsname\@changed@cmd
+%    \end{macrocode}
+% \LaTeXe\ 2018-04-01（予定）で、既定の入力エンコーディングが
+% UTF-8になります。これは、\file{latex.ltx}が\file{utf8.def}（従来は
+% \LaTeX{}ソースに |\usepackage[utf8]{inputenc}| と書いたときに
+% 読み込まれていたもの）を読み込むことで実現されています。
+% \file{utf8.def}は |\DeclareFontEncoding@| を再定義するので、
+% これに合わせるためのコードを追加します。
+% \changes{v1.6m}{2018/03/31}{\file{utf8.def}由来のコードを追加}
+%    \begin{macrocode}
      \begingroup
        \wlog{Now handling font encoding #1 ...}%
        \lowercase{%
@@ -632,8 +641,13 @@
                        encoding #1}}%
             {\wlog{... no UTF-8 mapping file for font encoding #1}}%
      \endgroup
+%    \end{macrocode}
+% 以下の2行がp\LaTeXe{}による追加部分です。
+%    \begin{macrocode}
      \def\enc@elt{\noexpand\enc@elt}%
      \xdef\fenc@list{\fenc@list\enc@elt<#1>}%
+%    \end{macrocode}
+%    \begin{macrocode}
   \else
      \@font@info{Redeclaring font encoding #1}%
   \fi
