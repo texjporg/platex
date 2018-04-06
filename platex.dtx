@@ -77,6 +77,7 @@
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
 % \changes{v1.0t}{2018/02/07}{ascmacパッケージを独立させた}
 % \changes{v1.0u}{2018/02/18}{nidanfloatパッケージを独立させた}
+% \changes{v1.0v}{2018/04/06}{最新のsource2eへの追随}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -112,6 +113,7 @@
 %    from \file{plcore.ltx} to \file{platex.ltx}}
 % \changes{v1.0t}{2018/02/07}{Moved ascmac package to separate bundle}
 % \changes{v1.0u}{2018/02/18}{Moved nidanfloat package to separate bundle}
+% \changes{v1.0v}{2018/04/06}{Sync with the latest \file{source2e.tex}}
 %\fi
 % \fi
 %
@@ -119,7 +121,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2018/02/18 v1.0u pLaTeX document file]
+\ProvidesFile{platex.dtx}[2018/04/06 v1.0v pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -1109,7 +1111,8 @@ all others indicate the places where it is used.}
 \makeatletter
 \def\changes@#1#2#3{%
   \let\protect\@unexpandable@protect
-  \edef\@tempa{\noexpand\glossary{#2\space\currentfile\space#1\levelchar
+  \edef\@tempa{\noexpand\glossary{#2\space
+               \currentfile\space#1\levelchar
                \ifx\saved@macroname\@empty
                   \space\actualchar\generalname
                \else
@@ -1121,6 +1124,31 @@ all others indicate the places where it is used.}
                \fi
                :\levelchar #3}}%
   \@tempa\endgroup\@esphack}
+%    \end{macrocode}
+%\ifJAPANESE
+% コード行では、少しのOverfullを警告無しに許容します。
+% \changes{v1.0v}{2018/04/06}{最新のsource2eへの追随}
+%\else
+% Codelines are allowed to run over a bit without
+% showing up as overfull.
+% \changes{v1.0v}{2018/04/06}{Sync with the latest \file{source2e.tex}}
+%\fi
+%    \begin{macrocode}
+\renewcommand*\MacroFont{\fontencoding\encodingdefault
+                   \fontfamily\ttdefault
+                   \fontseries\mddefault
+                   \fontshape\updefault
+                   \small
+                   \hfuzz 6pt\relax}
+%    \end{macrocode}
+%\ifJAPANESE
+% 章番号の桁数が多い場合を考慮し、目次でのスペースを少し増やします。
+%\else
+% Section numbers now reach eg 74.17.2 which need more space
+%\fi
+%    \begin{macrocode}
+\renewcommand*\l@subsection{\@dottedtocline{2}{1.5em}{2.8em}}
+\renewcommand*\l@subsubsection{\@dottedtocline{3}{3.8em}{3.4em}}
 \makeatother
 %    \end{macrocode}
 %\ifJAPANESE

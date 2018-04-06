@@ -24,7 +24,10 @@
 % \changes{v1.0i}{2017/12/06}{タイポ修正}
 % \changes{v1.0j}{2018/01/27}{p\LaTeX\ \texttt{!<2017/09/26!>}版に警告}
 % \changes{v1.0k}{2018/01/27}{Add \cs{platexreleaseversion} info
-%      to \cs{ProvidesPackage} output (sync with latexrelease.dtx v1.0i)}
+%      to \cs{ProvidesPackage} output
+%      (sync with latexrelease.dtx 2017/12/17 v1.0i)}
+% \changes{v1.0l}{2018/04/06}{Drop an extra period in warning message
+%      (sync with latexrelease.dtx 2018/02/18 v1.0j)}
 % \fi
 %
 % \iffalse
@@ -34,7 +37,7 @@
 \ProvidesFile{platexrelease.dtx}
 %</driver>
 %<platexrelease>\ProvidesPackage{platexrelease}
-          [2018/01/27 v1.0k latexrelease support for pLaTeX Kernel
+          [2018/04/06 v1.0l latexrelease support for pLaTeX Kernel
               (including releases up to \platexreleaseversion)]
 %<*driver>
 \documentclass{jltxdoc}
@@ -236,7 +239,7 @@
 \ifx\reserved@b\@empty\else
 \PackageError{platexrelease}%
              {Unexpected option \requestedplpatchdate}%
-             {The option must be of the form yyyy/mm/dd}%
+             {The option must be of the form yyyy/mm/dd or yyyy-mm-dd}%
 \fi}
 \afterassignment\reserved@a
 \count@\expandafter
@@ -251,7 +254,7 @@
 %    \begin{macrocode}
 \ifnum\requestedpLaTeXdate=\currentpLaTeXdate
 \PackageWarningNoLine{platexrelease}{%
-  Current format date selected, no patches applied.}
+  Current format date selected, no patches applied}
 \expandafter\endinput
 \fi
 %    \end{macrocode}

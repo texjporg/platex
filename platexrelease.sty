@@ -68,7 +68,7 @@
 %% File: platexrelease.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{platexrelease}
-          [2018/01/27 v1.0k latexrelease support for pLaTeX Kernel
+          [2018/04/06 v1.0l latexrelease support for pLaTeX Kernel
               (including releases up to \platexreleaseversion)]
 \RequirePackageWithOptions{latexrelease}
 \ifnum\expandafter\@parse@version\latexreleaseversion//00\@nil
@@ -94,7 +94,7 @@
 \ifx\reserved@b\@empty\else
 \PackageError{platexrelease}%
              {Unexpected option \requestedplpatchdate}%
-             {The option must be of the form yyyy/mm/dd}%
+             {The option must be of the form yyyy/mm/dd or yyyy-mm-dd}%
 \fi}
 \afterassignment\reserved@a
 \count@\expandafter
@@ -103,7 +103,7 @@
    \expandafter\@parse@version\pfmtversion//00\@nil}
 \ifnum\requestedpLaTeXdate=\currentpLaTeXdate
 \PackageWarningNoLine{platexrelease}{%
-  Current format date selected, no patches applied.}
+  Current format date selected, no patches applied}
 \expandafter\endinput
 \fi
 \ifnum\currentpLaTeXdate
