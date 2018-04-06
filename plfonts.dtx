@@ -76,13 +76,17 @@
 % \changes{v1.6k}{2017/12/05}{デフォルト設定ファイルの読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
 % \changes{v1.6l}{2018/02/04}{和文スケール値を明文化}
+% \changes{v1.6m}{2018/03/31}{\file{utf8.def}由来のコードを追加}
+% \changes{v1.6n}{2018/04/06}{\cs{UseRawInputEncoding}で使われる
+%    \cs{DeclareFontEncoding@}の保存版も定義
+%    (sync with ltfinal.dtx 2018/04/06 v2.1b)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2018/02/04 v1.6l pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2018/04/06 v1.6n pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -666,6 +670,9 @@
 % \file{utf8.def}は |\DeclareFontEncoding@| を再定義するので、
 % これに合わせるためのコードを追加します。
 % \changes{v1.6m}{2018/03/31}{\file{utf8.def}由来のコードを追加}
+% \changes{v1.6n}{2018/04/06}{\cs{UseRawInputEncoding}で使われる
+%    \cs{DeclareFontEncoding@}の保存版も定義
+%    (sync with ltfinal.dtx 2018/04/06 v2.1b)}
 %    \begin{macrocode}
      \begingroup
        \wlog{Now handling font encoding #1 ...}%
@@ -690,6 +697,7 @@
   \xdef\LastDeclaredEncoding{#1}%
   }
 \fi
+\let\DeclareFontEncoding@saved\DeclareFontEncoding@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\DeclareFontEncoding@}
