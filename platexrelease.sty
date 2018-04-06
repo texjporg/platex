@@ -222,7 +222,6 @@ of this package available from CTAN}
 \plEndIncludeInRelease
 \plIncludeInRelease{2018/04/01}{\DeclareFontEncoding@}
                    {UTF-8 Encoding}%
-\ifx\IeC\@undefined
 \def\DeclareFontEncoding@#1#2#3{%
   \expandafter
   \ifx\csname T@#1\endcsname\relax
@@ -240,7 +239,8 @@ of this package available from CTAN}
   \global\@namedef{M@#1}{\default@M#3}%
   \xdef\LastDeclaredEncoding{#1}%
   }
-\else
+\let\DeclareFontEncoding@saved\DeclareFontEncoding@
+\ifx\IeC\@undefined\else
 \def\DeclareFontEncoding@#1#2#3{%
   \expandafter
   \ifx\csname T@#1\endcsname\relax
@@ -267,7 +267,6 @@ of this package available from CTAN}
   \xdef\LastDeclaredEncoding{#1}%
   }
 \fi
-\let\DeclareFontEncoding@saved\DeclareFontEncoding@
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\DeclareFontEncoding@}
                    {UTF-8 Encoding}%

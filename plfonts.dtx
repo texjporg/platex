@@ -621,9 +621,12 @@
 %<*plcore|platexrelease>
 %    \end{macrocode}
 %
-% まず、\LaTeXe\ 2017-04-15以前の場合のコードです。
+% まず、\LaTeXe\ 2017-04-15以前の場合のコードです。このコードは、
+% |\UseRawInputEncoding|の内部でも使われます。
+% \changes{v1.6n}{2018/04/06}{\cs{UseRawInputEncoding}で使われる
+%    \cs{DeclareFontEncoding@}の保存版（従来の定義）を準備
+%    (sync with ltfinal.dtx 2018/04/06 v2.1b)}
 %    \begin{macrocode}
-\ifx\IeC\@undefined
 % for compatibility with LaTeX2e 2017-04-15 or earlier.
 % this code is used if MLTeX is enabled
 \def\DeclareFontEncoding@#1#2#3{%
@@ -648,11 +651,12 @@
   \global\@namedef{M@#1}{\default@M#3}%
   \xdef\LastDeclaredEncoding{#1}%
   }
+\let\DeclareFontEncoding@saved\DeclareFontEncoding@
 %    \end{macrocode}
 %
 % 次に、\LaTeXe\ 2018-04-01以降の場合のコードです。
 %    \begin{macrocode}
-\else
+\ifx\IeC\@undefined\else
 % for LaTeX2e with UTF-8 input.
 \def\DeclareFontEncoding@#1#2#3{%
   \expandafter
@@ -670,9 +674,6 @@
 % \file{utf8.def}は |\DeclareFontEncoding@| を再定義するので、
 % これに合わせるためのコードを追加します。
 % \changes{v1.6m}{2018/03/31}{\file{utf8.def}由来のコードを追加}
-% \changes{v1.6n}{2018/04/06}{\cs{UseRawInputEncoding}で使われる
-%    \cs{DeclareFontEncoding@}の保存版も定義
-%    (sync with ltfinal.dtx 2018/04/06 v2.1b)}
 %    \begin{macrocode}
      \begingroup
        \wlog{Now handling font encoding #1 ...}%
@@ -697,7 +698,6 @@
   \xdef\LastDeclaredEncoding{#1}%
   }
 \fi
-\let\DeclareFontEncoding@saved\DeclareFontEncoding@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\DeclareFontEncoding@}
