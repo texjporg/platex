@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2018/03/12 v1.0t Experimental pLaTeX2e features]
+                [2018/04/06 v1.0u Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -371,9 +371,13 @@
 % に相互参照が収束しなくなるのを防ぐため、水平モード以外では
 % やはり|\null|を発行してみます。
 %    \begin{macrocode}
-\def\@setref@{\ifhmode\spacefactor\@m\else\null\fi}
+%\def\@setref@{\ifhmode\spacefactor\@m\else\null\fi}
 %    \end{macrocode}
 % \end{macro}
+% このコードは、emathの|\marusuuref|のような
+% 「|\ref|を使って参照先の番号だけを取得する」
+% というマクロの動作に（垂直モードで使う場合など）影響するため、
+% ひとまずコメントアウトしておきます。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
