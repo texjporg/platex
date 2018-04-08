@@ -68,12 +68,14 @@
 %    (sync with ltvers 2018/01/08 v1.1a)}
 % \changes{v1.1i}{2018/03/31}{\LaTeXe\ 2017-04-15以降必須}
 % \changes{v1.1j}{2018/04/07}{\LaTeX\ \texttt{!<2018-04-01!>}版対応確認}
+% \changes{v1.1k}{2018/04/08}{バナー調節のコードを最後(plfinal)ではなく
+%    最初(plcore)に早めた}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2018/04/07 v1.1j pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2018/04/08 v1.1k pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -282,8 +284,10 @@
 % \changes{v1.1d}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
 % \changes{v1.1g}{2017/12/04}{\pLaTeX{}のバナーの定義時に
 %    \cs{pfmtname}, \cs{pfmtversion}, \cs{ppatch@level}を展開しないように}
+% \changes{v1.1k}{2018/04/08}{バナー調節のコードを最後(plfinal)ではなく
+%    最初(plcore)に早めた}
 %    \begin{macrocode}
-%<*plfinal>
+%<*plcore>
 %\ifx\ppatch@level\@undefined % fallback if undefined in pLaTeX
 %  \def\ppatch@level{0}\fi
 \begingroup
@@ -319,7 +323,7 @@
   \global\everyjob\expandafter{\platexBANNER}%
 \endgroup
 \let\platexBANNER=\@undefined
-%</plfinal>
+%</plcore>
 %    \end{macrocode}
 % \end{macro}
 %
