@@ -78,6 +78,8 @@
 % \changes{v1.0t}{2018/02/07}{ascmacパッケージを独立させた}
 % \changes{v1.0u}{2018/02/18}{nidanfloatパッケージを独立させた}
 % \changes{v1.0v}{2018/04/06}{最新のsource2eへの追随}
+% \changes{v1.0w}{2018/04/08}{安全のためフォーマット作成時の
+%    バナー表示をやめた}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -114,6 +116,8 @@
 % \changes{v1.0t}{2018/02/07}{Moved ascmac package to separate bundle}
 % \changes{v1.0u}{2018/02/18}{Moved nidanfloat package to separate bundle}
 % \changes{v1.0v}{2018/04/06}{Sync with the latest \file{source2e.tex}}
+% \changes{v1.0w}{2018/04/08}{Stop showing banner during
+%    format generation for safety}
 %\fi
 % \fi
 %
@@ -121,7 +125,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2018/04/06 v1.0v pLaTeX document file]
+\ProvidesFile{platex.dtx}[2018/04/08 v1.0w pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -513,14 +517,21 @@
 %    \end{macrocode}
 %
 %\ifJAPANESE
-% フォーマット作成時に\pLaTeX{}のバージョンがわかるように、
-% 端末に表示します。
+% 以前のバージョンでは、フォーマット作成時に\pLaTeX{}のバージョンが
+% わかるように、端末に表示していましたが、|\everyjob| にバナー表示
+% 以外のコードが含まれる可能性を考慮し、安全のためやめました。
+% \changes{v1.0w}{2018/04/08}{安全のためフォーマット作成時の
+%    バナー表示をやめた}
 %\else
-% Display \pLaTeX\ version on the terminal, so that
-% it can be easily recognized during format creation.
+% In the previous version, we displayed \pLaTeX\ version
+% on the terminal, so that it can be easily recognized
+% during format creation; however |\everyjob| can contain
+% any code other than showing a banner, so now disabled.
+% \changes{v1.0w}{2018/04/08}{Stop showing banner during
+%    format generation for safety}
 %\fi
 %    \begin{macrocode}
-\the\everyjob
+%\the\everyjob
 %    \end{macrocode}
 %
 %\ifJAPANESE
