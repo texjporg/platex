@@ -266,14 +266,15 @@
 %    \begin{macrocode}
 %<*plcore>
 \begingroup
-  \def\parse@@BANNER\platexNILa#1\typeout#2#3\typeout#4#5\platexNILb{#1}
+  \def\parse@@BANNER\platexNILa#1\typeout#2#3\platexNILb{#1}
   \toks0=\expandafter\expandafter\expandafter{%
            \expandafter\parse@@BANNER\platexBANNER}
   \global\everyjob\expandafter{\the\toks0}%
 \endgroup
 %    \end{macrocode}
 %
-% 次に、\LaTeXe{}のバージョンと\pLaTeXe{}のバージョンをまとめて表示します。
+% 次に、\LaTeXe{}のバージョンを表示するコードを抽出し、
+% \pLaTeXe{}のバージョンとまとめて表示するように整形します。
 % \changes{v1.0v}{2016/05/07}{起動時の文字列を最新の\LaTeX{}に合わせた。}
 % \changes{v1.0w}{2016/05/12}{起動時の文字列に入れる\LaTeX{}のバージョンを
 %    元の\LaTeX{}のバナーから引き継ぐように改良}
@@ -284,7 +285,7 @@
 %\ifx\ppatch@level\@undefined % fallback if undefined in pLaTeX
 %  \def\ppatch@level{0}\fi
 \begingroup
-  \def\parse@@BANNER\platexNILa#1\typeout#2#3\typeout#4#5\platexNILb{#2}
+  \def\parse@@BANNER\platexNILa#1\typeout#2#3\platexNILb{#2}
   \toks0=\expandafter\expandafter\expandafter{%
            \expandafter\parse@@BANNER\platexBANNER}
   \ifnum\ppatch@level=0
@@ -294,37 +295,26 @@
   \else
     \toks2={\pfmtname\space<\pfmtversion>-pre\ppatch@level\space}%
   \fi\fi
-  \edef\platexBANNER{\the\toks2 (based on \the\toks0)}
-  \global\everyjob\expandafter{%
-    \expandafter\typeout\expandafter{\platexBANNER}}%
-\endgroup
-%    \end{macrocode}
-%
-% 無いとは思いますが、念のため|\typeout{LaTeX2e version}|と
-% |\typeout{Babel version}|の間にコードがあるケースも想定します。
-%    \begin{macrocode}
-\begingroup
-  \def\parse@@BANNER\platexNILa#1\typeout#2#3\typeout#4#5\platexNILb{#3}
-  \toks0=\expandafter\expandafter\expandafter{%
-           \expandafter\parse@@BANNER\platexBANNER}
-  \edef\platexBANNER{\the\everyjob \the\toks0}
+  \edef\platexBANNER{\the\everyjob
+    \noexpand\typeout{\the\toks2 (based on \the\toks0)}}
   \global\everyjob\expandafter{\platexBANNER}%
 \endgroup
 %    \end{macrocode}
 %
-% p\LaTeX{}は、独自のハイフネーション・パターンを定義していません。
-% \TeX\ Liveの標準的インストールでは、代わりに\LaTeX{}が読み込んでいる
-% Babelパッケージの\file{hyphen.cfg}が適用されるはずです。
-% そこで、起動時に|\typeout{Babel version}|を表示し、さらに
-% 最後に残っているコードも抽出して|\everyjob|に入れます。
+% \LaTeXe{}のバージョン表示の後に残っているコードを、
+% そのまま|\everyjob|に追加します。
+% この中には、|\typeout{Babel version}|も含まれる
+% はずです（p\LaTeX{}は独自のハイフネーション・パターンを定義して
+% いないので、\TeX\ Liveの標準的インストールでは代わりに\LaTeX{}が
+% 読み込んでいるBabelパッケージの\file{hyphen.cfg}が適用されるため）。
 % \changes{v1.0w}{2016/05/12}{起動時の文字列に入れるBabelのバージョンを
 %    元の\LaTeX{}のバナーから取得するコードを\file{platex.ini}から取り入れた}
 %    \begin{macrocode}
 \begingroup
-  \def\parse@@BANNER\platexNILa#1\typeout#2#3\typeout#4#5\platexNILb{{#4}#5}
+  \def\parse@@BANNER\platexNILa#1\typeout#2#3\platexNILb{#3}
   \toks0=\expandafter\expandafter\expandafter{%
            \expandafter\parse@@BANNER\platexBANNER}
-  \edef\platexBANNER{\the\everyjob \noexpand\typeout\the\toks0}
+  \edef\platexBANNER{\the\everyjob \the\toks0}
   \global\everyjob\expandafter{\platexBANNER}%
 \endgroup
 \let\platexBANNER=\@undefined
