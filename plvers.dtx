@@ -70,12 +70,14 @@
 % \changes{v1.1j}{2018/04/07}{\LaTeX\ \texttt{!<2018-04-01!>}版対応確認}
 % \changes{v1.1k}{2018/04/08}{バナー調節のコードを最後(plfinal)ではなく
 %    最初(plcore)に早めた}
+% \changes{v1.1l}{2018/04/09}{バナーの保存しかたを改良}
+% \changes{v1.1l}{2018/04/09}{バナーの再構築のしかたを改良}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2018/04/08 v1.1k pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2018/04/09 v1.1l pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -170,7 +172,7 @@
    {2018-04-01}
 %</plcore|platexrelease>
 %<*plcore>
-\def\ppatch@level{1}
+\def\ppatch@level{2}
 %</plcore>
 %    \end{macrocode}
 % \end{macro}
@@ -181,46 +183,23 @@
 % このファイルの直前で\LaTeXe{}の\file{latex.ltx}が読み込まれているはず
 % なので、その起動時のバナーを保存します。
 %
-% 2016/05/07の実装では、\file{platex.ltx}のなかで
-%\begin{verbatim}
-% \edef\platexBANNER{\the\everyjob}
-%\end{verbatim}
-% としてバナーを保存し、この内容が
+% \LaTeXe\ 2018-04-01 patch level 1までは、|\everyjob|が
 %\begin{verbatim}
 %   \typeout{LaTeX2e version}\typeout{Babel version}
 %\end{verbatim}
-% という4つのトークンから成ると仮定して、\file{plcore.ltx}のなかで
-%\begin{verbatim}
-%   \def\parse@@BANNER#1#2#3#4{#2}
-%\end{verbatim}
-% のようにパースしていました。ところが、この「4つのトークンから成る」と
-% いう仮定はBabel由来の\file{hyphen.cfg}を使用した場合のみ成り立ち、
-% それ以外の特別な\file{hyphen.cfg}や\file{hyphen.ltx}を使用した場合に
-% エラーになってしまいます。
-% そこで、新たに2016/09/14の実装では、\file{platex.ltx}のなかで
-%\begin{verbatim}
-% \edef\platexBANNER{\the\everyjob\noexpand\typeout{}\relax}
-%\end{verbatim}
-% としてダミーを追加します（|\relax|はただの区切りトークンの役割）。
-% こうすると、|\platexBANNER|の内容は、Babelの\file{hyphen.cfg}のとき
-%\begin{verbatim}
-%   \typeout{LaTeX2e version}\typeout{Babel version}\typeout{}\relax
-%\end{verbatim}
-% となり、それ以外のとき
-%\begin{verbatim}
-%   \typeout{LaTeX2e version}\typeout{}\relax
-%\end{verbatim}
-% となるはずです。このように、少なくとも|\typeout|が2回含まれています
-% ので、\file{plcore.ltx}のなかで
-%\begin{verbatim}
-%   \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#1}
-%\end{verbatim}
-% とパースすることができるようになります。
+% だけでしたが、\LaTeXe\ 2018-04-01 patch level 2で新たなトークン列が
+% 追加されました。今後も\LaTeXe{}側で|\everyjob|に実行を遅らせる
+% コードが追加される可能性がありますので、そのコードを抽出しなければ
+% なりません。そこで、最初と最後に区切りトークン（それぞれ|\platexNILa|と
+% |\platexNILb|）を付けておきます。
 % \changes{v1.1f}{2017/11/11}{\LaTeX{}のバナーを保存するコードを
 %    \file{platex.ltx}から\file{plcore.ltx}へ移動}
+% \changes{v1.1l}{2018/04/09}{バナーの保存しかたを改良}
 %    \begin{macrocode}
 %<*plcore>
-\edef\platexBANNER{\the\everyjob\noexpand\typeout{}\relax}% save LaTeX banner
+\edef\platexBANNER{\noexpand\platexNILa
+                   \the\everyjob % LaTeX banner and delayed codes
+                   \noexpand\platexNILb}
 %</plcore>
 %    \end{macrocode}
 %
@@ -271,27 +250,41 @@
 %    \end{macrocode}
 % \fi
 %
-% \subsection{起動時に表示するバナー}
+% \subsection{起動時に実行するコード}
 %
 % \begin{macro}{\everyjob}
-% p\LaTeXe{}が起動されたときに表示される文字列です。
-% \LaTeXe{}のバージョンも併せて表示します。
+% p\LaTeXe{}が起動されたときに実行されるコードです。
+% \LaTeXe{}の実行コードを元に、\pLaTeXe{}用の調整を加えます。
+% \changes{v1.1}{2016/09/14}{起動時のバナーを取得するコードを改良}
+% \changes{v1.1k}{2018/04/08}{バナー調節のコードを最後(plfinal)ではなく
+%    最初(plcore)に早めた}
+% \changes{v1.1l}{2018/04/09}{バナーの再構築のしかたを改良}
 %
+% まず、\LaTeXe{}のバージョン表示（|\typeout{LaTeX2e version}|）より
+% 前に実行されるコードがあれば、それを抽出して|\everyjob|に入れます。
+% \LaTeXe\ 2018-04-01 patch level 2の時点では空です。
+%    \begin{macrocode}
+%<*plcore>
+\begingroup
+  \def\parse@@BANNER\platexNILa#1\typeout#2#3\typeout#4#5\platexNILb{#1}
+  \toks0=\expandafter\expandafter\expandafter{%
+           \expandafter\parse@@BANNER\platexBANNER}
+  \global\everyjob\expandafter{\the\toks0}%
+\endgroup
+%    \end{macrocode}
+%
+% 次に、\LaTeXe{}のバージョンと\pLaTeXe{}のバージョンをまとめて表示します。
 % \changes{v1.0v}{2016/05/07}{起動時の文字列を最新の\LaTeX{}に合わせた。}
 % \changes{v1.0w}{2016/05/12}{起動時の文字列に入れる\LaTeX{}のバージョンを
 %    元の\LaTeX{}のバナーから引き継ぐように改良}
-% \changes{v1.1}{2016/09/14}{起動時のバナーを取得するコードを改良}
 % \changes{v1.1d}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
 % \changes{v1.1g}{2017/12/04}{\pLaTeX{}のバナーの定義時に
 %    \cs{pfmtname}, \cs{pfmtversion}, \cs{ppatch@level}を展開しないように}
-% \changes{v1.1k}{2018/04/08}{バナー調節のコードを最後(plfinal)ではなく
-%    最初(plcore)に早めた}
 %    \begin{macrocode}
-%<*plcore>
 %\ifx\ppatch@level\@undefined % fallback if undefined in pLaTeX
 %  \def\ppatch@level{0}\fi
 \begingroup
-  \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#1}
+  \def\parse@@BANNER\platexNILa#1\typeout#2#3\typeout#4#5\platexNILb{#2}
   \toks0=\expandafter\expandafter\expandafter{%
            \expandafter\parse@@BANNER\platexBANNER}
   \ifnum\ppatch@level=0
@@ -307,19 +300,31 @@
 \endgroup
 %    \end{macrocode}
 %
+% 無いとは思いますが、念のため|\typeout{LaTeX2e version}|と
+% |\typeout{Babel version}|の間にコードがあるケースも想定します。
+%    \begin{macrocode}
+\begingroup
+  \def\parse@@BANNER\platexNILa#1\typeout#2#3\typeout#4#5\platexNILb{#3}
+  \toks0=\expandafter\expandafter\expandafter{%
+           \expandafter\parse@@BANNER\platexBANNER}
+  \edef\platexBANNER{\the\everyjob \the\toks0}
+  \global\everyjob\expandafter{\platexBANNER}%
+\endgroup
+%    \end{macrocode}
+%
 % p\LaTeX{}は、独自のハイフネーション・パターンを定義していません。
 % \TeX\ Liveの標準的インストールでは、代わりに\LaTeX{}が読み込んでいる
-% Babelパッケージのものが適用されるはずですから、起動時の文字列にも
-% \file{hyphen.cfg}のバージョンを反映します（Babelパッケージの
-% \file{hyphen.cfg}でない場合は、何も表示されず空行になるはずです）。
+% Babelパッケージの\file{hyphen.cfg}が適用されるはずです。
+% そこで、起動時に|\typeout{Babel version}|を表示し、さらに
+% 最後に残っているコードも抽出して|\everyjob|に入れます。
 % \changes{v1.0w}{2016/05/12}{起動時の文字列に入れるBabelのバージョンを
 %    元の\LaTeX{}のバナーから取得するコードを\file{platex.ini}から取り入れた}
 %    \begin{macrocode}
 \begingroup
-  \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#2}
+  \def\parse@@BANNER\platexNILa#1\typeout#2#3\typeout#4#5\platexNILb{{#4}#5}
   \toks0=\expandafter\expandafter\expandafter{%
            \expandafter\parse@@BANNER\platexBANNER}
-  \edef\platexBANNER{\the\everyjob \noexpand\typeout{\the\toks0}}
+  \edef\platexBANNER{\the\everyjob \noexpand\typeout\the\toks0}
   \global\everyjob\expandafter{\platexBANNER}%
 \endgroup
 \let\platexBANNER=\@undefined

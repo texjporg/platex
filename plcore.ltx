@@ -34,10 +34,18 @@
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
    {2018-04-01}
-\def\ppatch@level{1}
-\edef\platexBANNER{\the\everyjob\noexpand\typeout{}\relax}% save LaTeX banner
+\def\ppatch@level{2}
+\edef\platexBANNER{\noexpand\platexNILa
+                   \the\everyjob % LaTeX banner and delayed codes
+                   \noexpand\platexNILb}
 \begingroup
-  \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#1}
+  \def\parse@@BANNER\platexNILa#1\typeout#2#3\typeout#4#5\platexNILb{#1}
+  \toks0=\expandafter\expandafter\expandafter{%
+           \expandafter\parse@@BANNER\platexBANNER}
+  \global\everyjob\expandafter{\the\toks0}%
+\endgroup
+\begingroup
+  \def\parse@@BANNER\platexNILa#1\typeout#2#3\typeout#4#5\platexNILb{#2}
   \toks0=\expandafter\expandafter\expandafter{%
            \expandafter\parse@@BANNER\platexBANNER}
   \ifnum\ppatch@level=0
@@ -52,10 +60,17 @@
     \expandafter\typeout\expandafter{\platexBANNER}}%
 \endgroup
 \begingroup
-  \def\parse@@BANNER\typeout#1\typeout#2#3\relax{#2}
+  \def\parse@@BANNER\platexNILa#1\typeout#2#3\typeout#4#5\platexNILb{#3}
   \toks0=\expandafter\expandafter\expandafter{%
            \expandafter\parse@@BANNER\platexBANNER}
-  \edef\platexBANNER{\the\everyjob \noexpand\typeout{\the\toks0}}
+  \edef\platexBANNER{\the\everyjob \the\toks0}
+  \global\everyjob\expandafter{\platexBANNER}%
+\endgroup
+\begingroup
+  \def\parse@@BANNER\platexNILa#1\typeout#2#3\typeout#4#5\platexNILb{{#4}#5}
+  \toks0=\expandafter\expandafter\expandafter{%
+           \expandafter\parse@@BANNER\platexBANNER}
+  \edef\platexBANNER{\the\everyjob \noexpand\typeout\the\toks0}
   \global\everyjob\expandafter{\platexBANNER}%
 \endgroup
 \let\platexBANNER=\@undefined
@@ -208,13 +223,6 @@
   \global\@namedef{M@#1}{\default@M#3}%
   \xdef\LastDeclaredEncoding{#1}%
   }
-\ifx\UTFviii@two@octets@@\@undefined\else
-  \everyjob\expandafter{\the\everyjob
-    \let\UTFviii@two@octets\UTFviii@two@octets@@
-    \let\UTFviii@three@octets\UTFviii@three@octets@@
-    \let\UTFviii@four@octets\UTFviii@four@octets@@
-  }
-\fi
 \fi
 \def\DeclareKanjiEncoding#1{%
   \@latex@warning{%
