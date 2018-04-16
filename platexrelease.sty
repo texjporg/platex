@@ -18,7 +18,7 @@
 \edef\p@known@latexreleaseversion
    {2018-04-01}
 \edef\platexreleaseversion
-   {2018-04-01}
+   {2018-05-02}
 \newif\if@plincludeinrelease
 \@plincludeinreleasefalse
 \def\plIncludeInRelease#1{%
@@ -837,11 +837,35 @@ of this package available from CTAN}
    \global \maxdepth \@maxdepth
 }
 \plEndIncludeInRelease
+\plIncludeInRelease{2018/05/02}{\@outputtombow}{\@outputtombow}%
+\def\@outputtombow{%
+  \iftombow
+  \vbox to\z@{\kern-13mm\relax
+    \boxmaxdepth\maxdimen
+    \color@begingroup
+      \normalcolor
+      \hbox to\@@paperwidth{\hskip3mm\relax
+         \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip3mm}%
+      \kern-10mm
+      \hbox to\@@paperwidth{\copy\@Tl\hfill\copy\@Tr}%
+      \vfill
+      \hbox to\@@paperwidth{\copy\@CL\hfill\copy\@CR}%
+      \vfill
+      \hbox to\@@paperwidth{\copy\@Bl\hfill\copy\@Br}%
+      \kern-10mm
+      \hbox to\@@paperwidth{\hskip3mm\relax
+         \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip3mm}%
+    \color@endgroup
+    }\vss
+  }%
+  \fi
+}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@outputtombow}{\@outputtombow}%
 \def\@outputtombow{%
   \iftombow
   \vbox to\z@{\kern-13mm\relax
-    \boxmaxdepth\maxdimen%% Added (Apr 1, 2016)
+    \boxmaxdepth\maxdimen
     \moveleft3mm\vbox to\@@paperheight{%
       \hbox to\@@paperwidth{\hskip3mm\relax
          \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip3mm}%

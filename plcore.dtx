@@ -86,13 +86,15 @@
 % \changes{v1.2x}{2018/03/01}{セル最初の\cs{par}で空行が入らないようにした}
 % \changes{v1.2x}{2018/03/01}{\cs{everypar}に\cs{inhibitglue}を仕込むマクロ追加}
 % \changes{v1.2y}{2018/03/12}{\cs{inhibitglue}を\cs{everypar}の末尾に移動}
+% \changes{v1.2z}{2018/04/16}{色の付いたテキストの途中で改ページすると
+%    トンボにも色が付く現象に対処}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2018/03/12 v1.2y pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2018/04/16 v1.2z pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -890,15 +892,18 @@
 % \begin{macro}{\@outputtombow}
 % |\@outputtombow|コマンドは、トンボを出力するのに用います。
 % \changes{v1.2d}{2016/04/01}{multicolパッケージを使うとトンボの下端が縮む問題を修正}
+% \changes{v1.2z}{2018/04/16}{色の付いたテキストの途中で改ページすると
+%    トンボにも色が付く現象に対処}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2016/04/17}{\@outputtombow}{\@outputtombow}%
+%<platexrelease>\plIncludeInRelease{2018/05/02}{\@outputtombow}{\@outputtombow}%
 %<*plcore|platexrelease>
 \def\@outputtombow{%
   \iftombow
   \vbox to\z@{\kern-13mm\relax
-    \boxmaxdepth\maxdimen%% Added (Apr 1, 2016)
-    \moveleft3mm\vbox to\@@paperheight{%
+    \boxmaxdepth\maxdimen
+    \color@begingroup
+      \normalcolor
       \hbox to\@@paperwidth{\hskip3mm\relax
          \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip3mm}%
       \kern-10mm
@@ -910,11 +915,34 @@
       \kern-10mm
       \hbox to\@@paperwidth{\hskip3mm\relax
          \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip3mm}%
+    \color@endgroup
     }\vss
   }%
   \fi
 }
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\@outputtombow}{\@outputtombow}%
+%<platexrelease>\def\@outputtombow{%
+%<platexrelease>  \iftombow
+%<platexrelease>  \vbox to\z@{\kern-13mm\relax
+%<platexrelease>    \boxmaxdepth\maxdimen
+%<platexrelease>    \moveleft3mm\vbox to\@@paperheight{%
+%<platexrelease>      \hbox to\@@paperwidth{\hskip3mm\relax
+%<platexrelease>         \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip3mm}%
+%<platexrelease>      \kern-10mm
+%<platexrelease>      \hbox to\@@paperwidth{\copy\@Tl\hfill\copy\@Tr}%
+%<platexrelease>      \vfill
+%<platexrelease>      \hbox to\@@paperwidth{\copy\@CL\hfill\copy\@CR}%
+%<platexrelease>      \vfill
+%<platexrelease>      \hbox to\@@paperwidth{\copy\@Bl\hfill\copy\@Br}%
+%<platexrelease>      \kern-10mm
+%<platexrelease>      \hbox to\@@paperwidth{\hskip3mm\relax
+%<platexrelease>         \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip3mm}%
+%<platexrelease>    }\vss
+%<platexrelease>  }%
+%<platexrelease>  \fi
+%<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@outputtombow}{\@outputtombow}%
 %<platexrelease>\def\@outputtombow{%
