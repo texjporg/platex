@@ -843,7 +843,7 @@ of this package available from CTAN}
   \vbox to\z@{\kern-13mm\relax
     \boxmaxdepth\maxdimen
     \color@begingroup
-      \normalcolor
+      \@tombowcolor
       \hbox to\@@paperwidth{\hskip3mm\relax
          \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip3mm}%
       \kern-10mm
@@ -860,6 +860,7 @@ of this package available from CTAN}
   }%
   \fi
 }
+\def\@tombowcolor{\normalcolor}
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@outputtombow}{\@outputtombow}%
 \def\@outputtombow{%
@@ -882,6 +883,7 @@ of this package available from CTAN}
   }%
   \fi
 }
+\let\@tombowcolor\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@outputtombow}{\@outputtombow}%
 \def\@outputtombow{%
@@ -903,6 +905,7 @@ of this package available from CTAN}
   }%
   \fi
 }
+\let\@tombowcolor\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\@outputpage}
                    {Reset language for hyphenation}%

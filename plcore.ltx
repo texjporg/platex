@@ -973,7 +973,7 @@
   \vbox to\z@{\kern-13mm\relax
     \boxmaxdepth\maxdimen
     \color@begingroup
-      \normalcolor
+      \@tombowcolor
       \hbox to\@@paperwidth{\hskip3mm\relax
          \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip3mm}%
       \kern-10mm
@@ -990,6 +990,7 @@
   }%
   \fi
 }
+\def\@tombowcolor{\normalcolor}
 \newdimen\@@paperheight
 \newdimen\@@paperwidth
 \newdimen\@@topmargin

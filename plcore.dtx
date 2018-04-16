@@ -87,7 +87,8 @@
 % \changes{v1.2x}{2018/03/01}{\cs{everypar}に\cs{inhibitglue}を仕込むマクロ追加}
 % \changes{v1.2y}{2018/03/12}{\cs{inhibitglue}を\cs{everypar}の末尾に移動}
 % \changes{v1.2z}{2018/04/16}{色の付いたテキストの途中で改ページすると
-%    トンボにも色が付く現象に対処}
+%    トンボにも色が付く現象に対処、さらに
+%    トンボの色を\cs{@tombowcolor}に切り出し）}
 % \fi
 %
 % \iffalse
@@ -891,9 +892,13 @@
 %
 % \begin{macro}{\@outputtombow}
 % |\@outputtombow|コマンドは、トンボを出力するのに用います。
+% コミュニティ版では、「色付きテキストの途中で改ページが起きた場合に、
+% トンボにも色が付いてしまう」という現象を防ぎ、さらにトンボの色を
+% 簡単に変えられるよう、|\@tombowcolor|というマクロに切り出しています。
 % \changes{v1.2d}{2016/04/01}{multicolパッケージを使うとトンボの下端が縮む問題を修正}
 % \changes{v1.2z}{2018/04/16}{色の付いたテキストの途中で改ページすると
-%    トンボにも色が付く現象に対処}
+%    トンボにも色が付く現象に対処、さらに
+%    トンボの色を\cs{@tombowcolor}に切り出し）}
 %    \begin{macrocode}
 %</plcore>
 %<platexrelease>\plIncludeInRelease{2018/05/02}{\@outputtombow}{\@outputtombow}%
@@ -903,7 +908,7 @@
   \vbox to\z@{\kern-13mm\relax
     \boxmaxdepth\maxdimen
     \color@begingroup
-      \normalcolor
+      \@tombowcolor
       \hbox to\@@paperwidth{\hskip3mm\relax
          \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip3mm}%
       \kern-10mm
@@ -920,6 +925,7 @@
   }%
   \fi
 }
+\def\@tombowcolor{\normalcolor}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/04/17}{\@outputtombow}{\@outputtombow}%
@@ -943,6 +949,7 @@
 %<platexrelease>  }%
 %<platexrelease>  \fi
 %<platexrelease>}
+%<platexrelease>\let\@tombowcolor\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@outputtombow}{\@outputtombow}%
 %<platexrelease>\def\@outputtombow{%
@@ -964,6 +971,7 @@
 %<platexrelease>  }%
 %<platexrelease>  \fi
 %<platexrelease>}
+%<platexrelease>\let\@tombowcolor\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
