@@ -994,6 +994,14 @@
 \newdimen\@@paperheight
 \newdimen\@@paperwidth
 \newdimen\@@topmargin
+\def\@tombow@reset@@paper{%
+     \@@topmargin\topmargin
+     \iftombow
+       \@@paperwidth\paperwidth \advance\@@paperwidth 6mm\relax
+       \@@paperheight\paperheight \advance\@@paperheight 16mm\relax
+       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
+     \fi
+}
 \def\@outputpage{%
 \begingroup % the \endgroup is put in by \aftergroup
   \iftdir
@@ -1021,12 +1029,7 @@
            \iftdir\let\@themargin\oddsidemargin
            \else\let\@themargin\evensidemargin\fi
      \fi\fi
-     \@@topmargin\topmargin
-     \iftombow
-       \@@paperwidth\paperwidth \advance\@@paperwidth 6mm\relax
-       \@@paperheight\paperheight \advance\@@paperheight 16mm\relax
-       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
-     \fi
+     \@tombow@reset@@paper
      \reset@font
      \normalsize
      \normalsfcodes

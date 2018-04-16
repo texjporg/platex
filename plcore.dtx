@@ -994,6 +994,34 @@
 % \end{macro}
 % \end{macro}
 %
+%  \begin{macro}{\@tombow@reset@@paper}
+% トンボ出力オプションが指定されている場合に
+% 用紙サイズを再設定する命令です。
+% |\@outputpage|へ加える変更を簡潔にするため、分離しました。
+% \changes{v1.2z}{2018/04/16}{コマンドに分離}
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2018/05/02}{\@tombow@reset@@paper}
+%<platexrelease>                   {Macro separated}%
+%<*plcore|platexrelease>
+\def\@tombow@reset@@paper{%
+     \@@topmargin\topmargin
+     \iftombow
+       \@@paperwidth\paperwidth \advance\@@paperwidth 6mm\relax
+       \@@paperheight\paperheight \advance\@@paperheight 16mm\relax
+       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
+     \fi
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@tombow@reset@@paper}
+%<platexrelease>                   {Macro separated}%
+%<platexrelease>\let\@tombow@reset@@paper\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
+%    \end{macrocode}
+%  \end{macro}
+%
 %  \begin{macro}{\@shipoutsetup}
 % \changes{v1.1i}{1998/02/03}{Command removed}
 % |\@outputpage|内に挿入したので削除しました。
@@ -1010,8 +1038,8 @@
 % \changes{v1.2a}{2001/09/26}{\LaTeX\ \texttt{!<2001/06/01!>}に対応}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2017/04/08}{\@outputpage}
-%<platexrelease>                   {Reset language for hyphenation}%
+%<platexrelease>\plIncludeInRelease{2018/05/02}{\@outputpage}
+%<platexrelease>                   {Use \@tombow@reset@@paper}%
 %<*plcore|platexrelease>
 \def\@outputpage{%
 \begingroup % the \endgroup is put in by \aftergroup
@@ -1065,13 +1093,11 @@
 % トンボ出力オプションが指定されている場合、ここで用紙サイズを再設定します。
 % \TeX の加える左と上部の1インチは、トンボの内側に入ります。
 % \changes{v1.1a}{1995/11/10}{\cs{topmargin}が反映されないバグを修正}
+% \changes{v1.2z}{2018/04/16}{\cs{@tombow@reset@@paper}コマンドに分離}
 %    \begin{macrocode}
-     \@@topmargin\topmargin
-     \iftombow
-       \@@paperwidth\paperwidth \advance\@@paperwidth 6mm\relax
-       \@@paperheight\paperheight \advance\@@paperheight 16mm\relax
-       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
-     \fi
+     \@tombow@reset@@paper
+%    \end{macrocode}
+%    \begin{macrocode}
      \reset@font
      \normalsize
      \normalsfcodes
@@ -1114,6 +1140,76 @@
   \let\firstmark\botmark
 }
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\@outputpage}
+%<platexrelease>                   {Reset language for hyphenation}%
+%<platexrelease>\def\@outputpage{%
+%<platexrelease>\begingroup % the \endgroup is put in by \aftergroup
+%<platexrelease>  \iftdir
+%<platexrelease>    \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
+%<platexrelease>  \fi
+%<platexrelease>  \let \protect \noexpand
+%<platexrelease>  \language\document@default@language
+%<platexrelease>  \@resetactivechars
+%<platexrelease>  \global\let\@@if@newlist\if@newlist
+%<platexrelease>  \global\@newlistfalse
+%<platexrelease>  \@parboxrestore
+%<platexrelease>  \shipout\vbox{\yoko
+%<platexrelease>    \set@typeset@protect
+%<platexrelease>    \aftergroup\endgroup
+%<platexrelease>    \aftergroup\set@typeset@protect
+%<platexrelease>     \if@specialpage
+%<platexrelease>       \global\@specialpagefalse\@nameuse{ps@\@specialstyle}%
+%<platexrelease>     \fi
+%<platexrelease>     \if@twoside
+%<platexrelease>       \ifodd\count\z@ \let\@thehead\@oddhead \let\@thefoot\@oddfoot
+%<platexrelease>          \iftdir\let\@themargin\evensidemargin
+%<platexrelease>          \else\let\@themargin\oddsidemargin\fi
+%<platexrelease>       \else \let\@thehead\@evenhead
+%<platexrelease>          \let\@thefoot\@evenfoot
+%<platexrelease>           \iftdir\let\@themargin\oddsidemargin
+%<platexrelease>           \else\let\@themargin\evensidemargin\fi
+%<platexrelease>     \fi\fi
+%<platexrelease>     \@@topmargin\topmargin
+%<platexrelease>     \iftombow
+%<platexrelease>       \@@paperwidth\paperwidth \advance\@@paperwidth 6mm\relax
+%<platexrelease>       \@@paperheight\paperheight \advance\@@paperheight 16mm\relax
+%<platexrelease>       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
+%<platexrelease>     \fi
+%<platexrelease>     \reset@font
+%<platexrelease>     \normalsize
+%<platexrelease>     \normalsfcodes
+%<platexrelease>     \let\label\@gobble
+%<platexrelease>     \let\index\@gobble
+%<platexrelease>     \let\glossary\@gobble
+%<platexrelease>     \baselineskip\z@skip \lineskip\z@skip \lineskiplimit\z@
+%<platexrelease>    \@begindvi
+%<platexrelease>    \@outputtombow
+%<platexrelease>    \vskip \@@topmargin
+%<platexrelease>    \moveright\@themargin\vbox{%
+%<platexrelease>      \setbox\@tempboxa \vbox to\headheight{%
+%<platexrelease>        \vfil
+%<platexrelease>        \color@hbox
+%<platexrelease>          \normalcolor
+%<platexrelease>          \hb@xt@\textwidth{\@thehead}%
+%<platexrelease>        \color@endbox
+%<platexrelease>      }%                        %% 22 Feb 87
+%<platexrelease>      \dp\@tempboxa \z@
+%<platexrelease>      \box\@tempboxa
+%<platexrelease>      \vskip \headsep
+%<platexrelease>      \box\@outputbox
+%<platexrelease>      \baselineskip \footskip
+%<platexrelease>      \color@hbox
+%<platexrelease>        \normalcolor
+%<platexrelease>        \hb@xt@\textwidth{\@thefoot}%
+%<platexrelease>      \color@endbox
+%<platexrelease>    }%
+%<platexrelease>  }%
+%<platexrelease>  \global\let\if@newlist\@@if@newlist
+%<platexrelease>  \global \@colht \textheight
+%<platexrelease>  \stepcounter{page}%
+%<platexrelease>  \let\firstmark\botmark
+%<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@outputpage}
 %<platexrelease>                   {Reset language for hyphenation}%
