@@ -86,11 +86,14 @@
 % \changes{v1.2x}{2018/03/01}{セル最初の\cs{par}で空行が入らないようにした}
 % \changes{v1.2x}{2018/03/01}{\cs{everypar}に\cs{inhibitglue}を仕込むマクロ追加}
 % \changes{v1.2y}{2018/03/12}{\cs{inhibitglue}を\cs{everypar}の末尾に移動}
-% \changes{v1.2z}{2018/04/16}{色の付いたテキストの途中で改ページすると
-%    トンボにも色が付く現象に対処、さらに
-%    トンボの色を\cs{@tombowcolor}に切り出し）}
+% \changes{v1.2z}{2018/04/16}{\cs{@tombow@bleed}マクロ追加}
 % \changes{v1.2z}{2018/04/16}{\cs{@tombowcolor}マクロ追加}
-% \changes{v1.2z}{2018/04/16}{コマンドに分離}
+% \changes{v1.2z}{2018/04/16}{bleed幅を\cs{@tombow@bleed}に切り出し}
+% \changes{v1.2z}{2018/04/16}{色の付いたテキストの途中で改ページすると
+%    トンボにも色が付く現象に対処、さらにトンボの色を\cs{@tombowcolor}へ・
+%    bleed幅を\cs{@tombow@bleed}に切り出し}
+% \changes{v1.2z}{2018/04/16}{コマンドに分離、さらに
+%    bleed幅を\cs{@tombow@bleed}に切り出し}
 % \changes{v1.2z}{2018/04/16}{\cs{@tombow@reset@@paper}コマンドに分離}
 % \fi
 %
@@ -768,6 +771,24 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\@tombow@bleed}
+% |\@tombow@bleed|は、bleed幅を指定します。
+% デフォルトは3mmです。
+% \changes{v1.2z}{2018/04/16}{\cs{@tombow@bleed}マクロ追加}
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2018/05/02}{\@tombow@bleed}{Macro added}%
+%<*plcore|platexrelease>
+\def\@tombow@bleed{3mm}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@tombow@bleed}{Macro added}%
+%<platexrelease>\let\@tombow@bleed\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\@tombowcolor}
 % |\@tombowcolor|は、トンボの色です。
 % デフォルトは|\normalcolor|です。
@@ -856,10 +877,15 @@
 % |\maketombow|コマンドは、トンボとなるボックスを作るために用います。
 % このコマンドは、トンボとなるボックスを作るだけで、それらのボックスを
 % 出力するのではないことに注意をしてください。
+% \changes{v1.2z}{2018/04/16}{bleed幅を\cs{@tombow@bleed}に切り出し}
 %    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2018/05/02}{\maketombowbox}
+%<platexrelease>                               {Use \@tombow@bleed}%
+%<*plcore|platexrelease>
 \def\maketombowbox{%
   \setbox\@TL\hbox to\z@{\yoko\hss
-      \vrule width13mm height\@tombowwidth depth\z@
+      \vrule width\dimexpr 10mm+\@tombow@bleed\relax height\@tombowwidth depth\z@
       \vrule height10mm width\@tombowwidth depth\z@
 %    \end{macrocode}
 % \changes{v1.0f}{1996/07/10}{トンボの横にDVIファイルの作成日を出力する
@@ -872,33 +898,33 @@
       \fi}%
   \setbox\@Tl\hbox to\z@{\yoko\hss
       \vrule width10mm height\@tombowwidth depth\z@
-      \vrule height13mm width\@tombowwidth depth\z@}%
+      \vrule height\dimexpr 10mm+\@tombow@bleed\relax width\@tombowwidth depth\z@}%
   \setbox\@TC\hbox{\yoko
       \vrule width10mm height\@tombowwidth depth\z@
       \vrule height10mm width\@tombowwidth depth\z@
       \vrule width10mm height\@tombowwidth depth\z@}%
   \setbox\@TR\hbox to\z@{\yoko
       \vrule height10mm width\@tombowwidth depth\z@
-      \vrule width13mm height\@tombowwidth depth\z@\hss}%
+      \vrule width\dimexpr 10mm+\@tombow@bleed\relax height\@tombowwidth depth\z@\hss}%
   \setbox\@Tr\hbox to\z@{\yoko
-      \vrule height13mm width\@tombowwidth depth\z@
+      \vrule height\dimexpr 10mm+\@tombow@bleed\relax width\@tombowwidth depth\z@
       \vrule width10mm height\@tombowwidth depth\z@\hss}%
 %
   \setbox\@BL\hbox to\z@{\yoko\hss
-      \vrule width13mm depth\@tombowwidth height\z@
+      \vrule width\dimexpr 10mm+\@tombow@bleed\relax depth\@tombowwidth height\z@
       \vrule depth10mm width\@tombowwidth height\z@}%
   \setbox\@Bl\hbox to\z@{\yoko\hss
       \vrule width10mm depth\@tombowwidth height\z@
-      \vrule depth13mm width\@tombowwidth height\z@}%
+      \vrule depth\dimexpr 10mm+\@tombow@bleed\relax width\@tombowwidth height\z@}%
   \setbox\@BC\hbox{\yoko
       \vrule width10mm depth\@tombowwidth height\z@
       \vrule depth10mm width\@tombowwidth height\z@
       \vrule width10mm depth\@tombowwidth height\z@}%
   \setbox\@BR\hbox to\z@{\yoko
       \vrule depth10mm width\@tombowwidth height\z@
-      \vrule width13mm depth\@tombowwidth height\z@\hss}%
+      \vrule width\dimexpr 10mm+\@tombow@bleed\relax depth\@tombowwidth height\z@\hss}%
   \setbox\@Br\hbox to\z@{\yoko
-      \vrule depth13mm width\@tombowwidth height\z@
+      \vrule depth\dimexpr 10mm+\@tombow@bleed\relax width\@tombowwidth height\z@
       \vrule width10mm depth\@tombowwidth height\z@\hss}%
 %
   \setbox\@CL\hbox to\z@{\yoko\hss
@@ -908,6 +934,55 @@
       \vrule height10mm depth10mm width\@tombowwidth
       \vrule height.5\@tombowwidth depth.5\@tombowwidth width10mm\hss}%
 }
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\maketombowbox}
+%<platexrelease>                               {Use \@tombow@bleed}%
+%<platexrelease>\def\maketombowbox{%
+%<platexrelease>  \setbox\@TL\hbox to\z@{\yoko\hss
+%<platexrelease>      \vrule width13mm height\@tombowwidth depth\z@
+%<platexrelease>      \vrule height10mm width\@tombowwidth depth\z@
+%<platexrelease>      \iftombowdate
+%<platexrelease>        \raise4pt\hbox to\z@{\hskip5mm\@bannerfont\the\@bannertoken\hss}%
+%<platexrelease>      \fi}%
+%<platexrelease>  \setbox\@Tl\hbox to\z@{\yoko\hss
+%<platexrelease>      \vrule width10mm height\@tombowwidth depth\z@
+%<platexrelease>      \vrule height13mm width\@tombowwidth depth\z@}%
+%<platexrelease>  \setbox\@TC\hbox{\yoko
+%<platexrelease>      \vrule width10mm height\@tombowwidth depth\z@
+%<platexrelease>      \vrule height10mm width\@tombowwidth depth\z@
+%<platexrelease>      \vrule width10mm height\@tombowwidth depth\z@}%
+%<platexrelease>  \setbox\@TR\hbox to\z@{\yoko
+%<platexrelease>      \vrule height10mm width\@tombowwidth depth\z@
+%<platexrelease>      \vrule width13mm height\@tombowwidth depth\z@\hss}%
+%<platexrelease>  \setbox\@Tr\hbox to\z@{\yoko
+%<platexrelease>      \vrule height13mm width\@tombowwidth depth\z@
+%<platexrelease>      \vrule width10mm height\@tombowwidth depth\z@\hss}%
+%<platexrelease>  \setbox\@BL\hbox to\z@{\yoko\hss
+%<platexrelease>      \vrule width13mm depth\@tombowwidth height\z@
+%<platexrelease>      \vrule depth10mm width\@tombowwidth height\z@}%
+%<platexrelease>  \setbox\@Bl\hbox to\z@{\yoko\hss
+%<platexrelease>      \vrule width10mm depth\@tombowwidth height\z@
+%<platexrelease>      \vrule depth13mm width\@tombowwidth height\z@}%
+%<platexrelease>  \setbox\@BC\hbox{\yoko
+%<platexrelease>      \vrule width10mm depth\@tombowwidth height\z@
+%<platexrelease>      \vrule depth10mm width\@tombowwidth height\z@
+%<platexrelease>      \vrule width10mm depth\@tombowwidth height\z@}%
+%<platexrelease>  \setbox\@BR\hbox to\z@{\yoko
+%<platexrelease>      \vrule depth10mm width\@tombowwidth height\z@
+%<platexrelease>      \vrule width13mm depth\@tombowwidth height\z@\hss}%
+%<platexrelease>  \setbox\@Br\hbox to\z@{\yoko
+%<platexrelease>      \vrule depth13mm width\@tombowwidth height\z@
+%<platexrelease>      \vrule width10mm depth\@tombowwidth height\z@\hss}%
+%<platexrelease>  \setbox\@CL\hbox to\z@{\yoko\hss
+%<platexrelease>      \vrule width10mm height.5\@tombowwidth depth.5\@tombowwidth
+%<platexrelease>      \vrule height10mm depth10mm width\@tombowwidth}%
+%<platexrelease>  \setbox\@CR\hbox to\z@{\yoko
+%<platexrelease>      \vrule height10mm depth10mm width\@tombowwidth
+%<platexrelease>      \vrule height.5\@tombowwidth depth.5\@tombowwidth width10mm\hss}%
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -918,21 +993,22 @@
 % 簡単に変えられるよう、|\@tombowcolor|というマクロに切り出しています。
 % \changes{v1.2d}{2016/04/01}{multicolパッケージを使うとトンボの下端が縮む問題を修正}
 % \changes{v1.2z}{2018/04/16}{色の付いたテキストの途中で改ページすると
-%    トンボにも色が付く現象に対処、さらに
-%    トンボの色を\cs{@tombowcolor}に切り出し）}
+%    トンボにも色が付く現象に対処、さらにトンボの色を\cs{@tombowcolor}へ・
+%    bleed幅を\cs{@tombow@bleed}に切り出し}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2018/05/02}{\@outputtombow}{\@outputtombow}%
+%<platexrelease>\plIncludeInRelease{2018/05/02}{\@outputtombow}
+%                                  {Use \@tombowcolor and \@tombow@bleed}%
 %<*plcore|platexrelease>
 \def\@outputtombow{%
   \iftombow
-  \vbox to\z@{\kern-13mm\relax
+  \vbox to\z@{\kern-\dimexpr 10mm+\@tombow@bleed\relax\relax
     \boxmaxdepth\maxdimen
-    \moveleft3mm\vbox to\@@paperheight{%
+    \moveleft\@tombow@bleed \vbox to\@@paperheight{%
     \color@begingroup
       \@tombowcolor
-      \hbox to\@@paperwidth{\hskip3mm\relax
-         \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip3mm}%
+      \hbox to\@@paperwidth{\hskip\@tombow@bleed\relax
+         \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip\@tombow@bleed}%
       \kern-10mm
       \hbox to\@@paperwidth{\copy\@Tl\hfill\copy\@Tr}%
       \vfill
@@ -940,8 +1016,8 @@
       \vfill
       \hbox to\@@paperwidth{\copy\@Bl\hfill\copy\@Br}%
       \kern-10mm
-      \hbox to\@@paperwidth{\hskip3mm\relax
-         \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip3mm}%
+      \hbox to\@@paperwidth{\hskip\@tombow@bleed\relax
+         \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip\@tombow@bleed}%
     \color@endgroup
     }\vss
   }%
@@ -1016,8 +1092,10 @@
 %  \begin{macro}{\@tombow@reset@@paper}
 % トンボ出力オプションが指定されている場合に
 % 用紙サイズを再設定する命令です。
-% |\@outputpage|へ加える変更を簡潔にするため、分離しました。
-% \changes{v1.2z}{2018/04/16}{コマンドに分離}
+% |\@outputpage|へ加える変更を簡潔にするため、分離した上で
+% |\@tombow@bleed|を使うようにしました。
+% \changes{v1.2z}{2018/04/16}{コマンドに分離、さらに
+%    bleed幅を\cs{@tombow@bleed}に切り出し}
 %    \begin{macrocode}
 %</plcore>
 %<platexrelease>\plIncludeInRelease{2018/05/02}{\@tombow@reset@@paper}
@@ -1026,8 +1104,10 @@
 \def\@tombow@reset@@paper{%
      \@@topmargin\topmargin
      \iftombow
-       \@@paperwidth\paperwidth \advance\@@paperwidth 6mm\relax
-       \@@paperheight\paperheight \advance\@@paperheight 16mm\relax
+       \@@paperwidth\paperwidth
+       \advance\@@paperwidth 2\dimexpr\@tombow@bleed\relax
+       \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
+       \advance\@@paperheight 2\dimexpr\@tombow@bleed\relax
        \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
      \fi
 }
