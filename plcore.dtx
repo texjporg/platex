@@ -89,6 +89,7 @@
 % \changes{v1.2z}{2018/04/16}{色の付いたテキストの途中で改ページすると
 %    トンボにも色が付く現象に対処、さらに
 %    トンボの色を\cs{@tombowcolor}に切り出し）}
+% \changes{v1.2z}{2018/04/16}{\cs{@tombowcolor}マクロ追加}
 % \changes{v1.2z}{2018/04/16}{コマンドに分離}
 % \changes{v1.2z}{2018/04/16}{\cs{@tombow@reset@@paper}コマンドに分離}
 % \fi
@@ -767,6 +768,24 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\@tombowcolor}
+% |\@tombowcolor|は、トンボの色です。
+% デフォルトは|\normalcolor|です。
+% \changes{v1.2z}{2018/04/16}{\cs{@tombowcolor}マクロ追加}
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2018/05/02}{\@tombowcolor}{Macro added}%
+%<*plcore|platexrelease>
+\def\@tombowcolor{\normalcolor}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@tombowcolor}{Macro added}%
+%<platexrelease>\let\@tombowcolor\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
+%    \end{macrocode}
+% \end{macro}
+%
 % トンボ用の罫線を定義します。
 %
 % \begin{macro}{\@TL}
@@ -928,7 +947,6 @@
   }%
   \fi
 }
-\def\@tombowcolor{\normalcolor}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/04/17}{\@outputtombow}{\@outputtombow}%
@@ -952,7 +970,6 @@
 %<platexrelease>  }%
 %<platexrelease>  \fi
 %<platexrelease>}
-%<platexrelease>\let\@tombowcolor\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@outputtombow}{\@outputtombow}%
 %<platexrelease>\def\@outputtombow{%
@@ -974,7 +991,6 @@
 %<platexrelease>  }%
 %<platexrelease>  \fi
 %<platexrelease>}
-%<platexrelease>\let\@tombowcolor\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
