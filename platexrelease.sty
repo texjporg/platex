@@ -18,7 +18,7 @@
 \edef\p@known@latexreleaseversion
    {2018-04-01}
 \edef\platexreleaseversion
-   {2018-05-02}
+   {2018-05-20}
 \newif\if@plincludeinrelease
 \@plincludeinreleasefalse
 \def\plIncludeInRelease#1{%
@@ -837,55 +837,55 @@ of this package available from CTAN}
    \global \maxdepth \@maxdepth
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{2018/05/02}{\@tombow@bleed}{Macro added}%
-\def\@tombow@bleed{3mm}
+\plIncludeInRelease{2018/05/20}{\@tombowbleed}{Macro added}%
+\def\@tombowbleed{3mm}
 \plEndIncludeInRelease
-\plIncludeInRelease{0000/00/00}{\@tombow@bleed}{Macro added}%
-\let\@tombow@bleed\@undefined
+\plIncludeInRelease{0000/00/00}{\@tombowbleed}{Macro added}%
+\let\@tombowbleed\@undefined
 \plEndIncludeInRelease
-\plIncludeInRelease{2018/05/02}{\@tombowcolor}{Macro added}%
+\plIncludeInRelease{2018/05/20}{\@tombowcolor}{Macro added}%
 \def\@tombowcolor{\normalcolor}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@tombowcolor}{Macro added}%
 \let\@tombowcolor\@undefined
 \plEndIncludeInRelease
-\plIncludeInRelease{2018/05/02}{\maketombowbox}
-                               {Use \@tombow@bleed}%
+\plIncludeInRelease{2018/05/20}{\maketombowbox}
+                               {Use \@tombowbleed}%
 \def\maketombowbox{%
   \setbox\@TL\hbox to\z@{\yoko\hss
-      \vrule width\dimexpr 10mm+\@tombow@bleed\relax height\@tombowwidth depth\z@
+      \vrule width\dimexpr 10mm+\@tombowbleed\relax height\@tombowwidth depth\z@
       \vrule height10mm width\@tombowwidth depth\z@
       \iftombowdate
         \raise4pt\hbox to\z@{\hskip5mm\@bannerfont\the\@bannertoken\hss}%
       \fi}%
   \setbox\@Tl\hbox to\z@{\yoko\hss
       \vrule width10mm height\@tombowwidth depth\z@
-      \vrule height\dimexpr 10mm+\@tombow@bleed\relax width\@tombowwidth depth\z@}%
+      \vrule height\dimexpr 10mm+\@tombowbleed\relax width\@tombowwidth depth\z@}%
   \setbox\@TC\hbox{\yoko
       \vrule width10mm height\@tombowwidth depth\z@
       \vrule height10mm width\@tombowwidth depth\z@
       \vrule width10mm height\@tombowwidth depth\z@}%
   \setbox\@TR\hbox to\z@{\yoko
       \vrule height10mm width\@tombowwidth depth\z@
-      \vrule width\dimexpr 10mm+\@tombow@bleed\relax height\@tombowwidth depth\z@\hss}%
+      \vrule width\dimexpr 10mm+\@tombowbleed\relax height\@tombowwidth depth\z@\hss}%
   \setbox\@Tr\hbox to\z@{\yoko
-      \vrule height\dimexpr 10mm+\@tombow@bleed\relax width\@tombowwidth depth\z@
+      \vrule height\dimexpr 10mm+\@tombowbleed\relax width\@tombowwidth depth\z@
       \vrule width10mm height\@tombowwidth depth\z@\hss}%
   \setbox\@BL\hbox to\z@{\yoko\hss
-      \vrule width\dimexpr 10mm+\@tombow@bleed\relax depth\@tombowwidth height\z@
+      \vrule width\dimexpr 10mm+\@tombowbleed\relax depth\@tombowwidth height\z@
       \vrule depth10mm width\@tombowwidth height\z@}%
   \setbox\@Bl\hbox to\z@{\yoko\hss
       \vrule width10mm depth\@tombowwidth height\z@
-      \vrule depth\dimexpr 10mm+\@tombow@bleed\relax width\@tombowwidth height\z@}%
+      \vrule depth\dimexpr 10mm+\@tombowbleed\relax width\@tombowwidth height\z@}%
   \setbox\@BC\hbox{\yoko
       \vrule width10mm depth\@tombowwidth height\z@
       \vrule depth10mm width\@tombowwidth height\z@
       \vrule width10mm depth\@tombowwidth height\z@}%
   \setbox\@BR\hbox to\z@{\yoko
       \vrule depth10mm width\@tombowwidth height\z@
-      \vrule width\dimexpr 10mm+\@tombow@bleed\relax depth\@tombowwidth height\z@\hss}%
+      \vrule width\dimexpr 10mm+\@tombowbleed\relax depth\@tombowwidth height\z@\hss}%
   \setbox\@Br\hbox to\z@{\yoko
-      \vrule depth\dimexpr 10mm+\@tombow@bleed\relax width\@tombowwidth height\z@
+      \vrule depth\dimexpr 10mm+\@tombowbleed\relax width\@tombowwidth height\z@
       \vrule width10mm depth\@tombowwidth height\z@\hss}%
   \setbox\@CL\hbox to\z@{\yoko\hss
       \vrule width10mm height.5\@tombowwidth depth.5\@tombowwidth
@@ -896,7 +896,7 @@ of this package available from CTAN}
 }
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\maketombowbox}
-                               {Use \@tombow@bleed}%
+                               {Use \@tombowbleed}%
 \def\maketombowbox{%
   \setbox\@TL\hbox to\z@{\yoko\hss
       \vrule width13mm height\@tombowwidth depth\z@
@@ -941,16 +941,16 @@ of this package available from CTAN}
       \vrule height.5\@tombowwidth depth.5\@tombowwidth width10mm\hss}%
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{2018/05/02}{\@outputtombow}
+\plIncludeInRelease{2018/05/20}{\@outputtombow}
 \def\@outputtombow{%
   \iftombow
-  \vbox to\z@{\kern-\dimexpr 10mm+\@tombow@bleed\relax\relax
+  \vbox to\z@{\kern-\dimexpr 10mm+\@tombowbleed\relax\relax
     \boxmaxdepth\maxdimen
-    \moveleft\@tombow@bleed \vbox to\@@paperheight{%
+    \moveleft\@tombowbleed \vbox to\@@paperheight{%
     \color@begingroup
       \@tombowcolor
-      \hbox to\@@paperwidth{\hskip\@tombow@bleed\relax
-         \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip\@tombow@bleed}%
+      \hbox to\@@paperwidth{\hskip\@tombowbleed\relax
+         \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip\@tombowbleed}%
       \kern-10mm
       \hbox to\@@paperwidth{\copy\@Tl\hfill\copy\@Tr}%
       \vfill
@@ -958,8 +958,8 @@ of this package available from CTAN}
       \vfill
       \hbox to\@@paperwidth{\copy\@Bl\hfill\copy\@Br}%
       \kern-10mm
-      \hbox to\@@paperwidth{\hskip\@tombow@bleed\relax
-         \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip\@tombow@bleed}%
+      \hbox to\@@paperwidth{\hskip\@tombowbleed\relax
+         \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip\@tombowbleed}%
     \color@endgroup
     }\vss
   }%
@@ -1009,25 +1009,25 @@ of this package available from CTAN}
   \fi
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{2018/05/02}{\@tombow@reset@@paper}
+\plIncludeInRelease{2018/05/20}{\@tombowreset@@paper}
                    {Macro separated}%
-\def\@tombow@reset@@paper{%
+\def\@tombowreset@@paper{%
      \@@topmargin\topmargin
      \iftombow
        \@@paperwidth\paperwidth
-       \advance\@@paperwidth 2\dimexpr\@tombow@bleed\relax
+       \advance\@@paperwidth 2\dimexpr\@tombowbleed\relax
        \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
-       \advance\@@paperheight 2\dimexpr\@tombow@bleed\relax
+       \advance\@@paperheight 2\dimexpr\@tombowbleed\relax
        \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
      \fi
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{0000/00/00}{\@tombow@reset@@paper}
+\plIncludeInRelease{0000/00/00}{\@tombowreset@@paper}
                    {Macro separated}%
-\let\@tombow@reset@@paper\@undefined
+\let\@tombowreset@@paper\@undefined
 \plEndIncludeInRelease
-\plIncludeInRelease{2018/05/02}{\@outputpage}
-                   {Use \@tombow@reset@@paper}%
+\plIncludeInRelease{2018/05/20}{\@outputpage}
+                   {Use \@tombowreset@@paper}%
 \def\@outputpage{%
 \begingroup % the \endgroup is put in by \aftergroup
   \iftdir
@@ -1055,7 +1055,7 @@ of this package available from CTAN}
            \iftdir\let\@themargin\oddsidemargin
            \else\let\@themargin\evensidemargin\fi
      \fi\fi
-     \@tombow@reset@@paper
+     \@tombowreset@@paper
      \reset@font
      \normalsize
      \normalsfcodes

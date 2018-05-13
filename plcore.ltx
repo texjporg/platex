@@ -33,7 +33,7 @@
 \fi
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2018-05-02}
+   {2018-05-20}
 \def\ppatch@level{-1}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
@@ -914,7 +914,7 @@
 \newif\iftombowdate \tombowdatetrue
 \newdimen\@tombowwidth
 \setlength{\@tombowwidth}{.1\p@}
-\def\@tombow@bleed{3mm}
+\def\@tombowbleed{3mm}
 \def\@tombowcolor{\normalcolor}
 \newbox\@TL\newbox\@Tl
 \newbox\@TC
@@ -929,39 +929,39 @@
 \@bannertoken{}
 \def\maketombowbox{%
   \setbox\@TL\hbox to\z@{\yoko\hss
-      \vrule width\dimexpr 10mm+\@tombow@bleed\relax height\@tombowwidth depth\z@
+      \vrule width\dimexpr 10mm+\@tombowbleed\relax height\@tombowwidth depth\z@
       \vrule height10mm width\@tombowwidth depth\z@
       \iftombowdate
         \raise4pt\hbox to\z@{\hskip5mm\@bannerfont\the\@bannertoken\hss}%
       \fi}%
   \setbox\@Tl\hbox to\z@{\yoko\hss
       \vrule width10mm height\@tombowwidth depth\z@
-      \vrule height\dimexpr 10mm+\@tombow@bleed\relax width\@tombowwidth depth\z@}%
+      \vrule height\dimexpr 10mm+\@tombowbleed\relax width\@tombowwidth depth\z@}%
   \setbox\@TC\hbox{\yoko
       \vrule width10mm height\@tombowwidth depth\z@
       \vrule height10mm width\@tombowwidth depth\z@
       \vrule width10mm height\@tombowwidth depth\z@}%
   \setbox\@TR\hbox to\z@{\yoko
       \vrule height10mm width\@tombowwidth depth\z@
-      \vrule width\dimexpr 10mm+\@tombow@bleed\relax height\@tombowwidth depth\z@\hss}%
+      \vrule width\dimexpr 10mm+\@tombowbleed\relax height\@tombowwidth depth\z@\hss}%
   \setbox\@Tr\hbox to\z@{\yoko
-      \vrule height\dimexpr 10mm+\@tombow@bleed\relax width\@tombowwidth depth\z@
+      \vrule height\dimexpr 10mm+\@tombowbleed\relax width\@tombowwidth depth\z@
       \vrule width10mm height\@tombowwidth depth\z@\hss}%
   \setbox\@BL\hbox to\z@{\yoko\hss
-      \vrule width\dimexpr 10mm+\@tombow@bleed\relax depth\@tombowwidth height\z@
+      \vrule width\dimexpr 10mm+\@tombowbleed\relax depth\@tombowwidth height\z@
       \vrule depth10mm width\@tombowwidth height\z@}%
   \setbox\@Bl\hbox to\z@{\yoko\hss
       \vrule width10mm depth\@tombowwidth height\z@
-      \vrule depth\dimexpr 10mm+\@tombow@bleed\relax width\@tombowwidth height\z@}%
+      \vrule depth\dimexpr 10mm+\@tombowbleed\relax width\@tombowwidth height\z@}%
   \setbox\@BC\hbox{\yoko
       \vrule width10mm depth\@tombowwidth height\z@
       \vrule depth10mm width\@tombowwidth height\z@
       \vrule width10mm depth\@tombowwidth height\z@}%
   \setbox\@BR\hbox to\z@{\yoko
       \vrule depth10mm width\@tombowwidth height\z@
-      \vrule width\dimexpr 10mm+\@tombow@bleed\relax depth\@tombowwidth height\z@\hss}%
+      \vrule width\dimexpr 10mm+\@tombowbleed\relax depth\@tombowwidth height\z@\hss}%
   \setbox\@Br\hbox to\z@{\yoko
-      \vrule depth\dimexpr 10mm+\@tombow@bleed\relax width\@tombowwidth height\z@
+      \vrule depth\dimexpr 10mm+\@tombowbleed\relax width\@tombowwidth height\z@
       \vrule width10mm depth\@tombowwidth height\z@\hss}%
   \setbox\@CL\hbox to\z@{\yoko\hss
       \vrule width10mm height.5\@tombowwidth depth.5\@tombowwidth
@@ -972,13 +972,13 @@
 }
 \def\@outputtombow{%
   \iftombow
-  \vbox to\z@{\kern-\dimexpr 10mm+\@tombow@bleed\relax\relax
+  \vbox to\z@{\kern-\dimexpr 10mm+\@tombowbleed\relax\relax
     \boxmaxdepth\maxdimen
-    \moveleft\@tombow@bleed \vbox to\@@paperheight{%
+    \moveleft\@tombowbleed \vbox to\@@paperheight{%
     \color@begingroup
       \@tombowcolor
-      \hbox to\@@paperwidth{\hskip\@tombow@bleed\relax
-         \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip\@tombow@bleed}%
+      \hbox to\@@paperwidth{\hskip\@tombowbleed\relax
+         \copy\@TL\hfill\copy\@TC\hfill\copy\@TR\hskip\@tombowbleed}%
       \kern-10mm
       \hbox to\@@paperwidth{\copy\@Tl\hfill\copy\@Tr}%
       \vfill
@@ -986,8 +986,8 @@
       \vfill
       \hbox to\@@paperwidth{\copy\@Bl\hfill\copy\@Br}%
       \kern-10mm
-      \hbox to\@@paperwidth{\hskip\@tombow@bleed\relax
-         \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip\@tombow@bleed}%
+      \hbox to\@@paperwidth{\hskip\@tombowbleed\relax
+         \copy\@BL\hfill\copy\@BC\hfill\copy\@BR\hskip\@tombowbleed}%
     \color@endgroup
     }\vss
   }%
@@ -996,13 +996,13 @@
 \newdimen\@@paperheight
 \newdimen\@@paperwidth
 \newdimen\@@topmargin
-\def\@tombow@reset@@paper{%
+\def\@tombowreset@@paper{%
      \@@topmargin\topmargin
      \iftombow
        \@@paperwidth\paperwidth
-       \advance\@@paperwidth 2\dimexpr\@tombow@bleed\relax
+       \advance\@@paperwidth 2\dimexpr\@tombowbleed\relax
        \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
-       \advance\@@paperheight 2\dimexpr\@tombow@bleed\relax
+       \advance\@@paperheight 2\dimexpr\@tombowbleed\relax
        \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
      \fi
 }
@@ -1033,7 +1033,7 @@
            \iftdir\let\@themargin\oddsidemargin
            \else\let\@themargin\evensidemargin\fi
      \fi\fi
-     \@tombow@reset@@paper
+     \@tombowreset@@paper
      \reset@font
      \normalsize
      \normalsfcodes
