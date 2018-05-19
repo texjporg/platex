@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2018/04/06 v1.0u Experimental pLaTeX2e features]
+                [2018/05/20 v1.0v Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -406,183 +406,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \subsection{直前のJFM由来スペースの削除【コミュニティ版独自】}
-% 現状のp\TeX{}（\TeX\ Live 2017時点）では、
-% |\inhibitglue|プリミティブは「JFM由来のスペース（グルー・カーン）挿入
-% ルーチンを抑制する」働きをします。しかし、既に挿入されてしまった
-% JFMグルーやカーンを削除することはできません。
 %
-% \begin{macro}{\removejfmglue}
-% そこで、「最後のノードがJFMグルーであった場合にそれを削除する」という
-% ユーザ向け命令を定義します。この機能にはe-p\TeX{} 180226以降の
-% |\lastnodesubtype|プリミティブが必要です。
-% \changes{v1.2x}{2018/03/01}{JFMグルーノードを削除するマクロ追加}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2018/03/09}%
-%<platexrelease>                   {\removejfmglue}{Macro added}%
-%<*plcore|platexrelease>
-%    \end{macrocode}
-%    \begin{macrocode}
-\ifx\lastnodesubtype\@undefined
-  \let\removejfmglue\@undefined
-\else
-  \def\pltx@gluetype{11}
-  \def\pltx@jfmgluesubtype{21}
-  \protected\def\removejfmglue{%
-    \ifnum\lastnodetype=\pltx@gluetype\relax
-      \ifnum\lastnodesubtype=\pltx@jfmgluesubtype\relax
-        \unskip
-      \fi
-    \fi}
-\fi
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}%
-%<platexrelease>                   {\removejfmglue}{Macro added}%
-%<platexrelease>\let\removejfmglue\@undefined
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
+% p\LaTeXe{}カーネル(2018/03/09)に導入したため削除。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % \section{tabular環境のセル内のJFMグル―}
 %
-% \begin{macro}{\@tabclassz}
-% \LaTeX{}カーネルは、アラインメント文字|&|の周囲に半角空白を書いたかどうかに
-% かかわらず余分なスペースを出力しないように、|\ignorespaces|と|\unskip|を
-% 発行しています(lttab.dtx)。しかし、これだけではJFMグルーが消えずに残って
-% しまうので、p\LaTeX{}では追加の対処を入れます。
+% p\LaTeXe{}カーネル(2017/07/29)に導入したため削除。
 %
-% まず、|l|, |c|, |r|の場合です。
-% 2017/09/26の修正では「セルの要素を|\mbox|に入れ、
-% その最初で|\inhibitglue|を発行する」という方針でしたが、
-% 2018/03/09の修正では「|\removejfmglue|マクロが定義されている場合は
-% 最初に|\inhibitglue|を発行し、最後に|\removejfmglue|を発行する」という
-% 方針にします。こうすれば少々\LaTeX{}との互換性が向上します。
-% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
-% \changes{v1.2r}{2017/09/26}{tabular環境の右揃え(r)で罫線がずれるように
-%    なっていたバグを修正}
-% \changes{v1.2x}{2018/03/01}{\cs{removejfmglue}があれば利用するようにした}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2018/03/09}{\@tabclassz}
-%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
-%<*plcore|platexrelease>
-\ifx\removejfmglue\@undefined
-\def\@tabclassz{%
-  \ifcase\@lastchclass
-    \@acolampacol
-  \or
-    \@ampacol
-  \or
-  \or
-  \or
-    \@addamp
-  \or
-    \@acolampacol
-  \or
-    \@firstampfalse\@acol
-  \fi
-  \edef\@preamble{%
-    \@preamble{%
-      \ifcase\@chnum
-        \hfil\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % c
-      \or
-        \hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}\hfil % l
-      \or
-        \hfil\hskip1sp\mbox{\inhibitglue\ignorespaces\@sharp\unskip}% % r
-      \fi}}}
-\else
-\def\@tabclassz{%
-  \ifcase\@lastchclass
-    \@acolampacol
-  \or
-    \@ampacol
-  \or
-  \or
-  \or
-    \@addamp
-  \or
-    \@acolampacol
-  \or
-    \@firstampfalse\@acol
-  \fi
-  \edef\@preamble{%
-    \@preamble{%
-      \ifcase\@chnum
-        \hfil\inhibitglue\ignorespaces\@sharp\unskip\removejfmglue\hfil % c
-      \or
-        \hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\removejfmglue\hfil % l
-      \or
-        \hfil\hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\removejfmglue % r
-      \fi}}}
-\fi
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
-%
-% \begin{macro}{\@classv}
-% 次に、|p|の場合です。
-% 2017/07/29の修正では|\mbox{}\inhibitglue|と|\unskip|を追加していましたが、
-% 以下のように|p|指定のセルの最初で|\par|として
-% 改段落を発行すると、一行空いてしまうという症状が起きてしまいます(platex/\#63)。
-%\begin{verbatim}
-% \begin{tabular}{p{5cm}}
-% A\\
-% \relax\par
-% A
-% \end{tabular}
-%\end{verbatim}
-% ここでは、2017/07/29の修正から方針を改め、|\everypar|内に|\inhibitglue|を
-% 仕込むという方針で対応します。
-% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
-% \changes{v1.2x}{2018/03/01}{セル最初の\cs{par}で空行が入らないようにした}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2018/03/09}{\@classv}
-%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
-%<*plcore|platexrelease>
-\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\pltx@next@inhibitglue\ignorespaces
-\@sharp\unskip\@endpbox}}
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2017/07/29}{\@classv}
-%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
-%<platexrelease>\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\mbox{}\inhibitglue\ignorespaces
-%<platexrelease>\@sharp\unskip\@endpbox}}
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\@classv}
-%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
-%<platexrelease>\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\ignorespaces
-%<platexrelease>\@sharp\@endpbox}}
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
-%
-% \begin{macro}{\pltx@next@inhibitglue}
-% 水平モードであればそのまま|\inhibitglue|を発行し、それ以外であれば
-% |\everypar|内に|\inhibitglue|を仕込みます。
-% \changes{v1.2x}{2018/03/01}{\cs{everypar}に\cs{inhibitglue}を仕込むマクロ追加}
-% \changes{v1.2y}{2018/03/12}{\cs{inhibitglue}を\cs{everypar}の末尾に移動}
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2018/03/09}{\pltx@next@inhibitglue}
-%<platexrelease>                   {Add \pltx@next@inhibitglue}%
-%<*plcore|platexrelease>
-\protected\def\pltx@next@inhibitglue{%
-  \ifhmode\inhibitglue\else
-  \edef\@tempa{\everypar{%
-    \everypar{\unexpanded\expandafter{\the\everypar}}%
-    \unexpanded\expandafter{\the\everypar}\inhibitglue}}%
-  \@tempa\fi}
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\pltx@next@inhibitglue}
-%<platexrelease>                   {Add \pltx@next@inhibitglue}%
-%<platexrelease>\let\pltx@next@inhibitglue\@undefined
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
-%
-% % p\LaTeXe{}カーネル(2017/07/29)に導入したため削除。
+% さらなる修正もp\LaTeXe{}カーネル(2018/03/09)に導入したため削除。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %

@@ -1,0 +1,77 @@
+%% <2018-04-01> and <2018-05-20>
+\documentclass{plnews}
+
+\publicationyear{2018}% 発行年
+\publicationmonth{05}% 発行月
+\publicationissue{c10}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\cs#1{\texttt{\char92 #1}}
+\def\pTeX{p\kern-.15em\TeX}
+\def\eTeX{$\varepsilon$-\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+
+\begin{document}
+
+\maketitle
+
+この文書はコミュニティ版\pLaTeXe\ \texttt{<2018-04-01>}および
+\texttt{<2018-05-20>}について、
+\pLaTeXe\ \texttt{<2018/03/09>}からの更新箇所をまとめたものです。
+今回から、フォーマットの日付の表記をyyyy/mm/ddからISO 8601準拠の
+yyyy-mm-ddに変更しました。
+
+
+\section{\LaTeXe\ \texttt{<2018-04-01>}対応}
+\LaTeXe\ \texttt{<2018-04-01>}で、欧文のinputencの既定が|utf8|に
+なりました。これに合わせ、\pLaTeXe で和文用に拡張していた
+|\DeclareFontEncoding|命令でも|.dfu|ファイルの読込処理を追加しました。
+
+
+\section{トンボ関連の修正と機能追加}
+従来、colorパッケージなどでテキストに色をつけた場合、
+その色つきテキストの途中に改ページするとそこだけトンボにも
+色がつくという問題がありました。\pLaTeXe\ \texttt{<2018-05-20>}では
+この問題に対処しました。
+
+さらに、トンボをカスタマイズしやすくするため、以下の仕様を定めます。
+パッケージを作る場合などに、以下のマクロやパラメータを
+変更することができます。
+
+まずはマクロです。
+\begin{itemize}
+\item |\maketombowbox|はトンボになる形状を用意する命令です。
+\item |\@outputtombow|は用意されたトンボを定位置に出力する命令です。
+\end{itemize}
+次にパラメータです。
+\begin{itemize}
+\item トンボに出力するバナーは|\@bannertoken|で表す。
+      これはトークンレジスタである。【アスキー版と同様】
+\item トンボの線の幅は|\@tombowwidth|で表す。
+      これは|\dimen|レジスタであり、デフォルトは
+      |.1pt|である。【アスキー版と同様】
+\item トンボの塗り足し（ドブ）の幅は|\@tombowbleed|で表す。
+      これは寸法マクロであり、デフォルトは
+      |\def\@tombowbleed{3mm}|である。【新設】
+\item トンボの色は|\@tombowcolor|マクロで表す。
+      デフォルトは|\def\@tombowcolor{\normalcolor}|である。【新設】
+\end{itemize}
+
+
+\section{開発版のテストのお願い}
+今後\pLaTeX{}に導入するかもしれない修正パッチや仕様変更のテストにご協力くだ
+さい。\TeX{}ファイルの冒頭（|\documentclass|より前）で
+\begin{verbatim}
+  \RequirePackage{exppl2e}
+\end{verbatim}
+と書くことで、開発版をテストすることができます。
+バグ報告やご意見を歓迎します。
+\TeX\ ForumやGitHubのIssueシステムが利用できます。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
