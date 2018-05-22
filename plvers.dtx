@@ -303,10 +303,8 @@
 %
 % \LaTeXe{}のバージョン表示の後に残っているコードを、
 % そのまま|\everyjob|に追加します。
-% この中には、|\typeout{Babel version}|も含まれる
-% はずです（p\LaTeX{}は独自のハイフネーション・パターンを定義して
-% いないので、\TeX\ Liveの標準的インストールでは代わりに\LaTeX{}が
-% 読み込んでいるBabelパッケージの\file{hyphen.cfg}が適用されるため）。
+% ^^A Babel v3.20まではこの中に|\typeout{Babel version}|も含まれて
+% ^^A いましたが、Babel v3.21からはこのバナー表示は無くなったようです。
 % \changes{v1.0w}{2016/05/12}{起動時の文字列に入れるBabelのバージョンを
 %    元の\LaTeX{}のバナーから取得するコードを\file{platex.ini}から取り入れた}
 %    \begin{macrocode}
