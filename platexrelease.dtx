@@ -28,6 +28,9 @@
 %      (sync with latexrelease.dtx 2017/12/17 v1.0i)}
 % \changes{v1.0l}{2018/04/06}{Drop an extra period in warning message
 %      (sync with latexrelease.dtx 2018/02/18 v1.0j)}
+% \changes{v1.0m}{2018/05/22}{reset \cs{\requestedLaTeXdate} for
+%      current and latest options
+%      (sync with latexrelease.dtx 2018/05/08 v1.0k)}
 % \fi
 %
 % \iffalse
@@ -37,7 +40,7 @@
 \ProvidesFile{platexrelease.dtx}
 %</driver>
 %<platexrelease>\ProvidesPackage{platexrelease}
-          [2018/04/06 v1.0l latexrelease support for pLaTeX Kernel
+          [2018/05/22 v1.0m latexrelease support for pLaTeX Kernel
               (including releases up to \platexreleaseversion)]
 %<*driver>
 \documentclass{jltxdoc}
@@ -215,18 +218,23 @@
 %
 % \Lpack{platexrelease}パッケージのオプションを定義します。コードは
 % \Lpack{latexrelease}のものをp\LaTeXe{}用に書き換えたものです。
+% \changes{v1.0m}{2018/05/22}{reset \cs{\requestedLaTeXdate} for
+%      current and latest options
+%      (sync with latexrelease.dtx 2018/05/08 v1.0k)}
 %    \begin{macrocode}
 \DeclareOption*{%
   \def\@plIncludeInRelease#1[#2]{\@plIncludeInRele@se{#1}}%
   \let\requestedplpatchdate\CurrentOption}
 \DeclareOption{latest}{%
-  \let\requestedplpatchdate\platexreleaseversion}
+  \let\requestedplpatchdate\platexreleaseversion
+  \AtEndOfPackage{\def\requestedpLaTeXdate{0}}}
 \DeclareOption{current}{%
-  \let\requestedplpatchdate\pfmtversion}
+  \let\requestedplpatchdate\pfmtversion
+  \AtEndOfPackage{\def\requestedpLaTeXdate{0}}}
 %    \end{macrocode}
 %
 %    \begin{macrocode}
-\ExecuteOptions{current}
+\let\requestedplpatchdate\pfmtversion
 \ProcessOptions\relax
 %    \end{macrocode}
 %

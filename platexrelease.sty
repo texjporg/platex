@@ -68,7 +68,7 @@
 %% File: platexrelease.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{platexrelease}
-          [2018/04/06 v1.0l latexrelease support for pLaTeX Kernel
+          [2018/05/22 v1.0m latexrelease support for pLaTeX Kernel
               (including releases up to \platexreleaseversion)]
 \RequirePackageWithOptions{latexrelease}
 \ifnum\expandafter\@parse@version\latexreleaseversion//00\@nil
@@ -81,10 +81,12 @@
   \def\@plIncludeInRelease#1[#2]{\@plIncludeInRele@se{#1}}%
   \let\requestedplpatchdate\CurrentOption}
 \DeclareOption{latest}{%
-  \let\requestedplpatchdate\platexreleaseversion}
+  \let\requestedplpatchdate\platexreleaseversion
+  \AtEndOfPackage{\def\requestedpLaTeXdate{0}}}
 \DeclareOption{current}{%
-  \let\requestedplpatchdate\pfmtversion}
-\ExecuteOptions{current}
+  \let\requestedplpatchdate\pfmtversion
+  \AtEndOfPackage{\def\requestedpLaTeXdate{0}}}
+\let\requestedplpatchdate\pfmtversion
 \ProcessOptions\relax
 \def\reserved@a{%
 \edef\requestedpLaTeXdate{\the\count@}%
