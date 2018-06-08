@@ -1,7 +1,7 @@
 STRIPTARGET = platex.ltx jarticle.cls pl209.def platexrelease.sty \
 	jltxdoc.cls
 DOCTARGET = platex platexrelease pldoc exppl2e \
-	platex-en
+	platex-en pldoc-en
 PDFTARGET = $(addsuffix .pdf,$(DOCTARGET))
 DVITARGET = $(addsuffix .dvi,$(DOCTARGET))
 KANJI = -kanji=jis
@@ -85,12 +85,12 @@ pldoc.dvi: $(PLDOC_SRC)
 	rm -f platex.cfg
 	rm -f jltxdoc.cls pldoc.tex Xins.ins
 	platex $(KANJI) pldocs.ins
-	rm -f mkpldoc.sh dstcheck.pl
+	rm -f mkpldoc*.sh dstcheck.pl
 	platex $(KANJI) Xins.ins
 	sh mkpldoc.sh
 	rm *.aux *.log pldoc.toc pldoc.idx pldoc.ind pldoc.ilg
 	rm pldoc.glo pldoc.gls pldoc.tex Xins.ins
-	rm ltxdoc.cfg pldoc.dic mkpldoc.sh dstcheck.pl
+	rm ltxdoc.cfg pldoc.dic mkpldoc*.sh dstcheck.pl
 
 exppl2e.dvi: exppl2e.sty
 	rm -f platex.cfg
@@ -108,6 +108,19 @@ platex-en.dvi: $(INTRODOC_SRC)
 	rm platex-en.glo platex-en.gls platex-en.ilg
 	rm platex.cfg
 
+pldoc-en.dvi: $(PLDOC_SRC)
+	# built-in echo in shell is troublesome, so use perl instead
+	perl -e "print \"\\\\newif\\\\ifJAPANESE\\n"\" >platex.cfg
+	rm -f jltxdoc.cls pldoc.tex Xins.ins
+	platex $(KANJI) pldocs.ins
+	rm -f mkpldoc*.sh dstcheck.pl
+	platex $(KANJI) Xins.ins
+	sh mkpldoc-en.sh
+	rm *.aux *.log pldoc-en.toc pldoc-en.idx pldoc-en.ind pldoc-en.ilg
+	rm pldoc-en.glo pldoc-en.gls pldoc.tex Xins.ins
+	rm ltxdoc.cfg pldoc.dic mkpldoc*.sh dstcheck.pl
+	rm platex.cfg
+
 platex.pdf: platex.dvi
 	dvipdfmx $(FONTMAP) $<
 platexrelease.pdf: platexrelease.dvi
@@ -117,6 +130,8 @@ pldoc.pdf: pldoc.dvi
 exppl2e.pdf: exppl2e.dvi
 	dvipdfmx $(FONTMAP) $<
 platex-en.pdf: platex-en.dvi
+	dvipdfmx $(FONTMAP) $<
+pldoc-en.pdf: pldoc-en.dvi
 	dvipdfmx $(FONTMAP) $<
 
 .PHONY: install clean cleanstrip cleanall cleandoc

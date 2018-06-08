@@ -1329,9 +1329,8 @@ all others indicate the places where it is used.}
 %\fi
 %    \begin{macrocode}
 %<*shprog>
-for f in pldoc.toc pldoc.idx pldoc.glo ; do
-if [ -e $f ]; then rm $f; fi
-done
+%<ja>rm -f pldoc.toc pldoc.idx pldoc.glo
+%<en>rm -f pldoc-en.toc pldoc-en.idx pldoc-en.glo
 %    \end{macrocode}
 %\ifJAPANESE
 % そして、\file{ltxdoc.cfg}を空にします。
@@ -1349,7 +1348,8 @@ echo "" > ltxdoc.cfg
 % Now process \file{pldoc.tex}.
 %\fi
 %    \begin{macrocode}
-platex pldoc.tex
+%<ja>platex pldoc.tex
+%<en>platex -jobname=pldoc-en pldoc.tex
 %    \end{macrocode}
 %\ifJAPANESE
 % 索引と変更履歴を作成します。
@@ -1380,8 +1380,10 @@ platex pldoc.tex
 % in dictionaries. (Makeindex does not have this option.)
 %\fi
 %    \begin{macrocode}
-mendex -s gind.ist -d pldoc.dic -o pldoc.ind pldoc.idx
-mendex -f -s gglo.ist -o pldoc.gls pldoc.glo
+%<ja>mendex -s gind.ist -d pldoc.dic -o pldoc.ind pldoc.idx
+%<en>mendex -s gind.ist -d pldoc.dic -o pldoc-en.ind pldoc-en.idx
+%<ja>mendex -f -s gglo.ist -o pldoc.gls pldoc.glo
+%<en>mendex -f -s gglo.ist -o pldoc-en.gls pldoc-en.glo
 %    \end{macrocode}
 %\ifJAPANESE
 % \file{ltxdoc.cfg}の内容を|\includeonly{}|にし、\file{pldoc.tex}を処理します。
@@ -1398,7 +1400,8 @@ mendex -f -s gglo.ist -o pldoc.gls pldoc.glo
 %\fi
 %    \begin{macrocode}
 echo "\includeonly{}" > ltxdoc.cfg
-platex pldoc.tex
+%<ja>platex pldoc.tex
+%<en>platex -jobname=pldoc-en pldoc.tex
 %    \end{macrocode}
 %\ifJAPANESE
 % 最後に、再び\file{ltxdoc.cfg}を空にして、\file{pldoc.tex}を処理をします。
@@ -1410,7 +1413,8 @@ platex pldoc.tex
 %\fi
 %    \begin{macrocode}
 echo "" > ltxdoc.cfg
-platex pldoc.tex
+%<ja>platex pldoc.tex
+%<en>platex -jobname=pldoc-en pldoc.tex
 # EOT
 %</shprog>
 %    \end{macrocode}
@@ -1650,7 +1654,8 @@ exit;
 %    \begin{macrocode}
 \generate{
    \file{dstcheck.pl}{\from{platex.dtx}{plprog}}
-   \file{mkpldoc.sh}{\from{platex.dtx}{shprog}}
+   \file{mkpldoc.sh}{\from{platex.dtx}{shprog,ja}}
+   \file{mkpldoc-en.sh}{\from{platex.dtx}{shprog,en}}
 }
 \endbatchfile
 %</Xins>
