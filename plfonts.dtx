@@ -84,13 +84,14 @@
 %    (sync with ltfinal.dtx 2018/04/08 v2.1d)}
 % \changes{v1.6p}{2018/04/09}{v1.6oで加えた対策を削除。
 %    参考：plvers.dtx 2018/04/09 v1.1lの\cs{everyjob}}
+% \changes{v1.6q}{2018/06/09}{シリーズbもbxと同様に宣言}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2018/04/09 v1.6p pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2018/06/09 v1.6q pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -2462,13 +2463,15 @@
 %<JY1gt>\ProvidesFile{jy1gt.fd}
 %<JT1mc>\ProvidesFile{jt1mc.fd}
 %<JT1gt>\ProvidesFile{jt1gt.fd}
-%<JY1mc,JY1gt,JT1mc,JT1gt>       [2018/02/04 v1.6l KANJI font defines]
+%<JY1mc,JY1gt,JT1mc,JT1gt>       [2018/06/09 v1.6q KANJI font defines]
 %    \end{macrocode}
 % 横組用、縦組用ともに、
 % 明朝体のシリーズ|bx|がゴシック体となるように宣言しています。
-% \changes{v1.2}{1995/11/24}{it, sl, sc の宣言を外した}
+% \changes{v1.2}{1995/11/24}{it, sl, scの宣言を外した}
 % \changes{v1.3b}{1997/01/29}{フォント定義ファイルのサイズ指定の調整}
 % \changes{v1.3b}{1997/03/11}{すべてのサイズをロード可能にした}
+% また、シリーズ|b|は同じ書体の|bx|と等価になるように宣言します。
+% \changes{v1.6q}{2018/06/09}{シリーズbもbxと同様に宣言}
 %
 % p\LaTeX{}では従属書体にOT1エンコーディングを指定しています。
 % また、要求サイズ（指定されたフォントサイズ）が10ptのとき、
@@ -2488,6 +2491,7 @@
     <-> min10
     }{}
 \DeclareFontShape{JY1}{mc}{bx}{n}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JY1}{mc}{b}{n}{<->ssub*mc/bx/n}{}
 %</JY1mc>
 %<*JT1mc>
 \DeclareKanjiFamily{JT1}{mc}{}
@@ -2498,6 +2502,7 @@
     <-> tmin10
     }{}
 \DeclareFontShape{JT1}{mc}{bx}{n}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{mc}{b}{n}{<->ssub*mc/bx/n}{}
 %</JT1mc>
 %<*JY1gt>
 \DeclareKanjiFamily{JY1}{gt}{}
@@ -2507,6 +2512,7 @@
     <-> goth10
     }{}
 \DeclareFontShape{JY1}{gt}{bx}{n}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JY1}{gt}{b}{n}{<->ssub*gt/bx/n}{}
 %</JY1gt>
 %<*JT1gt>
 \DeclareKanjiFamily{JT1}{gt}{}
@@ -2516,6 +2522,7 @@
     <-> tgoth10
     }{}
 \DeclareFontShape{JT1}{gt}{bx}{n}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{gt}{b}{n}{<->ssub*gt/bx/n}{}
 %</JT1gt>
 %    \end{macrocode}
 %

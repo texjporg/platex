@@ -14,7 +14,7 @@
 %% 
 %% File: plfonts.dtx
 \ProvidesFile{jt1mc.fd}
-       [2018/02/04 v1.6l KANJI font defines]
+       [2018/06/09 v1.6q KANJI font defines]
 \DeclareKanjiFamily{JT1}{mc}{}
 \DeclareRelationFont{JT1}{mc}{m}{}{OT1}{cmr}{m}{}
 \DeclareRelationFont{JT1}{mc}{bx}{}{OT1}{cmr}{bx}{}
@@ -23,6 +23,7 @@
     <-> tmin10
     }{}
 \DeclareFontShape{JT1}{mc}{bx}{n}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{mc}{b}{n}{<->ssub*mc/bx/n}{}
 \endinput
 %%
 %% End of file `jt1mc.fd'.
