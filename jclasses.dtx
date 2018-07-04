@@ -94,6 +94,7 @@
 % \changes{v1.7f}{2017/08/31}{和文書体の基準を全角空白から「漢」に変更}
 % \changes{v1.7g}{2017/09/19}{内部処理で使ったボックス0を空にした}
 % \changes{v1.7h}{2018/02/04}{和文スケール値\cs{Cjascale}を定義}
+% \changes{v1.8}{2018/07/03}{\cs{today}のデフォルトを和暦から西暦に変更}
 % \fi
 %
 % \iffalse
@@ -123,7 +124,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2018/02/04 v1.7h
+  [2018/07/03 v1.8
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -4342,8 +4343,11 @@
 % \changes{v1.0h}{1996/12/17}{Typo:和歴 to 和暦}
 % |\today|コマンドの`年'を、
 % 西暦か和暦のどちらで出力するかを指定するコマンドです。
+% 2018年7月以降の日本語\TeX{}開発コミュニティ版(v1.8)では、
+% デフォルトを和暦ではなく西暦に設定しています。
+% \changes{v1.8}{2018/07/03}{\cs{today}のデフォルトを和暦から西暦に変更}
 %    \begin{macrocode}
-\newif\if西暦 \西暦false
+\newif\if西暦 \西暦true
 \def\西暦{\西暦true}
 \def\和暦{\西暦false}
 %    \end{macrocode}
