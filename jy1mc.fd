@@ -14,7 +14,7 @@
 %% 
 %% File: plfonts.dtx
 \ProvidesFile{jy1mc.fd}
-       [2018/06/09 v1.6q KANJI font defines]
+       [2018/07/03 v1.6q KANJI font defines]
 \DeclareKanjiFamily{JY1}{mc}{}
 \DeclareRelationFont{JY1}{mc}{m}{}{OT1}{cmr}{m}{}
 \DeclareRelationFont{JY1}{mc}{bx}{}{OT1}{cmr}{bx}{}
