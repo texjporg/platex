@@ -1986,20 +1986,20 @@
 % \end{macro}
 %
 % \begin{macro}{\@text@composite}
-% 合成文字の内部命令です。v1.6aで誤って\LaTeX{}の定義を上書きしてしまいました
-% が、v1.6cで外しました。
+% 合成文字の内部命令です。
+% v1.6aで誤って\LaTeX{}の定義を上書きしてしまいましたが、v1.6cで外しました。
 % \changes{v1.6a}{2016/04/01}{ベースライン補正量が0でないときに
 %    \cs{AA}など一部の合成文字がおかしくなることに対応するため再定義}
 % \changes{v1.6c}{2016/06/06}{v1.6aでの誤った再定義を削除(forum:1941)}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2016/06/10}{\@text@composite}
-%<platexrelease>                   {Wrong fix for non-zero baselineshift}%
+%<platexrelease>                   {Fix for non-zero baselineshift (wrong)}%
 %<platexrelease>\def\@text@composite#1#2#3\@text@composite{%
 %<platexrelease>   \expandafter\@text@composite@x
 %<platexrelease>      \csname\string#1-\string#2\endcsname}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/04/17}{\@text@composite}
-%<platexrelease>                   {Wrong fix for non-zero baselineshift}%
+%<platexrelease>                   {Fix for non-zero baselineshift (wrong)}%
 %<platexrelease>\def\@text@composite#1#2#3#{%
 %<platexrelease>  \begingroup
 %<platexrelease>  \setbox\z@=\hbox\bgroup%
@@ -2008,7 +2008,7 @@
 %<platexrelease>  \csname\string#1-\string#2\endcsname}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@text@composite}
-%<platexrelease>                   {Wrong fix for non-zero baselineshift}%
+%<platexrelease>                   {Fix for non-zero baselineshift (wrong)}%
 %<platexrelease>\def\@text@composite#1#2#3\@text@composite{%
 %<platexrelease>   \expandafter\@text@composite@x
 %<platexrelease>      \csname\string#1-\string#2\endcsname}
@@ -2016,75 +2016,82 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\@text@composite@x}
-% 合成文字の内部命令です。|\g@tlastchart@|と|\pltx@isletter|を使います。
-% \changes{v1.6a}{2016/04/01}{ベースライン補正量が0でないときに
-%    \cs{AA}など一部の合成文字がおかしくなることへの対応。}
-% \changes{v1.6c}{2016/06/06}{v1.6aでの修正で\'e など全てのアクセント付き文字で
-%    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
-% \changes{v1.6e}{2016/06/26}{v1.6a以降の修正で全てのアクセント付き文字で
-%    トラブルが相次いだため、いったんパッチを除去。}
+% \begin{macro}{\ltx@text@composite@x}
+% 合成文字の内部命令|\@text@composite@x|のために、2通りの定義を準備します。
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2016/07/01}{\@text@composite@x}
+%<platexrelease>%\plIncludeInRelease{0000/00/00}{\ltx@text@composite@x}
+%<platexrelease>%    {Special case! (This block is required for any emulation date)}%
+%<*plcore|platexrelease>
+%    \end{macrocode}
+% まず、元の\LaTeX{}のコードをコピーしたものです。接頭辞|\ltx...|を付けておきます。
+%    \begin{macrocode}
+\def\ltx@text@composite@x#1{%
+   \ifx#1\relax
+      \expandafter\@secondoftwo
+   \else
+      \expandafter\@firstoftwo
+   \fi
+   #1}
+%</plcore|platexrelease>
+%<platexrelease>%\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pltx@text@composite@x}
+% 次に、\pLaTeX{}の新しいコードです。|\g@tlastchart@|と|\pltx@isletter|を使います。
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2016/06/10}{\pltx@text@composite@x}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
-%<platexrelease>\def\@text@composite@x#1{%
-%<platexrelease>   \ifx#1\relax
-%<platexrelease>      \expandafter\@secondoftwo
-%<platexrelease>   \else
-%<platexrelease>      \expandafter\@firstoftwo
-%<platexrelease>   \fi
-%<platexrelease>   #1}
+%<*plcore|platexrelease>
+\def\pltx@text@composite@x#1#2{%
+  \ifx#1\relax
+    #2%
+  \else\pltx@isletter{#1}{#1}{%
+    \begingroup
+    \setbox\z@\hbox\bgroup%
+      \ybaselineshift\z@\tbaselineshift\z@
+      #1%
+      \g@tlastchart@\@tempcntb
+      \xdef\pltx@composite@temp{\noexpand\@tempcntb=\the\@tempcntb\relax}%
+      \aftergroup\pltx@composite@temp
+    \egroup
+    \ifnum\@tempcntb<\z@
+      \@tempdima=\iftdir
+          \ifmdir
+            \ifmmode\tbaselineshift\else\ybaselineshift\fi
+          \else
+            \tbaselineshift
+          \fi
+        \else
+          \ybaselineshift
+        \fi
+      \@tempcntb=\@cclvi
+    \else\@tempdima=\z@
+    \fi
+    \ifnum\@tempcntb<\@cclvi
+      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
+        \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
+      \fi\fi
+      \begingroup\mathsurround\z@$%
+        \ifx\textbaselineshiftfactor\@undefined\else
+          \textbaselineshiftfactor\z@\fi
+        \box\z@
+      $\endgroup%
+      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
+        \ifnum\xspcode\@tempcntb<2\hbox{}\fi
+      \fi\fi
+    \else
+      \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
+      \else\lower\@tempdima\box\z@\fi
+    \fi
+    \endgroup}%
+  \fi
+}
+%</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2016/06/10}{\@text@composite@x}
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\pltx@text@composite@x}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
-%<platexrelease>\def\@text@composite@x#1#2{%
-%<platexrelease>  \ifx#1\relax
-%<platexrelease>    #2%
-%<platexrelease>  \else\pltx@isletter{#1}{#1}{%
-%<platexrelease>    \begingroup
-%<platexrelease>    \setbox\z@\hbox\bgroup%
-%<platexrelease>      \ybaselineshift\z@\tbaselineshift\z@
-%<platexrelease>      #1%
-%<platexrelease>      \g@tlastchart@\@tempcntb
-%<platexrelease>      \xdef\pltx@composite@temp{\noexpand\@tempcntb=\the\@tempcntb\relax}%
-%<platexrelease>      \aftergroup\pltx@composite@temp
-%<platexrelease>    \egroup
-%<platexrelease>    \ifnum\@tempcntb<\z@
-%<platexrelease>      \@tempdima=\iftdir
-%<platexrelease>          \ifmdir
-%<platexrelease>            \ifmmode\tbaselineshift\else\ybaselineshift\fi
-%<platexrelease>          \else
-%<platexrelease>            \tbaselineshift
-%<platexrelease>          \fi
-%<platexrelease>        \else
-%<platexrelease>          \ybaselineshift
-%<platexrelease>        \fi
-%<platexrelease>      \@tempcntb=\@cclvi
-%<platexrelease>    \else\@tempdima=\z@
-%<platexrelease>    \fi
-%<platexrelease>    \ifnum\@tempcntb<\@cclvi
-%<platexrelease>      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
-%<platexrelease>        \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
-%<platexrelease>      \fi\fi
-%<platexrelease>      \begingroup\mathsurround\z@$%
-%<platexrelease>        \ifx\textbaselineshiftfactor\@undefined\else
-%<platexrelease>          \textbaselineshiftfactor\z@\fi
-%<platexrelease>        \box\z@
-%<platexrelease>      $\endgroup%
-%<platexrelease>      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
-%<platexrelease>        \ifnum\xspcode\@tempcntb<2\hbox{}\fi
-%<platexrelease>      \fi\fi
-%<platexrelease>    \else
-%<platexrelease>      \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
-%<platexrelease>      \else\lower\@tempdima\box\z@\fi
-%<platexrelease>    \fi
-%<platexrelease>    \endgroup}%
-%<platexrelease>  \fi
-%<platexrelease>}
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2016/04/17}{\@text@composite@x}
-%<platexrelease>                   {Fix for non-zero baselineshift}%
-%<platexrelease>\def\@text@composite@x#1#2{%
+%<platexrelease>\def\pltx@text@composite@x#1#2{%
 %<platexrelease>  \ifx#1\relax
 %<platexrelease>    \expandafter\@secondoftwo
 %<platexrelease>  \else
@@ -2105,15 +2112,76 @@
 %<platexrelease>    \box\z@
 %<platexrelease>  \endgroup}
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\@text@composite@x}
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\pltx@text@composite@x}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
-%<platexrelease>\def\@text@composite@x#1{%
-%<platexrelease>   \ifx#1\relax
-%<platexrelease>      \expandafter\@secondoftwo
-%<platexrelease>   \else
-%<platexrelease>      \expandafter\@firstoftwo
-%<platexrelease>   \fi
-%<platexrelease>   #1}
+%<platexrelease>\let\pltx@text@composite@x\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\fixcompositeaccent}
+% \begin{macro}{\nofixcompositeaccent}
+% \begin{macro}{\@text@composite@x}
+% 上記2通りの定義のうち、本当は\pLaTeX{}の定義を用いたいのですが、
+% 想定外のエラーが発生するのを防ぐため、
+% デフォルトでは\LaTeX{}の定義のままとしておきます。
+% そして、|\fixcompositeaccent|が有効な時だけ\pLaTeX{}の定義を用います。
+% |\nofixcompositeaccent|はこの否定です。
+%    \begin{macrocode}
+%<platexrelease>%\plIncludeInRelease{0000/00/00}{\@text@composite@x}
+%<platexrelease>%    {Special case! (This block is required for any emulation date)}%
+%<*plcore|platexrelease>
+\def\fixcompositeaccent{%
+  \let\@text@composite@x\pltx@text@composite@x
+}
+\def\nofixcompositeaccent{%
+  \let\@text@composite@x\ltx@text@composite@x
+}
+\nofixcompositeaccent
+%</plcore|platexrelease>
+%<platexrelease>%\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@text@composite@x}
+% エミュレーション専用のコードです。
+% \changes{v1.6a}{2016/04/01}{ベースライン補正量が0でないときに
+%    \cs{AA}など一部の合成文字がおかしくなることへの対応。}
+% \changes{v1.6c}{2016/06/06}{v1.6aでの修正で\'e など全てのアクセント付き文字で
+%    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
+% \changes{v1.6e}{2016/06/26}{v1.6a以降の修正で全てのアクセント付き文字で
+%    トラブルが相次いだため、いったんパッチを除去。}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{9999/99/99}{\fixcompositeaccent}
+%<platexrelease>                   {Fix for non-zero baselineshift}%
+%<platexrelease>\nofixcompositeaccent % force LaTeX original (conditional default)
+%<platexrelease>% other commands are actually defined for pLaTeX2e 9999-99-99
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/07/01}{\fixcompositeaccent}
+%<platexrelease>                   {Fix for non-zero baselineshift}%
+%<platexrelease>\nofixcompositeaccent % force LaTeX original (always)
+%<platexrelease>\let\fixcompositeaccent\@undefined
+%<platexrelease>\let\nofixcompositeaccent\@undefined
+%<platexrelease>\let\ltx@text@composite@x\@undefined
+%<platexrelease>\let\pltx@text@composite@x\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\fixcompositeaccent}
+%<platexrelease>                   {Fix for non-zero baselineshift}%
+%<platexrelease>\fixcompositeaccent % force pLaTeX definition (always)
+%<platexrelease>\let\fixcompositeaccent\@undefined
+%<platexrelease>\let\nofixcompositeaccent\@undefined
+%<platexrelease>\let\ltx@text@composite@x\@undefined
+%<platexrelease>\let\pltx@text@composite@x\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\fixcompositeaccent}
+%<platexrelease>                   {Fix for non-zero baselineshift}%
+%<platexrelease>\nofixcompositeaccent % force LaTeX original (always)
+%<platexrelease>\let\fixcompositeaccent\@undefined
+%<platexrelease>\let\nofixcompositeaccent\@undefined
+%<platexrelease>\let\ltx@text@composite@x\@undefined
+%<platexrelease>\let\pltx@text@composite@x\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}

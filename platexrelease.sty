@@ -437,13 +437,13 @@ of this package available from CTAN}
 \let\pltx@isletter\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/06/10}{\@text@composite}
-                   {Wrong fix for non-zero baselineshift}%
+                   {Fix for non-zero baselineshift (wrong)}%
 \def\@text@composite#1#2#3\@text@composite{%
    \expandafter\@text@composite@x
       \csname\string#1-\string#2\endcsname}
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@text@composite}
-                   {Wrong fix for non-zero baselineshift}%
+                   {Fix for non-zero baselineshift (wrong)}%
 \def\@text@composite#1#2#3#{%
   \begingroup
   \setbox\z@=\hbox\bgroup%
@@ -452,24 +452,24 @@ of this package available from CTAN}
   \csname\string#1-\string#2\endcsname}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@text@composite}
-                   {Wrong fix for non-zero baselineshift}%
+                   {Fix for non-zero baselineshift (wrong)}%
 \def\@text@composite#1#2#3\@text@composite{%
    \expandafter\@text@composite@x
       \csname\string#1-\string#2\endcsname}
 \plEndIncludeInRelease
-\plIncludeInRelease{2016/07/01}{\@text@composite@x}
-                   {Fix for non-zero baselineshift}%
-\def\@text@composite@x#1{%
+%\plIncludeInRelease{0000/00/00}{\ltx@text@composite@x}
+%    {Special case! (This block is required for any emulation date)}%
+\def\ltx@text@composite@x#1{%
    \ifx#1\relax
       \expandafter\@secondoftwo
    \else
       \expandafter\@firstoftwo
    \fi
    #1}
-\plEndIncludeInRelease
-\plIncludeInRelease{2016/06/10}{\@text@composite@x}
+%\plEndIncludeInRelease
+\plIncludeInRelease{2016/06/10}{\pltx@text@composite@x}
                    {Fix for non-zero baselineshift}%
-\def\@text@composite@x#1#2{%
+\def\pltx@text@composite@x#1#2{%
   \ifx#1\relax
     #2%
   \else\pltx@isletter{#1}{#1}{%
@@ -514,9 +514,9 @@ of this package available from CTAN}
   \fi
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{2016/04/17}{\@text@composite@x}
+\plIncludeInRelease{2016/04/17}{\pltx@text@composite@x}
                    {Fix for non-zero baselineshift}%
-\def\@text@composite@x#1#2{%
+\def\pltx@text@composite@x#1#2{%
   \ifx#1\relax
     \expandafter\@secondoftwo
   \else
@@ -537,15 +537,48 @@ of this package available from CTAN}
     \box\z@
   \endgroup}
 \plEndIncludeInRelease
-\plIncludeInRelease{0000/00/00}{\@text@composite@x}
+\plIncludeInRelease{0000/00/00}{\pltx@text@composite@x}
                    {Fix for non-zero baselineshift}%
-\def\@text@composite@x#1{%
-   \ifx#1\relax
-      \expandafter\@secondoftwo
-   \else
-      \expandafter\@firstoftwo
-   \fi
-   #1}
+\let\pltx@text@composite@x\@undefined
+\plEndIncludeInRelease
+%\plIncludeInRelease{0000/00/00}{\@text@composite@x}
+%    {Special case! (This block is required for any emulation date)}%
+\def\fixcompositeaccent{%
+  \let\@text@composite@x\pltx@text@composite@x
+}
+\def\nofixcompositeaccent{%
+  \let\@text@composite@x\ltx@text@composite@x
+}
+\nofixcompositeaccent
+%\plEndIncludeInRelease
+\plIncludeInRelease{9999/99/99}{\fixcompositeaccent}
+                   {Fix for non-zero baselineshift}%
+\nofixcompositeaccent % force LaTeX original (conditional default)
+% other commands are actually defined for pLaTeX2e 9999-99-99
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/07/01}{\fixcompositeaccent}
+                   {Fix for non-zero baselineshift}%
+\nofixcompositeaccent % force LaTeX original (always)
+\let\fixcompositeaccent\@undefined
+\let\nofixcompositeaccent\@undefined
+\let\ltx@text@composite@x\@undefined
+\let\pltx@text@composite@x\@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\fixcompositeaccent}
+                   {Fix for non-zero baselineshift}%
+\fixcompositeaccent % force pLaTeX definition (always)
+\let\fixcompositeaccent\@undefined
+\let\nofixcompositeaccent\@undefined
+\let\ltx@text@composite@x\@undefined
+\let\pltx@text@composite@x\@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\fixcompositeaccent}
+                   {Fix for non-zero baselineshift}%
+\nofixcompositeaccent % force LaTeX original (always)
+\let\fixcompositeaccent\@undefined
+\let\nofixcompositeaccent\@undefined
+\let\ltx@text@composite@x\@undefined
+\let\pltx@text@composite@x\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/10/28}{\check@nocorr@}
                    {Italic correction before \textt...}%
