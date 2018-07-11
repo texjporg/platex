@@ -85,6 +85,10 @@
 % \changes{v1.6p}{2018/04/09}{v1.6oで加えた対策を削除。
 %    参考：plvers.dtx 2018/04/09 v1.1lの\cs{everyjob}}
 % \changes{v1.6q}{2018/07/03}{シリーズbがbxと等価になるように宣言}
+% \changes{v???}{9999/99/99}{PDFのしおりにアクセント文字が含まれる場合に対応}
+% \changes{v???}{9999/99/99}{\cs{lower}の前に\cs{leavevmode}を追加}
+% \changes{v???}{9999/99/99}{\cs{[no]fixcompositeaccent}マクロ追加}
+% \changes{v???}{9999/99/99}{コード整理}
 % \fi
 %
 % \iffalse
@@ -1985,6 +1989,7 @@
       {\@firstoftwo}{\pltx@composite@chkenc}%
   }{\pltx@composite@chkenc}}
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/06/10}{\pltx@isletter}
 %<platexrelease>                   {Added \pltx@isletter}%
 %<platexrelease>\def\pltx@mark{\pltx@mark@}
@@ -2052,6 +2057,7 @@
 %<*plcore|platexrelease>
 %    \end{macrocode}
 % まず、元の\LaTeX{}のコードをコピーしたものです。接頭辞|\ltx...|を付けておきます。
+% \changes{v???}{9999/99/99}{コード整理}
 %    \begin{macrocode}
 \def\ltx@text@composite@x#1{%
    \ifx#1\relax
@@ -2067,6 +2073,7 @@
 %
 % \begin{macro}{\pltx@text@composite@x}
 % 次に、\pLaTeX{}の新しいコードです。|\g@tlastchart@|と|\pltx@isletter|を使います。
+% \changes{v???}{9999/99/99}{コード整理}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{9999/99/99}{\pltx@text@composite@x}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
@@ -2212,6 +2219,7 @@
 % デフォルトでは\LaTeX{}の定義のままとしておきます。
 % そして、|\fixcompositeaccent|が有効な時だけ\pLaTeX{}の定義を用います。
 % |\nofixcompositeaccent|はこの否定です。
+% \changes{v???}{9999/99/99}{\cs{[no]fixcompositeaccent}マクロ追加}
 %    \begin{macrocode}
 %<platexrelease>%\plIncludeInRelease{0000/00/00}{\@text@composite@x}
 %<platexrelease>%    {Special case! (This block is required for any emulation date)}%
@@ -2238,6 +2246,7 @@
 %    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
 % \changes{v1.6e}{2016/06/26}{v1.6a以降の修正で全てのアクセント付き文字で
 %    トラブルが相次いだため、いったんパッチを除去。}
+% \changes{v???}{9999/99/99}{コード整理}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{9999/99/99}{\fixcompositeaccent}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
