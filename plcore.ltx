@@ -743,6 +743,13 @@
 \let\pltx@scanstop\relax
 \long\def\pltx@cond#1\fi{%
   #1\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
+\def\pltx@pdfencA{PD1}
+\def\pltx@composite@chkenc{%
+  \ifx\pltx@pdfencA\f@encoding
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi}
 \long\def\pltx@isletter#1{%
   \expandafter\pltx@isletter@i#1\pltx@scanstop}
 \long\def\pltx@isletter@i#1\pltx@scanstop{%
@@ -755,8 +762,8 @@
 \long\def\pltx@isletter@iv#1#2#3\pltx@mark{%
   \pltx@cond\ifx\pltx@mark#3\pltx@mark\fi{%
     \pltx@cond{\ifnum0\ifcat A\noexpand#21\fi\ifcat=\noexpand#21\fi>\z@}\fi
-      {\@firstoftwo}{\@secondoftwo}%
-  }{\@secondoftwo}}
+      {\@firstoftwo}{\pltx@composite@chkenc}%
+  }{\pltx@composite@chkenc}}
 \def\ltx@text@composite@x#1{%
    \ifx#1\relax
       \expandafter\@secondoftwo
@@ -803,7 +810,7 @@
       \fi\fi
     \else
       \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
-      \else\lower\@tempdima\box\z@\fi
+      \else\leavevmode\lower\@tempdima\box\z@\fi
     \fi
     \endgroup}%
   \fi

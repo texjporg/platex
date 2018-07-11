@@ -411,6 +411,33 @@ of this package available from CTAN}
                    {Added \g@tlastchart@}%
 \let\g@tlastchart@\@undefined
 \plEndIncludeInRelease
+\plIncludeInRelease{9999/99/99}{\pltx@isletter}
+                   {Support PD1 encoding}%
+\def\pltx@mark{\pltx@mark@}
+\let\pltx@scanstop\relax
+\long\def\pltx@cond#1\fi{%
+  #1\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
+\def\pltx@pdfencA{PD1}
+\def\pltx@composite@chkenc{%
+  \ifx\pltx@pdfencA\f@encoding
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi}
+\long\def\pltx@isletter#1{%
+  \expandafter\pltx@isletter@i#1\pltx@scanstop}
+\long\def\pltx@isletter@i#1\pltx@scanstop{%
+  \pltx@cond\ifx\pltx@mark#1\pltx@mark\fi{\@firstoftwo}%
+    {\pltx@isletter@ii\pltx@scanstop#1\pltx@scanstop{}#1\pltx@mark}}
+\long\def\pltx@isletter@ii#1\pltx@scanstop#{%
+  \pltx@cond\ifx\pltx@mark#1\pltx@mark\fi%
+    {\pltx@isletter@iii}{\pltx@isletter@iv}}
+\long\def\pltx@isletter@iii#1\pltx@mark{\@secondoftwo}
+\long\def\pltx@isletter@iv#1#2#3\pltx@mark{%
+  \pltx@cond\ifx\pltx@mark#3\pltx@mark\fi{%
+    \pltx@cond{\ifnum0\ifcat A\noexpand#21\fi\ifcat=\noexpand#21\fi>\z@}\fi
+      {\@firstoftwo}{\pltx@composite@chkenc}%
+  }{\pltx@composite@chkenc}}
 \plIncludeInRelease{2016/06/10}{\pltx@isletter}
                    {Added \pltx@isletter}%
 \def\pltx@mark{\pltx@mark@}
@@ -467,6 +494,53 @@ of this package available from CTAN}
    \fi
    #1}
 %\plEndIncludeInRelease
+\plIncludeInRelease{9999/99/99}{\pltx@text@composite@x}
+                   {Fix for non-zero baselineshift}%
+\def\pltx@text@composite@x#1#2{%
+  \ifx#1\relax
+    #2%
+  \else\pltx@isletter{#1}{#1}{%
+    \begingroup
+    \setbox\z@\hbox\bgroup%
+      \ybaselineshift\z@\tbaselineshift\z@
+      #1%
+      \g@tlastchart@\@tempcntb
+      \xdef\pltx@composite@temp{\noexpand\@tempcntb=\the\@tempcntb\relax}%
+      \aftergroup\pltx@composite@temp
+    \egroup
+    \ifnum\@tempcntb<\z@
+      \@tempdima=\iftdir
+          \ifmdir
+            \ifmmode\tbaselineshift\else\ybaselineshift\fi
+          \else
+            \tbaselineshift
+          \fi
+        \else
+          \ybaselineshift
+        \fi
+      \@tempcntb=\@cclvi
+    \else\@tempdima=\z@
+    \fi
+    \ifnum\@tempcntb<\@cclvi
+      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
+        \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
+      \fi\fi
+      \begingroup\mathsurround\z@$%
+        \ifx\textbaselineshiftfactor\@undefined\else
+          \textbaselineshiftfactor\z@\fi
+        \box\z@
+      $\endgroup%
+      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
+        \ifnum\xspcode\@tempcntb<2\hbox{}\fi
+      \fi\fi
+    \else
+      \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
+      \else\leavevmode\lower\@tempdima\box\z@\fi
+    \fi
+    \endgroup}%
+  \fi
+}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/06/10}{\pltx@text@composite@x}
                    {Fix for non-zero baselineshift}%
 \def\pltx@text@composite@x#1#2{%
