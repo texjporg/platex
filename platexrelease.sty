@@ -618,10 +618,10 @@ of this package available from CTAN}
 \plEndIncludeInRelease
 %\plIncludeInRelease{0000/00/00}{\@text@composite@x}
 %    {Special case! (This block is required for any emulation date)}%
-\def\fixcompositeaccent{%
+\DeclareRobustCommand\fixcompositeaccent{%
   \let\@text@composite@x\pltx@text@composite@x
 }
-\def\nofixcompositeaccent{%
+\DeclareRobustCommand\nofixcompositeaccent{%
   \let\@text@composite@x\ltx@text@composite@x
 }
 \nofixcompositeaccent

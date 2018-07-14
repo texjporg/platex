@@ -2224,10 +2224,10 @@
 %<platexrelease>%\plIncludeInRelease{0000/00/00}{\@text@composite@x}
 %<platexrelease>%    {Special case! (This block is required for any emulation date)}%
 %<*plcore|platexrelease>
-\def\fixcompositeaccent{%
+\DeclareRobustCommand\fixcompositeaccent{%
   \let\@text@composite@x\pltx@text@composite@x
 }
-\def\nofixcompositeaccent{%
+\DeclareRobustCommand\nofixcompositeaccent{%
   \let\@text@composite@x\ltx@text@composite@x
 }
 \nofixcompositeaccent
