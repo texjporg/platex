@@ -738,6 +738,27 @@
          \else\tbaselineshift\fi
          \else\ybaselineshift\fi
   \vbox{\hrule\@width.3em}}
+\def\pltx@saved@oalign#1{\leavevmode\vtop{\baselineskip\z@skip \lineskip.25ex%
+  \ialign{##\crcr#1\crcr}}}
+\def\pltx@oalign#1{\ifmmode
+  \leavevmode\vtop{\baselineskip\z@skip \lineskip.25ex%
+    \ialign{##\crcr#1\crcr}}
+\else
+  \iftdir\ybaselineshift\tbaselineshift\fi
+  $\hbox{\vtop{\baselineskip\z@skip \lineskip.25ex%
+    \ialign{##\crcr#1\crcr}}}$%
+\fi}
+\def\pltx@saved@ltx@sh@ft #1{%
+  \dimen@ #1%
+  \kern \strip@pt
+    \fontdimen1\font \dimen@
+  } % kern by #1 times the current slant
+\def\pltx@ltx@sh@ft #1{%
+  \ybaselineshift\z@
+  \dimen@ #1%
+  \kern \strip@pt
+    \fontdimen1\font \dimen@
+  } % kern by #1 times the current slant
 \def\g@tlastchart@#1{#1\ifx\lastnodechar\@undefined\m@ne\else\lastnodechar\fi}
 \def\pltx@mark{\pltx@mark@}
 \let\pltx@scanstop\relax
@@ -816,9 +837,13 @@
   \fi
 }
 \DeclareRobustCommand\fixcompositeaccent{%
+  \let\oalign\pltx@oalign
+  \let\ltx@sh@ft\pltx@ltx@sh@ft
   \let\@text@composite@x\pltx@text@composite@x
 }
 \DeclareRobustCommand\nofixcompositeaccent{%
+  \let\oalign\pltx@saved@oalign
+  \let\ltx@sh@ft\pltx@saved@ltx@sh@ft
   \let\@text@composite@x\pltx@saved@text@composite@x
 }
 \nofixcompositeaccent

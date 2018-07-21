@@ -403,6 +403,47 @@ of this package available from CTAN}
   \iftdir\raise-\tbaselineshift\fi
   \vbox{\hrule\@width.3em}}
 \plEndIncludeInRelease
+%\plIncludeInRelease{0000/00/00}{\pltx@saved@oalign}
+%    {Special case! (This block is required for any emulation date)}%
+\def\pltx@saved@oalign#1{\leavevmode\vtop{\baselineskip\z@skip \lineskip.25ex%
+  \ialign{##\crcr#1\crcr}}}
+%\plEndIncludeInRelease
+\plIncludeInRelease{9999/99/99}{\pltx@oalign}
+                   {Fix for non-zero baselineshift}%
+\def\pltx@oalign#1{\ifmmode
+  \leavevmode\vtop{\baselineskip\z@skip \lineskip.25ex%
+    \ialign{##\crcr#1\crcr}}
+\else
+  \iftdir\ybaselineshift\tbaselineshift\fi
+  $\hbox{\vtop{\baselineskip\z@skip \lineskip.25ex%
+    \ialign{##\crcr#1\crcr}}}$%
+\fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\pltx@oalign}
+                   {Fix for non-zero baselineshift}%
+\let\pltx@oalign\@undefined
+\plEndIncludeInRelease
+%\plIncludeInRelease{0000/00/00}{\pltx@saved@ltx@sh@ft}
+%    {Special case! (This block is required for any emulation date)}%
+\def\pltx@saved@ltx@sh@ft #1{%
+  \dimen@ #1%
+  \kern \strip@pt
+    \fontdimen1\font \dimen@
+  } % kern by #1 times the current slant
+%\plEndIncludeInRelease
+\plIncludeInRelease{9999/99/99}{\pltx@ltx@sh@ft}
+                   {Fix for non-zero baselineshift}%
+\def\pltx@ltx@sh@ft #1{%
+  \ybaselineshift\z@
+  \dimen@ #1%
+  \kern \strip@pt
+    \fontdimen1\font \dimen@
+  } % kern by #1 times the current slant
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\pltx@ltx@sh@ft}
+                   {Fix for non-zero baselineshift}%
+\let\pltx@ltx@sh@ft\@undefined
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/06/10}{\g@tlastchart@}
                    {Added \g@tlastchart@}%
 \def\g@tlastchart@#1{#1\ifx\lastnodechar\@undefined\m@ne\else\lastnodechar\fi}
@@ -619,9 +660,13 @@ of this package available from CTAN}
 %\plIncludeInRelease{0000/00/00}{\@text@composite@x}
 %    {Special case! (This block is required for any emulation date)}%
 \DeclareRobustCommand\fixcompositeaccent{%
+  \let\oalign\pltx@oalign
+  \let\ltx@sh@ft\pltx@ltx@sh@ft
   \let\@text@composite@x\pltx@text@composite@x
 }
 \DeclareRobustCommand\nofixcompositeaccent{%
+  \let\oalign\pltx@saved@oalign
+  \let\ltx@sh@ft\pltx@saved@ltx@sh@ft
   \let\@text@composite@x\pltx@saved@text@composite@x
 }
 \nofixcompositeaccent
@@ -636,6 +681,10 @@ of this package available from CTAN}
 \nofixcompositeaccent % force LaTeX original (always)
 \let\fixcompositeaccent\@undefined
 \let\nofixcompositeaccent\@undefined
+\let\pltx@saved@oalign\@undefined
+\let\pltx@oalign\@undefined
+\let\pltx@saved@ltx@sh@ft\@undefined
+\let\pltx@ltx@sh@ft\@undefined
 \let\pltx@saved@text@composite@x\@undefined
 \let\pltx@text@composite@x\@undefined
 \plEndIncludeInRelease
@@ -644,6 +693,10 @@ of this package available from CTAN}
 \fixcompositeaccent % force pLaTeX definition (always)
 \let\fixcompositeaccent\@undefined
 \let\nofixcompositeaccent\@undefined
+\let\pltx@saved@oalign\@undefined
+\let\pltx@oalign\@undefined
+\let\pltx@saved@ltx@sh@ft\@undefined
+\let\pltx@ltx@sh@ft\@undefined
 \let\pltx@saved@text@composite@x\@undefined
 \let\pltx@text@composite@x\@undefined
 \plEndIncludeInRelease
@@ -652,6 +705,10 @@ of this package available from CTAN}
 \nofixcompositeaccent % force LaTeX original (always)
 \let\fixcompositeaccent\@undefined
 \let\nofixcompositeaccent\@undefined
+\let\pltx@saved@oalign\@undefined
+\let\pltx@oalign\@undefined
+\let\pltx@saved@ltx@sh@ft\@undefined
+\let\pltx@ltx@sh@ft\@undefined
 \let\pltx@saved@text@composite@x\@undefined
 \let\pltx@text@composite@x\@undefined
 \plEndIncludeInRelease

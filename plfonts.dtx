@@ -1934,6 +1934,91 @@
 % \LaTeXe{}のカーネルのコードをそのまま使うと、p\TeX{}のベースライン
 % 補正量がゼロでないときに合成文字がおかしくなっていたため、対策します。
 %
+% \begin{macro}{\pltx@saved@oalign}
+% \file{ltplain.dtx}の|\oalign|を上書きするための準備です。
+%    \begin{macrocode}
+%<platexrelease>%\plIncludeInRelease{0000/00/00}{\pltx@saved@oalign}
+%<platexrelease>%    {Special case! (This block is required for any emulation date)}%
+%<*plcore|platexrelease>
+%    \end{macrocode}
+% まず、元の\LaTeX{}のコードをコピーしたものです。
+% 接頭辞|\pltx@saved...|を付けておきます。
+% \changes{v???}{9999/99/99}{コード追加}
+%    \begin{macrocode}
+\def\pltx@saved@oalign#1{\leavevmode\vtop{\baselineskip\z@skip \lineskip.25ex%
+  \ialign{##\crcr#1\crcr}}}
+%</plcore|platexrelease>
+%<platexrelease>%\plEndIncludeInRelease
+%    \end{macrocode}
+%  \end{macro}
+%
+% \begin{macro}{\pltx@oalign}
+% 次に、\pLaTeX{}の新しいコードです。
+% \changes{v???}{9999/99/99}{コード追加}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{9999/99/99}{\pltx@oalign}
+%<platexrelease>                   {Fix for non-zero baselineshift}%
+%<*plcore|platexrelease>
+\def\pltx@oalign#1{\ifmmode
+  \leavevmode\vtop{\baselineskip\z@skip \lineskip.25ex%
+    \ialign{##\crcr#1\crcr}}
+\else
+  \iftdir\ybaselineshift\tbaselineshift\fi
+  $\hbox{\vtop{\baselineskip\z@skip \lineskip.25ex%
+    \ialign{##\crcr#1\crcr}}}$%
+\fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\pltx@oalign}
+%<platexrelease>                   {Fix for non-zero baselineshift}%
+%<platexrelease>\let\pltx@oalign\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pltx@saved@ltx@sh@ft}
+% \file{ltplain.dtx}の|\ltx@sh@ft|を上書きするための準備です。
+%    \begin{macrocode}
+%<platexrelease>%\plIncludeInRelease{0000/00/00}{\pltx@saved@ltx@sh@ft}
+%<platexrelease>%    {Special case! (This block is required for any emulation date)}%
+%<*plcore|platexrelease>
+%    \end{macrocode}
+% まず、元の\LaTeX{}のコードをコピーしたものです。
+% 接頭辞|\pltx@saved...|を付けておきます。
+% \changes{v???}{9999/99/99}{コード追加}
+%    \begin{macrocode}
+\def\pltx@saved@ltx@sh@ft #1{%
+  \dimen@ #1%
+  \kern \strip@pt
+    \fontdimen1\font \dimen@
+  } % kern by #1 times the current slant
+%</plcore|platexrelease>
+%<platexrelease>%\plEndIncludeInRelease
+%    \end{macrocode}
+%  \end{macro}
+%
+% \begin{macro}{\pltx@ltx@sh@ft}
+% 次に、\pLaTeX{}の新しいコードです。
+% \changes{v???}{9999/99/99}{コード追加}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{9999/99/99}{\pltx@ltx@sh@ft}
+%<platexrelease>                   {Fix for non-zero baselineshift}%
+%<*plcore|platexrelease>
+\def\pltx@ltx@sh@ft #1{%
+  \ybaselineshift\z@
+  \dimen@ #1%
+  \kern \strip@pt
+    \fontdimen1\font \dimen@
+  } % kern by #1 times the current slant
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\pltx@ltx@sh@ft}
+%<platexrelease>                   {Fix for non-zero baselineshift}%
+%<platexrelease>\let\pltx@ltx@sh@ft\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\g@tlastchart@}
 % \TeX\ Live 2015で追加された\cs{lastnodechar}を利用して、
 % 「直前の文字」の符号位置を得るコードです。\cs{lastnodechar}が未定義の場合は
@@ -2226,9 +2311,13 @@
 %<platexrelease>%    {Special case! (This block is required for any emulation date)}%
 %<*plcore|platexrelease>
 \DeclareRobustCommand\fixcompositeaccent{%
+  \let\oalign\pltx@oalign
+  \let\ltx@sh@ft\pltx@ltx@sh@ft
   \let\@text@composite@x\pltx@text@composite@x
 }
 \DeclareRobustCommand\nofixcompositeaccent{%
+  \let\oalign\pltx@saved@oalign
+  \let\ltx@sh@ft\pltx@saved@ltx@sh@ft
   \let\@text@composite@x\pltx@saved@text@composite@x
 }
 \nofixcompositeaccent
@@ -2259,6 +2348,10 @@
 %<platexrelease>\nofixcompositeaccent % force LaTeX original (always)
 %<platexrelease>\let\fixcompositeaccent\@undefined
 %<platexrelease>\let\nofixcompositeaccent\@undefined
+%<platexrelease>\let\pltx@saved@oalign\@undefined
+%<platexrelease>\let\pltx@oalign\@undefined
+%<platexrelease>\let\pltx@saved@ltx@sh@ft\@undefined
+%<platexrelease>\let\pltx@ltx@sh@ft\@undefined
 %<platexrelease>\let\pltx@saved@text@composite@x\@undefined
 %<platexrelease>\let\pltx@text@composite@x\@undefined
 %<platexrelease>\plEndIncludeInRelease
@@ -2267,6 +2360,10 @@
 %<platexrelease>\fixcompositeaccent % force pLaTeX definition (always)
 %<platexrelease>\let\fixcompositeaccent\@undefined
 %<platexrelease>\let\nofixcompositeaccent\@undefined
+%<platexrelease>\let\pltx@saved@oalign\@undefined
+%<platexrelease>\let\pltx@oalign\@undefined
+%<platexrelease>\let\pltx@saved@ltx@sh@ft\@undefined
+%<platexrelease>\let\pltx@ltx@sh@ft\@undefined
 %<platexrelease>\let\pltx@saved@text@composite@x\@undefined
 %<platexrelease>\let\pltx@text@composite@x\@undefined
 %<platexrelease>\plEndIncludeInRelease
@@ -2275,6 +2372,10 @@
 %<platexrelease>\nofixcompositeaccent % force LaTeX original (always)
 %<platexrelease>\let\fixcompositeaccent\@undefined
 %<platexrelease>\let\nofixcompositeaccent\@undefined
+%<platexrelease>\let\pltx@saved@oalign\@undefined
+%<platexrelease>\let\pltx@oalign\@undefined
+%<platexrelease>\let\pltx@saved@ltx@sh@ft\@undefined
+%<platexrelease>\let\pltx@ltx@sh@ft\@undefined
 %<platexrelease>\let\pltx@saved@text@composite@x\@undefined
 %<platexrelease>\let\pltx@text@composite@x\@undefined
 %<platexrelease>\plEndIncludeInRelease
