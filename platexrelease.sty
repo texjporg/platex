@@ -485,9 +485,9 @@ of this package available from CTAN}
    \expandafter\@text@composite@x
       \csname\string#1-\string#2\endcsname}
 \plEndIncludeInRelease
-%\plIncludeInRelease{0000/00/00}{\ltx@text@composite@x}
+%\plIncludeInRelease{0000/00/00}{\pltx@saved@text@composite@x}
 %    {Special case! (This block is required for any emulation date)}%
-\def\ltx@text@composite@x#1{%
+\def\pltx@saved@text@composite@x#1{%
    \ifx#1\relax
       \expandafter\@secondoftwo
    \else
@@ -622,7 +622,7 @@ of this package available from CTAN}
   \let\@text@composite@x\pltx@text@composite@x
 }
 \DeclareRobustCommand\nofixcompositeaccent{%
-  \let\@text@composite@x\ltx@text@composite@x
+  \let\@text@composite@x\pltx@saved@text@composite@x
 }
 \nofixcompositeaccent
 %\plEndIncludeInRelease
@@ -636,7 +636,7 @@ of this package available from CTAN}
 \nofixcompositeaccent % force LaTeX original (always)
 \let\fixcompositeaccent\@undefined
 \let\nofixcompositeaccent\@undefined
-\let\ltx@text@composite@x\@undefined
+\let\pltx@saved@text@composite@x\@undefined
 \let\pltx@text@composite@x\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\fixcompositeaccent}
@@ -644,7 +644,7 @@ of this package available from CTAN}
 \fixcompositeaccent % force pLaTeX definition (always)
 \let\fixcompositeaccent\@undefined
 \let\nofixcompositeaccent\@undefined
-\let\ltx@text@composite@x\@undefined
+\let\pltx@saved@text@composite@x\@undefined
 \let\pltx@text@composite@x\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\fixcompositeaccent}
@@ -652,7 +652,7 @@ of this package available from CTAN}
 \nofixcompositeaccent % force LaTeX original (always)
 \let\fixcompositeaccent\@undefined
 \let\nofixcompositeaccent\@undefined
-\let\ltx@text@composite@x\@undefined
+\let\pltx@saved@text@composite@x\@undefined
 \let\pltx@text@composite@x\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/10/28}{\check@nocorr@}

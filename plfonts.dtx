@@ -2049,17 +2049,18 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\ltx@text@composite@x}
+% \begin{macro}{\pltx@saved@text@composite@x}
 % 合成文字の内部命令|\@text@composite@x|のために、2通りの定義を準備します。
 %    \begin{macrocode}
-%<platexrelease>%\plIncludeInRelease{0000/00/00}{\ltx@text@composite@x}
+%<platexrelease>%\plIncludeInRelease{0000/00/00}{\pltx@saved@text@composite@x}
 %<platexrelease>%    {Special case! (This block is required for any emulation date)}%
 %<*plcore|platexrelease>
 %    \end{macrocode}
-% まず、元の\LaTeX{}のコードをコピーしたものです。接頭辞|\ltx...|を付けておきます。
+% まず、元の\LaTeX{}のコードをコピーしたものです。
+% 接頭辞|\pltx@saved...|を付けておきます。
 % \changes{v???}{9999/99/99}{コード整理}
 %    \begin{macrocode}
-\def\ltx@text@composite@x#1{%
+\def\pltx@saved@text@composite@x#1{%
    \ifx#1\relax
       \expandafter\@secondoftwo
    \else
@@ -2228,7 +2229,7 @@
   \let\@text@composite@x\pltx@text@composite@x
 }
 \DeclareRobustCommand\nofixcompositeaccent{%
-  \let\@text@composite@x\ltx@text@composite@x
+  \let\@text@composite@x\pltx@saved@text@composite@x
 }
 \nofixcompositeaccent
 %</plcore|platexrelease>
@@ -2258,7 +2259,7 @@
 %<platexrelease>\nofixcompositeaccent % force LaTeX original (always)
 %<platexrelease>\let\fixcompositeaccent\@undefined
 %<platexrelease>\let\nofixcompositeaccent\@undefined
-%<platexrelease>\let\ltx@text@composite@x\@undefined
+%<platexrelease>\let\pltx@saved@text@composite@x\@undefined
 %<platexrelease>\let\pltx@text@composite@x\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/04/17}{\fixcompositeaccent}
@@ -2266,7 +2267,7 @@
 %<platexrelease>\fixcompositeaccent % force pLaTeX definition (always)
 %<platexrelease>\let\fixcompositeaccent\@undefined
 %<platexrelease>\let\nofixcompositeaccent\@undefined
-%<platexrelease>\let\ltx@text@composite@x\@undefined
+%<platexrelease>\let\pltx@saved@text@composite@x\@undefined
 %<platexrelease>\let\pltx@text@composite@x\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\fixcompositeaccent}
@@ -2274,7 +2275,7 @@
 %<platexrelease>\nofixcompositeaccent % force LaTeX original (always)
 %<platexrelease>\let\fixcompositeaccent\@undefined
 %<platexrelease>\let\nofixcompositeaccent\@undefined
-%<platexrelease>\let\ltx@text@composite@x\@undefined
+%<platexrelease>\let\pltx@saved@text@composite@x\@undefined
 %<platexrelease>\let\pltx@text@composite@x\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
