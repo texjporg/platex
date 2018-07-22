@@ -1935,7 +1935,7 @@
 % 補正量がゼロでないときに合成文字がおかしくなっていたため、対策します。
 %
 % \begin{macro}{\pltx@saved@oalign}
-% |\b{...}|や|\d{...}|などの合成文字を修正するため、
+% |\b{...}|, |\c{...}|, |\d{...}|, |\k{...}|などの合成文字を修正するため、
 % \file{ltplain.dtx}の|\oalign|を上書きします。
 %    \begin{macrocode}
 %<platexrelease>%\plIncludeInRelease{0000/00/00}{\pltx@saved@oalign}
@@ -1978,7 +1978,7 @@
 % \end{macro}
 %
 % \begin{macro}{\pltx@saved@ltx@sh@ft}
-% |\c{...}|などの合成文字を修正するため、
+% |\b{...}|と|\d{...}|の合成文字を修正するため、
 % \file{ltplain.dtx}の|\ltx@sh@ft|を上書きします。
 %    \begin{macrocode}
 %<platexrelease>%\plIncludeInRelease{0000/00/00}{\pltx@saved@ltx@sh@ft}
