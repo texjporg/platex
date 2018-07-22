@@ -797,41 +797,27 @@
     #2%
   \else\pltx@isletter{#1}{#1}{%
     \begingroup
-    \setbox\z@\hbox\bgroup%
+    \setbox\z@\hbox\bgroup
       \ybaselineshift\z@\tbaselineshift\z@
       #1%
       \g@tlastchart@\@tempcntb
       \xdef\pltx@composite@temp{\noexpand\@tempcntb=\the\@tempcntb\relax}%
       \aftergroup\pltx@composite@temp
     \egroup
-    \ifnum\@tempcntb<\z@
-      \@tempdima=\iftdir
-          \ifmdir
-            \ifmmode\tbaselineshift\else\ybaselineshift\fi
-          \else
-            \tbaselineshift
-          \fi
-        \else
-          \ybaselineshift
-        \fi
-      \@tempcntb=\@cclvi
-    \else\@tempdima=\z@
-    \fi
     \ifnum\@tempcntb<\@cclvi
-      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
-        \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
-      \fi\fi
-      \begingroup\mathsurround\z@$%
+      \ifnum\@tempcntb>\m@ne
+        \ifodd\xspcode\@tempcntb\else\leavevmode\null\fi
+      \fi
+      \begingroup\m@th$%
         \ifx\textbaselineshiftfactor\@undefined\else
           \textbaselineshiftfactor\z@\fi
         \box\z@
-      $\endgroup%
-      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
-        \ifnum\xspcode\@tempcntb<2\hbox{}\fi
-      \fi\fi
+      $\endgroup
+      \ifnum\@tempcntb>\m@ne
+        \ifnum\xspcode\@tempcntb<2\null\fi
+      \fi
     \else
-      \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
-      \else\leavevmode\lower\@tempdima\box\z@\fi
+      {\ybaselineshift\z@\tbaselineshift\z@#1}%
     \fi
     \endgroup}%
   \fi

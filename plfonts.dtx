@@ -86,7 +86,6 @@
 %    参考：plvers.dtx 2018/04/09 v1.1lの\cs{everyjob}}
 % \changes{v1.6q}{2018/07/03}{シリーズbがbxと等価になるように宣言}
 % \changes{v???}{9999/99/99}{PDFのしおりにアクセント文字が含まれる場合に対応}
-% \changes{v???}{9999/99/99}{\cs{lower}の前に\cs{leavevmode}を追加}
 % \changes{v???}{9999/99/99}{\cs{[no]fixcompositeaccent}マクロ追加}
 % \changes{v???}{9999/99/99}{コード整理}
 % \fi
@@ -2171,7 +2170,11 @@
     #2%
   \else\pltx@isletter{#1}{#1}{%
     \begingroup
-    \setbox\z@\hbox\bgroup%
+%    \end{macrocode}
+% |#1|を実際に組んでみて、符号位置の取得を試みます。
+% 結果は|\@tempcntb|に保存されます。取得に失敗した場合h$-1$です。
+%    \begin{macrocode}
+    \setbox\z@\hbox\bgroup
       \ybaselineshift\z@\tbaselineshift\z@
       #1%
       \g@tlastchart@\@tempcntb
@@ -2179,43 +2182,30 @@
       \aftergroup\pltx@composite@temp
     \egroup
 %    \end{macrocode}
-%    \begin{macrocode}
-    \ifnum\@tempcntb<\z@
-      \@tempdima=\iftdir
-          \ifmdir
-            \ifmmode\tbaselineshift\else\ybaselineshift\fi
-          \else
-            \tbaselineshift
-          \fi
-        \else
-          \ybaselineshift
-        \fi
-      \@tempcntb=\@cclvi
-    \else\@tempdima=\z@
-    \fi
-%    \end{macrocode}
 % アクセントが付く「本体の文字」が欧文文字と推測される場合には、
-% 一旦数式モードに入ることによって\cs{xkanjiskip}が前後に入るようにします。
-% 必要なら、数式モードの前後に\cs{null}を補って\cs{xkanjiskip}の挿入を抑制します。
+% 一旦数式モードに入ることによって|\xkanjiskip|が前後に入るようにします。
+% ここでは、取得に失敗した場合も欧文文字であると仮定しています。
+% また、符号位置の取得に成功していた場合は、その|\xspcode|の状態に応じて、
+% 数式モードの前後に|\null|を補って|\xkanjiskip|の挿入を抑制します。
 %    \begin{macrocode}
     \ifnum\@tempcntb<\@cclvi
-      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
-        \ifodd\xspcode\@tempcntb\else\leavevmode\hbox{}\fi
-      \fi\fi
-      \begingroup\mathsurround\z@$%
+      \ifnum\@tempcntb>\m@ne
+        \ifodd\xspcode\@tempcntb\else\leavevmode\null\fi
+      \fi
+      \begingroup\m@th$%
         \ifx\textbaselineshiftfactor\@undefined\else
           \textbaselineshiftfactor\z@\fi
         \box\z@
-      $\endgroup%
-      \ifnum\@tempcntb>\m@ne\ifnum\@tempcntb<\@cclvi
-        \ifnum\xspcode\@tempcntb<2\hbox{}\fi
-      \fi\fi
+      $\endgroup
+      \ifnum\@tempcntb>\m@ne
+        \ifnum\xspcode\@tempcntb<2\null\fi
+      \fi
 %    \end{macrocode}
-% \changes{v???}{9999/99/99}{\cs{lower}の前に\cs{leavevmode}を追加}
+% アクセントが付く「本体の文字」が和文文字と推測される場合には、
+% ベースライン補正を行わずに出力します。
 %    \begin{macrocode}
     \else
-      \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
-      \else\leavevmode\lower\@tempdima\box\z@\fi
+      {\ybaselineshift\z@\tbaselineshift\z@#1}%
     \fi
     \endgroup}%
   \fi
@@ -2263,7 +2253,7 @@
 %<platexrelease>      \fi\fi
 %<platexrelease>    \else
 %<platexrelease>      \ifdim\@tempdima=\z@{\ybaselineshift\z@\tbaselineshift\z@#1}%
-%<platexrelease>      \else\lower\@tempdima\box\z@\fi
+%<platexrelease>      \else\leavevmode\lower\@tempdima\box\z@\fi
 %<platexrelease>    \fi
 %<platexrelease>    \endgroup}%
 %<platexrelease>  \fi
