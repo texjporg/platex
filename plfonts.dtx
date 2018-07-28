@@ -2022,8 +2022,8 @@
 %
 % \begin{macro}{\g@tlastchart@}
 % \TeX\ Live 2015で追加された\cs{lastnodechar}を利用して、
-% 「直前の文字」の符号位置を得るコードです。\cs{lastnodechar}が未定義の場合は
-% $-1$が返ります。
+% 「直前の文字」の符号位置を得るコードです。
+% \cs{lastnodechar}が未定義の場合は$-1$が返ります。
 % \changes{v1.6c}{2016/06/06}{マクロ追加}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2016/06/10}{\g@tlastchart@}
@@ -2172,7 +2172,7 @@
     \begingroup
 %    \end{macrocode}
 % |#1|を実際に組んでみて、符号位置の取得を試みます。
-% 結果は|\@tempcntb|に保存されます。取得に失敗した場合h$-1$です。
+% 結果は|\@tempcntb|に保存されます。取得に失敗した場合は$-1$です。
 %    \begin{macrocode}
     \setbox\z@\hbox\bgroup
       \ybaselineshift\z@\tbaselineshift\z@
@@ -2333,7 +2333,7 @@
 %<platexrelease>\plIncludeInRelease{2018/07/28}{\fixcompositeaccent}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
 %<platexrelease>\nofixcompositeaccent % force LaTeX original (conditional default)
-%<platexrelease>% other commands are actually defined for pLaTeX2e 9999-99-99
+%<platexrelease>% other commands are actually defined for pLaTeX2e 2018-07-28
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/07/01}{\fixcompositeaccent}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
