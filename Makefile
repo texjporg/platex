@@ -1,7 +1,7 @@
 STRIPTARGET = platex.ltx jarticle.cls pl209.def platexrelease.sty \
 	jltxdoc.cls
 DOCTARGET = platex platexrelease pldoc exppl2e \
-	platex-en pldoc-en
+	platex-en #pldoc-en
 PDFTARGET = $(addsuffix .pdf,$(DOCTARGET))
 DVITARGET = $(addsuffix .dvi,$(DOCTARGET))
 KANJI = -kanji=jis
