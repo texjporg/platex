@@ -1,0 +1,94 @@
+%% <2018-07-28>
+\documentclass{plnews}
+
+\publicationyear{2018}% 発行年
+\publicationmonth{07}% 発行月
+\publicationissue{c11}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\cs#1{\texttt{\char92 #1}}
+\def\pTeX{p\kern-.15em\TeX}
+\def\eTeX{$\varepsilon$-\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+
+\begin{document}
+
+\maketitle
+
+この文書はコミュニティ版\pLaTeXe\ \texttt{<2018-07-28>}について、
+\pLaTeXe\ \texttt{<2018-05-20>}からの更新箇所をまとめたものです。
+
+
+\section{標準クラスの\cs{today}を西暦に}
+\pLaTeX{}付属の標準クラス
+(jarticle, jbook, jreport, tarticle, tbook, treport)では、
+これまで|\today|命令で表示される日付のデフォルトを
+\begin{quote}
+\和暦\today
+\end{quote}
+のように元号としていました。
+しかし、平成31年（2019年）に改元が予定されていることを機に、
+今回のリリースからデフォルトを
+\begin{quote}
+\西暦\today
+\end{quote}
+のような西暦に変更しました。
+u\pLaTeX{}付属のクラスも同様に変更しています。
+
+
+\section{シリーズ\texttt{b}も太字に}
+\LaTeX{}標準では、太字(|\bfseries|, |\textbf|)を指定すると
+{\fontseries{bx}\selectfont bold extended} (|bx|)に切り替わります。
+
+一方、\file{tgtermes}, \file{iwona}などの欧文フォントパッケージを
+使うと、太字が{\fontseries{b}\selectfont bold} (|b|)に変わります。
+
+従来の(u)\pLaTeX{}では、和文の太字をシリーズ|bx|だけに割り当て、
+|b|には何も設定していませんでした。そのため、後者の場合に
+\begin{quote}\scriptsize
+\begin{verbatim}
+LaTeX Font Warning: Font shape `JY1/mc/b/n' undefined
+(Font)              using `JY1/mc/m/n' instead on ...
+\end{verbatim}
+\end{quote}
+のような警告が出て「和文が太字にならない」という挙動でした。
+今回からシリーズ|b|にも和文の太字を割り当て、
+太字になるようにしました。
+
+
+\section{アクセント文字の再修正}
+\pLaTeXe\ 2016/04/17から2016/07/01にかけて、
+「ベースライン補正量がゼロでない場合にアクセント合成文字が乱れる」
+というバグを修正しようと試みていました。
+この時はトラブルが相次いだため、一旦全てのパッチを撤去したの
+ですが（参考：\file{plnewsc03.tex}）、今回別の方法で
+再度パッチを導入しました。
+\begin{itemize}
+\item \textbf{デフォルトでは修正パッチは無効}です。
+\item |\fixcompositeaccent|命令【新設】\\
+      この命令を発行すると、それ以降で\pLaTeX{}用修正パッチが
+      有効化されます。グループ内で発行された場合は、
+      そのグループ内でのみ修正パッチが有効です。
+\item |\nofixcompositeaccent|命令【新設】\\
+      |\fixcompositeaccent|の効果を打ち消し、
+      元の\LaTeX{}の定義に戻します。
+\end{itemize}
+|\fixcompositeaccent|命令を発行すると、
+「ベースライン補正量がゼロでない場合のアクセントの高さ」
+「周囲の和文文字との間に自動挿入される|\xkanjiskip|」などの
+挙動がほぼ期待通りになりますが、
+一部\LaTeX{}とは異なる挙動（警告・エラー）になる場合があります。
+必要に応じて|\fixcompositeaccent|を有効化・無効化することで
+対処してください。
+
+
+\section{開発版のテストのお願い}
+バグ報告やご意見、開発版の入手はGitHubへ。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
