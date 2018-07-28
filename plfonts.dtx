@@ -85,16 +85,16 @@
 % \changes{v1.6p}{2018/04/09}{v1.6oで加えた対策を削除。
 %    参考：plvers.dtx 2018/04/09 v1.1lの\cs{everyjob}}
 % \changes{v1.6q}{2018/07/03}{シリーズbがbxと等価になるように宣言}
-% \changes{v???}{9999/99/99}{PDFのしおりにアクセント文字が含まれる場合に対応}
-% \changes{v???}{9999/99/99}{\cs{[no]fixcompositeaccent}マクロ追加}
-% \changes{v???}{9999/99/99}{コード整理}
+% \changes{v1.6r}{2018/07/25}{PDFのしおりにアクセント文字が含まれる場合に対応}
+% \changes{v1.6r}{2018/07/25}{\cs{[no]fixcompositeaccent}マクロ追加}
+% \changes{v1.6r}{2018/07/25}{コード整理}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2018/07/03 v1.6q pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2018/07/25 v1.6r pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -1943,7 +1943,7 @@
 %    \end{macrocode}
 % まず、元の\LaTeX{}のコードをコピーしたものです。
 % 接頭辞|\pltx@saved...|を付けておきます。
-% \changes{v???}{9999/99/99}{コード追加}
+% \changes{v1.6r}{2018/07/25}{コード追加}
 %    \begin{macrocode}
 \def\pltx@saved@oalign#1{\leavevmode\vtop{\baselineskip\z@skip \lineskip.25ex%
   \ialign{##\crcr#1\crcr}}}
@@ -1954,9 +1954,9 @@
 %
 % \begin{macro}{\pltx@oalign}
 % 次に、\pLaTeX{}の新しいコードです。
-% \changes{v???}{9999/99/99}{コード追加}
+% \changes{v1.6r}{2018/07/25}{コード追加}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{9999/99/99}{\pltx@oalign}
+%<platexrelease>\plIncludeInRelease{2018/07/28}{\pltx@oalign}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
 %<*plcore|platexrelease>
 \def\pltx@oalign#1{\ifmmode
@@ -1986,7 +1986,7 @@
 %    \end{macrocode}
 % まず、元の\LaTeX{}のコードをコピーしたものです。
 % 接頭辞|\pltx@saved...|を付けておきます。
-% \changes{v???}{9999/99/99}{コード追加}
+% \changes{v1.6r}{2018/07/25}{コード追加}
 %    \begin{macrocode}
 \def\pltx@saved@ltx@sh@ft #1{%
   \dimen@ #1%
@@ -2000,9 +2000,9 @@
 %
 % \begin{macro}{\pltx@ltx@sh@ft}
 % 次に、\pLaTeX{}の新しいコードです。
-% \changes{v???}{9999/99/99}{コード追加}
+% \changes{v1.6r}{2018/07/25}{コード追加}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{9999/99/99}{\pltx@ltx@sh@ft}
+%<platexrelease>\plIncludeInRelease{2018/07/28}{\pltx@ltx@sh@ft}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
 %<*plcore|platexrelease>
 \def\pltx@ltx@sh@ft #1{%
@@ -2044,9 +2044,9 @@
 % 場合に第二引数の内容に展開され、そうでない場合は第三引数の内容に展開されます。
 % \changes{v1.6c}{2016/06/06}{マクロ追加}
 % \changes{v1.6d}{2016/06/19}{アクセント付き文字をさらに修正(forum:1951)}
-% \changes{v???}{9999/99/99}{PDFのしおりにアクセント文字が含まれる場合に対応}
+% \changes{v1.6r}{2018/07/25}{PDFのしおりにアクセント文字が含まれる場合に対応}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{9999/99/99}{\pltx@isletter}
+%<platexrelease>\plIncludeInRelease{2018/07/28}{\pltx@isletter}
 %<platexrelease>                   {Support PD1 encoding}%
 %<*plcore|platexrelease>
 \def\pltx@mark{\pltx@mark@}
@@ -2144,7 +2144,7 @@
 %    \end{macrocode}
 % まず、元の\LaTeX{}のコードをコピーしたものです。
 % 接頭辞|\pltx@saved...|を付けておきます。
-% \changes{v???}{9999/99/99}{コード整理}
+% \changes{v1.6r}{2018/07/25}{コード整理}
 %    \begin{macrocode}
 \def\pltx@saved@text@composite@x#1{%
    \ifx#1\relax
@@ -2160,9 +2160,9 @@
 %
 % \begin{macro}{\pltx@text@composite@x}
 % 次に、\pLaTeX{}の新しいコードです。|\g@tlastchart@|と|\pltx@isletter|を使います。
-% \changes{v???}{9999/99/99}{コード整理}
+% \changes{v1.6r}{2018/07/25}{コード整理}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{9999/99/99}{\pltx@text@composite@x}
+%<platexrelease>\plIncludeInRelease{2018/07/28}{\pltx@text@composite@x}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
 %<*plcore|platexrelease>
 \def\pltx@text@composite@x#1#2{%
@@ -2297,7 +2297,7 @@
 % デフォルトでは\LaTeX{}の定義のままとしておきます。
 % そして、|\fixcompositeaccent|が有効な時だけ\pLaTeX{}の定義を用います。
 % |\nofixcompositeaccent|はこの否定です。
-% \changes{v???}{9999/99/99}{\cs{[no]fixcompositeaccent}マクロ追加}
+% \changes{v1.6r}{2018/07/25}{\cs{[no]fixcompositeaccent}マクロ追加}
 %    \begin{macrocode}
 %<platexrelease>%\plIncludeInRelease{0000/00/00}{\@text@composite@x}
 %<platexrelease>%    {Special case! (This block is required for any emulation date)}%
@@ -2328,9 +2328,9 @@
 %    周囲に\cs{xkanjiskip}が入らなくなっていたのを修正。}
 % \changes{v1.6e}{2016/06/26}{v1.6a以降の修正で全てのアクセント付き文字で
 %    トラブルが相次いだため、いったんパッチを除去。}
-% \changes{v???}{9999/99/99}{コード整理}
+% \changes{v1.6r}{2018/07/25}{コード整理}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{9999/99/99}{\fixcompositeaccent}
+%<platexrelease>\plIncludeInRelease{2018/07/28}{\fixcompositeaccent}
 %<platexrelease>                   {Fix for non-zero baselineshift}%
 %<platexrelease>\nofixcompositeaccent % force LaTeX original (conditional default)
 %<platexrelease>% other commands are actually defined for pLaTeX2e 9999-99-99
