@@ -1,0 +1,88 @@
+\documentclass{article}
+
+\makeatletter
+%% current
+% \protected\def\removejfmglue{%
+%   \ifnum\lastnodetype=\pltx@gluetype\relax
+%     \ifnum\lastnodesubtype=\pltx@jfmgluesubtype\relax
+%       \unskip
+%     \fi
+%   \fi}
+%% candidate 1
+  \protected\def\removejfmglueA{\inhibitglue
+    \ifnum\lastnodetype=\pltx@gluetype\relax
+      \ifnum\lastnodesubtype=\pltx@jfmgluesubtype\relax
+        \unskip
+      \fi
+    \fi}
+%% candidate 2
+  \protected\def\removejfmglueB{\relax
+    \ifnum\lastnodetype=\pltx@gluetype\relax
+      \ifnum\lastnodesubtype=\pltx@jfmgluesubtype\relax
+        \unskip
+      \fi
+    \fi}
+%% simplified
+\protected\def\removejfmglueC{\ifnum\lastnodechar=-1\else\unskip\fi}
+%% D? --- NO!
+\protected\def\removejfmglueD{%
+  \ifnum\lastnodechar=-1\else
+    \inhibitglue
+    \ifnum\lastnodetype=\pltx@gluetype\relax
+      \unskip
+    \fi
+  \fi
+}
+%%
+\makeatother
+
+\begin{document}
+
+\def\SHOWNODE{}%\showthe\lastnodetype \showthe\lastnodesubtype}
+\def\TT#1{\texttt{#1}\null}
+
+[JFM glue already inserted: should be removed!]\par
+\TT{0------}あ）\relax\SHOWNODE                 あ\par
+\TT{RELAX--}あ）\relax\relax          \SHOWNODE あ\par
+\TT{UNSKIP-}あ）\relax\unskip         \SHOWNODE あ (Ref)\par
+\TT{INHIBIT}あ）\relax\inhibitglue    \SHOWNODE あ (NG)\par
+\TT{CURRENT}あ）\relax\removejfmglue  \SHOWNODE あ (OK)\par
+\TT{A------}あ）\relax\removejfmglueA \SHOWNODE あ (OK)\par
+\TT{B------}あ）\relax\removejfmglueB \SHOWNODE あ (OK)\par
+\TT{C------}あ）\relax\removejfmglueC \SHOWNODE あ (OK)\par
+\TT{D------}あ）\relax\removejfmglueD \SHOWNODE あ (OK)\par
+
+[JFM glue to be inserted: should remain!]\par
+\TT{0------}あ）\SHOWNODE                 あ\par
+\TT{RELAX--}あ）\relax          \SHOWNODE あ (Ref)\par
+\TT{UNSKIP-}あ）\unskip         \SHOWNODE あ (NG)\par
+\TT{INHIBIT}あ）\inhibitglue    \SHOWNODE あ (NG)\par
+\TT{CURRENT}あ）\removejfmglue  \SHOWNODE あ (OK)\par
+\TT{A------}あ）\removejfmglueA \SHOWNODE あ (NG)\par
+\TT{B------}あ）\removejfmglueB \SHOWNODE あ (NG)\par
+\TT{C------}あ）\removejfmglueC \SHOWNODE あ (NG)\par
+\TT{D------}あ）\removejfmglueD \SHOWNODE あ (NG)\par
+
+[JFM glue after it: should remain!]\par
+\TT{0------}あ\SHOWNODE                 （あ\par
+\TT{RELAX--}あ\relax          \SHOWNODE （あ\par
+\TT{UNSKIP-}あ\unskip         \SHOWNODE （あ (Ref)\par
+\TT{INHIBIT}あ\inhibitglue    \SHOWNODE （あ (NG)\par
+\TT{CURRENT}あ\removejfmglue  \SHOWNODE （あ (OK)\par
+\TT{A------}あ\removejfmglueA \SHOWNODE （あ (NG)\par
+\TT{B------}あ\removejfmglueB \SHOWNODE （あ (OK)\par
+\TT{C------}あ\removejfmglueC \SHOWNODE （あ (OK)\par
+\TT{D------}あ\removejfmglueD \SHOWNODE （あ (NG)\par
+
+[Ligature]\par
+\TT{0------}Wo                 (Ref)\par
+\TT{RELAX--}W\relax          o (NG)\par
+\TT{UNSKIP-}W\unskip         o (NG)\par
+\TT{INHIBIT}W\inhibitglue    o (OK)\par
+\TT{CURRENT}W\removejfmglue  o (OK)\par
+\TT{A------}W\removejfmglueA o (OK)\par
+\TT{B------}W\removejfmglueB o (NG)\par
+\TT{C------}W\removejfmglueC o (NG)\par
+\TT{D------}W\removejfmglueD o (OK)\par
+
+\end{document}
