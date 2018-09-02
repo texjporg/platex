@@ -807,7 +807,7 @@ of this package available from CTAN}
 \let\removejfmglue\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/10/28}{\@no@lnbk}
-                   {Break before prebreakpenalty}%
+                   {Break before prebreakpenalty (revert)}%
 \def\@no@lnbk #1[#2]{%
   \ifvmode
     \@nolnerr
@@ -822,7 +822,7 @@ of this package available from CTAN}
   \fi}
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/07/29}{\@no@lnbk}
-                   {Break before prebreakpenalty}%
+                   {Break before prebreakpenalty (another)}%
 \def\@no@lnbk #1[#2]{%
   \ifvmode
     \@nolnerr
@@ -854,7 +854,7 @@ of this package available from CTAN}
   \fi}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@no@lnbk}
-                   {Break before prebreakpenalty}%
+                   {LaTeX2e original}%
 \def\@no@lnbk #1[#2]{%
   \ifvmode
     \@nolnerr
@@ -868,7 +868,8 @@ of this package available from CTAN}
     \fi
   \fi}
 \plEndIncludeInRelease
-\plIncludeInRelease{2017/04/08}{\@makecol}{\@makecol}%
+\plIncludeInRelease{2017/04/08}{\@makecol}
+                   {Take into account depth of footnote}%
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%
    \let\@elt\relax % added on LaTeX (ltoutput.dtx 2003/12/16 v1.2k)
@@ -894,6 +895,7 @@ of this package available from CTAN}
      \@makespecialcolbox
    \else
      \setbox\@outputbox \vbox to\@colht {%
+       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
        \@texttop
        \dimen@ \dp\@outputbox
        \unvbox \@outputbox
@@ -906,7 +908,8 @@ of this package available from CTAN}
    \global \maxdepth \@maxdepth
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{2016/09/03}{\@makecol}{\@makecol}%
+\plIncludeInRelease{2016/09/03}{\@makecol}
+                   {Avoid infinite loop}%
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%
    \xdef\@freelist{\@freelist\@midlist}%
@@ -916,7 +919,7 @@ of this package available from CTAN}
      \@makespecialcolbox
    \else
      \setbox\@outputbox \vbox to\@colht {%
-%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
        \@texttop
        \dimen@ \dp\@outputbox
        \unvbox \@outputbox
@@ -936,7 +939,8 @@ of this package available from CTAN}
    \global \maxdepth \@maxdepth
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{2016/04/17}{\@makecol}{\@makecol}%
+\plIncludeInRelease{2016/04/17}{\@makecol}
+                   {Adjust for \dp\@outputbox in tate mode}%
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%
    \xdef\@freelist{\@freelist\@midlist}%
@@ -946,7 +950,7 @@ of this package available from CTAN}
      \@makespecialcolbox
    \else
      \setbox\@outputbox \vbox to\@colht {%
-%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
        \@texttop
        \dimen@ \dp\@outputbox
        \unvbox \@outputbox
@@ -966,7 +970,8 @@ of this package available from CTAN}
    \global \maxdepth \@maxdepth
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{0000/00/00}{\@makecol}{\@makecol}%
+\plIncludeInRelease{0000/00/00}{\@makecol}
+                   {ASCII Corporation original}%
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%
    \xdef\@freelist{\@freelist\@midlist}%
@@ -976,7 +981,7 @@ of this package available from CTAN}
      \@makespecialcolbox
    \else
      \setbox\@outputbox \vbox to\@colht {%
-%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
        \@texttop
        \dimen@ \dp\@outputbox
        \unvbox \@outputbox
@@ -1055,7 +1060,7 @@ of this package available from CTAN}
 }
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\maketombowbox}
-                               {Use \@tombowbleed}%
+                               {ASCII Corporation original}%
 \def\maketombowbox{%
   \setbox\@TL\hbox to\z@{\yoko\hss
       \vrule width13mm height\@tombowwidth depth\z@
@@ -1101,6 +1106,7 @@ of this package available from CTAN}
 }
 \plEndIncludeInRelease
 \plIncludeInRelease{2018/05/20}{\@outputtombow}
+                   {Use \@tombowcolor and \@tombowbleed}%
 \def\@outputtombow{%
   \iftombow
   \vbox to\z@{\kern-\dimexpr 10mm+\@tombowbleed\relax\relax
@@ -1125,7 +1131,8 @@ of this package available from CTAN}
   \fi
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{2016/04/17}{\@outputtombow}{\@outputtombow}%
+\plIncludeInRelease{2016/04/17}{\@outputtombow}
+                   {Safe \boxmaxdepth}%
 \def\@outputtombow{%
   \iftombow
   \vbox to\z@{\kern-13mm\relax
@@ -1147,7 +1154,8 @@ of this package available from CTAN}
   \fi
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{0000/00/00}{\@outputtombow}{\@outputtombow}%
+\plIncludeInRelease{0000/00/00}{\@outputtombow}
+                   {ASCII Corporation original}%
 \def\@outputtombow{%
   \iftombow
   \vbox to\z@{\kern-13mm\relax
@@ -1321,7 +1329,7 @@ of this package available from CTAN}
 }
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@outputpage}
-                   {Reset language for hyphenation}%
+                   {ASCII Corporation original}%
 \def\@outputpage{%
 \begingroup % the \endgroup is put in by \aftergroup
   \iftdir
@@ -1397,7 +1405,7 @@ of this package available from CTAN}
 }
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\AtBeginDvi}
-                   {Fix for incompatible direction}%
+                   {LaTeX2e original}%
 \def \AtBeginDvi #1{%
   \global \setbox \@begindvibox
     \vbox{\unvbox \@begindvibox #1}%
@@ -1410,7 +1418,7 @@ of this package available from CTAN}
   \else\hbox{\yoko\@textsuperscript{\normalfont\@thefnmark}}\fi}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@makefnmark}
-                   {Remove extra \xkanjiskip}%
+                   {ASCII Corporation original}%
 \renewcommand\@makefnmark{\hbox{%
   \ifydir \@textsuperscript{\normalfont\@thefnmark}%
   \else\hbox{\yoko\@textsuperscript{\normalfont\@thefnmark}}\fi}}
@@ -1437,7 +1445,7 @@ of this package available from CTAN}
       \@footnotemark}}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\footnote}
-                   {Append \inhibitglue in \footnotemark}%
+                   {LaTeX2e original}%
 \def\footnote{\@ifnextchar[\@xfootnote{\stepcounter\@mpfn
      \protected@xdef\@thefnmark{\thempfn}%
      \@footnotemark\@footnotetext}}
@@ -1456,7 +1464,7 @@ of this package available from CTAN}
      \@footnotetext}}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\footnotetext}
-                   {Preserve penalty before \footnotetext}%
+                   {LaTeX2e original}%
 \def\footnotetext{%
      \@ifnextchar [\@xfootnotenext
        {\protected@xdef\@thefnmark{\thempfn}%
@@ -1507,7 +1515,7 @@ of this package available from CTAN}
     \fi}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@footnotetext}
-                   {Allow break after \footnote}%
+                   {ASCII Corporation original}%
 \long\def\@footnotetext#1{%
   \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
   \insert\footins{\@tempa%
@@ -1525,7 +1533,7 @@ of this package available from CTAN}
     \color@endgroup}}
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/10/28}{\@setref}
-                   {Spacing after \ref in moving arguments}%
+                   {Space factor after \ref}%
 \def\@setref#1#2#3{%
   \ifx#1\relax
     \protect\G@refundefinedtrue
@@ -1551,7 +1559,7 @@ of this package available from CTAN}
 \let\@setref@\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@setref}
-                   {Spacing after \ref in moving arguments}%
+                   {ASCII Corporation original}%
 \def\@setref#1#2#3{%
   \ifx#1\relax
     \protect\G@refundefinedtrue
@@ -1586,7 +1594,7 @@ of this package available from CTAN}
 \fi
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\verb}
-                   {Disable hyphenation in verb}%
+                   {ASCII Corporation original}%
 \if@compatibility\else
 \def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
   \bgroup
@@ -1609,7 +1617,7 @@ of this package available from CTAN}
      \strut\inhibitglue}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@startline}
-                   {Inhibit JFM glue at the beginning}%
+                   {LaTeX2e original}%
 \gdef\@startline{%
      \ifnum \@nxttabmar >\@hightab
        \@badtab
@@ -1622,7 +1630,7 @@ of this package available from CTAN}
      \strut}
 \plEndIncludeInRelease
 \plIncludeInRelease{2018/03/09}{\@tabclassz}
-                   {Inhibit JFM glue in tabular cells}%
+                   {Inhibit JFM glue in tabular cells (better)}%
 \ifx\removejfmglue\@undefined
 \def\@tabclassz{%
   \ifcase\@lastchclass
@@ -1700,7 +1708,7 @@ of this package available from CTAN}
       \fi}}}
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/07/29}{\@tabclassz}
-                   {Inhibit JFM glue in tabular cells}%
+                   {Inhibit JFM glue in tabular cells (wrong)}%
 \def\@tabclassz{%
   \ifcase\@lastchclass
     \@acolampacol
@@ -1726,7 +1734,7 @@ of this package available from CTAN}
       \fi}}}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@tabclassz}
-                   {Inhibit JFM glue in tabular cells}%
+                   {LaTeX2e original}%
 \def\@tabclassz{%
   \ifcase\@lastchclass
     \@acolampacol
@@ -1752,7 +1760,7 @@ of this package available from CTAN}
       \fi}}}
 \plEndIncludeInRelease
 \plIncludeInRelease{2018/03/09}{\@classv}
-                   {Inhibit JFM glue in tabular cells}%
+                   {Inhibit JFM glue in tabular cells (better)}%
 \def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\pltx@next@inhibitglue\ignorespaces
 \@sharp\unskip\@endpbox}}
 \plEndIncludeInRelease
@@ -1762,7 +1770,7 @@ of this package available from CTAN}
 \@sharp\unskip\@endpbox}}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@classv}
-                   {Inhibit JFM glue in tabular cells}%
+                   {LaTeX2e original}%
 \def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\ignorespaces
 \@sharp\@endpbox}}
 \plEndIncludeInRelease
@@ -1786,7 +1794,7 @@ of this package available from CTAN}
    \let\@classiv\@tabclassiv \let\\\@tabularcr\@tabarray}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@tabular}
-                   {Remove extra \xkanjiskip}%
+                   {LaTeX2e original}%
 \def\@tabular{\leavevmode \hbox \bgroup $\let\@acol\@tabacol
    \let\@classz\@tabclassz
    \let\@classiv\@tabclassiv \let\\\@tabularcr\@tabarray}
@@ -1797,7 +1805,7 @@ of this package available from CTAN}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\endtabular}
-                   {Remove extra \xkanjiskip}%
+                   {LaTeX2e original}%
 \def\endtabular{\crcr\egroup\egroup $\egroup}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
 \plEndIncludeInRelease
@@ -1824,7 +1832,7 @@ of this package available from CTAN}
   \@end@tempboxa}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@iiiparbox}
-                   {Remove extra \xkanjiskip}%
+                   {LaTeX2e original}%
 \let\@parboxto\@empty
 \long\def\@iiiparbox#1#2[#3]#4#5{%
   \leavevmode
@@ -1853,7 +1861,7 @@ of this package available from CTAN}
   \else \leavevmode\null$\@@underline{\hbox{#1}}\m@th$\null\relax\fi}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\underline}
-                   {Remove extra \xkanjiskip}%
+                   {LaTeX2e original}%
 \def\underline#1{%
   \relax
   \ifmmode\@@underline{#1}%
@@ -1895,7 +1903,7 @@ of this package available from CTAN}
 \fi
 \plEndIncludeInRelease
 \plIncludeInRelease{2015/01/01}%
-                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+                   {\e@alloc@chardef}{LaTeX2e original}%
 \ifx\widowpenalties\@undefined
   \mathchardef\e@alloc@top=255
   \let\e@alloc@chardef\chardef
@@ -1905,7 +1913,7 @@ of this package available from CTAN}
 \fi
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}%
-                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+                   {\e@alloc@chardef}{LaTeX2e original}%
 \let\e@alloc@top\@undefined
 \let\e@alloc@chardef\@undefined
 \plEndIncludeInRelease
@@ -1918,11 +1926,11 @@ of this package available from CTAN}
 \fi
 \plEndIncludeInRelease
 \plIncludeInRelease{2015/01/01}%
-                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+                   {\e@mathgroup@top}{LaTeX2e original}%
 \chardef\e@mathgroup@top=16
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}%
-                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+                   {\e@mathgroup@top}{LaTeX2e original}%
 \let\e@mathgroup@top\@undefined
 \plEndIncludeInRelease
 \endinput

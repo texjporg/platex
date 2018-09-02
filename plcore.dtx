@@ -95,13 +95,14 @@
 % \changes{v1.2z}{2018/05/13}{コマンドに分離、さらに
 %    bleed幅を\cs{@tombowbleed}に切り出し}
 % \changes{v1.2z}{2018/05/13}{\cs{@tombowreset@@paper}コマンドに分離}
+% \changes{v1.3}{2018/09/02}{\file{platexrelease}バグ修正}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2018/05/13 v1.2z pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2018/09/02 v1.3 pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -360,7 +361,7 @@
 %    効かない場合があったので、元に戻した}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2017/10/28}{\@no@lnbk}
-%<platexrelease>                   {Break before prebreakpenalty}%
+%<platexrelease>                   {Break before prebreakpenalty (revert)}%
 %<platexrelease>\def\@no@lnbk #1[#2]{%
 %<platexrelease>  \ifvmode
 %<platexrelease>    \@nolnerr
@@ -375,7 +376,7 @@
 %<platexrelease>  \fi}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2017/07/29}{\@no@lnbk}
-%<platexrelease>                   {Break before prebreakpenalty}%
+%<platexrelease>                   {Break before prebreakpenalty (another)}%
 %<platexrelease>\def\@no@lnbk #1[#2]{%
 %<platexrelease>  \ifvmode
 %<platexrelease>    \@nolnerr
@@ -407,7 +408,7 @@
 %<platexrelease>  \fi}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@no@lnbk}
-%<platexrelease>                   {Break before prebreakpenalty}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\def\@no@lnbk #1[#2]{%
 %<platexrelease>  \ifvmode
 %<platexrelease>    \@nolnerr
@@ -456,7 +457,8 @@
 % このマクロが組み立てる部分の中心となります。
 % \file{ltoutput.dtx}で定義されているものです。
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2017/04/08}{\@makecol}{\@makecol}%
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\@makecol}
+%<platexrelease>                   {Take into account depth of footnote}%
 %<*plcore|platexrelease>
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%
@@ -467,10 +469,12 @@
 %    \end{macrocode}
 % オリジナルの\LaTeX{}は、トップフロート、本文、脚注、ボトムフロートの順番で
 % 出力します。一方p\LaTeX{}は、トップフロート、本文、ボトムフロート、脚注の
-% 順番で出力します。ところが、アスキー版のコードは順番を入れ替えるだけでなく、
+% 順番で出力します。
+% ところが、アスキー版のコードは順番を入れ替えるだけでなく、脚注のあるページの
 % 版面全体の垂直位置が（特に縦組で顕著に）ずれてしまっていました。
-% これは補正量|\dp\@outputbox|の取得が早すぎたためですので、コミュニティ版
-% p\LaTeX{}ではこの問題に対処してあります。結果的に、fnposパッケージ(yafoot)の
+% これは補正量|\dp\@outputbox|の取得を\emph{脚注挿入より前}に行っていたためで、
+% コミュニティ版p\LaTeX{}ではこの問題に対処してあります。
+% 結果的に、fnposパッケージ(yafoot)の
 % |\makeFNbottom|かつ|\makeFNbelow|な状態と完全に等価になりました。
 % \changes{v1.2l}{2017/02/25}{脚注とボトムフロートの順序を入れ替えたことで
 %    版面全体の垂直位置がずれていたのを修正(Issue 32)}
@@ -494,7 +498,7 @@
      \@makespecialcolbox
    \else
      \setbox\@outputbox \vbox to\@colht {%
-%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
        \@texttop
        \dimen@ \dp\@outputbox
        \unvbox \@outputbox
@@ -525,7 +529,8 @@
 }
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2016/09/03}{\@makecol}{\@makecol}%
+%<platexrelease>\plIncludeInRelease{2016/09/03}{\@makecol}
+%<platexrelease>                   {Avoid infinite loop}%
 %<platexrelease>\gdef\@makecol{%
 %<platexrelease>   \setbox\@outputbox\box\@cclv%
 %<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
@@ -535,7 +540,7 @@
 %<platexrelease>     \@makespecialcolbox
 %<platexrelease>   \else
 %<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
-%<platexrelease>%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+%<platexrelease>       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
 %<platexrelease>       \@texttop
 %<platexrelease>       \dimen@ \dp\@outputbox
 %<platexrelease>       \unvbox \@outputbox
@@ -555,7 +560,8 @@
 %<platexrelease>   \global \maxdepth \@maxdepth
 %<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2016/04/17}{\@makecol}{\@makecol}%
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\@makecol}
+%<platexrelease>                   {Adjust for \dp\@outputbox in tate mode}%
 %<platexrelease>\gdef\@makecol{%
 %<platexrelease>   \setbox\@outputbox\box\@cclv%
 %<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
@@ -565,7 +571,7 @@
 %<platexrelease>     \@makespecialcolbox
 %<platexrelease>   \else
 %<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
-%<platexrelease>%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+%<platexrelease>       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
 %<platexrelease>       \@texttop
 %<platexrelease>       \dimen@ \dp\@outputbox
 %<platexrelease>       \unvbox \@outputbox
@@ -585,7 +591,8 @@
 %<platexrelease>   \global \maxdepth \@maxdepth
 %<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\@makecol}{\@makecol}%
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@makecol}
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\gdef\@makecol{%
 %<platexrelease>   \setbox\@outputbox\box\@cclv%
 %<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
@@ -595,7 +602,7 @@
 %<platexrelease>     \@makespecialcolbox
 %<platexrelease>   \else
 %<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
-%<platexrelease>%       \boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+%<platexrelease>       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
 %<platexrelease>       \@texttop
 %<platexrelease>       \dimen@ \dp\@outputbox
 %<platexrelease>       \unvbox \@outputbox
@@ -937,7 +944,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\maketombowbox}
-%<platexrelease>                               {Use \@tombowbleed}%
+%<platexrelease>                               {ASCII Corporation original}%
 %<platexrelease>\def\maketombowbox{%
 %<platexrelease>  \setbox\@TL\hbox to\z@{\yoko\hss
 %<platexrelease>      \vrule width13mm height\@tombowwidth depth\z@
@@ -995,10 +1002,11 @@
 % \changes{v1.2z}{2018/05/13}{色の付いたテキストの途中で改ページすると
 %    トンボにも色が付く現象に対処、さらにトンボの色を\cs{@tombowcolor}へ・
 %    bleed幅を\cs{@tombowbleed}に切り出し}
+% \changes{v1.3}{2018/09/02}{\file{platexrelease}バグ修正}
 %    \begin{macrocode}
 %</plcore>
 %<platexrelease>\plIncludeInRelease{2018/05/20}{\@outputtombow}
-%                                  {Use \@tombowcolor and \@tombowbleed}%
+%<platexrelease>                   {Use \@tombowcolor and \@tombowbleed}%
 %<*plcore|platexrelease>
 \def\@outputtombow{%
   \iftombow
@@ -1025,7 +1033,8 @@
 }
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2016/04/17}{\@outputtombow}{\@outputtombow}%
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\@outputtombow}
+%<platexrelease>                   {Safe \boxmaxdepth}%
 %<platexrelease>\def\@outputtombow{%
 %<platexrelease>  \iftombow
 %<platexrelease>  \vbox to\z@{\kern-13mm\relax
@@ -1047,7 +1056,8 @@
 %<platexrelease>  \fi
 %<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\@outputtombow}{\@outputtombow}%
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@outputtombow}
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\def\@outputtombow{%
 %<platexrelease>  \iftombow
 %<platexrelease>  \vbox to\z@{\kern-13mm\relax
@@ -1311,7 +1321,7 @@
 %<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@outputpage}
-%<platexrelease>                   {Reset language for hyphenation}%
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\def\@outputpage{%
 %<platexrelease>\begingroup % the \endgroup is put in by \aftergroup
 %<platexrelease>  \iftdir
@@ -1408,7 +1418,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\AtBeginDvi}
-%<platexrelease>                   {Fix for incompatible direction}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\def \AtBeginDvi #1{%
 %<platexrelease>  \global \setbox \@begindvibox
 %<platexrelease>    \vbox{\unvbox \@begindvibox #1}%
@@ -1466,7 +1476,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@makefnmark}
-%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\renewcommand\@makefnmark{\hbox{%
 %<platexrelease>  \ifydir \@textsuperscript{\normalfont\@thefnmark}%
 %<platexrelease>  \else\hbox{\yoko\@textsuperscript{\normalfont\@thefnmark}}\fi}}
@@ -1522,7 +1532,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\footnote}
-%<platexrelease>                   {Append \inhibitglue in \footnotemark}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\def\footnote{\@ifnextchar[\@xfootnote{\stepcounter\@mpfn
 %<platexrelease>     \protected@xdef\@thefnmark{\thempfn}%
 %<platexrelease>     \@footnotemark\@footnotetext}}
@@ -1556,7 +1566,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\footnotetext}
-%<platexrelease>                   {Preserve penalty before \footnotetext}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\def\footnotetext{%
 %<platexrelease>     \@ifnextchar [\@xfootnotenext
 %<platexrelease>       {\protected@xdef\@thefnmark{\thempfn}%
@@ -1637,7 +1647,7 @@
 %<platexrelease>    \fi}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@footnotetext}
-%<platexrelease>                   {Allow break after \footnote}%
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\long\def\@footnotetext#1{%
 %<platexrelease>  \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
 %<platexrelease>  \insert\footins{\@tempa%
@@ -1703,7 +1713,7 @@
 %    \begin{macrocode}
 %</plcore>
 %<platexrelease>\plIncludeInRelease{2017/10/28}{\@setref}
-%<platexrelease>                   {Spacing after \ref in moving arguments}%
+%<platexrelease>                   {Space factor after \ref}%
 %<*plcore|platexrelease>
 \def\@setref#1#2#3{%
   \ifx#1\relax
@@ -1731,7 +1741,7 @@
 %<platexrelease>\let\@setref@\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@setref}
-%<platexrelease>                   {Spacing after \ref in moving arguments}%
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\def\@setref#1#2#3{%
 %<platexrelease>  \ifx#1\relax
 %<platexrelease>    \protect\G@refundefinedtrue
@@ -1803,7 +1813,7 @@
 %<platexrelease>\fi
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\verb}
-%<platexrelease>                   {Disable hyphenation in verb}%
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\if@compatibility\else
 %<platexrelease>\def\verb{\relax\ifmmode\hbox\else\leavevmode\fi
 %<platexrelease>  \bgroup
@@ -1841,7 +1851,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@startline}
-%<platexrelease>                   {Inhibit JFM glue at the beginning}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\gdef\@startline{%
 %<platexrelease>     \ifnum \@nxttabmar >\@hightab
 %<platexrelease>       \@badtab
@@ -1923,7 +1933,7 @@
 %    \begin{macrocode}
 %</plcore>
 %<platexrelease>\plIncludeInRelease{2018/03/09}{\@tabclassz}
-%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<platexrelease>                   {Inhibit JFM glue in tabular cells (better)}%
 %<*plcore|platexrelease>
 \ifx\removejfmglue\@undefined
 \def\@tabclassz{%
@@ -2003,7 +2013,7 @@
 %<platexrelease>      \fi}}}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2017/07/29}{\@tabclassz}
-%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<platexrelease>                   {Inhibit JFM glue in tabular cells (wrong)}%
 %<platexrelease>\def\@tabclassz{%
 %<platexrelease>  \ifcase\@lastchclass
 %<platexrelease>    \@acolampacol
@@ -2029,7 +2039,7 @@
 %<platexrelease>      \fi}}}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@tabclassz}
-%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\def\@tabclassz{%
 %<platexrelease>  \ifcase\@lastchclass
 %<platexrelease>    \@acolampacol
@@ -2075,7 +2085,7 @@
 % \changes{v1.2x}{2018/03/01}{セル最初の\cs{par}で空行が入らないようにした}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2018/03/09}{\@classv}
-%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<platexrelease>                   {Inhibit JFM glue in tabular cells (better)}%
 %<*plcore|platexrelease>
 \def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\pltx@next@inhibitglue\ignorespaces
 \@sharp\unskip\@endpbox}}
@@ -2087,7 +2097,7 @@
 %<platexrelease>\@sharp\unskip\@endpbox}}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@classv}
-%<platexrelease>                   {Inhibit JFM glue in tabular cells}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\ignorespaces
 %<platexrelease>\@sharp\@endpbox}}
 %<platexrelease>\plEndIncludeInRelease
@@ -2138,7 +2148,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@tabular}
-%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\def\@tabular{\leavevmode \hbox \bgroup $\let\@acol\@tabacol
 %<platexrelease>   \let\@classz\@tabclassz
 %<platexrelease>   \let\@classiv\@tabclassiv \let\\\@tabularcr\@tabarray}
@@ -2157,7 +2167,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\endtabular}
-%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\def\endtabular{\crcr\egroup\egroup $\egroup}
 %<platexrelease>\expandafter \let \csname endtabular*\endcsname = \endtabular
 %<platexrelease>\plEndIncludeInRelease
@@ -2194,7 +2204,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@iiiparbox}
-%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\let\@parboxto\@empty
 %<platexrelease>\long\def\@iiiparbox#1#2[#3]#4#5{%
 %<platexrelease>  \leavevmode
@@ -2232,7 +2242,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\underline}
-%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\def\underline#1{%
 %<platexrelease>  \relax
 %<platexrelease>  \ifmmode\@@underline{#1}%
@@ -2317,7 +2327,7 @@
 %<platexrelease>\fi
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2015/01/01}%
-%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+%<platexrelease>                   {\e@alloc@chardef}{LaTeX2e original}%
 %<platexrelease>\ifx\widowpenalties\@undefined
 %<platexrelease>  \mathchardef\e@alloc@top=255
 %<platexrelease>  \let\e@alloc@chardef\chardef
@@ -2327,7 +2337,7 @@
 %<platexrelease>\fi
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}%
-%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+%<platexrelease>                   {\e@alloc@chardef}{LaTeX2e original}%
 %<platexrelease>\let\e@alloc@top\@undefined
 %<platexrelease>\let\e@alloc@chardef\@undefined
 %<platexrelease>\plEndIncludeInRelease
@@ -2361,11 +2371,11 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2015/01/01}%
-%<platexrelease>                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+%<platexrelease>                   {\e@mathgroup@top}{LaTeX2e original}%
 %<platexrelease>\chardef\e@mathgroup@top=16
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}%
-%<platexrelease>                   {\e@mathgroup@top}{Extended Allocation (FAM256)}%
+%<platexrelease>                   {\e@mathgroup@top}{LaTeX2e original}%
 %<platexrelease>\let\e@mathgroup@top\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
