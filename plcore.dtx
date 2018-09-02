@@ -95,6 +95,7 @@
 % \changes{v1.2z}{2018/05/13}{コマンドに分離、さらに
 %    bleed幅を\cs{@tombowbleed}に切り出し}
 % \changes{v1.2z}{2018/05/13}{\cs{@tombowreset@@paper}コマンドに分離}
+% \changes{v1.3}{2018/09/02}{\cs{removejfmglue}の挙動を明文化}
 % \changes{v1.3}{2018/09/02}{\file{platexrelease}バグ修正}
 % \fi
 %
@@ -215,7 +216,19 @@
 % そこで、「最後のノードがJFMグルーであった場合にそれを削除する」という
 % ユーザ向け命令を定義します。この機能にはe-p\TeX{} 180226以降の
 % |\lastnodesubtype|プリミティブが必要です。
+% この命令はあくまで「\verb+\removejfmglue+の展開時点で
+% 既にp\TeX{}によって挿入完了しているJFMグルー」だけを
+% 削除し、「これから挿入されようとするJFMグルー」は抑制しません。例えば
+%\begin{verbatim}
+%   始）\removejfmglue 中）\relax\removejfmglue 終
+%\end{verbatim}
+% という入力からは
+% \begin{quote}
+% 始）\removejfmglue 中）\relax\removejfmglue 終
+% \end{quote}
+% が得られます（最初の\verb+\removejfmglue+は結果的に何もしていません）。
 % \changes{v1.2x}{2018/03/01}{JFMグルーノードを削除するマクロ追加}
+% \changes{v1.3}{2018/09/02}{\cs{removejfmglue}の挙動を明文化}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2018/03/09}%
 %<platexrelease>                   {\removejfmglue}{Macro added}%
