@@ -80,6 +80,7 @@
 % \changes{v1.0v}{2018/04/06}{最新のsource2eへの追随}
 % \changes{v1.0w}{2018/04/08}{安全のためフォーマット作成時の
 %    バナー表示をやめた}
+% \changes{v1.0x}{2018/09/03}{ドキュメントを更新}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -118,6 +119,7 @@
 % \changes{v1.0v}{2018/04/06}{Sync with the latest \file{source2e.tex}}
 % \changes{v1.0w}{2018/04/08}{Stop showing banner during
 %    format generation for safety}
+% \changes{v1.0x}{2018/09/03}{Update document.}
 %\fi
 % \fi
 %
@@ -125,7 +127,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2018/04/08 v1.0w pLaTeX document file]
+\ProvidesFile{platex.dtx}[2018/09/03 v1.0x pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -188,32 +190,29 @@
 % \changes{v1.0f}{2016/04/12}{ドキュメントを更新}
 % \changes{v1.0k}{2016/05/21}{変更履歴も出力するようにした}
 % \changes{v1.0q}{2017/11/29}{英語版ドキュメントを追加}
+% \changes{v1.0x}{2018/09/03}{ドキュメントを更新}
 %\else
 % \changes{v1.0f}{2016/04/12}{Update document.}
 % \changes{v1.0k}{2016/05/21}{Print also changes.}
 % \changes{v1.0q}{2017/11/29}{New English documentation added!}
+% \changes{v1.0x}{2018/09/03}{Update document.}
 %\fi
-% \begin{chuui}
 %\ifJAPANESE
+% \begin{chuui}
 % この文書では「コミュニティ版\pLaTeXe{}」について簡単に説明します。
 % 株式会社アスキー（現アスキー・メディアワークス
 % \footnote{アスキー日本語\TeX{}（\pTeX{}）、
 % \texttt{http://ascii.asciimw.jp/pb/ptex/}}）が配布している
 % \pLaTeXe{}（以下、アスキー版\pLaTeXe{}）とは異なる内容ですので、
 % 注意してください。
-%\else
-% This document provides a brief description of \pLaTeXe, the Japanese
-% extended version of \LaTeXe. The original version of
-% \pLaTeXe\ (`ASCII \pLaTeXe') was developed by ASCII MEDIA
-% WORKS\footnote{\texttt{http://ascii.asciimw.jp/pb/ptex/}}
-% (formerly ASCII CORPORATION) during 1995 and 2006.
-% The current version, which is now distributed in CTAN and
-% \TeX\ Live, is a forked version called
-% `\pLaTeXe\ Community Edition.'
-% It is now maintained by Japanese \TeX\ Development
-% Community\footnote{\texttt{https://texjp.org}}.
-%\fi
 % \end{chuui}
+%\else
+% \begin{chuui}[]
+% This document provides a brief description of \pLaTeXe, the Japanese
+% extended version of \LaTeXe. Current maintainer of
+% \pLaTeXe\ is Japanese \TeX\ Development Community.
+% \end{chuui}
+%\fi
 %
 %\ifJAPANESE
 % 2010年以降、アスキー\pTeX{}は、国際的に広く使われている\TeX\ Liveという
@@ -237,30 +236,36 @@
 % コミュニティ版：plnewsc*.pdf）を参照してください。また、
 % 実際の\pLaTeX{}のソースコードはpldoc.pdfで説明しています。
 %\else
-% \def\JLaTeX{\leavevmode\lower.5ex\hbox{J}\kern-.15em\LaTeXe}
+% \def\JLaTeX{\leavevmode\lower.5ex\hbox{J}\kern-.15em\LaTeX}
 % \pLaTeX\ is a Japanese \LaTeX\ format, which is adjusted/extended
 % to be more suitable for writing Japanese documents.
-% It requires \pTeX\ (\TeX\ engine with extensions for Japanese
-% typesetting; it is designed for high-quality Japanese book publishing,
-% and the `p' stands for `publishing'\footnote{There is another
-% old implementation of Japanese \LaTeX, called \JLaTeX\ (but
-% not includeded in \TeX\ Live). Also, MiK\TeX\ has another program
-% called `platex,' but it has nothing to do with our
-% Japanese \pLaTeX!}), and the developent of both \pTeX\ and
-% \pLaTeX\ was done by ASCII Corporation.
+% It requires \pTeX, a \TeX\ engine with extensions for
+% Japanese typesetting, which is designed for high-quality
+% Japanese book ``p''ublishing.\footnote{There is another
+% old implementation of Japanese \LaTeX, called
+% \JLaTeX\ (not available in \TeX\ Live).
+% Also, MiK\TeX\ has another program \texttt{platex}, but
+% it has nothing to do with our Japanese \pLaTeX!} The developent of
+% both \pTeX\ and \pLaTeX\ was done by ASCII Corporation (and its
+% successor ASCII Media Works\footnote{The \pTeX\ website:
+% \texttt{http://ascii.asciimw.jp/pb/ptex/} (closed in 2016).}),
+% so they are often refered to as ``ASCII \pTeX'' and ``ASCII \pLaTeX''
+% respectively.
 %
 % In 2010, ASCII \pTeX\ was incorporated into the
-% world-wide \TeX\ distribution `\TeX\ Live.' Since then, \pTeX\ has
+% world-wide \TeX\ distribution, \TeX\ Live. Since then, \pTeX\ has
 % been maintained/improved/changed along with \TeX\ Live sources.
-% In recent versions of \TeX\ Live and W32\TeX, the default engine of
-% \pLaTeX\ changed from original \pTeX\ to \epTeX\ (\pTeX\ with
-% \eTeX\ extension), and the original \LaTeX\ itself is also frequently
-% updated. On the other hand, \pLaTeX\ remained unchanged since 2006,
+% In recent versions of \TeX\ Live and W32\TeX\ (arround 2011),
+% the default engine of \pLaTeX\ changed from original \pTeX\ to
+% \epTeX\ (\pTeX\ with \eTeX\ extension).
+% Also, the original \LaTeX\ itself is also frequently updated.
+% On the other hand, \pLaTeX\ remained unchanged since 2006,
 % which resulted in some incompatibility and limitations.
 %
 % To follow these upstream changes, we (Japanese \TeX\ Development
-% Community) decided to fork ASCII \pLaTeX\ and distribute the
-% `community edition.' The development version is available from
+% Community\footnote{\texttt{https://texjp.org}}) decided to fork
+% ASCII \pLaTeX\ and distribute the ``community edition.''
+% The development version is available from
 % GitHub repository\footnote{\texttt{https://github.com/texjporg/platex}}.
 % The forked community edition is different from the original ASCII
 % edition, so any bug reports and requests should be sent to
@@ -291,6 +296,10 @@
 %
 % \LaTeX{}の機能については、\cite{latex-book2}や\cite{latex-comp}などを
 % 参照してください。新しい機能については\file{usrguide.tex}を参照してください。
+% \pLaTeX{}のコマンド一覧は「\pLaTeXe{}チートシート」(platexsheet.pdf) または
+% その\textsf{jsclasses}版 (platexsheet-jsclasses.pdf) が参考に
+% なるでしょう\footnote{両者のPDFとも、コマンドラインで
+% \texttt{texdoc -l platexcheat}を実行すると表示されます。}。
 % \changes{v1.0}{1995/05/08}{最初のバージョン}
 % \changes{v1.0a}{1995/08/25}{互換性について、\dst{}の使い方、参考文献を追加}
 % \changes{v1.0r}{2017/12/02}{英語の参考文献も追加}
