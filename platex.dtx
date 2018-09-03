@@ -81,6 +81,8 @@
 % \changes{v1.0w}{2018/04/08}{安全のためフォーマット作成時の
 %    バナー表示をやめた}
 % \changes{v1.0x}{2018/09/03}{ドキュメントを更新}
+% \changes{v1.0x}{2018/09/03}{platexcheatに言及}
+% \changes{v1.0x}{2018/09/03}{plautopatchに言及}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -120,6 +122,8 @@
 % \changes{v1.0w}{2018/04/08}{Stop showing banner during
 %    format generation for safety}
 % \changes{v1.0x}{2018/09/03}{Update document.}
+% \changes{v1.0x}{2018/09/03}{Mention platexcheat (Japanese only).}
+% \changes{v1.0x}{2018/09/03}{Mention plautopatch.}
 %\fi
 % \fi
 %
@@ -303,6 +307,7 @@
 % \changes{v1.0}{1995/05/08}{最初のバージョン}
 % \changes{v1.0a}{1995/08/25}{互換性について、\dst{}の使い方、参考文献を追加}
 % \changes{v1.0r}{2017/12/02}{英語の参考文献も追加}
+% \changes{v1.0x}{2018/09/03}{platexcheatに言及}
 %\else
 % \section{Introduction to this document}\label{platex:intro}
 % This document briefly describes \pLaTeXe, but is not a manual of \pLaTeXe.
@@ -319,6 +324,7 @@
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
 %    and `References'}
 % \changes{v1.0r}{2017/12/02}{English references added}
+% \changes{v1.0x}{2018/09/03}{Mention platexcheat (Japanese only).}
 %\fi
 %
 %\ifJAPANESE
@@ -848,6 +854,12 @@
 % うまく動くかどうかを、完全に確かめる方法は残念ながらありません。
 % 一番簡単なのは、動かしてみることです。不幸にもうまく動かない場合は、
 % ログファイルや付属の文書ファイルを参考に原因を調べてください。
+%
+% なお、いくつかの\LaTeX{}パッケージについては、\pLaTeX{}向けの
+% パッチが用意されています。その一覧は、
+% \texttt{plautopatch}パッケージ（Hironobu Yamashita作）の
+% ドキュメント（日本語版はplautopatch-ja.pdf）に記載されています。
+% \changes{v1.0x}{2018/09/03}{plautopatchに言及}
 %\else
 % \section{Compatibility with Other Formats and Older Versions}
 % \label{platex:compatibility}
@@ -867,6 +879,12 @@
 % We cannot tell whether a class or a package works fine with
 % \pLaTeXe\ beforehand; the easiest way is to try to use it.
 % If it fails, please refer to the log file or a package manual.
+%
+% Some \LaTeX\ packages are known to be incompatible with \pLaTeX.
+% For those packages, \pLaTeX-specific patches might be available.
+% Please refer to the documentation of the \texttt{plautopatch}
+% package (by Hironobu Yamashita).
+% \changes{v1.0x}{2018/09/03}{Mention plautopatch.}
 %\fi
 %
 %\ifJAPANESE
