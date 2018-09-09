@@ -15,7 +15,7 @@
 %% File: plext.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plext}
-   [2017/07/21 v1.2h pLaTeX package file (community edition)]
+   [2018/09/09 v1.2i pLaTeX package file (community edition)]
 \newif\if@rotsw
 \def\array{\let\@acol\@arrayacol \let\@classz\@arrayclassz
   \let\@classiv\@arrayclassiv
@@ -202,12 +202,21 @@
   \@ifnextchar[{\@iilayoutcaption}{\relax}}
 \def\@iilayoutcaption[#1#2]{%
   \def\caption@posa{#1}\def\caption@posb{#2}}
-\def\pcaption{\refstepcounter\@captype \@dblarg{\@pcaption\@captype}}
+\def\pcaption{%
+   \ifx\@captype\@undefined
+     \@latex@error{\noexpand\pcaption outside float}\@ehd
+     \expandafter\@gobble
+   \else
+     \refstepcounter\@captype
+     \expandafter\@firstofone
+   \fi
+   {\@dblarg{\@pcaption\@captype}}%
+}
 \long\def\@pcaption#1[#2]#3{%
   \addcontentsline{\csname ext@#1\endcsname}{#1}{%
     \protect\numberline{\csname the#1\endcsname}{\ignorespaces#2}}%
   \ifvoid\@floatbox
-     \latex@error{Use with `\protect\layoutfloat'.}\@eha
+     \@latex@error{Use \noexpand\pcaption with `\string\layoutfloat'}\@eha
   \fi
   \make@pcaptionbox{#3}%
   \@pboxswfalse

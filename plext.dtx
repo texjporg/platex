@@ -60,6 +60,8 @@
 % \changes{v1.2g}{2017/05/04}{Use \cs{setlength}, so that
 %           calc extensions apply}
 % \changes{v1.2h}{2017/07/21}{表と周囲との揃え位置をさらに修正}
+% \changes{v1.2i}{2018/09/09}{Made caption an error outside a float: latex/2815
+%    (sync with ltfloat 1999/04/19 v1.1u)}
 % \fi
 %
 % \iffalse
@@ -68,7 +70,7 @@
 \ProvidesFile{plext.dtx}
 %</driver>
 %<package>\ProvidesPackage{plext}
-   [2017/07/21 v1.2h pLaTeX package file (community edition)]
+   [2018/09/09 v1.2i pLaTeX package file (community edition)]
 %<*driver>
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -586,14 +588,25 @@
 % 指定をします。位置の指定は|\layoutcaption|コマンドで行ないます。
 % |\layoutcaption|コマンドが省略された場合は、|\DeclareLayoutCaption|コマンド
 % で設定されているデフォルト値が使われます。
+% \changes{v1.2i}{2018/09/09}{Made caption an error outside a float: latex/2815
+%    (sync with ltfloat 1999/04/19 v1.1u)}
 %    \begin{macrocode}
-\def\pcaption{\refstepcounter\@captype \@dblarg{\@pcaption\@captype}}
+\def\pcaption{%
+   \ifx\@captype\@undefined
+     \@latex@error{\noexpand\pcaption outside float}\@ehd
+     \expandafter\@gobble
+   \else
+     \refstepcounter\@captype
+     \expandafter\@firstofone
+   \fi
+   {\@dblarg{\@pcaption\@captype}}%
+}
 %
 \long\def\@pcaption#1[#2]#3{%
   \addcontentsline{\csname ext@#1\endcsname}{#1}{%
     \protect\numberline{\csname the#1\endcsname}{\ignorespaces#2}}%
   \ifvoid\@floatbox
-     \latex@error{Use with `\protect\layoutfloat'.}\@eha
+     \@latex@error{Use \noexpand\pcaption with `\string\layoutfloat'}\@eha
   \fi
   \make@pcaptionbox{#3}%
   \@pboxswfalse
