@@ -35,7 +35,10 @@
    \let\@classiv\@tabclassiv \let\\\@tabularcr\p@tabarray<#1>}
 \def\p@tabarray<#1>{\m@th\@ifnextchar[%]
    {\p@array<#1>}{\p@array<#1>[c]}}
-\def\p@array<#1>[#2]#3{\setbox\@arstrutbox\hbox{%
+\def\p@array<#1>[#2]#3{%
+  \fork@array@option<#1>[#2]\@begin@alignbox
+  \bgroup\box@dir\adjustbaseline
+  \setbox\@arstrutbox\hbox{%
   \iftdir
     \if #1y\relax\yoko
        \vrule\@height\arraystretch\ht\strutbox
@@ -56,15 +59,16 @@
              \@depth\arraystretch\dp\strutbox \@width\z@
     \fi
   \fi}%
-  \fork@array@option<#1>[#2]%
   \@mkpream{#3}\edef\@preamble{\ialign \noexpand\@halignto
   \bgroup \tabskip\z@skip \@arstrut \@preamble \tabskip\z@skip \cr}%
   \let\@startpbox\@@startpbox \let\@endpbox\@@endpbox
   \let\tabularnewline\\%
-  \@begin@alignbox\bgroup\box@dir\adjustbaseline
     \let\par\@empty
-    \let\@sharp##\let\protect\relax
-    \lineskip\z@skip\baselineskip\z@skip\@preamble}
+    \let\@sharp##%
+    \set@typeset@protect
+    \lineskip\z@skip\baselineskip\z@skip
+    \ifhmode \@preamerr\z@ \@@par\fi
+    \@preamble}
 \def\endarray{\crcr\egroup\egroup\@end@alignbox}
 \def\endtabular{\crcr\egroup\egroup\@end@alignbox $\egroup\null}
 \expandafter \let \csname endtabular*\endcsname = \endtabular

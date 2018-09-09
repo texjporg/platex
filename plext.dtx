@@ -63,6 +63,15 @@
 % \changes{v1.2i}{2018/09/09}{Made caption an error outside a float: latex/2815
 %    (sync with ltfloat 1999/04/19 v1.1u)}
 % \changes{v1.2i}{2018/09/09}{縦数式ディレクションの連数字}
+% \changes{v1.2i}{2018/09/09}{Moved the code associated with
+%    \cs{@mkpream} into the group provided by the box,
+%    for robustness (latex/2183)
+%    (sync with lttab.dtx 1996/10/21 v1.1i)}
+% \changes{v1.2i}{2018/09/09}{Use \cs{set@typeset@protect}
+%    (sync with lttab.dtx 1996/10/21 v1.1i)}
+% \changes{v1.2i}{2018/09/09}{Check for hmode to see if something
+%     went wrong during parsing (pr/2884)
+%    (sync with lttab.dtx 1998/11/13 v1.1m)}
 % \fi
 %
 % \iffalse
@@ -235,11 +244,19 @@
 %
 % \begin{macro}{\p@array}
 % tabular環境とarray環境の内部形式です。
+% \changes{v1.1c}{1995/09/11}{Add \cs{adjustbaseline}.}
 % \changes{v1.1d}{1995/11/10}{\cs{@array} to \cs{p@array}}
 % \changes{v1.2a}{2016/08/20}{横組で\texttt{<t>}を指定した場合に
 %    \cs{@arstrutbox}を余計に\cs{hbox}に入れていたのを修正}
+% \changes{v1.2i}{2018/09/09}{Moved the code associated with
+%    \cs{@mkpream} into the group provided by the box,
+%    for robustness (latex/2183)
+%    (sync with lttab.dtx 1996/10/21 v1.1i)}
 %    \begin{macrocode}
-\def\p@array<#1>[#2]#3{\setbox\@arstrutbox\hbox{%
+\def\p@array<#1>[#2]#3{%
+  \fork@array@option<#1>[#2]\@begin@alignbox
+  \bgroup\box@dir\adjustbaseline
+  \setbox\@arstrutbox\hbox{%
   \iftdir
     \if #1y\relax\yoko
        \vrule\@height\arraystretch\ht\strutbox
@@ -260,18 +277,25 @@
              \@depth\arraystretch\dp\strutbox \@width\z@
     \fi
   \fi}%
-  \fork@array@option<#1>[#2]%
   \@mkpream{#3}\edef\@preamble{\ialign \noexpand\@halignto
   \bgroup \tabskip\z@skip \@arstrut \@preamble \tabskip\z@skip \cr}%
   \let\@startpbox\@@startpbox \let\@endpbox\@@endpbox
   \let\tabularnewline\\%
 %    \end{macrocode}
-% \changes{v1.1c}{1995/09/11}{Add \cs{adjustbaseline}.}
+% \changes{v1.2i}{2018/09/09}{Use \cs{set@typeset@protect}
+%    (sync with lttab.dtx 1996/10/21 v1.1i)}
 %    \begin{macrocode}
-  \@begin@alignbox\bgroup\box@dir\adjustbaseline
     \let\par\@empty
-    \let\@sharp##\let\protect\relax
-    \lineskip\z@skip\baselineskip\z@skip\@preamble}
+    \let\@sharp##%
+    \set@typeset@protect
+    \lineskip\z@skip\baselineskip\z@skip
+%    \end{macrocode}
+% \changes{v1.2i}{2018/09/09}{Check for hmode to see if something
+%     went wrong during parsing (pr/2884)
+%    (sync with lttab.dtx 1998/11/13 v1.1m)}
+%    \begin{macrocode}
+    \ifhmode \@preamerr\z@ \@@par\fi
+    \@preamble}
 %    \end{macrocode}
 % \end{macro}
 %
