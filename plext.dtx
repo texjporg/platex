@@ -62,6 +62,7 @@
 % \changes{v1.2h}{2017/07/21}{表と周囲との揃え位置をさらに修正}
 % \changes{v1.2i}{2018/09/09}{Made caption an error outside a float: latex/2815
 %    (sync with ltfloat 1999/04/19 v1.1u)}
+% \changes{v1.2i}{2018/09/09}{縦数式ディレクションの連数字}
 % \fi
 %
 % \iffalse
@@ -1240,13 +1241,14 @@
 % |\@@rensuji|が|\rensuji|の内部形式です。
 % \changes{v1.2b}{2016/11/07}{横組で段落の頭に\cs{rensuji}を使える
 %    ように\cs{leavevmode}を追加して修正}
+% \changes{v1.2i}{2018/09/09}{縦数式ディレクションの連数字}
 %    \begin{macrocode}
 \DeclareRobustCommand\rensuji{%
   \@ifstar{\not@advancelinetrue\@rensuji}{\@rensuji}}
 \def\@rensuji{\@ifnextchar[{\@@rensuji}{\@@rensuji[c]}}
 \def\@@rensuji[#1]#2{%
   \ifvmode\leavevmode\fi
-  \ifydir\hbox{#2}\else
+ \iftdir\ifmdir\hbox{#2}\else
   \hskip\rensujiskip
   \ifnot@advanceline\not@advancelinefalse\else
     \setbox\z@\hbox{\yoko#2}%
@@ -1261,7 +1263,8 @@
   \else\vtop{\hbox to1zw{\yoko#2\hss}}%
   \fi\fi
   \hskip\rensujiskip
-\fi}
+ \fi\else\hbox{#2}\fi
+}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}

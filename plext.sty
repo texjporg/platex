@@ -509,7 +509,7 @@
 \def\@rensuji{\@ifnextchar[{\@@rensuji}{\@@rensuji[c]}}
 \def\@@rensuji[#1]#2{%
   \ifvmode\leavevmode\fi
-  \ifydir\hbox{#2}\else
+ \iftdir\ifmdir\hbox{#2}\else
   \hskip\rensujiskip
   \ifnot@advanceline\not@advancelinefalse\else
     \setbox\z@\hbox{\yoko#2}%
@@ -524,7 +524,8 @@
   \else\vtop{\hbox to1zw{\yoko#2\hss}}%
   \fi\fi
   \hskip\rensujiskip
-\fi}
+ \fi\else\hbox{#2}\fi
+}
 \let\Rensuji\rensuji
 \let\prensuji\rensuji
 \def\Kanji#1{\expandafter\@Kanji\csname c@#1\endcsname}
