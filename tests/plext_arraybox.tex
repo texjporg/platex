@@ -1,0 +1,26 @@
+%% bug: latex/2183
+% \changes{v1.1i}{1996/10/21}{Moved the code associated with
+% \cs{@mkpream} into the group provided by the box, for robustness
+% (latex/2183)}
+\documentclass[11pt]{tarticle}
+\usepackage{amsmath}
+\begin{document}
+
+\makeatletter
+\newenvironment{mycase}{%
+  \left.\def\arraystretch{1.2}%
+    \array{@{}l@{\quad}l@{}}%
+}{%
+  \endarray\right\}%
+}
+\makeatother
+
+\begin{equation}
+\begin{mycase}
+  x=0 \\
+  y=1/x
+\end{mycase} \text{peculiar equation system}
+% => should NOT throw "Missing delimiter (. inserted)."
+\end{equation}
+
+\end{document}

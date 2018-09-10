@@ -1,0 +1,10 @@
+%% bug: latex/2884
+% \changes{v1.1m}{1998/11/13}{Check for hmode to see if something
+%     went wrong during parsing (pr/2884)}
+\documentclass{tarticle}
+\begin{document}
+\begin{tabular}{l|l{11.5cm}}
+% => should throw "LaTeX Error:  Illegal character in array arg."
+%    instead of actually typesetting ".5cm"
+\end{tabular}
+\end{document}
