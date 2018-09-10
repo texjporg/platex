@@ -182,11 +182,11 @@
     }\hrule width\floatwidth height\floatruletick depth\z@}}
 \def\DeclareLayoutCaption#1<#2>(#3)[#4#5]{%
   \expandafter
-  \ifx\csname #1@layoutcaption\endcsname\relax \else
+  \ifx\csname #1@layoutc@ption\endcsname\relax \else
     \@latex@info{Redeclaring capiton layout setting of '#1'}%
   \fi
   \expandafter
-  \gdef\csname #1@layoutcaption\endcsname{%
+  \gdef\csname #1@layoutc@ption\endcsname{%
      \if Z\caption@dir\def\caption@dir{#2}\fi
      \ifdim\captionwidth=\z@ \captionwidth=#3\relax\fi
      \if Z\caption@posa\def\caption@posa{#4}\fi
@@ -238,12 +238,12 @@
   \box\@tempboxa}
 \def\make@pcaptionbox#1{%
   \expandafter
-  \ifx\csname\@captype @layoutcaption\endcsname\relax
+  \ifx\csname\@captype @layoutc@ption\endcsname\relax
      \@latex@warning{Default caption layout of `\@captype' unknown.}%
        \def\caption@dir{Z}\captionwidth\z@
        \def\caption@posa{Z}\def\caption@posb{Z}%
   \else
-     \csname \@captype @layoutcaption\endcsname
+     \csname \@captype @layoutc@ption\endcsname
   \fi
   \@rotswfalse \@tempswafalse
   \iftdir\if y\caption@dir \let\captiondir\yoko \@tempswatrue
