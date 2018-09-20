@@ -15,19 +15,19 @@
 %% File: plext.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plext}
-   [2018/09/09 v1.2i pLaTeX package file (community edition)]
+   [2018/09/20 v1.2j pLaTeX package file (community edition)]
 \newif\if@rotsw
 \def\array{\let\@acol\@arrayacol \let\@classz\@arrayclassz
   \let\@classiv\@arrayclassiv
   \let\\\@arraycr\let\@halignto\@empty\X@tabarray}
 \def\tabular{\let\@halignto\@empty\X@tabular}
 \@namedef{tabular*}{\@ifnextchar<%>
-   {\@stabular}{\@stabular<Z>}}
+   {\p@stabular}{\p@stabular<Z>}}
 \def\X@tabarray{\@ifnextchar<%>
    {\p@tabarray}{\p@tabarray<Z>}}
 \def\X@tabular{\@ifnextchar<%>
    {\p@tabular}{\p@tabular<Z>}}
-\def\@stabular<#1>#2{%
+\def\p@stabular<#1>#2{%
    \setlength\dimen@{#2}%
    \edef\@halignto{to\the\dimen@}\p@tabular<#1>}
 \def\p@tabular<#1>{\leavevmode \null\hbox \bgroup $\let\@acol\@tabacol

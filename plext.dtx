@@ -75,6 +75,8 @@
 % \changes{v1.2i}{2018/09/09}{安全のため、\cs{DeclareLayoutCaption}で
 %    定義する内部命令を\cs{...@layoutcaption}から
 %    \cs{...@layoutc@ption}へ変更}
+% \changes{v1.2j}{2018/09/20}{Change \cs{@stabular} to \cs{p@stabular},
+%           to avoid conflict with \textsf{stabular} package}
 % \fi
 %
 % \iffalse
@@ -83,7 +85,7 @@
 \ProvidesFile{plext.dtx}
 %</driver>
 %<package>\ProvidesPackage{plext}
-   [2018/09/09 v1.2i pLaTeX package file (community edition)]
+   [2018/09/20 v1.2j pLaTeX package file (community edition)]
 %<*driver>
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -197,7 +199,7 @@
 %
 \def\tabular{\let\@halignto\@empty\X@tabular}
 \@namedef{tabular*}{\@ifnextchar<%>
-   {\@stabular}{\@stabular<Z>}}
+   {\p@stabular}{\p@stabular<Z>}}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -218,15 +220,17 @@
 % \end{macro}
 % \end{macro}
 %
-% \begin{macro}{\@stabular}
+% \begin{macro}{\p@stabular}
 % \begin{macro}{\p@tabular}
 % アスタリスク形式の場合は、組方向オプションの後ろに幅を指定します。
 % \changes{v1.1d}{1995/11/10}{\cs{@tabular} to \cs{p@tabular}}
 % \changes{v1.2a}{2016/08/20}{tabular環境前の余分な\cs{xkanjiskip}を削除}
 % \changes{v1.2c}{2016/11/19}{Use \cs{setlength}, so that
 %           calc extensions apply (sync with lttab.dtx v1.1j)}
+% \changes{v1.2j}{2018/09/20}{Change \cs{@stabular} to \cs{p@stabular},
+%           to avoid conflict with \textsf{stabular} package}
 %    \begin{macrocode}
-\def\@stabular<#1>#2{%
+\def\p@stabular<#1>#2{%
    \setlength\dimen@{#2}%
    \edef\@halignto{to\the\dimen@}\p@tabular<#1>}
 \def\p@tabular<#1>{\leavevmode \null\hbox \bgroup $\let\@acol\@tabacol
