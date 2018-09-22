@@ -83,6 +83,7 @@
 % \changes{v1.0x}{2018/09/03}{ドキュメントを更新}
 % \changes{v1.0x}{2018/09/03}{platexcheatに言及}
 % \changes{v1.0x}{2018/09/03}{plautopatchに言及}
+% \changes{v1.0y}{2018/09/22}{最終更新日を\file{pldoc.pdf}に表示}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -124,6 +125,7 @@
 % \changes{v1.0x}{2018/09/03}{Update document.}
 % \changes{v1.0x}{2018/09/03}{Mention platexcheat (Japanese only).}
 % \changes{v1.0x}{2018/09/03}{Mention plautopatch.}
+% \changes{v1.0y}{2018/09/22}{Show last update info on \file{pldoc.pdf}}
 %\fi
 % \fi
 %
@@ -131,7 +133,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2018/09/03 v1.0x pLaTeX document file]
+\ProvidesFile{platex.dtx}[2018/09/22 v1.0y pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -1202,20 +1204,21 @@ all others indicate the places where it is used.}
 \settowidth\MacroIndent{\ttfamily\scriptsize 000\ }
 %    \end{macrocode}
 %\ifJAPANESE
-% ここからが本文ページとなります。
+% この文書のタイトル・著者・日付を設定します。
 % \changes{v1.0c}{1997/01/29}{\file{pltpatch.ltx}を\file{plpatch.ltx}に名称変更}
 % \changes{v1.0h}{2016/05/08}{ドキュメントから\file{plpatch.ltx}を除外}
 % \changes{v1.0l}{2016/06/19}{パッチレベルを\file{plvers.dtx}から取得}
 % \changes{v1.0o}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
+% \changes{v1.0y}{2018/09/22}{最終更新日を\file{pldoc.pdf}に表示}
 %\else
-% Here starts the document body.
+% Set the title, authors and the date for this document.
 % \changes{v1.0c}{1997/01/29}{Rename \file{pltpatch.ltx} to \file{plpatch.ltx}.}
 % \changes{v1.0h}{2016/05/08}{Exclude \file{plpatch.ltx} from the document}
 % \changes{v1.0l}{2016/06/19}{Get the patch level from \file{plvers.dtx}}
 % \changes{v1.0o}{2017/09/24}{Allow negative patch level for pre-release}
+% \changes{v1.0y}{2018/09/22}{Show last update info on \file{pldoc.pdf}}
 %\fi
 %    \begin{macrocode}
-\begin{document}
  \title{The \pLaTeXe\ Sources}
  \author{Ken Nakano \& Japanese \TeX\ Development Community}
 
@@ -1237,8 +1240,39 @@ all others indicate the places where it is used.}
 \else
   \edef\@date{\@date\space Pre-Release\patchdate}
 \fi\fi
-\makeatother
 
+% Add the last update info, in case formate date unchanged
+% Note: \@ifl@t@r can be used only in preamble.
+\def\lastupd@te{0000/00/00}
+\begingroup
+   \def\ProvidesFile#1[#2 #3]{%
+      \def\@tempd@te{#2}\endinput
+      \@ifl@t@r{\@tempd@te}{\lastupd@te}{%
+         \global\let\lastupd@te\@tempd@te
+      }{}}
+   \let\ProvidesClass\ProvidesFile
+   \let\ProvidesPackage\ProvidesFile
+   \input{plvers.dtx}
+   \input{plfonts.dtx}
+   \input{plcore.dtx}
+   \input{plext.dtx}
+   \input{pl209.dtx}
+   \input{kinsoku.dtx}
+   \input{jclasses.dtx}
+   \input{jltxdoc.cls}
+\endgroup
+\@ifl@t@r{\lastupd@te}{\pfmtversion}{%
+  \edef\@date{\@date\break (last updated: \lastupd@te)}%
+}{}
+\makeatother
+%    \end{macrocode}
+%\ifJAPANESE
+% ここからが本文ページとなります。
+%\else
+% Here starts the document body.
+%\fi
+%    \begin{macrocode}
+\begin{document}
 \pagenumbering{roman}
 \maketitle
 \renewcommand\maketitle{}
