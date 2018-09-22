@@ -228,12 +228,13 @@
     \if l\caption@posb\box\@captionbox\kern\captionfloatsep\fi
     \if t\caption@posa\vtop
     \else\if b\caption@posa\vbox
-    \else\ifmmode\vcenter \else\@pboxswtrue $\vcenter \fi\fi\fi
+    \else\@pboxswtrue $\vcenter \fi\fi
     {\if u\caption@posb\box\@captionbox\kern\captionfloatsep\fi
      \unvbox\@floatbox
      \if d\caption@posb\kern\captionfloatsep\box\@captionbox\fi}%
+    \if@pboxsw \m@th$\fi
     \if r\caption@posb\kern\captionfloatsep\box\@captionbox\fi
-    \if@pboxsw \m@th$\fi \if r\float@pos\else\hss\fi}}%
+    \if r\float@pos\else\hss\fi}}%
   \par\vskip.25\baselineskip
   \box\@tempboxa}
 \def\make@pcaptionbox#1{%
@@ -259,7 +260,7 @@
   \if@tempswa \@tempdima\ht0 \else\@tempdima\wd0 \fi
   \ifdim\@tempdima>\captionwidth \@tempdima\captionwidth \fi
   \@pboxswfalse
-  \setbox0\hbox{\if@rotsw\ifmmode\@rotswfalse \else $\fi\fi
+  \setbox0\hbox{\if@rotsw $\fi
     \if u\caption@posb\vbox
     \else\if d\caption@posb\vbox
     \else\if t\caption@posa\vtop

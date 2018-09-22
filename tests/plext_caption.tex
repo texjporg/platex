@@ -1,0 +1,30 @@
+\documentclass{tarticle}
+\usepackage{plext}
+\DeclareLayoutCaption{r}<z>(5zw)[tu]
+% => should NOT define \r@layoutcaption
+\DeclareLayoutCaption{X}<z>(5zw)[tu]
+% => should NOT redefine \X@layoutcaption
+\begin{document}
+
+%\pcaption{あああ}% => should be an explicit error
+
+\label{layoutcaption}% => define \r@layoutcaption
+
+\begin{figure}[htbp]
+\layoutfloat(5cm,3cm)[c]{\centering 図入る}
+\pcaption{とても長いキャプション---サブタイトルまで}
+\end{figure}
+
+\begin{figure}[htbp]
+\layoutfloat(5cm,3cm)[c]{\centering 図入る}
+\layoutcaption<z>(5zw)[tu]
+\pcaption{とても長いキャプション---サブタイトルまで}
+\end{figure}
+
+\begin{figure}[htbp]
+\layoutfloat(5cm,4cm)[c]{\centering 図入る}
+\layoutcaption<t>(5zw)[tr]
+\pcaption{とても長いキャプション---サブタイトルまで}
+\end{figure}
+
+\end{document}
