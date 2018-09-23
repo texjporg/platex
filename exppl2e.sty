@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2018/07/28 v1.0w Experimental pLaTeX2e features]
+                [2018/09/23 v1.1a Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -127,6 +127,7 @@
 % \section{改行}
 %
 % 強制改行|\\|と|\par|が連続した場合の挙動については以下のとおり保留中。
+% 参考：GitHub:texjporg/platex\#27
 %
 % \begin{macro}{\@gnewline}
 % \changes{v1.1c}{1995/08/25}{行頭禁則文字の直前での改行での不具合の修正}
@@ -209,6 +210,7 @@
 %
 % p\LaTeXe{}カーネル(2017/10/28)の修正に加え、以下の修正を検討中ですが、
 % 現時点では保留しています。
+% 参考：GitHub:texjporg/platex\#57
 %
 % \begin{macro}{\@setref@}
 % さらに、参照した結果が「空」の場合
@@ -219,7 +221,11 @@
 % \pageref{a}\label{a}
 % \end{document}
 %\end{verbatim}
-% に相互参照が収束しなくなるのを防ぐため、水平モード以外では
+% に相互参照が収束しなくなる\footnote{奇数回コンパイルすると
+% Output written on sheors.dvi (1 page, 212 bytes).
+% となり、偶数回コンパイルすると
+% No pages of output.
+% となります。}のを防ぐため、水平モード以外では
 % やはり|\null|を発行してみます。
 %    \begin{macrocode}
 %\def\@setref@{\ifhmode\spacefactor\@m\else\null\fi}
@@ -229,6 +235,38 @@
 % 「|\ref|を使って参照先の番号だけを取得する」
 % というマクロの動作に（垂直モードで使う場合など）影響するため、
 % ひとまずコメントアウトしておきます。
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \section{空のページ}
+%
+% 現時点では保留しています。
+% 参考：GitHub:texjporg/platex\#78
+%
+% \LaTeXe\ 2017/01/01以降では、例えば
+%\begin{verbatim}
+% \documentclass{tarticle}
+% \begin{document}
+% \begin{figure}
+% \end{figure}
+% \clearpage
+% a
+% \end{document}
+%\end{verbatim}
+% のようにすると「空のフロート」だけの空白ページを発生させることが
+% できます。この場合、縦組クラスを用いているとフッタが持ち上がります。
+%
+% なお、\LaTeXe\ 2015/01/01〜2016/03/31 patch level 3では
+%\begin{verbatim}
+%   ! Output loop---100 consecutive dead cycles.
+%\end{verbatim}
+% のエラーが出て、それ以前では空白ページは発生しません。
+%
+% フロートでない空白ページでページフッタが持ち上がる問題へは、
+% |\@makecol|の|\iftdir\vbox{\hskip\z@}\fi|で対処してありますが、
+% フロートがある空白ページでは|\@makecol|が呼ばれないことから
+% 対策が効いていません。ただ、フロートが空である状況は
+% 元々不自然なので、現在はサポートしていません。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
