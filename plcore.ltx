@@ -39,15 +39,13 @@
                    \the\everyjob % LaTeX banner and delayed codes
                    \noexpand\platexNILb}
 \begingroup
-  \def\parse@@BANNER\platexNILa#1\typeout#2#3\platexNILb{#1}
-  \toks0=\expandafter\expandafter\expandafter{%
-           \expandafter\parse@@BANNER\platexBANNER}
+  \def\platexNILa#1\typeout#2#3\platexNILb{#1}
+  \toks0=\expandafter\expandafter\expandafter{\platexBANNER}
   \global\everyjob\expandafter{\the\toks0}%
 \endgroup
 \begingroup
-  \def\parse@@BANNER\platexNILa#1\typeout#2#3\platexNILb{#2}
-  \toks0=\expandafter\expandafter\expandafter{%
-           \expandafter\parse@@BANNER\platexBANNER}
+  \def\platexNILa#1\typeout#2#3\platexNILb{#2}
+  \toks0=\expandafter\expandafter\expandafter{\platexBANNER}
   \ifnum\ppatch@level=0
     \toks2={\pfmtname\space<\pfmtversion>\space}%
   \else\ifnum\ppatch@level>0
@@ -60,9 +58,8 @@
   \global\everyjob\expandafter{\platexBANNER}%
 \endgroup
 \begingroup
-  \def\parse@@BANNER\platexNILa#1\typeout#2#3\platexNILb{#3}
-  \toks0=\expandafter\expandafter\expandafter{%
-           \expandafter\parse@@BANNER\platexBANNER}
+  \def\platexNILa#1\typeout#2#3\platexNILb{#3}
+  \toks0=\expandafter\expandafter\expandafter{\platexBANNER}
   \edef\platexBANNER{\the\everyjob \the\toks0}
   \global\everyjob\expandafter{\platexBANNER}%
 \endgroup
