@@ -15,7 +15,7 @@
 %% File: plext.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plext}
-   [2018/09/20 v1.2j pLaTeX package file (community edition)]
+   [2018/10/07 v1.2k pLaTeX package file (community edition)]
 \newif\if@rotsw
 \def\array{\let\@acol\@arrayacol \let\@classz\@arrayclassz
   \let\@classiv\@arrayclassiv
@@ -192,8 +192,8 @@
      \if Z\caption@posa\def\caption@posa{#4}\fi
      \if Z\caption@posb\def\caption@posb{#5}\fi}}
 \@onlypreamble\DeclareLayoutCaption
-\DeclareLayoutCaption{figure}<y>(.8\linewidth)[cd]
-\DeclareLayoutCaption{table}<y>(.8\linewidth)[cu]
+\DeclareLayoutCaption{figure}<n>(.8\linewidth)[cd]
+\DeclareLayoutCaption{table}<n>(.8\linewidth)[cu]
 \def\layoutcaption{\def\caption@dir{Z}\captionwidth\z@
   \def\caption@posa{Z}\def\caption@posb{Z}%
   \@ifnextchar<\X@layoutcaption{%
@@ -257,7 +257,8 @@
      \captionfontsetup\parindent\z@\inhibitglue
      \csname fnum@\@captype\endcsname\char\euc"A1A1\relax#1}%
   \if@rotsw \m@th$\fi}%
-  \if@tempswa \@tempdima\ht0 \else\@tempdima\wd0 \fi
+  \if@tempswa \@tempdima\ht0 \advance\@tempdima\dp0
+  \else \@tempdima\wd0 \fi
   \ifdim\@tempdima>\captionwidth \@tempdima\captionwidth \fi
   \@pboxswfalse
   \setbox0\hbox{\if@rotsw $\fi

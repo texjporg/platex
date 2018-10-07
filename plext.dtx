@@ -77,6 +77,10 @@
 %    \cs{...@layoutc@ption}へ変更}
 % \changes{v1.2j}{2018/09/20}{Change \cs{@stabular} to \cs{p@stabular},
 %           to avoid conflict with \textsf{stabular} package}
+% \changes{v1.2k}{2018/10/07}{キャプションのデフォルトの組方向をyからnへ
+%    変更 (forum:2506, issue~76)}
+% \changes{v1.2k}{2018/10/07}{キャプションの組み方向が基本組の組み方向と
+%    直交する場合に、深さを忘れていたバグ修正 (forum:2506, issue~76)}
 % \fi
 %
 % \iffalse
@@ -85,7 +89,7 @@
 \ProvidesFile{plext.dtx}
 %</driver>
 %<package>\ProvidesPackage{plext}
-   [2018/09/20 v1.2j pLaTeX package file (community edition)]
+   [2018/10/07 v1.2k pLaTeX package file (community edition)]
 %<*driver>
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -539,21 +543,26 @@
 % |\pcaption|コマンドでエラーが発せられます。
 % このコマンドはプリアンブルでのみ、使用できます。
 %
-% \DescribeMacro\DeclareLayoutCaption
 % |\DeclareLayoutCaption|\meta{type}^^A
 %         |<|\meta{dir}|>(|\meta{width}|)[|\meta{pos1}\meta{pos2}|]|
 %
 % コマンド引数を省略することはできません。
 % \meta{dir}には、`|y|', `|t|', `|z|', `|n|'のいずれかを指定します。
 % `|n|'と指定をすると、本文の組み方向と同じ方向でキャプションが組まれます。
-% これがデフォルトです。
+% これがデフォルトです。（補足：2018/09/20 v1.2jまでは、この説明に反して
+% 実際のコードは`|y|'がデフォルトになっており、
+% 「日本語\LaTeXe{}ブック」にも`|y|'と書かれていましたが、
+% 後述の★のバグ修正に合わせ、2018/10/07 v1.2kで`|n|'に直しました。）
 %
 % \meta{width}には、キャプションを折り返す長さを指定します。
 % `|(12zw)|'と指定をすると、漢字12文字分の長さで折り返されます。
-% `|(\floatwidth)|'と指定をすると、
-% キャプションの幅はフロートオブジェクトの幅となります。
-% これがデフォルトです。なお、`|(\floatheight)|'と指定をすると、
-% キャプションの幅はフロートオブジェクトの高さとなります。
+% デフォルトは|(.8\linewidth)|です。
+% ^^A （補足：2018/09/20 v1.2jまでは、ここの説明文だけ
+% ^^A   `|(\floatwidth)|'がデフォルトと書かれていましたが、
+% ^^A   実際のコード及び「日本語\LaTeXe{}ブック」に合わせました。）
+% なお、キャプションの幅をフロートオブジェクトの幅に合わせる場合は
+% `|(\floatwidth)|'と指定し、高さに合わせる場合は`|(\floatheight)|'と
+% 指定します。
 %
 % \meta{pos1}と\meta{pos2}には、キャプションを出力する位置を指定します。
 % \meta{pos1}は、`|c|', `|t|', `|b|'のいずれかです。
@@ -577,9 +586,11 @@
 \@onlypreamble\DeclareLayoutCaption
 %    \end{macrocode}
 % \changes{v1.0h}{1996/03/13}{キャプション出力位置の初期値を設定}
+% \changes{v1.2k}{2018/10/07}{キャプションのデフォルトの組方向をyからnへ
+%    変更 (forum:2506, issue~76)}
 %    \begin{macrocode}
-\DeclareLayoutCaption{figure}<y>(.8\linewidth)[cd]
-\DeclareLayoutCaption{table}<y>(.8\linewidth)[cu]
+\DeclareLayoutCaption{figure}<n>(.8\linewidth)[cd]
+\DeclareLayoutCaption{table}<n>(.8\linewidth)[cu]
 %    \end{macrocode}
 % \end{macro}
 %
@@ -707,11 +718,23 @@
 %
 % キャプションを折り返さなくてもよい場合、|\@tempdima|をキャプションの長さに
 % します。ただし、キャプションの組み方向が基本組の組み方向と異なる場合
-% （|\@tempswa|が真）は、ボックス０の幅ではなく、高さに設定をします。
+% （|\@tempswa|が真）は、ボックス0の幅ではなく、高さに設定をします
+% （p\TeX{}では同じボックスでも、組方向によって |\wd| と |\ht|+|\wd| の
+% 返す寸法が異なることに注意）。
 % |\captionwidth|の値が、キャプションの幅よりも長い場合、
 % 折り返さなくてはなりませんので、|\@tempdima|を|\captionwidth|にします。
+%
+% \noindent\emph{日本語\TeX{}開発コミュニティによる修正}：
+% 2018/09/20 v1.2jまでは、キャプションの組方向が基本組の組み方向と
+% 直交する場合に深さを考慮するのを忘れていたために、
+% 本来は折り返さずに済むはずの短いキャプションが、必ず折り返されて
+% しまうというバグ（★）がありました。2018/10/07 v1.2kでこのバグを
+% 修正したため、組版結果が大きく変わる場合があります。
+% \changes{v1.2k}{2018/10/07}{キャプションの組み方向が基本組の組み方向と
+%    直交する場合に、深さを忘れていたバグ修正 (forum:2506, issue~76)}
 %    \begin{macrocode}
-  \if@tempswa \@tempdima\ht0 \else\@tempdima\wd0 \fi
+  \if@tempswa \@tempdima\ht0 \advance\@tempdima\dp0
+  \else \@tempdima\wd0 \fi
   \ifdim\@tempdima>\captionwidth \@tempdima\captionwidth \fi
   \@pboxswfalse
   \setbox0\hbox{\if@rotsw $\fi

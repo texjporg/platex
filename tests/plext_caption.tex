@@ -10,6 +10,28 @@
 
 \label{layoutcaption}% => define \r@layoutcaption
 
+\begin{figure}
+\layoutfloat(180pt,300pt){一応，図です一応，図です一応，図です}
+\layoutcaption<y>(\floatheight)[cr]
+\pcaption{とても長いキャプション---サブタイトルまで}
+\end{figure}
+
+\begin{figure}
+\layoutfloat(180pt,300pt){一応，図です一応，図です一応，図です}
+\pcaption{とても長いキャプション---サブタイトルまで}
+\end{figure}
+
+\begin{figure}
+\layoutfloat(180pt,300pt){一応，図です一応，図です一応，図です}
+\layoutcaption(\floatheight)[cr]
+\pcaption{あれれれれ}
+\end{figure}
+
+\begin{figure}
+\layoutfloat(180pt,30pt){一応，図です一応，図です一応，図です}
+\pcaption{あれれれれ}
+\end{figure}
+
 \begin{figure}[htbp]
 \layoutfloat(5cm,3cm)[c]{\centering 図入る}
 \pcaption{とても長いキャプション---サブタイトルまで}
@@ -17,7 +39,7 @@
 
 \begin{figure}[htbp]
 \layoutfloat(5cm,3cm)[c]{\centering 図入る}
-\layoutcaption<z>(5zw)[tu]
+\layoutcaption<z>(7zw)[tu]
 \pcaption{とても長いキャプション---サブタイトルまで}
 \end{figure}
 
