@@ -95,6 +95,8 @@
 % \changes{v1.7g}{2017/09/19}{内部処理で使ったボックス0を空にした}
 % \changes{v1.7h}{2018/02/04}{和文スケール値\cs{Cjascale}を定義}
 % \changes{v1.8}{2018/07/03}{\cs{today}のデフォルトを和暦から西暦に変更}
+% \changes{v1.8a}{2018/10/25}{ファイル書き出し時の行末文字対策
+%    (sync with ltsect.dtx 2018/09/26 v1.1c)}
 % \fi
 %
 % \iffalse
@@ -124,7 +126,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2018/07/03 v1.8
+  [2018/10/25 v1.8a
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -3962,6 +3964,8 @@
 % ^^A このコマンドによる影響はありません。
 %
 % このマクロは\file{ltsect.dtx}で定義されています。
+% \changes{v1.8a}{2018/10/25}{ファイル書き出し時の行末文字対策
+%    (sync with ltsect.dtx 2018/09/26 v1.1c)}
 %    \begin{macrocode}
 \providecommand*\protected@file@percent{}
 \def\addcontentsline#1#2#3{%
