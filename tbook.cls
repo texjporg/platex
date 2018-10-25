@@ -762,12 +762,14 @@
      \hb@xt@\@pnumwidth{\hss\normalfont \normalcolor #5}%
      \par}%
   \fi}
+\providecommand*\protected@file@percent{}
 \def\addcontentsline#1#2#3{%
   \protected@write\@auxout
     {\let\label\@gobble \let\index\@gobble \let\glossary\@gobble
-\@temptokena{\rensuji{\thepage}}}%
+     \@temptokena{\rensuji{\thepage}}}%
     {\string\@writefile{#1}%
-       {\protect\contentsline{#2}{#3}{\the\@temptokena}}}%
+       {\protect\contentsline{#2}{#3}{\the\@temptokena}%
+        \protected@file@percent}}%
 }
 \newcommand{\tableofcontents}{%
   \if@twocolumn\@restonecoltrue\onecolumn
