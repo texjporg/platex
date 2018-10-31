@@ -111,13 +111,16 @@
 % \changes{v1.2z}{2018/05/13}{\cs{@tombowreset@@paper}コマンドに分離}
 % \changes{v1.3}{2018/09/02}{\cs{removejfmglue}の挙動を明文化}
 % \changes{v1.3}{2018/09/02}{\file{platexrelease}バグ修正}
+% \changes{v1.3a}{2018/10/31}{\LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策を
+%    \file{plvers.dtx} (plfinal) から\file{plcore.dtx}へ移動、latexrelease対策
+%    (sync with ltfinal 2018/08/24 v2.1f)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2018/09/02 v1.3 pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2018/10/31 v1.3a pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -2404,6 +2407,51 @@
 %<platexrelease>\plIncludeInRelease{0000/00/00}%
 %<platexrelease>                   {\e@mathgroup@top}{LaTeX2e original}%
 %<platexrelease>\let\e@mathgroup@top\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{\LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策}
+% \changes{v1.3a}{2018/10/31}{\LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策を
+%    \file{plvers.dtx} (plfinal) から\file{plcore.dtx}へ移動、latexrelease対策
+%    (sync with ltfinal 2018/08/24 v2.1f)}
+%
+% \begin{macro}{\l@nohyphenation}
+% 通常はBabelのハイフネーション定義により提供されるパラメータです。
+% しかし、\LaTeXe\ 2017-04-15以降・p\LaTeXe\ 2017-04-08以降では、
+% |\verb|の途中でハイフネーションが起きないようにするために必須の
+% ものとなりました。
+% \LaTeXe{}は特殊な状況も想定してltfinal.dtxで対策しているようですので、
+% p\LaTeXe{}も念のためここで対策します（参考：latex2e svn r1405）。
+%    \begin{macrocode}
+%<*plcore>
+\ifx\l@nohyphenation \@undefined
+  \newlanguage\l@nohyphenation
+\fi
+%</plcore>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\document@default@language}
+% \LaTeXe\ 2017-04-15で導入されたパラメータですが、これに先立ち
+% p\LaTeXe\ 2017-04-08でも使用しています。
+% verbatim環境の途中で
+% 改ページが起きた場合にヘッダでハイフネーションが抑制されないように、
+% |\@outputpage|で|\language|をリセットするときに使われます
+% （参考：latex2e svn r1407）。
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\document@default@language}%
+%<platexrelease>                   {Save language for hyphenation}%
+%<*plcore|platexrelease>
+\ifx\document@default@language \@undefined
+  \let\document@default@language\m@ne
+\fi
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\document@default@language}%
+%<platexrelease>                   {Save language for hyphenation}%
+%<platexrelease>\let\document@default@language\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}

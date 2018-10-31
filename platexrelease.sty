@@ -1934,6 +1934,16 @@ of this package available from CTAN}
                    {\e@mathgroup@top}{LaTeX2e original}%
 \let\e@mathgroup@top\@undefined
 \plEndIncludeInRelease
+\plIncludeInRelease{2017/04/08}{\document@default@language}%
+                   {Save language for hyphenation}%
+\ifx\document@default@language \@undefined
+  \let\document@default@language\m@ne
+\fi
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\document@default@language}%
+                   {Save language for hyphenation}%
+\let\document@default@language\@undefined
+\plEndIncludeInRelease
 \endinput
 %%
 %% End of file `platexrelease.sty'.

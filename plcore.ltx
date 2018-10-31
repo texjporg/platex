@@ -1323,6 +1323,12 @@
 \else
   \mathchardef\e@mathgroup@top=256 % for e-pTeX FAM256 patched
 \fi
+\ifx\l@nohyphenation \@undefined
+  \newlanguage\l@nohyphenation
+\fi
+\ifx\document@default@language \@undefined
+  \let\document@default@language\m@ne
+\fi
 %% File: plvers.dtx
 \AtBeginDocument{%
   \@ifpackageloaded{latexrelease}{%

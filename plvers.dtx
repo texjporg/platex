@@ -86,12 +86,14 @@
 % \changes{v1.1l}{2018/04/09}{バナーの保存しかたを改良}
 % \changes{v1.1l}{2018/04/09}{バナーの再構築のしかたを改良}
 % \changes{v1.1m}{2018/09/24}{バナーの再構築を簡略化}
+% \changes{v1.1n}{2018/10/31}{\LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策を
+%    \file{plvers.dtx} (plfinal) から\file{plcore.dtx}へ移動}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2018/09/24 v1.1m pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2018/10/31 v1.1n pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -147,8 +149,7 @@
 %
 % まず、次のバージョンの\LaTeX{}が利用可能なことを確認します。
 % \LaTeXe\ 2017-04-15で、バージョン番号（日付）のフォーマットが
-% YYYY/MM/DD形式からYYYY-MM-DDに変更され、またハイフネーションに関係する
-% パラメータ|\document@default@language|等が導入されています。
+% YYYY/MM/DD形式からYYYY-MM-DDに変更されています。
 % ^^A \LaTeXe\ 2017/01/01以降はe-\TeX{}必須になっています。
 % \changes{v1.1i}{2018/03/31}{\LaTeXe\ 2017-04-15以降必須}
 %    \begin{macrocode}
@@ -338,43 +339,18 @@
 % \changes{v1.0z}{2016/08/26}{\file{platex.cfg}の読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
 %
-% \iffalse
-% \subsection{ハイフネーション関連}
-%
-% \begin{macro}{\l@nohyphenation}
-% \LaTeXe\ 2017-04-15で、|\verb|の途中でハイフネーションが起きないように
-% する修正が入りました。この修正には|\l@nohyphenation|が定義済みでなければ
-% なりませんが、通常はBabelの定義ファイルによって提供されています。
-% \LaTeXe{}は特殊な状況も想定してltfinalで対策しているようですので、
-% p\LaTeXe{}も念のためplfinalで対策します（参考：latex2e svn r1405）。
+% ^^A \LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策
+% ^^A （ハイフネーション関連パラメータの定義）は、
+% ^^A \file{plvers.dtx}から\file{plcore.dtx}へ移動しました。
 % \changes{v1.1b}{2017/03/19}{\cs{l@nohyphenation}の定義を保証
 %    (sync with ltfinal 2017/03/09 v2.0t)}
-%    \begin{macrocode}
-%<*plfinal>
-%\ifx\l@nohyphenation \@undefined
-%  \newlanguage\l@nohyphenation
-%\fi
-%    \end{macrocode}
-% \end{macro}
-%
-% \begin{macro}{\document@default@language}
-% \LaTeXe\ 2017-04-15で導入されたパラメータです。更新タイミングのずれの
-% 可能性を考慮し、p\LaTeXe{}でも準備しておきます。verbatim環境の途中で
-% 改ページが起きた場合にヘッダでハイフネーションが抑制されないように、
-% |\@outputpage|で|\language|をリセットするときに使われます
-% （参考：latex2e svn r1407）。
 % \changes{v1.1b}{2017/03/19}{\cs{document@default@language}の定義を保証
 %    (sync with ltfinal 2017/03/09 v2.0t)}
-%    \begin{macrocode}
-%\ifx\document@default@language \@undefined
-%  \let\document@default@language\m@ne
-%\fi
-%</plfinal>
-%    \end{macrocode}
-% \end{macro}
-% \fi
+% \changes{v1.1n}{2018/10/31}{\LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策を
+%    \file{plvers.dtx} (plfinal) から\file{plcore.dtx}へ移動}
 %
-% \subsection{latexreleaseパッケージへの対応}
+%
+% \section{latexreleaseパッケージへの対応}
 %
 % 最後に、latexreleaseパッケージへの対応です。
 % \begin{macro}{\plIncludeInRelease}
