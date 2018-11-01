@@ -1,0 +1,45 @@
+%% <2018-12-01>
+\documentclass{plnews}
+
+\publicationyear{2018}% 発行年
+\publicationmonth{12}% 発行月
+\publicationissue{c12}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\cs#1{\texttt{\char92 #1}}
+\def\pTeX{p\kern-.15em\TeX}
+\def\eTeX{$\varepsilon$-\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+
+\begin{document}
+
+\maketitle
+
+この文書はコミュニティ版\pLaTeXe\ \texttt{<2018-12-01>}について、
+\pLaTeXe\ \texttt{<2018-12-01>}からの更新箇所をまとめたものです。
+
+
+\section{\file{plext}のバグ修正}
+\file{plext}パッケージが拡張する|\pcaption|命令について、
+下記の仕様変更とバグ修正を行いました。
+\begin{description}
+\item[仕様変更]
+  本文が縦組の時、キャプションも縦組にする。
+\item[バグ修正]
+  本文が縦組で、キャプションを横組にする場合に
+  「どんなに短いキャプションでも、幅を増やして
+  一行に収めることができなかった」というバグの修正。
+\end{description}
+詳細はGitHub issue 76及び\TeX\ forum 2506を参照してください。
+
+
+\section{開発版のテストのお願い}
+バグ報告やご意見、開発版の入手はGitHubへ。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
