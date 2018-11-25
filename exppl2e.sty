@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2018/09/23 v1.1a Experimental pLaTeX2e features]
+                [2018/11/25 v1.1b Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -270,6 +270,46 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
+% \section{支柱}
+%
+% \begin{macro}{\strut}
+% \cs{strut}を縦数式ディレクションで使った場合への修正。
+%    \begin{macrocode}
+%% \strut の改良版
+\def\strut{\relax
+  \iftdir
+    \ifmdir
+      %% [縦数式ディレクション]
+      %% テキストモードの場合は \zstrutbox でなければならない気がする。
+      %% （下線 \underline で使う場合に横組の 90 度回転にならない）
+      %% 数式モードの場合は \zstrutbox に変えるとかえってバランスが崩れるが，
+      %% これは \copy したボックスにベースライン補正が効かないためであり，
+      %% その分 \lower で下げる。
+      \ifmmode \lower \tbaselineshift \copy \zstrutbox \else \unhcopy \zstrutbox \fi
+    \else
+      %% [縦ディレクション]
+      %% テキストモードの場合は \tstrutbox で良い。
+      %% 数式モードに入ると自動的に [縦数式ディレクション] に入るので分岐不要。
+      \unhcopy \tstrutbox
+    \fi
+  \else
+    %% [横ディレクション]
+    %% テキストモードの場合は \(y)strutbox で良い。
+    %% 数式モードではベースライン補正分だけ \lower で下げる。
+    \ifmmode \lower \ybaselineshift \copy \ystrutbox \else \unhcopy \ystrutbox \fi
+  \fi}
+%% \strutbox は \zstrutbox を使うとまずそうなので 2017-04-08 のままとする。
+%% 以下のコードは使わない。
+%\def\strutbox{%
+%  \iftdir \ifmdir \zstrutbox \else \tstrutbox \fi
+%  \else \ystrutbox \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \cs{strutbox}の変更は2017/04/08に導入済み。
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 % \section{脚注の合印直後での改行を許可}
 %
 % 2016/09/03に導入済み。
@@ -279,12 +319,6 @@
 % \section{e-p\TeX{}でのFAM256パッチの利用}
 %
 % 2016/11/29に導入済み。
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% \section{支柱}
-%
-% 2017/04/08に導入済み。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
