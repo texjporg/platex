@@ -88,12 +88,13 @@
 % \changes{v1.1m}{2018/09/24}{バナーの再構築を簡略化}
 % \changes{v1.1n}{2018/10/31}{\LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策を
 %    \file{plvers.dtx} (plfinal) から\file{plcore.dtx}へ移動}
+% \changes{v1.1o}{2018/12/01}{\LaTeX\ \texttt{!<2018-12-01!>}版対応確認}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2018/10/31 v1.1n pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2018/12/01 v1.1o pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -130,6 +131,7 @@
 % \changes{v1.1a}{2017/02/20}{\LaTeX\ \texttt{!<2017/01/01!>}版対応確認}
 % \changes{v1.1c}{2017/04/23}{\LaTeX\ \texttt{!<2017-04-15!>}版対応確認}
 % \changes{v1.1j}{2018/04/07}{\LaTeX\ \texttt{!<2018-04-01!>}版対応確認}
+% \changes{v1.1o}{2018/12/01}{\LaTeX\ \texttt{!<2018-12-01!>}版対応確認}
 %
 % このバージョンのp\LaTeXe{}は、次のバージョンの\LaTeX{}\footnote{%
 % \LaTeX\ authors: Johannes Braams, David Carlisle, Alan Jeffrey,
@@ -143,7 +145,7 @@
 %<latexrelease>\edef\latexreleaseversion
 %<platexrelease>\edef\p@known@latexreleaseversion
 %<*2ekernel|latexrelease|platexrelease>
-   {2018-04-01}
+   {2018-12-01}
 %</2ekernel|latexrelease|platexrelease>
 %    \end{macrocode}
 %
@@ -187,7 +189,7 @@
    {2018-12-01}
 %</plcore|platexrelease>
 %<*plcore>
-\def\ppatch@level{-2}
+\def\ppatch@level{0}
 %</plcore>
 %    \end{macrocode}
 % \end{macro}
