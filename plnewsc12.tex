@@ -18,7 +18,7 @@
 \maketitle
 
 この文書はコミュニティ版\pLaTeXe\ \texttt{<2018-12-01>}について、
-\pLaTeXe\ \texttt{<2018-12-01>}からの更新箇所をまとめたものです。
+\pLaTeXe\ \texttt{<2018-07-28>}からの更新箇所をまとめたものです。
 
 
 \section{\file{plext}のバグ修正}
@@ -35,8 +35,27 @@
 詳細はGitHub issue 76及び\TeX\ forum 2506を参照してください。
 
 
+\section{\LaTeXe\ \texttt{<2018-12-01>}対応}
+\LaTeXe\ \texttt{<2018-12-01>}では、
+外部ファイルへの書き出しと読み込みを要する処理（目次など）で
+「行末の空白文字に由来する不自然な空白が入ることがある」という
+問題が修正される予定です。
+このため、(u)\pLaTeX{}の標準クラスもこの修正に追随しました。
+詳細はGitHub issue 79を参照してください。
+
+
 \section{開発版のテストのお願い}
-バグ報告やご意見、開発版の入手はGitHubへ。
+今後p\LaTeX{}に導入するかもしれない修正パッチや仕様変更のテストに
+ご協力ください。\TeX{}ファイルの冒頭（|\documentclass|より前）で
+\begin{verbatim}
+\RequirePackage{exppl2e}
+\end{verbatim}
+と書くことで、現在の開発版をテストすることができます。
+現在は、支柱コマンドで用いられる|\strut|の挙動に関するパッチが
+入っています。
+
+詳細は\file{exppl2e.pdf}を参照してください。
+\TeX\ ForumやGitHubのIssueでのバグ報告やご意見を歓迎します。
 \begin{itemize}
 \item \texttt{https://github.com/texjporg/platex}
 \item \texttt{https://github.com/texjporg/uplatex}
