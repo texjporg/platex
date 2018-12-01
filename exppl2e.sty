@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2018/11/25 v1.1b Experimental pLaTeX2e features]
+                [2018/12/02 v1.1c Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -267,6 +267,26 @@
 % フロートがある空白ページでは|\@makecol|が呼ばれないことから
 % 対策が効いていません。ただ、フロートが空である状況は
 % 元々不自然なので、現在はサポートしていません。
+%
+% もし対策することになれば、下記のコードを使用します。
+% \begin{macro}{\@vtryfc}
+% \file{ltoutput.dtx}で定義されている|\@vtryfc|に
+% |\iftdir\hskip\z@\fi|を追加してあります。
+%    \begin{macrocode}
+\def\@vtryfc #1{%
+  \global\setbox\@outputbox\vbox{\iftdir\hskip\z@\fi}%
+  \let\@elt\@wtryfc
+  \@flsucceed
+  \global\setbox\@outputbox \vbox to\@colht{%
+    \vskip \@fptop
+    \vskip -\@fpsep
+    \unvbox \@outputbox
+    \vskip \@fpbot}%
+  \let\@elt\relax
+  \xdef #1{\@failedlist\@flfail}%
+  \xdef\@freelist{\@freelist\@flsucceed}}
+%    \end{macrocode}
+% \end{macro}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
