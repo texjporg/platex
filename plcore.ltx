@@ -1263,11 +1263,14 @@
   \edef\@preamble{%
     \@preamble{%
       \ifcase\@chnum
-        \hfil\inhibitglue\ignorespaces\@sharp\unskip\removejfmglue\hfil % c
+        \hfil\hskip1sp\inhibitglue
+        \ignorespaces\@sharp\unskip\removejfmglue\hfil % c
       \or
-        \hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\removejfmglue\hfil % l
+        \hskip1sp\inhibitglue
+        \ignorespaces\@sharp\unskip\removejfmglue\hfil % l
       \or
-        \hfil\hskip1sp\inhibitglue\ignorespaces\@sharp\unskip\removejfmglue % r
+        \hfil\hskip1sp\inhibitglue
+        \ignorespaces\@sharp\unskip\removejfmglue % r
       \fi}}}
 \fi
 \def\@classv{\@addtopreamble{\@startpbox{\@nextchar}\pltx@next@inhibitglue\ignorespaces

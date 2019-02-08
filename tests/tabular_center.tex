@@ -1,0 +1,15 @@
+% https://github.com/latex3/latex2e/issues/102
+\documentclass{article}
+
+% this tries to be invisible
+\newcommand\beinvisible[1]{\leavevmode\unskip\strut\ignorespaces}
+
+\begin{document}
+
+\begin{tabular}{clr}
+ AA & BB & CC \\
+ x  &  y & z  \\
+ \beinvisible{} x & \beinvisible{} y & \beinvisible{} z \\
+\end{tabular}
+
+\end{document}
