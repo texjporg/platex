@@ -23,7 +23,7 @@ mkdir -p $TMP/$PROJECT/doc/platex/base
 mv $TMP/$PROJECT/LICENSE $TMP/$PROJECT/doc/platex/base/
 mv $TMP/$PROJECT/README.md $TMP/$PROJECT/doc/platex/base/
 mv $TMP/$PROJECT/*.pdf $TMP/$PROJECT/doc/platex/base/
-mv $TMP/$PROJECT/*.txt $TMP/$PROJECT/doc/platex/base/
+#mv $TMP/$PROJECT/*.txt $TMP/$PROJECT/doc/platex/base/
 
 mkdir -p $TMP/$PROJECT/source/platex/base
 mv $TMP/$PROJECT/Makefile $TMP/$PROJECT/source/platex/base/
@@ -54,6 +54,7 @@ git archive --format=tar --prefix=$PROJECT/ HEAD | (cd $TMP && tar xf -)
 rm $TMP/$PROJECT/.gitignore
 rm $TMP/$PROJECT/create_archive.sh
 rm -rf $TMP/$PROJECT/tests
+rm -rf $TMP/$PROJECT/00old
 rm $TMP/$PROJECT/kinsoku.tex
 rm $TMP/$PROJECT/pl209.def
 ls $TMP/$PROJECT/*.cls | grep -v plnews.cls | xargs rm

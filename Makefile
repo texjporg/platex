@@ -140,7 +140,7 @@ install:
 	cp ./LICENSE ${TEXMF}/doc/platex/base/
 	cp ./README.md ${TEXMF}/doc/platex/base/
 	cp ./*.pdf ${TEXMF}/doc/platex/base/
-	cp ./*.txt ${TEXMF}/doc/platex/base/
+#	cp ./*.txt ${TEXMF}/doc/platex/base/
 	mkdir -p ${TEXMF}/source/platex/base
 	cp ./Makefile ${TEXMF}/source/platex/base/
 	cp ./plnews*.tex ${TEXMF}/source/platex/base/
