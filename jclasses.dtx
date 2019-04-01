@@ -97,6 +97,7 @@
 % \changes{v1.8}{2018/07/03}{\cs{today}のデフォルトを和暦から西暦に変更}
 % \changes{v1.8a}{2018/10/25}{ファイル書き出し時の行末文字対策
 %    (sync with ltsect.dtx 2018/09/26 v1.1c)}
+% \changes{v1.8b}{2019/04/02}{新元号対応}
 % \fi
 %
 % \iffalse
@@ -126,7 +127,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2018/10/25 v1.8a
+  [2019/04/02 v1.8b
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -4364,6 +4365,7 @@
 %
 % \begin{macro}{\heisei}
 % \changes{v1.1m}{1998/04/07}{\cs{today}の計算手順を変更}
+% \changes{v1.8b}{2019/04/02}{\cs{heisei}の値は$\mbox{西暦}-1988$で固定}
 % |\today|コマンドを|\rightmark|で指定したとき、|\rightmark|を出力する部分
 % で和暦のための計算ができないので、クラスファイルを読み込む時点で計算して
 % おきます。
@@ -4373,31 +4375,40 @@
 % \end{macro}
 %
 % \begin{macro}{\today}
+% \begin{macro}{\pltx@today@year}
+% \changes{v1.8b}{2019/04/02}{\cs{today}の計算方法を変更}
 % 縦組の場合は、漢数字で出力します。
 %    \begin{macrocode}
+\def\pltx@today@year@#1{%
+  \ifnum\numexpr\year-#1=1 元\else
+    \iftdir\kansuji\number\numexpr\year-#1\relax
+    \else \number\numexpr\year-#1\relax\nobreak\fi
+  \fi 年
+}
+\def\pltx@today@year{%
+  \ifnum\numexpr\year*10000+\month*100+\day<19890108
+    昭和\pltx@today@year@{1925}%
+  \else\ifnum\numexpr\year*10000+\month*100+\day<20190501
+    平成\pltx@today@year@{1988}%
+  \else 
+    令和\pltx@today@year@{2018}%
+  \fi\fi}
 \def\today{{%
-  \iftdir
-    \if西暦
-      \kansuji\number\year 年
-      \kansuji\number\month 月
-      \kansuji\number\day 日
-    \else
-      平成\ifnum\heisei=1 元年\else\kansuji\number\heisei 年\fi
-      \kansuji\number\month 月
-      \kansuji\number\day 日
-    \fi
+  \if西暦
+    \iftdir\kansuji\number\year
+    \else\number\year\nobreak\fi 年
   \else
-    \if西暦
-      \number\year~年
-      \number\month~月
-      \number\day~日
-    \else
-      平成\ifnum\heisei=1 元年\else\number\heisei~年\fi
-      \number\month~月
-      \number\day~日
-    \fi
+    \pltx@today@year
+  \fi
+  \iftdir
+    \kansuji\number\month 月
+    \kansuji\number\day 日
+  \else
+    \number\month\nobreak 月
+    \number\day\nobreak 日
   \fi}}
 %    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 %
