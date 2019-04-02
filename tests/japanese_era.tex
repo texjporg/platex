@@ -1,0 +1,23 @@
+\documentclass{jarticle}
+\usepackage{plext}
+
+\def\TEST{{\par\和暦\TESTa\西暦\TESTa\par}}
+\def\TESTa{%
+  \today\par
+  \year=1926 \month=12 \day=31 \today\par
+  \year=1989 \month=01 \day=07 \today\par
+  \year=1989 \month=01 \day=08 \today\par
+  \year=2019 \month=04 \day=30 \today\par
+  \year=2019 \month=05 \day=01 \today\par
+}
+\begin{document}
+\parindent0pt
+
+\TEST
+
+\parbox<t>{20zw}{\TEST}
+
+\parbox<t>{20zw}{\parbox<z>{20zw}{\TEST}}
+
+\end{document}
+

@@ -871,8 +871,11 @@
 \newcount\heisei \heisei\year \advance\heisei-1988\relax
 \def\pltx@today@year@#1{%
   \ifnum\numexpr\year-#1=1 元\else
-    \iftdir\kansuji\number\numexpr\year-#1\relax
-    \else \number\numexpr\year-#1\relax\nobreak\fi
+    \ifnum1=\iftdir\ifmdir0\else1\fi\else0\fi
+      \kansuji\number\numexpr\year-#1\relax
+    \else
+      \number\numexpr\year-#1\relax\nobreak
+    \fi
   \fi 年
 }
 \def\pltx@today@year{%
@@ -885,12 +888,12 @@
   \fi\fi}
 \def\today{{%
   \if西暦
-    \iftdir\kansuji\number\year
+    \ifnum1=\iftdir\ifmdir0\else1\fi\else0\fi\kansuji\number\year
     \else\number\year\nobreak\fi 年
   \else
     \pltx@today@year
   \fi
-  \iftdir
+  \ifnum1=\iftdir\ifmdir0\else1\fi\else0\fi
     \kansuji\number\month 月
     \kansuji\number\day 日
   \else
