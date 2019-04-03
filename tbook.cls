@@ -7,7 +7,7 @@
 %% jclasses.dtx  (with options: `book,tate')
 %% 
 %% Copyright (c) 2010 ASCII MEDIA WORKS
-%% Copyright (c) 2016-2018 Japanese TeX Development Community
+%% Copyright (c) 2016-2019 Japanese TeX Development Community
 %% 
 %% This file is part of the pLaTeX2e system (community edition).
 %% -------------------------------------------------------------
