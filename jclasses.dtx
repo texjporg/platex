@@ -4379,7 +4379,7 @@
 % \changes{v1.8b}{2019/04/02}{\cs{today}の計算・出力方法を変更。}
 % 縦組の場合は、漢数字で出力します
 % \pLaTeX\ 2018-12-01以前では縦数式ディレクション時でも漢数字で出力していましたが、
-% \pLaTeX\ 2019-**-**以降からはそうしなくなりました。
+% \pLaTeX\ 2019-04-06以降からはそうしなくなりました。
 %    \begin{macrocode}
 \def\pltx@today@year@#1{%
   \ifnum\numexpr\year-#1=1 元\else
@@ -4395,7 +4395,7 @@
     昭和\pltx@today@year@{1925}%
   \else\ifnum\numexpr\year*10000+\month*100+\day<20190501
     平成\pltx@today@year@{1988}%
-  \else 
+  \else
     令和\pltx@today@year@{2018}%
   \fi\fi}
 \def\today{{%
