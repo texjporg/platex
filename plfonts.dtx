@@ -3,7 +3,7 @@
 %
 %  Copyright 1994-2006 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016-2018 Japanese TeX Development Community
+%  Copyright (c) 2016-2019 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -101,13 +101,16 @@
 % \changes{v1.6r}{2018/07/25}{PDFのしおりにアクセント文字が含まれる場合に対応}
 % \changes{v1.6r}{2018/07/25}{\cs{[no]fixcompositeaccent}マクロ追加}
 % \changes{v1.6r}{2018/07/25}{コード整理}
+% \changes{v1.6s}{2019/08/13}{\cs{DeclareErrorKanjiFont}:
+%    Don't set any \cs{k@...} macros
+%    (sync with ltfssbas.dtx 2019/07/09 v3.2c)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2018/07/25 v1.6r pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2019/08/13 v1.6s pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -925,12 +928,10 @@
 %    \end{macrocode}
 % \end{macro}
 %
-%
 % \begin{macro}{\DeclareKanjiSubstitution}
-% \begin{macro}{\DeclareErrorKanjiFont}
 % 目的の和文フォントが見つからなかったときに使うフォントの宣言をする
 % コマンドです。
-% それぞれ、|\DeclareFontSubstitution|と|\DeclareErrorFont|に対応します。
+% |\DeclareFontSubstitution|に対応します。
 %    \begin{macrocode}
 \def\DeclareKanjiSubstitution#1#2#3#4{%
   \expandafter\ifx\csname T@#1\endcsname\relax
@@ -953,7 +954,20 @@
                            \def\default@series{#3}%
                            \def\default@shape{#4}}%
   \fi}
+\@onlypreamble\DeclareKanjiSubstitution
+%    \end{macrocode}
+% \end{macro}
 %
+% \begin{macro}{\DeclareErrorKanjiFont}
+% |\DeclareErrorFont|に対応するコマンドです。
+% \changes{v1.6s}{2019/08/13}{\cs{DeclareErrorKanjiFont}:
+%    Don't set any \cs{k@...} macros
+%    (sync with ltfssbas.dtx 2019/07/09 v3.2c)}
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2019/10/01}{\DeclareErrorKanjiFont}
+%<platexrelease>                   {No side effects please}%
+%<*plcore|platexrelease>
 \def\DeclareErrorKanjiFont#1#2#3#4#5{%
    \xdef\error@kfontshape{%
       \noexpand\expandafter\noexpand\split@name\noexpand\string
@@ -962,16 +976,28 @@
    \gdef\default@k@family{#2}%
    \gdef\default@k@series{#3}%
    \gdef\default@k@shape{#4}%
-   \global\let\k@family\default@k@family
-   \global\let\k@series\default@k@series
-   \global\let\k@shape\default@k@shape
-   \gdef\f@size{#5}%
-   \gdef\f@baselineskip{#5pt}}
-%
-\@onlypreamble\DeclareKanjiSubstitution
+   }
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\DeclareErrorKanjiFont}
+%<platexrelease>                   {No side effects please}%
+%<platexrelease>\def\DeclareErrorKanjiFont#1#2#3#4#5{%
+%<platexrelease>   \xdef\error@kfontshape{%
+%<platexrelease>      \noexpand\expandafter\noexpand\split@name\noexpand\string
+%<platexrelease>      \expandafter\noexpand\csname#1/#2/#3/#4/#5\endcsname
+%<platexrelease>      \noexpand\@nil}%
+%<platexrelease>   \gdef\default@k@family{#2}%
+%<platexrelease>   \gdef\default@k@series{#3}%
+%<platexrelease>   \gdef\default@k@shape{#4}%
+%<platexrelease>   \global\let\k@family\default@k@family
+%<platexrelease>   \global\let\k@series\default@k@series
+%<platexrelease>   \global\let\k@shape\default@k@shape
+%<platexrelease>   \gdef\f@size{#5}%
+%<platexrelease>   \gdef\f@baselineskip{#5pt}}
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 \@onlypreamble\DeclareErrorKanjiFont
 %    \end{macrocode}
-% \end{macro}
 % \end{macro}
 %
 %
@@ -2493,19 +2519,27 @@
 %    \begin{macrocode}
 %<*pldefs>
 \ProvidesFile{pldefs.ltx}
-      [2018/02/04 v1.6l pLaTeX Kernel (Default settings)]
+      [2019/08/13 v1.6s pLaTeX Kernel (Default settings)]
 %</pldefs>
 %    \end{macrocode}
 %
 % \subsection{テキストフォント}
 % テキストフォントのための属性やエラー書体などの宣言です。
 % p\LaTeX{}のデフォルトの横組エンコードはJY1、縦組エンコードはJT1とします。
+%
+% \changes{v1.6s}{2019/08/13}{Explicitly set some defaults
+%    after \cs{DeclareErrorKanjiFont} change
+%    (sync with ltfssini.dtx 2019/07/09 v3.1c)}
 % \noindent
 % 縦横エンコード共通：
 %    \begin{macrocode}
 %<*pldefs>
 \DeclareKanjiEncodingDefaults{}{}
 \DeclareErrorKanjiFont{JY1}{mc}{m}{n}{10}
+\kanjifamily{cmr}
+\kanjiseries{m}
+\kanjishape{n}
+\fontsize{10}{10}
 %    \end{macrocode}
 % 横組エンコード：
 %    \begin{macrocode}
