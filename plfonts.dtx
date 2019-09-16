@@ -104,13 +104,17 @@
 % \changes{v1.6s}{2019/08/13}{\cs{DeclareErrorKanjiFont}:
 %    Don't set any \cs{k@...} macros
 %    (sync with ltfssbas.dtx 2019/07/09 v3.2c)}
+% \changes{v1.6t}{2019/09/16}{Make \cs{strut} robust
+%    (sync with ltdefns.dtx 2019/08/27 v1.5f)}
+% \changes{v1.6t}{2019/09/16}{Make \cs{usefont} etc. robust
+%    (sync with ltfssbas.dtx 2019/08/27 v3.2d)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2019/08/13 v1.6s pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2019/09/16 v1.6t pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -184,7 +188,7 @@
 %<*trace>
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{ptrace}
-     [2017/08/05 v1.6h Standard pLaTeX package (font tracing)]
+     [2019/09/16 v1.6t Standard pLaTeX package (font tracing)]
 \RequirePackageWithOptions{tracefnt}
 %</trace>
 %    \end{macrocode}
@@ -511,13 +515,13 @@
 % \changes{v1.6f}{2017/02/20}{\cs{strutbox}を縦横両対応に}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2017/04/08}{\strutbox}
-%<platexrelease>                   {Add \strutbox}%
+%<platexrelease>                   {Macro definition of \strutbox}%
 %<*plcore|platexrelease>
 \def\strutbox{\iftdir\tstrutbox\else\ystrutbox\fi}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\strutbox}
-%<platexrelease>                   {Add \strutbox}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\newbox\strutbox % emulation purpose only
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
@@ -527,33 +531,48 @@
 % ディレクションに応じて|\ystrutbox|と|\tstrutbox|を使い分けます。
 % ^^A |\strutbox|は|\yoko|ディレクションで組まれていますので、
 % ^^A 縦組ボックス内で|\unhcopy|をするとエラーとなります。
-% 元々このマクロは\file{ltplain.dtx}で定義されています。
+% オリジナルの\LaTeX{}では\file{ltplain.dtx}で定義されていますが、
+% \LaTeXe\ 2019-10-01以降ではさらに\file{ltdefns.dtx}で
+% |\MakeRobust|を前置されるため、robustになります。
 %
 % \changes{v1.1c}{1995/08/24}{``\cs{centerling}~\cs{strut}''の幅がゼロに
 % なってしまうのを修正}
 % \changes{v1.3h}{1999/08/09}{縦組のとき、幅のあるボックスになってしまう
 % のを修正}
 % \changes{v1.6f}{2017/02/20}{\cs{strutbox}の代わりに\cs{ystrutbox}を使用}
+% \changes{v1.6t}{2019/09/16}{Make \cs{strut} robust
+%    (sync with ltdefns.dtx 2019/08/27 v1.5f)}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2017/04/08}{\strut}
-%<platexrelease>                   {Use \ystrutbox}%
+%<platexrelease>\plIncludeInRelease{2019/10/01}{\strut}
+%<platexrelease>                   {Make robust}%
 %<*plcore|platexrelease>
-\def\strut{\relax
-  \ifydir
-    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi
-  \else
+\DeclareRobustCommand\strut{\relax
+  \iftdir
     \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
+  \else
+    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi
   \fi}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\strut}
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\strut}
 %<platexrelease>                   {Use \ystrutbox}%
+%<platexrelease>\def\strut{\relax
+%<platexrelease>  \ifydir
+%<platexrelease>    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi
+%<platexrelease>  \else
+%<platexrelease>    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
+%<platexrelease>  \fi}
+%<platexrelease>\expandafter \let \csname strut \endcsname \@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\strut}
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\def\strut{\relax
 %<platexrelease>  \ifydir
 %<platexrelease>    \ifmmode\copy\strutbox\else\unhcopy\strutbox\fi
 %<platexrelease>  \else
 %<platexrelease>    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
 %<platexrelease>  \fi}
+%<platexrelease>\expandafter \let \csname strut \endcsname \@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
@@ -737,7 +756,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\DeclareFontEncoding@}
-%<platexrelease>                   {UTF-8 Encoding}%
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\def\DeclareFontEncoding@#1#2#3{%
 %<platexrelease>  \expandafter
 %<platexrelease>  \ifx\csname T@#1\endcsname\relax
@@ -980,7 +999,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\DeclareErrorKanjiFont}
-%<platexrelease>                   {No side effects please}%
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\def\DeclareErrorKanjiFont#1#2#3#4#5{%
 %<platexrelease>   \xdef\error@kfontshape{%
 %<platexrelease>      \noexpand\expandafter\noexpand\split@name\noexpand\string
@@ -1385,7 +1404,7 @@
 %</plcore|platexrelease|trace>
 %<platexrelease|trace>\plEndIncludeInRelease
 %<platexrelease|trace>\plIncludeInRelease{0000/00/00}{\set@fontsize}
-%<platexrelease|trace>                   {Construct \ystrutbox}%
+%<platexrelease|trace>                   {ASCII Corporation original}%
 %<platexrelease|trace>\def\set@fontsize#1#2#3{%
 %<platexrelease|trace>    \@defaultunits\@tempdimb#2pt\relax\@nnil
 %<platexrelease|trace>    \edef\f@size{\strip@pt\@tempdimb}%
@@ -1502,7 +1521,7 @@
 %</plcore|platexrelease|trace>
 %<platexrelease|trace>\plEndIncludeInRelease
 %<platexrelease|trace>\plIncludeInRelease{0000/00/00}{\adjustbaseline}
-%<platexrelease|trace>                   {Change zenkaku reference}%
+%<platexrelease|trace>                   {ASCII Corporation original}%
 %<platexrelease|trace>\def\adjustbaseline{%
 %<platexrelease|trace>    \setbox\adjust@box\hbox{\char\euc"A1A1}%"
 %<platexrelease|trace>    \cht\ht\adjust@box
@@ -1846,20 +1865,48 @@
 %
 % |\usefont|コマンドは、第一引数で指定されるエンコードによって、
 % 和文または欧文フォントを切り替えます。
+% \changes{v1.6t}{2019/09/16}{Make \cs{usefont} etc. robust
+%    (sync with ltfssbas.dtx 2019/08/27 v3.2d)}
 %    \begin{macrocode}
-\def\usekanji#1#2#3#4{%
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2019/10/01}{\usefont}
+%<platexrelease>                   {Make robust}%
+%<*plcore|platexrelease>
+\DeclareRobustCommand\usekanji[4]{%
     \kanjiencoding{#1}\kanjifamily{#2}\kanjiseries{#3}\kanjishape{#4}%
     \selectfont\ignorespaces}
-\def\useroman#1#2#3#4{%
+\DeclareRobustCommand\useroman[4]{%
     \romanencoding{#1}\romanfamily{#2}\romanseries{#3}\romanshape{#4}%
     \selectfont\ignorespaces}
-\def\usefont#1#2#3#4{%
+\DeclareRobustCommand\usefont[4]{%
   \edef\tmp@item{{#1}}%
   \expandafter\expandafter\expandafter
   \inlist@\expandafter\tmp@item\expandafter{\kenc@list}%
   \ifin@ \usekanji{#1}{#2}{#3}{#4}%
   \else\useroman{#1}{#2}{#3}{#4}%
   \fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\usefont}
+%<platexrelease>                   {ASCII Corporation original}%
+%<platexrelease>\def\usekanji#1#2#3#4{%
+%<platexrelease>    \kanjiencoding{#1}\kanjifamily{#2}\kanjiseries{#3}\kanjishape{#4}%
+%<platexrelease>    \selectfont\ignorespaces}
+%<platexrelease>\def\useroman#1#2#3#4{%
+%<platexrelease>    \romanencoding{#1}\romanfamily{#2}\romanseries{#3}\romanshape{#4}%
+%<platexrelease>    \selectfont\ignorespaces}
+%<platexrelease>\def\usefont#1#2#3#4{%
+%<platexrelease>  \edef\tmp@item{{#1}}%
+%<platexrelease>  \expandafter\expandafter\expandafter
+%<platexrelease>  \inlist@\expandafter\tmp@item\expandafter{\kenc@list}%
+%<platexrelease>  \ifin@ \usekanji{#1}{#2}{#3}{#4}%
+%<platexrelease>  \else\useroman{#1}{#2}{#3}{#4}%
+%<platexrelease>  \fi}
+%<platexrelease>\expandafter \let \csname usekanji \endcsname \@undefined
+%<platexrelease>\expandafter \let \csname useroman \endcsname \@undefined
+%<platexrelease>\expandafter \let \csname usefont \endcsname \@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1958,7 +2005,7 @@
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\textunderscore}
-%<platexrelease>                   {Baseline shift for \textunderscore}%
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\DeclareTextCommandDefault{\textunderscore}{%
 %<platexrelease>  \leavevmode\kern.06em
 %<platexrelease>  \iftdir\raise-\tbaselineshift\fi
@@ -2151,7 +2198,7 @@
 % \changes{v1.6c}{2016/06/06}{v1.6aでの誤った再定義を削除(forum:1941)}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2016/06/10}{\@text@composite}
-%<platexrelease>                   {Fix for non-zero baselineshift (wrong)}%
+%<platexrelease>                   {Fix for non-zero baselineshift (revert)}%
 %<platexrelease>\def\@text@composite#1#2#3\@text@composite{%
 %<platexrelease>   \expandafter\@text@composite@x
 %<platexrelease>      \csname\string#1-\string#2\endcsname}
@@ -2166,7 +2213,7 @@
 %<platexrelease>  \csname\string#1-\string#2\endcsname}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@text@composite}
-%<platexrelease>                   {Fix for non-zero baselineshift (wrong)}%
+%<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\def\@text@composite#1#2#3\@text@composite{%
 %<platexrelease>   \expandafter\@text@composite@x
 %<platexrelease>      \csname\string#1-\string#2\endcsname}
@@ -2469,7 +2516,7 @@
 %<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\check@nocorr@}
-%<platexrelease>                   {Italic correction before \textt...}%
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\def \check@nocorr@ #1#2\nocorr#3\@nil {%
 %<platexrelease>  \let \check@icl \relax % changed from \maybe@ic
 %<platexrelease>  \def \check@icr {\ifvmode \else \aftergroup \maybe@ic \fi}%
@@ -2739,7 +2786,7 @@
 %</pldefs|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\<}
-%<platexrelease>                   {\inhibitglue in vertical mode}%
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\def\<{\inhibitglue}
 %<platexrelease>\plEndIncludeInRelease
 %<*pldefs>

@@ -116,13 +116,17 @@
 %    (sync with ltfinal 2018/08/24 v2.1f)}
 % \changes{v1.3b}{2019/02/08}{中央揃えのセルでの\cs{unskip}対策
 %    (sync with lttab 2018/12/30 v1.1p)}
+% \changes{v1.3c}{2019/09/16}{Make \cs{AtBeginDvi} robust
+%    (sync with ltoutput.dtx 2019/08/27 v1.4e)}
+% \changes{v1.3c}{2019/09/16}{Make \cs{underline} robust
+%    (sync with ltboxes.dtx 2019/08/27 v1.3b)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2019/02/08 v1.3b pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2019/09/16 v1.3c pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1438,16 +1442,25 @@
 % \end{center}
 % と仮定します。この仮定に従い、|\AtBeginDvi|を再定義します。
 % \changes{v1.2f}{2016/06/30}{\cs{@begindvibox}を常に横組に}
+% \changes{v1.3c}{2019/09/16}{Make \cs{AtBeginDvi} robust
+%    (sync with ltoutput.dtx 2019/08/27 v1.4e)}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2016/07/01}{\AtBeginDvi}
-%<platexrelease>                   {Fix for incompatible direction}%
+%<platexrelease>\plIncludeInRelease{2019/10/01}{\AtBeginDvi}
+%<platexrelease>                   {Make robust}%
 %<*plcore|platexrelease>
-\def \AtBeginDvi #1{%
+\DeclareRobustCommand \AtBeginDvi [1]{%
   \global \setbox \@begindvibox
     \vbox{\yoko \unvbox \@begindvibox #1}%
 }
 %</plcore|platexrelease>
+%<platexrelease>\plIncludeInRelease{2016/07/01}{\AtBeginDvi}
+%<platexrelease>                   {Fix for incompatible direction}%
+%<platexrelease>\def \AtBeginDvi #1{%
+%<platexrelease>  \global \setbox \@begindvibox
+%<platexrelease>    \vbox{\yoko \unvbox \@begindvibox #1}%
+%<platexrelease>}
+%<platexrelease>\expandafter \let \csname AtBeginDvi \endcsname \@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\AtBeginDvi}
 %<platexrelease>                   {LaTeX2e original}%
@@ -1455,6 +1468,7 @@
 %<platexrelease>  \global \setbox \@begindvibox
 %<platexrelease>    \vbox{\unvbox \@begindvibox #1}%
 %<platexrelease>}
+%<platexrelease>\expandafter \let \csname AtBeginDvi \endcsname \@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
@@ -2275,15 +2289,25 @@
 % \begin{macro}{\underline}
 % 下線を引く命令です。もとは\file{ltboxes.dtx}で定義されています。
 % \changes{v1.2c}{2016/02/28}{1.2bと同様の修正を\cs{underline}命令にも行った}
+% \changes{v1.3c}{2019/09/16}{Make \cs{underline} robust
+%    (sync with ltboxes.dtx 2019/08/27 v1.3b)}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2016/04/17}{\underline}
-%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<platexrelease>\plIncludeInRelease{2019/10/01}{\underline}
+%<platexrelease>                   {Make robust}%
 %<*plcore|platexrelease>
-\def\underline#1{%
+\DeclareRobustCommand\underline[1]{%
   \relax
   \ifmmode\@@underline{#1}%
   \else \leavevmode\null$\@@underline{\hbox{#1}}\m@th$\null\relax\fi}
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\underline}
+%<platexrelease>                   {Remove extra \xkanjiskip}%
+%<platexrelease>\def\underline#1{%
+%<platexrelease>  \relax
+%<platexrelease>  \ifmmode\@@underline{#1}%
+%<platexrelease>  \else \leavevmode\null$\@@underline{\hbox{#1}}\m@th$\null\relax\fi}
+%<platexrelease>\expandafter \let \csname underline \endcsname \@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\underline}
 %<platexrelease>                   {LaTeX2e original}%
@@ -2291,6 +2315,7 @@
 %<platexrelease>  \relax
 %<platexrelease>  \ifmmode\@@underline{#1}%
 %<platexrelease>  \else $\@@underline{\hbox{#1}}\m@th$\relax\fi}
+%<platexrelease>\expandafter \let \csname underline \endcsname \@undefined
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
