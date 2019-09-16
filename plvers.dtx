@@ -65,9 +65,9 @@
 % \changes{v1.1}{2016/09/14}{起動時のバナーを取得するコードを改良}
 % \changes{v1.1a}{2017/02/20}{\LaTeX\ \texttt{!<2017/01/01!>}版対応確認}
 % \changes{v1.1b}{2017/03/19}{\cs{l@nohyphenation}の定義を保証
-%    (sync with ltfinal 2017/03/09 v2.0t)}
+%    (sync with ltfinal.dtx 2017/03/09 v2.0t)}
 % \changes{v1.1b}{2017/03/19}{\cs{document@default@language}の定義を保証
-%    (sync with ltfinal 2017/03/09 v2.0t)}
+%    (sync with ltfinal.dtx 2017/03/09 v2.0t)}
 % \changes{v1.1c}{2017/04/23}{\LaTeX\ \texttt{!<2017-04-15!>}版対応確認}
 % \changes{v1.1d}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
 % \changes{v1.1e}{2017/11/09}{\file{latexrelease}と
@@ -78,7 +78,7 @@
 %    \cs{pfmtname}, \cs{pfmtversion}, \cs{ppatch@level}を展開しないように}
 % \changes{v1.1h}{2018/01/10}{Modify \cs{plIncludeInRelease} code
 %    to check matching \cs{plEndIncluderelease}
-%    (sync with ltvers 2018/01/08 v1.1a)}
+%    (sync with ltvers.dtx 2018/01/08 v1.1a)}
 % \changes{v1.1i}{2018/03/31}{\LaTeXe\ 2017-04-15以降必須}
 % \changes{v1.1j}{2018/04/07}{\LaTeX\ \texttt{!<2018-04-01!>}版対応確認}
 % \changes{v1.1k}{2018/04/08}{バナー調節のコードを最後(plfinal)ではなく
@@ -89,12 +89,14 @@
 % \changes{v1.1n}{2018/10/31}{\LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策を
 %    \file{plvers.dtx} (plfinal) から\file{plcore.dtx}へ移動}
 % \changes{v1.1o}{2018/12/01}{\LaTeX\ \texttt{!<2018-12-01!>}版対応確認}
+% \changes{v1.1p}{2019/09/16}{エラーメッセージを更新
+%    (sync with ltvers.dtx 2019/07/01 v1.1c)}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2018/12/01 v1.1o pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2019/09/16 v1.1p pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -345,9 +347,9 @@
 % ^^A （ハイフネーション関連パラメータの定義）は、
 % ^^A \file{plvers.dtx}から\file{plcore.dtx}へ移動しました。
 % \changes{v1.1b}{2017/03/19}{\cs{l@nohyphenation}の定義を保証
-%    (sync with ltfinal 2017/03/09 v2.0t)}
+%    (sync with ltfinal.dtx 2017/03/09 v2.0t)}
 % \changes{v1.1b}{2017/03/19}{\cs{document@default@language}の定義を保証
-%    (sync with ltfinal 2017/03/09 v2.0t)}
+%    (sync with ltfinal.dtx 2017/03/09 v2.0t)}
 % \changes{v1.1n}{2018/10/31}{\LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策を
 %    \file{plvers.dtx} (plfinal) から\file{plcore.dtx}へ移動}
 %
@@ -362,7 +364,9 @@
 %    \cs{platexrelease}のエミュレート内部処理を分離}
 % \changes{v1.1h}{2018/01/10}{Modify \cs{plIncludeInRelease} code
 %    to check matching \cs{plEndIncluderelease}
-%    (sync with ltvers 2018/01/08 v1.1a)}
+%    (sync with ltvers.dtx 2018/01/08 v1.1a)}
+% \changes{v1.1p}{2019/09/16}{エラーメッセージを更新
+%    (sync with ltvers.dtx 2019/07/01 v1.1c)}
 %
 % \iffalse
 % 備忘録：\LaTeX{}では\cs{if@includeinrelease}の定義を
@@ -378,7 +382,8 @@
 \def\plIncludeInRelease#1{%
   \if@plincludeinrelease
     \PackageError{platexrelease}
-      {mis-matched \string\plIncludeInRelease}{}%
+      {mis-matched \string\plIncludeInRelease}%
+      {There is an \string\plEndIncludeRelease\space missing}%
     \@plincludeinreleasefalse
   \fi
   \kernel@ifnextchar[%
@@ -431,7 +436,7 @@
   #2#3\@end@check@plIncludeInRelease{%
   \ifx\@check@plIncludeInRelease#2\else
     \PackageError{platexrelease}
-      {skipped \string\plIncludeInRelease}{}%
+      {skipped \string\plIncludeInRelease\space for tag \string#2}{}%
   \fi}
 %</plcore|platexrelease>
 %    \end{macrocode}
