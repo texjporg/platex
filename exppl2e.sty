@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2018/12/02 v1.1c Experimental pLaTeX2e features]
+                [2019/09/16 v1.1d Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -296,7 +296,7 @@
 % \cs{strut}を縦数式ディレクションで使った場合への修正。
 %    \begin{macrocode}
 %% \strut の改良版
-\def\strut{\relax
+\DeclareRobustCommand\strut{\relax
   \iftdir
     \ifmdir
       %% [縦数式ディレクション]
