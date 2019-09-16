@@ -69,7 +69,8 @@
 \def\plIncludeInRelease#1{%
   \if@plincludeinrelease
     \PackageError{platexrelease}
-      {mis-matched \string\plIncludeInRelease}{}%
+      {mis-matched \string\plIncludeInRelease}%
+      {There is an \string\plEndIncludeRelease\space missing}%
     \@plincludeinreleasefalse
   \fi
   \kernel@ifnextchar[%
@@ -108,7 +109,7 @@
   #2#3\@end@check@plIncludeInRelease{%
   \ifx\@check@plIncludeInRelease#2\else
     \PackageError{platexrelease}
-      {skipped \string\plIncludeInRelease}{}%
+      {skipped \string\plIncludeInRelease\space for tag \string#2}{}%
   \fi}
 %% File: plfonts.dtx
 \let\k@encoding\@empty
@@ -152,11 +153,11 @@
 \newbox\zstrutbox
 \newbox\ystrutbox
 \def\strutbox{\iftdir\tstrutbox\else\ystrutbox\fi}
-\def\strut{\relax
-  \ifydir
-    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi
-  \else
+\DeclareRobustCommand\strut{\relax
+  \iftdir
     \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
+  \else
+    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi
   \fi}
 \def\tstrut{\relax\hbox{\tate
    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi}}
@@ -681,13 +682,13 @@
 \DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\edef\k@shape{#1}}
 \DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
-\def\usekanji#1#2#3#4{%
+\DeclareRobustCommand\usekanji[4]{%
     \kanjiencoding{#1}\kanjifamily{#2}\kanjiseries{#3}\kanjishape{#4}%
     \selectfont\ignorespaces}
-\def\useroman#1#2#3#4{%
+\DeclareRobustCommand\useroman[4]{%
     \romanencoding{#1}\romanfamily{#2}\romanseries{#3}\romanshape{#4}%
     \selectfont\ignorespaces}
-\def\usefont#1#2#3#4{%
+\DeclareRobustCommand\usefont[4]{%
   \edef\tmp@item{{#1}}%
   \expandafter\expandafter\expandafter
   \inlist@\expandafter\tmp@item\expandafter{\kenc@list}%
@@ -1138,7 +1139,7 @@
   \stepcounter{page}%
   \let\firstmark\botmark
 }
-\def \AtBeginDvi #1{%
+\DeclareRobustCommand \AtBeginDvi [1]{%
   \global \setbox \@begindvibox
     \vbox{\yoko \unvbox \@begindvibox #1}%
 }
@@ -1301,7 +1302,7 @@
        \csname bm@#3\endcsname}%
     \if@pboxsw \m@th$\null\fi% !!!
   \@end@tempboxa}
-\def\underline#1{%
+\DeclareRobustCommand\underline[1]{%
   \relax
   \ifmmode\@@underline{#1}%
   \else \leavevmode\null$\@@underline{\hbox{#1}}\m@th$\null\relax\fi}

@@ -15,7 +15,7 @@
 %% File: plfonts.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{ptrace}
-     [2017/08/05 v1.6h Standard pLaTeX package (font tracing)]
+     [2019/09/16 v1.6t Standard pLaTeX package (font tracing)]
 \RequirePackageWithOptions{tracefnt}
 \DeclareRobustCommand\selectfont{%
   \let\tmp@error@fontshape\error@fontshape
@@ -108,7 +108,7 @@
         \let\size@update\relax}}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\set@fontsize}
-                   {Construct \ystrutbox}%
+                   {ASCII Corporation original}%
 \def\set@fontsize#1#2#3{%
     \@defaultunits\@tempdimb#2pt\relax\@nnil
     \edef\f@size{\strip@pt\@tempdimb}%
@@ -167,7 +167,7 @@
   \fi}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\adjustbaseline}
-                   {Change zenkaku reference}%
+                   {ASCII Corporation original}%
 \def\adjustbaseline{%
     \setbox\adjust@box\hbox{\char\euc"A1A1}%"
     \cht\ht\adjust@box

@@ -24,7 +24,8 @@
 \def\plIncludeInRelease#1{%
   \if@plincludeinrelease
     \PackageError{platexrelease}
-      {mis-matched \string\plIncludeInRelease}{}%
+      {mis-matched \string\plIncludeInRelease}%
+      {There is an \string\plEndIncludeRelease\space missing}%
     \@plincludeinreleasefalse
   \fi
   \kernel@ifnextchar[%
@@ -63,7 +64,7 @@
   #2#3\@end@check@plIncludeInRelease{%
   \ifx\@check@plIncludeInRelease#2\else
     \PackageError{platexrelease}
-      {skipped \string\plIncludeInRelease}{}%
+      {skipped \string\plIncludeInRelease\space for tag \string#2}{}%
   \fi}
 %% File: platexrelease.dtx
 \NeedsTeXFormat{pLaTeX2e}
@@ -196,12 +197,21 @@ of this package available from CTAN}
 \let\ystrutbox\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\strutbox}
-                   {Add \strutbox}%
+                   {Macro definition of \strutbox}%
 \def\strutbox{\iftdir\tstrutbox\else\ystrutbox\fi}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\strutbox}
-                   {Add \strutbox}%
+                   {LaTeX2e original}%
 \newbox\strutbox % emulation purpose only
+\plEndIncludeInRelease
+\plIncludeInRelease{2019/10/01}{\strut}
+                   {Make robust}%
+\DeclareRobustCommand\strut{\relax
+  \iftdir
+    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
+  \else
+    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi
+  \fi}
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\strut}
                    {Use \ystrutbox}%
@@ -211,15 +221,17 @@ of this package available from CTAN}
   \else
     \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
   \fi}
+\expandafter \let \csname strut \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\strut}
-                   {Use \ystrutbox}%
+                   {ASCII Corporation original}%
 \def\strut{\relax
   \ifydir
     \ifmmode\copy\strutbox\else\unhcopy\strutbox\fi
   \else
     \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi
   \fi}
+\expandafter \let \csname strut \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\ystrut}
                    {Add \ystrut}%
@@ -279,7 +291,7 @@ of this package available from CTAN}
 \fi
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\DeclareFontEncoding@}
-                   {UTF-8 Encoding}%
+                   {ASCII Corporation original}%
 \def\DeclareFontEncoding@#1#2#3{%
   \expandafter
   \ifx\csname T@#1\endcsname\relax
@@ -312,7 +324,7 @@ of this package available from CTAN}
    }
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\DeclareErrorKanjiFont}
-                   {No side effects please}%
+                   {ASCII Corporation original}%
 \def\DeclareErrorKanjiFont#1#2#3#4#5{%
    \xdef\error@kfontshape{%
       \noexpand\expandafter\noexpand\split@name\noexpand\string
@@ -353,7 +365,7 @@ of this package available from CTAN}
         \let\size@update\relax}}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\set@fontsize}
-                   {Construct \ystrutbox}%
+                   {ASCII Corporation original}%
 \def\set@fontsize#1#2#3{%
     \@defaultunits\@tempdimb#2pt\relax\@nnil
     \edef\f@size{\strip@pt\@tempdimb}%
@@ -399,7 +411,7 @@ of this package available from CTAN}
   \fi}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\adjustbaseline}
-                   {Change zenkaku reference}%
+                   {ASCII Corporation original}%
 \def\adjustbaseline{%
     \setbox\adjust@box\hbox{\char\euc"A1A1}%"
     \cht\ht\adjust@box
@@ -419,6 +431,41 @@ of this package available from CTAN}
     \tbaselineshift\adjust@dimen
   \fi}
 \plEndIncludeInRelease
+\plIncludeInRelease{2019/10/01}{\usefont}
+                   {Make robust}%
+\DeclareRobustCommand\usekanji[4]{%
+    \kanjiencoding{#1}\kanjifamily{#2}\kanjiseries{#3}\kanjishape{#4}%
+    \selectfont\ignorespaces}
+\DeclareRobustCommand\useroman[4]{%
+    \romanencoding{#1}\romanfamily{#2}\romanseries{#3}\romanshape{#4}%
+    \selectfont\ignorespaces}
+\DeclareRobustCommand\usefont[4]{%
+  \edef\tmp@item{{#1}}%
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\kenc@list}%
+  \ifin@ \usekanji{#1}{#2}{#3}{#4}%
+  \else\useroman{#1}{#2}{#3}{#4}%
+  \fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\usefont}
+                   {ASCII Corporation original}%
+\def\usekanji#1#2#3#4{%
+    \kanjiencoding{#1}\kanjifamily{#2}\kanjiseries{#3}\kanjishape{#4}%
+    \selectfont\ignorespaces}
+\def\useroman#1#2#3#4{%
+    \romanencoding{#1}\romanfamily{#2}\romanseries{#3}\romanshape{#4}%
+    \selectfont\ignorespaces}
+\def\usefont#1#2#3#4{%
+  \edef\tmp@item{{#1}}%
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\kenc@list}%
+  \ifin@ \usekanji{#1}{#2}{#3}{#4}%
+  \else\useroman{#1}{#2}{#3}{#4}%
+  \fi}
+\expandafter \let \csname usekanji \endcsname \@undefined
+\expandafter \let \csname useroman \endcsname \@undefined
+\expandafter \let \csname usefont \endcsname \@undefined
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\textunderscore}
                    {Baseline shift for \textunderscore}%
 \DeclareTextCommandDefault{\textunderscore}{%
@@ -429,7 +476,7 @@ of this package available from CTAN}
   \vbox{\hrule\@width.3em}}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\textunderscore}
-                   {Baseline shift for \textunderscore}%
+                   {ASCII Corporation original}%
 \DeclareTextCommandDefault{\textunderscore}{%
   \leavevmode\kern.06em
   \iftdir\raise-\tbaselineshift\fi
@@ -538,7 +585,7 @@ of this package available from CTAN}
 \let\pltx@isletter\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/06/10}{\@text@composite}
-                   {Fix for non-zero baselineshift (wrong)}%
+                   {Fix for non-zero baselineshift (revert)}%
 \def\@text@composite#1#2#3\@text@composite{%
    \expandafter\@text@composite@x
       \csname\string#1-\string#2\endcsname}
@@ -553,7 +600,7 @@ of this package available from CTAN}
   \csname\string#1-\string#2\endcsname}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@text@composite}
-                   {Fix for non-zero baselineshift (wrong)}%
+                   {LaTeX2e original}%
 \def\@text@composite#1#2#3\@text@composite{%
    \expandafter\@text@composite@x
       \csname\string#1-\string#2\endcsname}
@@ -756,7 +803,7 @@ of this package available from CTAN}
 }
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\check@nocorr@}
-                   {Italic correction before \textt...}%
+                   {ASCII Corporation original}%
 \def \check@nocorr@ #1#2\nocorr#3\@nil {%
   \let \check@icl \relax % changed from \maybe@ic
   \def \check@icr {\ifvmode \else \aftergroup \maybe@ic \fi}%
@@ -805,7 +852,7 @@ of this package available from CTAN}
 \fi
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\<}
-                   {\inhibitglue in vertical mode}%
+                   {ASCII Corporation original}%
 \def\<{\inhibitglue}
 \plEndIncludeInRelease
 %% File: plcore.dtx
@@ -1428,12 +1475,20 @@ of this package available from CTAN}
   \let\firstmark\botmark
 }
 \plEndIncludeInRelease
+\plIncludeInRelease{2019/10/01}{\AtBeginDvi}
+                   {Make robust}%
+\DeclareRobustCommand \AtBeginDvi [1]{%
+  \global \setbox \@begindvibox
+    \vbox{\yoko \unvbox \@begindvibox #1}%
+}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/07/01}{\AtBeginDvi}
                    {Fix for incompatible direction}%
 \def \AtBeginDvi #1{%
   \global \setbox \@begindvibox
     \vbox{\yoko \unvbox \@begindvibox #1}%
 }
+\expandafter \let \csname AtBeginDvi \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\AtBeginDvi}
                    {LaTeX2e original}%
@@ -1441,6 +1496,7 @@ of this package available from CTAN}
   \global \setbox \@begindvibox
     \vbox{\unvbox \@begindvibox #1}%
 }
+\expandafter \let \csname AtBeginDvi \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@makefnmark}
                    {Remove extra \xkanjiskip}%
@@ -1893,12 +1949,20 @@ of this package available from CTAN}
     \if@pboxsw \m@th$\fi
   \@end@tempboxa}
 \plEndIncludeInRelease
+\plIncludeInRelease{2019/10/01}{\underline}
+                   {Make robust}%
+\DeclareRobustCommand\underline[1]{%
+  \relax
+  \ifmmode\@@underline{#1}%
+  \else \leavevmode\null$\@@underline{\hbox{#1}}\m@th$\null\relax\fi}
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\underline}
                    {Remove extra \xkanjiskip}%
 \def\underline#1{%
   \relax
   \ifmmode\@@underline{#1}%
   \else \leavevmode\null$\@@underline{\hbox{#1}}\m@th$\null\relax\fi}
+\expandafter \let \csname underline \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\underline}
                    {LaTeX2e original}%
@@ -1906,6 +1970,7 @@ of this package available from CTAN}
   \relax
   \ifmmode\@@underline{#1}%
   \else $\@@underline{\hbox{#1}}\m@th$\relax\fi}
+\expandafter \let \csname underline \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2018/03/09}%
                    {\e@alloc@chardef}{Extended Allocation (FAM256)}%
