@@ -107,7 +107,7 @@
 % \changes{v1.6s}{2019/08/13}{Explicitly set some defaults
 %    after \cs{DeclareErrorKanjiFont} change
 %    (sync with ltfssini.dtx 2019/07/09 v3.1c)}
-% \changes{v1.6t}{2019/09/16}{Make \cs{strut} robust
+% \changes{v1.6t}{2019/09/16}{Make \cs{strut}, \cs{tstrut} etc. robust
 %    (sync with ltdefns.dtx 2019/08/27 v1.5f)}
 % \changes{v1.6t}{2019/09/16}{Make \cs{usefont} etc. robust
 %    (sync with ltfssbas.dtx 2019/08/27 v3.2d)}
@@ -543,7 +543,7 @@
 % \changes{v1.3h}{1999/08/09}{縦組のとき、幅のあるボックスになってしまう
 % のを修正}
 % \changes{v1.6f}{2017/02/20}{\cs{strutbox}の代わりに\cs{ystrutbox}を使用}
-% \changes{v1.6t}{2019/09/16}{Make \cs{strut} robust
+% \changes{v1.6t}{2019/09/16}{Make \cs{strut}, \cs{tstrut} etc. robust
 %    (sync with ltdefns.dtx 2019/08/27 v1.5f)}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2019/10/01}{\strut}
@@ -577,17 +577,28 @@
 %<platexrelease>  \fi}
 %<platexrelease>\expandafter \let \csname strut \endcsname \@undefined
 %<platexrelease>\plEndIncludeInRelease
-%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\tstrut}
 % \begin{macro}{\zstrut}
 %    \begin{macrocode}
-\def\tstrut{\relax\hbox{\tate
+%<platexrelease>\plIncludeInRelease{2019/10/01}{\tstrut}
+%<platexrelease>                   {Make robust}%
+%<*plcore|platexrelease>
+\DeclareRobustCommand\tstrut{\relax\hbox{\tate
    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi}}
-\def\zstrut{\relax\hbox{\tate
+\DeclareRobustCommand\zstrut{\relax\hbox{\tate
    \ifmmode\copy\zstrutbox\else\unhcopy\zstrutbox\fi}}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\tstrut}
+%<platexrelease>                   {ASCII Corporation original}%
+%<platexrelease>\def\tstrut{\relax\hbox{\tate
+%<platexrelease>   \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi}}
+%<platexrelease>\def\zstrut{\relax\hbox{\tate
+%<platexrelease>   \ifmmode\copy\zstrutbox\else\unhcopy\zstrutbox\fi}}
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -595,13 +606,17 @@
 % \begin{macro}{\ystrut}
 % \changes{v1.6f}{2017/02/20}{\cs{ystrut}を追加}
 %    \begin{macrocode}
-%</plcore>
-%<platexrelease>\plIncludeInRelease{2017/04/08}{\ystrut}
-%<platexrelease>                   {Add \ystrut}%
+%<platexrelease>\plIncludeInRelease{2019/10/01}{\ystrut}
+%<platexrelease>                   {Make robust}%
 %<*plcore|platexrelease>
-\def\ystrut{\relax\hbox{\yoko
+\DeclareRobustCommand\ystrut{\relax\hbox{\yoko
     \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi}}
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\ystrut}
+%<platexrelease>                   {Add \ystrut}%
+%<platexrelease>\def\ystrut{\relax\hbox{\yoko
+%<platexrelease>    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi}}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\ystrut}
 %<platexrelease>                   {Add \ystrut}%
