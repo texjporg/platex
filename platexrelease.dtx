@@ -307,9 +307,8 @@ of this package available from CTAN}
 %
 % \section{注意：p\LaTeXe{}のバグ情報}
 %
-% 以下の日付のp\LaTeXe{}にはcriticalなバグがあることを、
-% 日本語\TeX{}開発コミュニティが把握しています。
-% エミュレートしようと考えている場合は、注意してください。
+% 過去のp\LaTeXe{}には何度かcriticalなバグがあったため、
+% そのバージョンをエミュレートした場合に警告が出るようにします。
 % \changes{v1.0d}{2016/06/08}{p\LaTeX\ \texttt{!<2016/04/17!>}版と
 %      p\LaTeX\ \texttt{!<2016/05/07!>}版に警告}
 % \changes{v1.0e}{2016/06/30}{p\LaTeX\ \texttt{!<2016/06/10!>}版に警告}
@@ -324,6 +323,7 @@ of this package available from CTAN}
       some critical bugs. We advise you to\MessageBreak
       select another format date}
 \plIncludeInRelease{2017/10/28}{\PackageWarning}{pLaTeX Info}%
+  % * <2019-10-01>
   % * <2019-04-06>
   % * <2018-12-01>
   % * <2018-07-28>+1
