@@ -84,6 +84,7 @@
 % \changes{v1.0x}{2018/09/03}{platexcheatに言及}
 % \changes{v1.0x}{2018/09/03}{plautopatchに言及}
 % \changes{v1.0y}{2018/09/22}{最終更新日を\file{pldoc.pdf}に表示}
+% \changes{v1.0z}{2019/09/29}{タイポ修正}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -126,6 +127,7 @@
 % \changes{v1.0x}{2018/09/03}{Mention platexcheat (Japanese only).}
 % \changes{v1.0x}{2018/09/03}{Mention plautopatch.}
 % \changes{v1.0y}{2018/09/22}{Show last update info on \file{pldoc.pdf}}
+% \changes{v1.0z}{2019/09/29}{Fix typos in document.}
 %\fi
 % \fi
 %
@@ -133,7 +135,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2018/09/22 v1.0y pLaTeX document file]
+\ProvidesFile{platex.dtx}[2019/09/29 v1.0z pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -197,11 +199,13 @@
 % \changes{v1.0k}{2016/05/21}{変更履歴も出力するようにした}
 % \changes{v1.0q}{2017/11/29}{英語版ドキュメントを追加}
 % \changes{v1.0x}{2018/09/03}{ドキュメントを更新}
+% \changes{v1.0z}{2019/09/29}{タイポ修正}
 %\else
 % \changes{v1.0f}{2016/04/12}{Update document.}
 % \changes{v1.0k}{2016/05/21}{Print also changes.}
 % \changes{v1.0q}{2017/11/29}{New English documentation added!}
 % \changes{v1.0x}{2018/09/03}{Update document.}
+% \changes{v1.0z}{2019/09/29}{Fix typos in document.}
 %\fi
 %\ifJAPANESE
 % \begin{chuui}
@@ -221,9 +225,11 @@
 %\fi
 %
 %\ifJAPANESE
-% 2010年以降、アスキー\pTeX{}は、国際的に広く使われている\TeX\ Liveという
-% ディストリビューションに取り込まれ、そこで独自の改良や仕様変更が加えられ
-% てきました。最近（2011年以降）の\TeX\ LiveやW32\TeX{}では、\pLaTeX{}も
+% 2010年以降、アスキー\pTeX\footnote{アスキー日本語\pTeX:
+% \texttt{https://asciidwango.github.io/ptex/}}は、
+% 国際的に広く使われている\TeX\ Liveというディストリビューションに
+% 取り込まれ、そこで独自の改良や仕様変更が加えられてきました。
+% 最近（2011年以降）の\TeX\ LiveやW32\TeX{}では、\pLaTeX{}も
 % 元々の\pTeX{}ではなく、その拡張版\epTeX{}をエンジンに用いるようになって
 % います。また、\pLaTeX{}のベースである\LaTeX{}も更新が進められています。
 %
@@ -245,16 +251,17 @@
 % \def\JLaTeX{\leavevmode\lower.5ex\hbox{J}\kern-.15em\LaTeX}
 % \pLaTeX\ is a Japanese \LaTeX\ format, which is adjusted/extended
 % to be more suitable for writing Japanese documents.
-% It requires \pTeX, a \TeX\ engine with extensions for
-% Japanese typesetting, which is designed for high-quality
+% It requires \pTeX\footnote{The \pTeX\ website:
+% \texttt{https://asciidwango.github.io/ptex/} (in Japanese)},
+% a \TeX\ engine with extensions for Japanese typesetting,
+% which is designed for high-quality
 % Japanese book ``p''ublishing.\footnote{There is another
 % old implementation of Japanese \LaTeX, called
 % \JLaTeX\ (not available in \TeX\ Live).
 % Also, MiK\TeX\ has another program \texttt{platex}, but
 % it has nothing to do with our Japanese \pLaTeX!}
-% Both \pTeX\ and \pLaTeX\ were developed by ASCII Corporation (and
-% its successor ASCII Media Works\footnote{The \pTeX\ website:
-% \texttt{http://ascii.asciimw.jp/pb/ptex/} (closed in 2016).}),
+% Both \pTeX\ and \pLaTeX\ were developed by ASCII Corporation
+% (and its successor ASCII Media Works),
 % so they are often referred to as ``ASCII \pTeX'' and ``ASCII \pLaTeX''
 % respectively.
 %
