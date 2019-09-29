@@ -1,56 +1,84 @@
-%% <2019-04-06>
+%% <2019-04-06> and <2019-10-01>
 \documentclass{plnews}
 
 \publicationyear{2019}% 発行年
-\publicationmonth{04}% 発行月
+\publicationmonth{10}% 発行月
 \publicationissue{c13}% 番号
 \author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
 
-\def\cs#1{\texttt{\char92 #1}}
+\def\cs#1{\texttt{\char92\nobreak #1}}
 \def\pTeX{p\kern-.15em\TeX}
 \def\eTeX{$\varepsilon$-\TeX}
 \def\epTeX{$\varepsilon$-\pTeX}
 \def\pLaTeX{p\kern-.05em\LaTeX}
 \def\pLaTeXe{p\kern-.05em\LaTeXe}
+\xspcode`\\=1
 
 \begin{document}
 
 \maketitle
 
-この文書はコミュニティ版\pLaTeXe\ \texttt{<2019-04-06>}について、
-\pLaTeXe\ \texttt{<2018-12-01>}からの更新箇所をまとめたものです。
+コミュニティ版\pLaTeXe\ \texttt{<2019-04-06>}および
+\texttt{<2019-10-01>}について、
+\pLaTeXe\ \texttt{<2018-12-01>}からの更新箇所をまとめます。
 
 
 \section{標準クラスの新元号対応}
-\pLaTeX{}付属の標準クラス
+\pLaTeXe\ \texttt{<2019-04-06>}では、付属の標準クラス
 (jarticle, jbook, jreport, tarticle, tbook, treport)で
-\verb+\和暦+を指定した場合の\verb+\today+について、
+\cs{和暦} を指定した場合の \cs{today} について、
 2019年5月1日から施行予定の新元号「令和」に対応しました。
-{\year=2019 \month=4 \day=30 \西暦\today は\和暦\today}、
-{\year=2019 \month=5 \day=1 \西暦\today は\和暦\today}、
-{\year=2020 \month=1 \day=2 \西暦\today は\和暦\today}と
-なります。
-
-また、縦数式ディレクションで\verb+\today+を使った場合、
+\begin{itemize}
+\item {\year=2019 \month=4 \day=30
+       \西暦\today $\rightarrow$ \和暦\today}
+\item {\year=2019 \month=5 \day=1
+       \西暦\today $\rightarrow$ \和暦\today}
+\item {\year=2020 \month=1 \day=2
+       \西暦\today $\rightarrow$ \和暦\today}
+\end{itemize}
+また、縦数式ディレクションで \cs{today} を使った場合、
 従来は縦組と同じく漢数字に変換されていましたが、
 このバージョンからは算用数字としました。
 
 
-\section{\LaTeXe\ \texttt{<2019-04-01>}対応}
-\LaTeXe\ \texttt{<2019-04-01>}（予定）の表組み（tabular環境）の
-マクロへの微修正に追随しました。
+\section{\LaTeXe\ \texttt{<2019-10-01>}対応}
+オリジナルの\LaTeX に合わせるため、\pLaTeX へも
+いくつか修正を加えました。
 
+\pLaTeXe\ \texttt{<2019-04-06>}時点では
+\begin{itemize}
+\item 表組み（tabular環境）のマクロの微修正
+\end{itemize}
+に対応しました。
+
+\pLaTeXe\ \texttt{<2019-10-01>}時点では、さらに
+\begin{itemize}
+\item \cs{DeclareErrorKanjiFont}が\cs{k@family}等を定義しない
+  ように（\cs{DeclareErrorFont}に追随）
+\item ユーザ用コマンドをrobustに
+  \begin{itemize}
+    \item \cs{strut}関係 (\cs{\{t,z,y\}strut})
+    \item \cs{usefont}関係 (\cs{use\{roman,kanji\}})
+    \item \cs{userelfont}, \cs{adjustbaseline}
+    \item \cs{AtBeginDvi}, \cs{underline}
+    \item plextパッケージの\cs{bou}, \cs{kasen}
+  \end{itemize}
+\end{itemize}
+にも対応しました。
 
 \section{開発版のテストのお願い}
 今後\pLaTeX{}に導入するかもしれない修正パッチや仕様変更のテストに
 ご協力ください。\TeX{}ファイルの冒頭（|\documentclass|より前）で
 \begin{verbatim}
-\RequirePackage{exppl2e}
+  \RequirePackage{exppl2e}
 \end{verbatim}
 と書くことで、現在の開発版をテストすることができます。
-現在は、支柱コマンドで用いられる|\strut|の挙動に関するパッチ、
-空のフロートだけのページが発生した場合の処理に関するパッチが
-入っています。
+現在は
+\begin{itemize}
+  \item 支柱コマンドで用いられる|\strut|の挙動
+  \item 空のフロートだけのページが発生した場合の処理
+\end{itemize}
+に関するパッチが入っています。
 
 詳細は\file{exppl2e.pdf}を参照してください。ここには、
 その他の\pLaTeXe{}の既知の制約事項も記載しています。
