@@ -15,7 +15,7 @@
 %% File: plext.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plext}
-   [2018/10/07 v1.2k pLaTeX package file (community edition)]
+   [2019/09/29 v1.2l pLaTeX package file (community edition)]
 \newif\if@rotsw
 \def\array{\let\@acol\@arrayacol \let\@classz\@arrayclassz
   \let\@classiv\@arrayclassiv
@@ -538,7 +538,7 @@
 \def\@Kanji#1{\kansuji #1}
 \def\kanji{\iftdir\expandafter\kansuji\fi}
 \def\boutenchar{\char\euc"A1A2}
-\def\bou#1{\ifvmode\leavevmode\fi\@bou#1\end}
+\DeclareRobustCommand\bou[1]{\ifvmode\leavevmode\fi\@bou#1\end}
 \def\@bou#1{%
   \ifx#1\end \let\next=\relax
   \else
@@ -557,7 +557,7 @@
     \fi
     \let\next=\@bou
   \fi\next}
-\def\kasen#1{%
+\DeclareRobustCommand\kasen[1]{%
   \ifydir\underline{#1}%
   \else\if@rotsw\underline{#1}\else
     \setbox\z@\hbox{#1}\leavevmode\raise.7zw

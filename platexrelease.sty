@@ -247,6 +247,8 @@ of this package available from CTAN}
    \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi}}
 \def\zstrut{\relax\hbox{\tate
    \ifmmode\copy\zstrutbox\else\unhcopy\zstrutbox\fi}}
+\expandafter \let \csname tstrut \endcsname \@undefined
+\expandafter \let \csname zstrut \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2019/10/01}{\ystrut}
                    {Make robust}%
@@ -257,10 +259,12 @@ of this package available from CTAN}
                    {Add \ystrut}%
 \def\ystrut{\relax\hbox{\yoko
     \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi}}
+\expandafter \let \csname ystrut \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\ystrut}
                    {Add \ystrut}%
 \let\ystrut\@undefined
+\expandafter \let \csname ystrut \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2018/04/01}{\DeclareFontEncoding@}
                    {UTF-8 Encoding}%
@@ -359,6 +363,15 @@ of this package available from CTAN}
    \gdef\f@size{#5}%
    \gdef\f@baselineskip{#5pt}}
 \plEndIncludeInRelease
+\plIncludeInRelease{2019/10/01}{\userelfont}
+                   {Make robust}%
+\DeclareRobustCommand\userelfont{\@knjcmdtrue}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\userelfont}
+                   {ASCII Corporation original}%
+\def\userelfont{\@knjcmdtrue}
+\expandafter \let \csname userelfont \endcsname \@undefined
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\set@fontsize}
                    {Construct \ystrutbox}%
 \def\set@fontsize#1#2#3{%
@@ -409,6 +422,27 @@ of this package available from CTAN}
                 \@height.7\baselineskip \@depth.3\baselineskip}%
         \let\size@update\relax}}
 \plEndIncludeInRelease
+\plIncludeInRelease{2019/10/01}{\adjustbaseline}
+                   {Make robust}%
+\DeclareRobustCommand\adjustbaseline{%
+    \setbox\adjust@box\hbox{\char\jis"3441}%"
+    \cht\ht\adjust@box
+    \cdp\dp\adjust@box
+    \cwd\wd\adjust@box
+    \cvs\normalbaselineskip
+    \chs\cwd
+    \cHT\cht \advance\cHT\cdp
+  \iftdir
+    \setbox\adjust@box\hbox{\tbaselineshift\z@ M}%
+    \adjust@dimen\ht\adjust@box
+    \advance\adjust@dimen\dp\adjust@box
+    \advance\adjust@dimen-\cHT
+    \divide\adjust@dimen\tw@
+    \advance\adjust@dimen\cdp
+    \advance\adjust@dimen-\dp\adjust@box
+    \tbaselineshift\adjust@dimen
+  \fi}
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/07/29}{\adjustbaseline}
                    {Change zenkaku reference}%
 \def\adjustbaseline{%
@@ -429,6 +463,7 @@ of this package available from CTAN}
     \advance\adjust@dimen-\dp\adjust@box
     \tbaselineshift\adjust@dimen
   \fi}
+\expandafter \let \csname adjustbaseline \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\adjustbaseline}
                    {ASCII Corporation original}%
@@ -450,6 +485,7 @@ of this package available from CTAN}
     \advance\adjust@dimen-\dp\adjust@box
     \tbaselineshift\adjust@dimen
   \fi}
+\expandafter \let \csname adjustbaseline \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2019/10/01}{\usefont}
                    {Make robust}%

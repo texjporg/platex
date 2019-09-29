@@ -457,7 +457,7 @@
   \fi
 }
 \newif\if@knjcmd
-\def\userelfont{\@knjcmdtrue}
+\DeclareRobustCommand\userelfont{\@knjcmdtrue}
 \DeclareRobustCommand\selectfont{%
   \let\tmp@error@fontshape\error@fontshape
   \let\error@fontshape\error@kfontshape
@@ -535,7 +535,7 @@
         \let\size@update\relax}}
 \newbox\adjust@box
 \newdimen\adjust@dimen
-\def\adjustbaseline{%
+\DeclareRobustCommand\adjustbaseline{%
     \setbox\adjust@box\hbox{\char\jis"3441}%"
     \cht\ht\adjust@box
     \cdp\dp\adjust@box

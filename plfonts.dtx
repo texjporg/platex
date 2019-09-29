@@ -111,13 +111,15 @@
 %    (sync with ltdefns.dtx 2019/08/27 v1.5f)}
 % \changes{v1.6t}{2019/09/16}{Make \cs{usefont} etc. robust
 %    (sync with ltfssbas.dtx 2019/08/27 v3.2d)}
+% \changes{v1.6u}{2019/09/29}{Make \cs{userelfont} robust}
+% \changes{v1.6u}{2019/09/29}{Make \cs{adjustbaseline} robust}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2019/09/16 v1.6t pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2019/09/29 v1.6u pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -598,6 +600,8 @@
 %<platexrelease>   \ifmmode\copy\tstrutbox\else\unhcopy\tstrutbox\fi}}
 %<platexrelease>\def\zstrut{\relax\hbox{\tate
 %<platexrelease>   \ifmmode\copy\zstrutbox\else\unhcopy\zstrutbox\fi}}
+%<platexrelease>\expandafter \let \csname tstrut \endcsname \@undefined
+%<platexrelease>\expandafter \let \csname zstrut \endcsname \@undefined
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
@@ -617,10 +621,12 @@
 %<platexrelease>                   {Add \ystrut}%
 %<platexrelease>\def\ystrut{\relax\hbox{\yoko
 %<platexrelease>    \ifmmode\copy\ystrutbox\else\unhcopy\ystrutbox\fi}}
+%<platexrelease>\expandafter \let \csname ystrut \endcsname \@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\ystrut}
 %<platexrelease>                   {Add \ystrut}%
 %<platexrelease>\let\ystrut\@undefined
+%<platexrelease>\expandafter \let \csname ystrut \endcsname \@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
@@ -1265,16 +1271,32 @@
 %
 %
 % \begin{macro}{\if@knjcmd}
-% \begin{macro}{\userelfont}
 % |\if@knjcmd|は欧文書体を従属書体にするかどうかのフラグです。
 % このフラグが真になると、欧文書体に従属書体が使われます。
-% このフラグは|\userelfont|コマンドによって、\emph{真}となります。
-% そして|\selectfont|実行後には\emph{偽}に初期化されます。
 %    \begin{macrocode}
 \newif\if@knjcmd
-\def\userelfont{\@knjcmdtrue}
 %    \end{macrocode}
 % \end{macro}
+%
+% \begin{macro}{\userelfont}
+% |\if@knjcmd|フラグは|\userelfont|コマンドによって、\emph{真}となります。
+% そして|\selectfont|実行後には\emph{偽}に初期化されます。
+% \changes{v1.6u}{2019/09/29}{Make \cs{userelfont} robust}
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2019/10/01}{\userelfont}
+%<platexrelease>                   {Make robust}%
+%<*plcore|platexrelease>
+\DeclareRobustCommand\userelfont{\@knjcmdtrue}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\userelfont}
+%<platexrelease>                   {ASCII Corporation original}%
+%<platexrelease>\def\userelfont{\@knjcmdtrue}
+%<platexrelease>\expandafter \let \csname userelfont \endcsname \@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
+%    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\selectfont}
@@ -1487,7 +1509,7 @@
 % 全角空白（EUCコード\texttt{0xA1A1}）はJFMで特殊なタイプに分類される可能性
 % があるため、和文書体の基準を「漢」（JISコード\texttt{0x3441}）へ変更しました。
 % \changes{v1.6h}{2017/08/05}{和文書体の基準を全角空白から「漢」に変更}
-%
+% \changes{v1.6u}{2019/09/29}{Make \cs{adjustbaseline} robust}
 %    \begin{macrocode}
 \newbox\adjust@box
 \newdimen\adjust@dimen
@@ -1495,10 +1517,10 @@
 %
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease|trace>\plIncludeInRelease{2017/07/29}{\adjustbaseline}
-%<platexrelease|trace>                   {Change zenkaku reference}%
+%<platexrelease|trace>\plIncludeInRelease{2019/10/01}{\adjustbaseline}
+%<platexrelease|trace>                   {Make robust}%
 %<*plcore|platexrelease|trace>
-\def\adjustbaseline{%
+\DeclareRobustCommand\adjustbaseline{%
 %    \end{macrocode}
 % 和文フォントの基準値を設定します。
 %    \begin{macrocode}
@@ -1538,6 +1560,33 @@
   \fi}
 %</plcore|platexrelease|trace>
 %<platexrelease|trace>\plEndIncludeInRelease
+%<platexrelease|trace>\plIncludeInRelease{2017/07/29}{\adjustbaseline}
+%<platexrelease|trace>                   {Change zenkaku reference}%
+%<platexrelease|trace>\def\adjustbaseline{%
+%<platexrelease|trace>    \setbox\adjust@box\hbox{\char\jis"3441}%"
+%<platexrelease|trace>    \cht\ht\adjust@box
+%<platexrelease|trace>    \cdp\dp\adjust@box
+%<platexrelease|trace>    \cwd\wd\adjust@box
+%<platexrelease|trace>    \cvs\normalbaselineskip
+%<platexrelease|trace>    \chs\cwd
+%<platexrelease|trace>    \cHT\cht \advance\cHT\cdp
+%<platexrelease|trace>  \iftdir
+%<platexrelease|trace>    \setbox\adjust@box\hbox{\tbaselineshift\z@ M}%
+%<platexrelease|trace>    \adjust@dimen\ht\adjust@box
+%<platexrelease|trace>    \advance\adjust@dimen\dp\adjust@box
+%<platexrelease|trace>    \advance\adjust@dimen-\cHT
+%<platexrelease|trace>    \divide\adjust@dimen\tw@
+%<platexrelease|trace>    \advance\adjust@dimen\cdp
+%<platexrelease|trace>    \advance\adjust@dimen-\dp\adjust@box
+%<platexrelease|trace>    \tbaselineshift\adjust@dimen
+%<*trace>
+%<platexrelease|trace>    \ifnum \tracingfonts>\tw@
+%<platexrelease|trace>      \typeout{baselineshift:\the\tbaselineshift}%
+%<platexrelease|trace>    \fi
+%</trace>
+%<platexrelease|trace>  \fi}
+%<platexrelease|trace>\expandafter \let \csname adjustbaseline \endcsname \@undefined
+%<platexrelease|trace>\plEndIncludeInRelease
 %<platexrelease|trace>\plIncludeInRelease{0000/00/00}{\adjustbaseline}
 %<platexrelease|trace>                   {ASCII Corporation original}%
 %<platexrelease|trace>\def\adjustbaseline{%
@@ -1563,6 +1612,7 @@
 %<platexrelease|trace>    \fi
 %</trace>
 %<platexrelease|trace>  \fi}
+%<platexrelease|trace>\expandafter \let \csname adjustbaseline \endcsname \@undefined
 %<platexrelease|trace>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
