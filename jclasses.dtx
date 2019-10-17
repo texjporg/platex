@@ -98,6 +98,8 @@
 % \changes{v1.8a}{2018/10/25}{ファイル書き出し時の行末文字対策
 %    (sync with ltsect.dtx 2018/09/26 v1.1c)}
 % \changes{v1.8b}{2019/04/02}{新元号対応}
+% \changes{v1.8c}{2019/10/17}{フォントサイズ変更命令をrobustに
+%    (sync with classes.dtx 2019/08/27 v1.4j)}
 % \fi
 %
 % \iffalse
@@ -127,7 +129,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2019/04/02 v1.8b
+  [2019/10/17 v1.8c
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -609,6 +611,17 @@
 %<tate>\kanjiencoding{\kanjiencodingdefault}%
 \normalsize
 %    \end{macrocode}
+%
+% |\normalsize|をrobustにします。
+% すぐ上で|\DeclareRobustCommand|とせずに、
+% カーネルの定義を|\renewcommand|した後に|\MakeRobust|を使っている理由は、
+% ログに |LaTeX Info: Redefining \normalsize on input line ...| という
+% メッセージを出したくないからです。
+% \changes{v1.8c}{2019/10/17}{フォントサイズ変更命令をrobustに
+%    (sync with classes.dtx 2019/08/27 v1.4j)}
+%    \begin{macrocode}
+\MakeRobust\normalsize
+%    \end{macrocode}
 % \end{macro}
 % \end{macro}
 %
@@ -639,8 +652,11 @@
 %
 % \begin{macro}{\small}
 % |\small|コマンドの定義は、|\normalsize|に似ています。
+% こちらはカーネルで未定義なので、直接|\DeclareRobustCommand|で定義します。
+% \changes{v1.8c}{2019/10/17}{フォントサイズ変更命令をrobustに
+%    (sync with classes.dtx 2019/08/27 v1.4j)}
 %    \begin{macrocode}
-\newcommand{\small}{%
+\DeclareRobustCommand{\small}{%
 %<*10pt>
   \@setfontsize\small\@ixpt{11}%
   \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
@@ -677,8 +693,11 @@
 %
 % \begin{macro}{\footnotesize}
 % |\footnotesize|コマンドの定義は、|\normalsize|に似ています。
+% こちらも直接|\DeclareRobustCommand|で定義します。
+% \changes{v1.8c}{2019/10/17}{フォントサイズ変更命令をrobustに
+%    (sync with classes.dtx 2019/08/27 v1.4j)}
 %    \begin{macrocode}
-\newcommand{\footnotesize}{%
+\DeclareRobustCommand{\footnotesize}{%
 %<*10pt>
   \@setfontsize\footnotesize\@viiipt{9.5}%
   \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
@@ -722,32 +741,34 @@
 % \begin{macro}{\Huge}
 % これらは先ほどのマクロよりも簡単です。これらはフォントサイズを変更する
 % だけで、リスト環境とディスプレイ数式のパラメータは変更しません。
+% \changes{v1.8c}{2019/10/17}{フォントサイズ変更命令をrobustに
+%    (sync with classes.dtx 2019/08/27 v1.4j)}
 %    \begin{macrocode}
 %<*10pt>
-\newcommand{\scriptsize}{\@setfontsize\scriptsize\@viipt\@viiipt}
-\newcommand{\tiny}{\@setfontsize\tiny\@vpt\@vipt}
-\newcommand{\large}{\@setfontsize\large\@xiipt{17}}
-\newcommand{\Large}{\@setfontsize\Large\@xivpt{21}}
-\newcommand{\LARGE}{\@setfontsize\LARGE\@xviipt{25}}
-\newcommand{\huge}{\@setfontsize\huge\@xxpt{28}}
-\newcommand{\Huge}{\@setfontsize\Huge\@xxvpt{33}}
+\DeclareRobustCommand{\scriptsize}{\@setfontsize\scriptsize\@viipt\@viiipt}
+\DeclareRobustCommand{\tiny}{\@setfontsize\tiny\@vpt\@vipt}
+\DeclareRobustCommand{\large}{\@setfontsize\large\@xiipt{17}}
+\DeclareRobustCommand{\Large}{\@setfontsize\Large\@xivpt{21}}
+\DeclareRobustCommand{\LARGE}{\@setfontsize\LARGE\@xviipt{25}}
+\DeclareRobustCommand{\huge}{\@setfontsize\huge\@xxpt{28}}
+\DeclareRobustCommand{\Huge}{\@setfontsize\Huge\@xxvpt{33}}
 %</10pt>
 %<*11pt>
-\newcommand{\scriptsize}{\@setfontsize\scriptsize\@viiipt{9.5}}
-\newcommand{\tiny}{\@setfontsize\tiny\@vipt\@viipt}
-\newcommand{\large}{\@setfontsize\large\@xiipt{17}}
-\newcommand{\Large}{\@setfontsize\Large\@xivpt{21}}
-\newcommand{\LARGE}{\@setfontsize\LARGE\@xviipt{25}}
-\newcommand{\huge}{\@setfontsize\huge\@xxpt{28}}
-\newcommand{\Huge}{\@setfontsize\Huge\@xxvpt{33}}
+\DeclareRobustCommand{\scriptsize}{\@setfontsize\scriptsize\@viiipt{9.5}}
+\DeclareRobustCommand{\tiny}{\@setfontsize\tiny\@vipt\@viipt}
+\DeclareRobustCommand{\large}{\@setfontsize\large\@xiipt{17}}
+\DeclareRobustCommand{\Large}{\@setfontsize\Large\@xivpt{21}}
+\DeclareRobustCommand{\LARGE}{\@setfontsize\LARGE\@xviipt{25}}
+\DeclareRobustCommand{\huge}{\@setfontsize\huge\@xxpt{28}}
+\DeclareRobustCommand{\Huge}{\@setfontsize\Huge\@xxvpt{33}}
 %</11pt>
 %<*12pt>
-\newcommand{\scriptsize}{\@setfontsize\scriptsize\@viiipt{9.5}}
-\newcommand{\tiny}{\@setfontsize\tiny\@vipt\@viipt}
-\newcommand{\large}{\@setfontsize\large\@xivpt{21}}
-\newcommand{\Large}{\@setfontsize\Large\@xviipt{25}}
-\newcommand{\LARGE}{\@setfontsize\LARGE\@xxpt{28}}
-\newcommand{\huge}{\@setfontsize\huge\@xxvpt{33}}
+\DeclareRobustCommand{\scriptsize}{\@setfontsize\scriptsize\@viiipt{9.5}}
+\DeclareRobustCommand{\tiny}{\@setfontsize\tiny\@vipt\@viipt}
+\DeclareRobustCommand{\large}{\@setfontsize\large\@xivpt{21}}
+\DeclareRobustCommand{\Large}{\@setfontsize\Large\@xviipt{25}}
+\DeclareRobustCommand{\LARGE}{\@setfontsize\LARGE\@xxpt{28}}
+\DeclareRobustCommand{\huge}{\@setfontsize\huge\@xxvpt{33}}
 \let\Huge=\huge
 %</12pt>
 %</10pt|11pt|12pt>
@@ -2079,9 +2100,9 @@
 % これらの３つのコマンドは\file{ltsect.dtx}で提供されています。
 % これらのコマンドは次のように定義されています。
 %    \begin{macrocode}
-%\newcommand*{\title}[1]{\gdef\@title{#1}}
-%\newcommand*{\author}[1]{\gdef\@author{#1}}
-%\newcommand*{\date}[1]{\gdef\@date{#1}}
+%\DeclareRobustCommand*{\title}[1]{\gdef\@title{#1}}
+%\DeclareRobustCommand*{\author}[1]{\gdef\@author{#1}}
+%\DeclareRobustCommand*{\date}[1]{\gdef\@date{#1}}
 %    \end{macrocode}
 % |\date|マクロのデフォルトは、今日の日付です。
 %    \begin{macrocode}

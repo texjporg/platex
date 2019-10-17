@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesFile{tbk10.clo}
-  [2019/04/02 v1.8b
+  [2019/10/17 v1.8c
   Standard pLaTeX file (size option)]
 \renewcommand{\normalsize}{%
     \@setfontsize\normalsize\@xpt{17}%
@@ -27,6 +27,7 @@
 \def\kanjiencodingdefault{JT1}%
 \kanjiencoding{\kanjiencodingdefault}%
 \normalsize
+\MakeRobust\normalsize
 \setbox0\hbox{\char\jis"3441}%
 \setlength\Cht{\ht0}
 \setlength\Cdp{\dp0}
@@ -34,7 +35,7 @@
 \setlength\Cvs{\baselineskip}
 \setlength\Chs{\wd0}
 \setbox0=\box\voidb@x
-\newcommand{\small}{%
+\DeclareRobustCommand{\small}{%
   \@setfontsize\small\@ixpt{11}%
   \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
   \abovedisplayshortskip \z@ \@plus2\p@
@@ -44,7 +45,7 @@
               \parsep 2\p@ \@plus\p@ \@minus\p@
               \itemsep \parsep}%
   \belowdisplayskip \abovedisplayskip}
-\newcommand{\footnotesize}{%
+\DeclareRobustCommand{\footnotesize}{%
   \@setfontsize\footnotesize\@viiipt{9.5}%
   \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
   \abovedisplayshortskip \z@ \@plus\p@
@@ -54,13 +55,13 @@
               \parsep 2\p@ \@plus\p@ \@minus\p@
               \itemsep \parsep}%
   \belowdisplayskip \abovedisplayskip}
-\newcommand{\scriptsize}{\@setfontsize\scriptsize\@viipt\@viiipt}
-\newcommand{\tiny}{\@setfontsize\tiny\@vpt\@vipt}
-\newcommand{\large}{\@setfontsize\large\@xiipt{17}}
-\newcommand{\Large}{\@setfontsize\Large\@xivpt{21}}
-\newcommand{\LARGE}{\@setfontsize\LARGE\@xviipt{25}}
-\newcommand{\huge}{\@setfontsize\huge\@xxpt{28}}
-\newcommand{\Huge}{\@setfontsize\Huge\@xxvpt{33}}
+\DeclareRobustCommand{\scriptsize}{\@setfontsize\scriptsize\@viipt\@viiipt}
+\DeclareRobustCommand{\tiny}{\@setfontsize\tiny\@vpt\@vipt}
+\DeclareRobustCommand{\large}{\@setfontsize\large\@xiipt{17}}
+\DeclareRobustCommand{\Large}{\@setfontsize\Large\@xivpt{21}}
+\DeclareRobustCommand{\LARGE}{\@setfontsize\LARGE\@xviipt{25}}
+\DeclareRobustCommand{\huge}{\@setfontsize\huge\@xxpt{28}}
+\DeclareRobustCommand{\Huge}{\@setfontsize\Huge\@xxvpt{33}}
 \setlength\headheight{12\p@}
 \if@stysize
   \ifnum\c@@paper=2 % A5

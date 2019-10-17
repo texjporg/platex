@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesFile{tsize12.clo}
-  [2019/04/02 v1.8b
+  [2019/10/17 v1.8c
   Standard pLaTeX file (size option)]
 \renewcommand{\normalsize}{%
     \@setfontsize\normalsize\@xiipt{18}%
@@ -27,6 +27,7 @@
 \def\kanjiencodingdefault{JT1}%
 \kanjiencoding{\kanjiencodingdefault}%
 \normalsize
+\MakeRobust\normalsize
 \setbox0\hbox{\char\jis"3441}%
 \setlength\Cht{\ht0}
 \setlength\Cdp{\dp0}
@@ -34,7 +35,7 @@
 \setlength\Cvs{\baselineskip}
 \setlength\Chs{\wd0}
 \setbox0=\box\voidb@x
-\newcommand{\small}{%
+\DeclareRobustCommand{\small}{%
   \@setfontsize\small\@xipt{13.6}%
   \abovedisplayskip 11\p@ \@plus3\p@ \@minus6\p@
   \abovedisplayshortskip \z@ \@plus3\p@
@@ -44,7 +45,7 @@
               \parsep 4.5\p@ \@plus2\p@ \@minus\p@
               \itemsep \parsep}%
   \belowdisplayskip \abovedisplayskip}
-\newcommand{\footnotesize}{%
+\DeclareRobustCommand{\footnotesize}{%
   \@setfontsize\footnotesize\@xpt\@xiipt
   \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
   \abovedisplayshortskip \z@ \@plus3\p@
@@ -54,12 +55,12 @@
               \parsep 3\p@ \@plus2\p@ \@minus\p@
               \itemsep \parsep}%
   \belowdisplayskip \abovedisplayskip}
-\newcommand{\scriptsize}{\@setfontsize\scriptsize\@viiipt{9.5}}
-\newcommand{\tiny}{\@setfontsize\tiny\@vipt\@viipt}
-\newcommand{\large}{\@setfontsize\large\@xivpt{21}}
-\newcommand{\Large}{\@setfontsize\Large\@xviipt{25}}
-\newcommand{\LARGE}{\@setfontsize\LARGE\@xxpt{28}}
-\newcommand{\huge}{\@setfontsize\huge\@xxvpt{33}}
+\DeclareRobustCommand{\scriptsize}{\@setfontsize\scriptsize\@viiipt{9.5}}
+\DeclareRobustCommand{\tiny}{\@setfontsize\tiny\@vipt\@viipt}
+\DeclareRobustCommand{\large}{\@setfontsize\large\@xivpt{21}}
+\DeclareRobustCommand{\Large}{\@setfontsize\Large\@xviipt{25}}
+\DeclareRobustCommand{\LARGE}{\@setfontsize\LARGE\@xxpt{28}}
+\DeclareRobustCommand{\huge}{\@setfontsize\huge\@xxvpt{33}}
 \let\Huge=\huge
 \setlength\headheight{12\p@}
 \if@stysize
