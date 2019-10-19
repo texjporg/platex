@@ -2028,6 +2028,21 @@ of this package available from CTAN}
   \else $\@@underline{\hbox{#1}}\m@th$\relax\fi}
 \expandafter \let \csname underline \endcsname \@undefined
 \plEndIncludeInRelease
+\plIncludeInRelease{2019/10/01}%
+                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+\ifx\widowpenalties\@undefined
+    \mathchardef\e@alloc@top=255
+    \let\e@alloc@chardef\chardef
+\else
+  \ifx\omathchar\@undefined
+    \mathchardef\e@alloc@top=32767
+    \let\e@alloc@chardef\mathchardef
+  \else
+    \omathchardef\e@alloc@top=65535
+    \let\e@alloc@chardef\omathchardef
+  \fi
+\fi
+\plEndIncludeInRelease
 \plIncludeInRelease{2018/03/09}%
                    {\e@alloc@chardef}{Extended Allocation (FAM256)}%
 \ifx\omathchar\@undefined
@@ -2078,6 +2093,7 @@ of this package available from CTAN}
 \let\e@alloc@top\@undefined
 \let\e@alloc@chardef\@undefined
 \plEndIncludeInRelease
+\let\float@count\e@alloc@top
 \plIncludeInRelease{2016/11/29}%
                    {\e@mathgroup@top}{Extended Allocation (FAM256)}%
 \ifx\omathchar\@undefined

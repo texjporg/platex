@@ -120,13 +120,16 @@
 %    (sync with ltoutput.dtx 2019/08/27 v1.4e)}
 % \changes{v1.3c}{2019/09/16}{Make \cs{underline} robust
 %    (sync with ltboxes.dtx 2019/08/27 v1.3b)}
+% \changes{v1.3d}{2019/10/19}{判定順序を修正；extended modeかつ
+%    FAM256拡張ありの場合に限りレジスタ数が65536個のため。}
+% \changes{v1.3d}{2019/10/19}{コピー忘れ}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2019/09/16 v1.3c pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2019/10/19 v1.3d pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -2329,20 +2332,22 @@
 % \LaTeXe\ 2015/01/01以降、拡張レジスタがあれば利用するようになっています
 % ので、e-p\TeX{}の拡張レジスタを利用できるように設定します。
 % \changes{v1.2j}{2016/11/09}{FAM256パッチ適用e-p\TeX{}に対応}
+% \changes{v1.3d}{2019/10/19}{判定順序を修正；extended modeかつ
+%    FAM256拡張ありの場合に限りレジスタ数が65536個のため。}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2018/03/09}%
+%<platexrelease>\plIncludeInRelease{2019/10/01}%
 %<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
 %<*plcore|platexrelease>
 %    \end{macrocode}
 %    \begin{macrocode}
-\ifx\omathchar\@undefined
-  \ifx\widowpenalties\@undefined
+\ifx\widowpenalties\@undefined
 %    \end{macrocode}
 % オリジナルの\TeX{}の場合（拡張なしのアスキーp\TeX{}の場合）。
 %    \begin{macrocode}
     \mathchardef\e@alloc@top=255
     \let\e@alloc@chardef\chardef
-  \else
+\else
+  \ifx\omathchar\@undefined
 %    \end{macrocode}
 % e-\TeX{}拡張で$2^{15}$個のレジスタが利用できます。
 % ^^A 備忘録：「FAM256なしのe-(u)p\TeX{}」は事実上存在しないはず。
@@ -2359,8 +2364,7 @@
 %    \begin{macrocode}
     \mathchardef\e@alloc@top=32767
     \let\e@alloc@chardef\mathchardef
-  \fi
-\else
+  \else
 %    \end{macrocode}
 % FAM256パッチが適用されたe-p\TeX{}の場合は、$2^{16}$個のレジスタが利用できます。
 % \changes{v1.2w}{2018/02/24}{e-up\TeX{}でも\cs{omathchardef}を使用}
@@ -2371,10 +2375,26 @@
 %    \begin{macrocode}
     \omathchardef\e@alloc@top=65535
     \let\e@alloc@chardef\omathchardef
+  \fi
 \fi
 %    \end{macrocode}
 %    \begin{macrocode}
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2018/03/09}%
+%<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
+%<platexrelease>\ifx\omathchar\@undefined
+%<platexrelease>  \ifx\widowpenalties\@undefined
+%<platexrelease>    \mathchardef\e@alloc@top=255
+%<platexrelease>    \let\e@alloc@chardef\chardef
+%<platexrelease>  \else
+%<platexrelease>    \mathchardef\e@alloc@top=32767
+%<platexrelease>    \let\e@alloc@chardef\mathchardef
+%<platexrelease>  \fi
+%<platexrelease>\else
+%<platexrelease>    \omathchardef\e@alloc@top=65535
+%<platexrelease>    \let\e@alloc@chardef\omathchardef
+%<platexrelease>\fi
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/11/29}%
 %<platexrelease>                   {\e@alloc@chardef}{Extended Allocation (FAM256)}%
@@ -2413,6 +2433,16 @@
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\float@count}
+% |\newcount|や|\newdimen|で使われます。
+% \changes{v1.3d}{2019/10/19}{コピー忘れ}
+%    \begin{macrocode}
+%<*plcore|platexrelease>
+\let\float@count\e@alloc@top
+%</plcore|platexrelease>
+%    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\e@mathgroup@top}

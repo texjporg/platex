@@ -34,7 +34,7 @@
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
    {2019-10-01}
-\def\ppatch@level{0}
+\def\ppatch@level{1}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
                    \noexpand\platexNILb}
@@ -1306,18 +1306,19 @@
   \relax
   \ifmmode\@@underline{#1}%
   \else \leavevmode\null$\@@underline{\hbox{#1}}\m@th$\null\relax\fi}
-\ifx\omathchar\@undefined
-  \ifx\widowpenalties\@undefined
+\ifx\widowpenalties\@undefined
     \mathchardef\e@alloc@top=255
     \let\e@alloc@chardef\chardef
-  \else
+\else
+  \ifx\omathchar\@undefined
     \mathchardef\e@alloc@top=32767
     \let\e@alloc@chardef\mathchardef
-  \fi
-\else
+  \else
     \omathchardef\e@alloc@top=65535
     \let\e@alloc@chardef\omathchardef
+  \fi
 \fi
+\let\float@count\e@alloc@top
 \ifx\omathchar\@undefined
   \chardef\e@mathgroup@top=16 % LaTeX2e kernel standard
 \else
