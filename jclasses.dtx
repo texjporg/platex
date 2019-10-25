@@ -100,6 +100,9 @@
 % \changes{v1.8b}{2019/04/02}{新元号対応}
 % \changes{v1.8c}{2019/10/17}{フォントサイズ変更命令をrobustに
 %    (sync with classes.dtx 2019/08/27 v1.4j)}
+% \changes{v1.8d}{2019/10/25}{Don't use \cs{MakeRobust} if
+%    in rollback prior to 2015
+%    (sync with classes.dtx 2019/10/25 v1.4k)}
 % \fi
 %
 % \iffalse
@@ -129,7 +132,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2019/10/17 v1.8c
+  [2019/10/25 v1.8d
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -617,10 +620,17 @@
 % カーネルの定義を|\renewcommand|した後に|\MakeRobust|を使っている理由は、
 % ログに |LaTeX Info: Redefining \normalsize on input line ...| という
 % メッセージを出したくないからです。
+% ただし、\textsf{latexrelease}パッケージで2015/01/01より
+% 昔の日付に巻き戻っている場合は|\MakeRobust|が定義されていません。
 % \changes{v1.8c}{2019/10/17}{フォントサイズ変更命令をrobustに
 %    (sync with classes.dtx 2019/08/27 v1.4j)}
+% \changes{v1.8d}{2019/10/25}{Don't use \cs{MakeRobust} if
+%    in rollback prior to 2015
+%    (sync with classes.dtx 2019/10/25 v1.4k)}
 %    \begin{macrocode}
-\MakeRobust\normalsize
+\ifx\MakeRobust\@undefined \else
+  \MakeRobust\normalsize
+\fi
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}

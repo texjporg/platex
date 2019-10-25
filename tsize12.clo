@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesFile{tsize12.clo}
-  [2019/10/17 v1.8c
+  [2019/10/25 v1.8d
   Standard pLaTeX file (size option)]
 \renewcommand{\normalsize}{%
     \@setfontsize\normalsize\@xiipt{18}%
@@ -27,7 +27,9 @@
 \def\kanjiencodingdefault{JT1}%
 \kanjiencoding{\kanjiencodingdefault}%
 \normalsize
-\MakeRobust\normalsize
+\ifx\MakeRobust\@undefined \else
+  \MakeRobust\normalsize
+\fi
 \setbox0\hbox{\char\jis"3441}%
 \setlength\Cht{\ht0}
 \setlength\Cdp{\dp0}
