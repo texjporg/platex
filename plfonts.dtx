@@ -1889,6 +1889,7 @@
   \if@notkfam\if@notffam
       \edef\k@family{#1}\edef\f@family{#1}%
   \fi\fi}
+%</plcore>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1900,10 +1901,86 @@
 % \begin{macro}{\fontseries}
 % 書体のシリーズを指定するコマンドです。
 % |\fontseries|コマンドは和欧文の両方に影響します。
+% \LaTeXe~2020-02-02では|\merge@font@series|を使います。
 %    \begin{macrocode}
+%<*plcore|platexrelease>
+\ifx\fontseriesforce\@undefined  % old
 \DeclareRobustCommand\romanseries[1]{\edef\f@series{#1}}
 \DeclareRobustCommand\kanjiseries[1]{\edef\k@series{#1}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
+\else                            % 2020-02-02
+\DeclareRobustCommand\romanseries[1]{\merge@font@series{#1}}
+\DeclareRobustCommand\kanjiseries[1]{\merge@font@kanji@series{#1}}
+\DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
+\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\romanseriesforce}
+% \begin{macro}{\kanjiseriesforce}
+% \begin{macro}{\fontseriesforce}
+% 無条件にシリーズを変更します。
+% \changes{v1.6v}{XXXX/XX/XX}{New commands \cs{fontseriesforce} etc.
+%    (sync with ltfssaxes.dtx 2019/12/16 v1.0a)}
+%    \begin{macrocode}
+\ifx\fontseriesforce\@undefined  % old
+\let\romanseriesforce\@undefined
+\let\kanjiseriesforce\@undefined
+\else                            % 2020-02-02
+\DeclareRobustCommand\romanseriesforce[1]{\edef\f@series{#1}}
+\DeclareRobustCommand\kanjiseriesforce[1]{\edef\k@series{#1}}
+\DeclareRobustCommand\fontseriesforce[1]{\kanjiseriesforce{#1}\romanseriesforce{#1}}
+\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\merge@font@kanji@series}
+% \begin{macro}{\merge@font@kanji@series@}
+% \begin{macro}{\set@target@kanji@series}
+% \cs{merge@font@series}の和文版です。
+%    \begin{macrocode}
+\ifx\fontseriesforce\@undefined  % old
+\let\merge@font@kanji@series\@undefined
+\let\merge@font@kanji@series@\@undefined
+\let\set@target@kanji@series\@undefined
+\else                            % 2020-02-02
+\def\merge@font@kanji@series#1{%
+  \expandafter\expandafter\expandafter
+  \merge@font@kanji@series@
+    \csname series@\k@series @#1\endcsname
+    {#1}%
+    \@nil
+}
+\def\merge@font@kanji@series@#1#2#3\@nil{%
+  \def\@reserveda{#3}%
+  \ifx\@reserveda\@empty
+    \set@target@kanji@series{#2}%
+  \else
+    \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+	   \maybe@load@fontshape\endgroup
+    \edef\@reserveda{\k@encoding /\k@family /#1/\k@shape}%
+     \ifcsname \@reserveda \endcsname
+       \set@target@kanji@series{#1}%
+    \else
+       \ifcsname \k@encoding /\k@family /#2/\k@shape \endcsname
+         \set@target@kanji@series{#2}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \else
+         \set@target@kanji@series{#3}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \fi
+    \fi
+  \fi
+}
+\def\set@target@kanji@series#1{%
+    \edef\k@series{#1}%
+    \edef\k@series{\expandafter\series@drop@one@m\k@series mm\series@drop@one@m}%
+}
+\fi
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1915,12 +1992,79 @@
 % \begin{macro}{\fontshape}
 % 書体のシェイプを指定するコマンドです。
 % |\fontshape|コマンドは和欧文の両方に影響します。
+% \LaTeXe~2020-02-02では|\merge@font@shape|を使います。
 %    \begin{macrocode}
+\ifx\fontshapeforce\@undefined   % old
 \DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\edef\k@shape{#1}}
 \DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
+\else                            % 2020-02-02
+\DeclareRobustCommand\romanshape[1]{\merge@font@shape{#1}}
+\DeclareRobustCommand\kanjishape[1]{\merge@font@kanji@shape{#1}}
+\DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
+\fi
 %    \end{macrocode}
 % \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\romanshapeforce}
+% \begin{macro}{\kanjishapeforce}
+% \begin{macro}{\fontshapeforce}
+% 無条件にシェイプを変更します。
+% \changes{v1.6v}{XXXX/XX/XX}{New commands \cs{fontshapeforce} etc.
+%    (sync with ltfssaxes.dtx 2019/12/16 v1.0a)}
+%    \begin{macrocode}
+\ifx\fontshapeforce\@undefined   % old
+\let\romanshapeforce\@undefined
+\let\kanjishapeforce\@undefined
+\else                            % 2020-02-02
+\DeclareRobustCommand\romanshapeforce[1]{\edef\f@shape{#1}}
+\DeclareRobustCommand\kanjishapeforce[1]{\edef\k@shape{#1}}
+\DeclareRobustCommand\fontshapeforce[1]{\kanjishapeforce{#1}\romanshapeforce{#1}}
+\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\merge@font@kanji@shape}
+% \begin{macro}{\merge@font@kanji@shape@}
+% \cs{merge@font@shape}の和文版です。
+%    \begin{macrocode}
+\ifx\fontseriesforce\@undefined  % old
+\let\merge@font@kanji@shape\@undefined
+\let\merge@font@kanji@shape@\@undefined
+\else                            % 2020-02-02
+\def\merge@font@kanji@shape#1{%
+  \expandafter\expandafter\expandafter
+  \merge@font@kanji@shape@
+    \csname shape@\k@shape @#1\endcsname
+    {#1}%
+    \@nil
+}
+\def\merge@font@kanji@shape@#1#2#3\@nil{%
+  \def\@reserveda{#3}%
+  \ifx\@reserveda\@empty
+    \edef\k@shape{#2}%
+  \else
+    \maybe@load@fontshape
+    \edef\@reserveda{\k@encoding /\k@family /\k@series/#1}%
+     \ifcsname \@reserveda\endcsname
+       \edef\k@shape{#1}%
+    \else
+       \ifcsname \k@encoding /\k@family /\k@series/#2\endcsname
+         \edef\k@shape{#2}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \else
+         \edef\k@shape{#3}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \fi
+    \fi
+  \fi
+}
+%</plcore|platexrelease>
+%    \end{macrocode}
 % \end{macro}
 % \end{macro}
 %
@@ -1935,17 +2079,22 @@
 % 和文または欧文フォントを切り替えます。
 % \changes{v1.6t}{2019/09/16}{Make \cs{usefont} etc. robust
 %    (sync with ltfssbas.dtx 2019/08/27 v3.2d)}
+% \changes{v1.6v}{XXXX/XX/XX}{Don't call \cs{fontseries} or \cs{fontshape}
+%    (sync with ltfssbas.dtx 2019/12/17 v3.2e)}
 %    \begin{macrocode}
-%</plcore>
-%<platexrelease>\plIncludeInRelease{2019/10/01}{\usefont}
-%<platexrelease>                   {Make robust}%
+%<platexrelease>\plIncludeInRelease{2020/02/02}{\usefont}
+%<platexrelease>                   {Don't call \fontseries or \fontshape}%
 %<*plcore|platexrelease>
-\DeclareRobustCommand\usekanji[4]{%
-    \kanjiencoding{#1}\kanjifamily{#2}\kanjiseries{#3}\kanjishape{#4}%
-    \selectfont\ignorespaces}
-\DeclareRobustCommand\useroman[4]{%
-    \romanencoding{#1}\romanfamily{#2}\romanseries{#3}\romanshape{#4}%
-    \selectfont\ignorespaces}
+\DeclareRobustCommand\usekanji[4]{\kanjiencoding{#1}%
+    \edef\k@family{#2}%
+    \edef\k@series{#3}%
+    \edef\k@shape{#4}\selectfont
+    \ignorespaces}
+\DeclareRobustCommand\useroman[4]{\romanencoding{#1}%
+    \edef\f@family{#2}%
+    \edef\f@series{#3}%
+    \edef\f@shape{#4}\selectfont
+    \ignorespaces}
 \DeclareRobustCommand\usefont[4]{%
   \edef\tmp@item{{#1}}%
   \expandafter\expandafter\expandafter
@@ -1954,6 +2103,22 @@
   \else\useroman{#1}{#2}{#3}{#4}%
   \fi}
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2019/10/01}{\usefont}
+%<platexrelease>                   {Make robust}%
+%<platexrelease>\DeclareRobustCommand\usekanji[4]{%
+%<platexrelease>    \kanjiencoding{#1}\kanjifamily{#2}\kanjiseries{#3}\kanjishape{#4}%
+%<platexrelease>    \selectfont\ignorespaces}
+%<platexrelease>\DeclareRobustCommand\useroman[4]{%
+%<platexrelease>    \romanencoding{#1}\romanfamily{#2}\romanseries{#3}\romanshape{#4}%
+%<platexrelease>    \selectfont\ignorespaces}
+%<platexrelease>\DeclareRobustCommand\usefont[4]{%
+%<platexrelease>  \edef\tmp@item{{#1}}%
+%<platexrelease>  \expandafter\expandafter\expandafter
+%<platexrelease>  \inlist@\expandafter\tmp@item\expandafter{\kenc@list}%
+%<platexrelease>  \ifin@ \usekanji{#1}{#2}{#3}{#4}%
+%<platexrelease>  \else\useroman{#1}{#2}{#3}{#4}%
+%<platexrelease>  \fi}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\usefont}
 %<platexrelease>                   {ASCII Corporation original}%
@@ -1974,7 +2139,6 @@
 %<platexrelease>\expandafter \let \csname useroman \endcsname \@undefined
 %<platexrelease>\expandafter \let \csname usefont \endcsname \@undefined
 %<platexrelease>\plEndIncludeInRelease
-%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1987,18 +2151,39 @@
 % ただし高速化のため、|\usekanji|と|\useroman|を展開し、
 % |\selectfont|を一度しか呼び出さないようにしています。
 %    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2020/02/02}{\normalfont}
+%<platexrelease>                   {Don't call \fontseries or \fontshape}%
+%<*plcore|platexrelease>
 \DeclareRobustCommand\normalfont{%
     \kanjiencoding{\kanjiencodingdefault}%
-    \kanjifamily{\kanjifamilydefault}%
-    \kanjiseries{\kanjiseriesdefault}%
-    \kanjishape{\kanjishapedefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
     \romanencoding{\encodingdefault}%
-    \romanfamily{\familydefault}%
-    \romanseries{\seriesdefault}%
-    \romanshape{\shapedefault}%
+    \edef\f@family{\familydefault}%
+    \edef\f@series{\seriesdefault}%
+    \edef\f@shape{\shapedefault}%
     \selectfont\ignorespaces}
 \adjustbaseline
 \let\reset@font\normalfont
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\normalfont}
+%<platexrelease>                   {ASCII Corporation original}%
+%<platexrelease>\DeclareRobustCommand\normalfont{%
+%<platexrelease>    \kanjiencoding{\kanjiencodingdefault}%
+%<platexrelease>    \kanjifamily{\kanjifamilydefault}%
+%<platexrelease>    \kanjiseries{\kanjiseriesdefault}%
+%<platexrelease>    \kanjishape{\kanjishapedefault}%
+%<platexrelease>    \romanencoding{\encodingdefault}%
+%<platexrelease>    \romanfamily{\familydefault}%
+%<platexrelease>    \romanseries{\seriesdefault}%
+%<platexrelease>    \romanshape{\shapedefault}%
+%<platexrelease>    \selectfont\ignorespaces}
+%<platexrelease>\adjustbaseline
+%<platexrelease>\let\reset@font\normalfont
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %
