@@ -1910,7 +1910,7 @@
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
 \else                            % 2020-02-02
 \DeclareRobustCommand\romanseries[1]{\merge@font@series{#1}}
-\DeclareRobustCommand\kanjiseries[1]{\merge@font@kanji@series{#1}}
+\DeclareRobustCommand\kanjiseries[1]{\merge@kanji@series{#1}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
 \fi
 %    \end{macrocode}
@@ -1938,45 +1938,45 @@
 % \end{macro}
 % \end{macro}
 %
-% \begin{macro}{\merge@font@kanji@series}
-% \begin{macro}{\merge@font@kanji@series@}
-% \begin{macro}{\set@target@kanji@series}
+% \begin{macro}{\merge@kanji@series}
+% \begin{macro}{\merge@kanji@series@}
+% \begin{macro}{\set@target@series@kanji}
 % \cs{merge@font@series}の和文版です。
 %    \begin{macrocode}
 \ifx\fontseriesforce\@undefined  % old
-\let\merge@font@kanji@series\@undefined
-\let\merge@font@kanji@series@\@undefined
-\let\set@target@kanji@series\@undefined
+\let\merge@kanji@series\@undefined
+\let\merge@kanji@series@\@undefined
+\let\set@target@series@kanji\@undefined
 \else                            % 2020-02-02
-\def\merge@font@kanji@series#1{%
+\def\merge@kanji@series#1{%
   \expandafter\expandafter\expandafter
-  \merge@font@kanji@series@
+  \merge@kanji@series@
     \csname series@\k@series @#1\endcsname
     {#1}%
     \@nil
 }
-\def\merge@font@kanji@series@#1#2#3\@nil{%
+\def\merge@kanji@series@#1#2#3\@nil{%
   \def\@reserveda{#3}%
   \ifx\@reserveda\@empty
-    \set@target@kanji@series{#2}%
+    \set@target@series@kanji{#2}%
   \else
     \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
-	   \maybe@load@fontshape\endgroup
+      \maybe@load@fontshape\endgroup
     \edef\@reserveda{\k@encoding /\k@family /#1/\k@shape}%
      \ifcsname \@reserveda \endcsname
-       \set@target@kanji@series{#1}%
+       \set@target@series@kanji{#1}%
     \else
        \ifcsname \k@encoding /\k@family /#2/\k@shape \endcsname
-         \set@target@kanji@series{#2}%
+         \set@target@series@kanji{#2}%
          {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
        \else
-         \set@target@kanji@series{#3}%
+         \set@target@series@kanji{#3}%
          {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
        \fi
     \fi
   \fi
 }
-\def\set@target@kanji@series#1{%
+\def\set@target@series@kanji#1{%
     \edef\k@series{#1}%
     \edef\k@series{\expandafter\series@drop@one@m\k@series mm\series@drop@one@m}%
 }
@@ -2000,7 +2000,7 @@
 \DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
 \else                            % 2020-02-02
 \DeclareRobustCommand\romanshape[1]{\merge@font@shape{#1}}
-\DeclareRobustCommand\kanjishape[1]{\merge@font@kanji@shape{#1}}
+\DeclareRobustCommand\kanjishape[1]{\merge@kanji@shape{#1}}
 \DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
 \fi
 %    \end{macrocode}
@@ -2028,22 +2028,22 @@
 % \end{macro}
 % \end{macro}
 %
-% \begin{macro}{\merge@font@kanji@shape}
-% \begin{macro}{\merge@font@kanji@shape@}
+% \begin{macro}{\merge@kanji@shape}
+% \begin{macro}{\merge@kanji@shape@}
 % \cs{merge@font@shape}の和文版です。
 %    \begin{macrocode}
 \ifx\fontseriesforce\@undefined  % old
-\let\merge@font@kanji@shape\@undefined
-\let\merge@font@kanji@shape@\@undefined
+\let\merge@kanji@shape\@undefined
+\let\merge@kanji@shape@\@undefined
 \else                            % 2020-02-02
-\def\merge@font@kanji@shape#1{%
+\def\merge@kanji@shape#1{%
   \expandafter\expandafter\expandafter
-  \merge@font@kanji@shape@
+  \merge@kanji@shape@
     \csname shape@\k@shape @#1\endcsname
     {#1}%
     \@nil
 }
-\def\merge@font@kanji@shape@#1#2#3\@nil{%
+\def\merge@kanji@shape@#1#2#3\@nil{%
   \def\@reserveda{#3}%
   \ifx\@reserveda\@empty
     \edef\k@shape{#2}%
