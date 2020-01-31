@@ -676,18 +676,119 @@
   \if@notkfam\if@notffam
       \edef\k@family{#1}\edef\f@family{#1}%
   \fi\fi}
+\ifx\fontseriesforce\@undefined  % old
 \DeclareRobustCommand\romanseries[1]{\edef\f@series{#1}}
 \DeclareRobustCommand\kanjiseries[1]{\edef\k@series{#1}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
+\else                            % 2020-02-02
+\DeclareRobustCommand\romanseries[1]{\merge@font@series{#1}}
+\DeclareRobustCommand\kanjiseries[1]{\merge@kanji@series{#1}}
+\DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
+\fi
+\ifx\fontseriesforce\@undefined  % old
+\let\romanseriesforce\@undefined
+\let\kanjiseriesforce\@undefined
+\else                            % 2020-02-02
+\DeclareRobustCommand\romanseriesforce[1]{\edef\f@series{#1}}
+\DeclareRobustCommand\kanjiseriesforce[1]{\edef\k@series{#1}}
+\DeclareRobustCommand\fontseriesforce[1]{\kanjiseriesforce{#1}\romanseriesforce{#1}}
+\fi
+\ifx\fontseriesforce\@undefined  % old
+\let\merge@kanji@series\@undefined
+\let\merge@kanji@series@\@undefined
+\let\set@target@series@kanji\@undefined
+\else                            % 2020-02-02
+\def\merge@kanji@series#1{%
+  \expandafter\expandafter\expandafter
+  \merge@kanji@series@
+    \csname series@\k@series @#1\endcsname
+    {#1}%
+    \@nil
+}
+\def\merge@kanji@series@#1#2#3\@nil{%
+  \def\@reserveda{#3}%
+  \ifx\@reserveda\@empty
+    \set@target@series@kanji{#2}%
+  \else
+    \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+      \maybe@load@fontshape\endgroup
+    \edef\@reserveda{\k@encoding /\k@family /#1/\k@shape}%
+     \ifcsname \@reserveda \endcsname
+       \set@target@series@kanji{#1}%
+    \else
+       \ifcsname \k@encoding /\k@family /#2/\k@shape \endcsname
+         \set@target@series@kanji{#2}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \else
+         \set@target@series@kanji{#3}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \fi
+    \fi
+  \fi
+}
+\def\set@target@series@kanji#1{%
+    \edef\k@series{#1}%
+    \edef\k@series{\expandafter\series@drop@one@m\k@series mm\series@drop@one@m}%
+}
+\fi
+\ifx\fontshapeforce\@undefined   % old
 \DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\edef\k@shape{#1}}
 \DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
-\DeclareRobustCommand\usekanji[4]{%
-    \kanjiencoding{#1}\kanjifamily{#2}\kanjiseries{#3}\kanjishape{#4}%
-    \selectfont\ignorespaces}
-\DeclareRobustCommand\useroman[4]{%
-    \romanencoding{#1}\romanfamily{#2}\romanseries{#3}\romanshape{#4}%
-    \selectfont\ignorespaces}
+\else                            % 2020-02-02
+\DeclareRobustCommand\romanshape[1]{\merge@font@shape{#1}}
+\DeclareRobustCommand\kanjishape[1]{\merge@kanji@shape{#1}}
+\DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
+\fi
+\ifx\fontshapeforce\@undefined   % old
+\let\romanshapeforce\@undefined
+\let\kanjishapeforce\@undefined
+\else                            % 2020-02-02
+\DeclareRobustCommand\romanshapeforce[1]{\edef\f@shape{#1}}
+\DeclareRobustCommand\kanjishapeforce[1]{\edef\k@shape{#1}}
+\DeclareRobustCommand\fontshapeforce[1]{\kanjishapeforce{#1}\romanshapeforce{#1}}
+\fi
+\ifx\fontseriesforce\@undefined  % old
+\let\merge@kanji@shape\@undefined
+\let\merge@kanji@shape@\@undefined
+\else                            % 2020-02-02
+\def\merge@kanji@shape#1{%
+  \expandafter\expandafter\expandafter
+  \merge@kanji@shape@
+    \csname shape@\k@shape @#1\endcsname
+    {#1}%
+    \@nil
+}
+\def\merge@kanji@shape@#1#2#3\@nil{%
+  \def\@reserveda{#3}%
+  \ifx\@reserveda\@empty
+    \edef\k@shape{#2}%
+  \else
+    \maybe@load@fontshape
+    \edef\@reserveda{\k@encoding /\k@family /\k@series/#1}%
+     \ifcsname \@reserveda\endcsname
+       \edef\k@shape{#1}%
+    \else
+       \ifcsname \k@encoding /\k@family /\k@series/#2\endcsname
+         \edef\k@shape{#2}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \else
+         \edef\k@shape{#3}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \fi
+    \fi
+  \fi
+}
+\DeclareRobustCommand\usekanji[4]{\kanjiencoding{#1}%
+    \edef\k@family{#2}%
+    \edef\k@series{#3}%
+    \edef\k@shape{#4}\selectfont
+    \ignorespaces}
+\DeclareRobustCommand\useroman[4]{\romanencoding{#1}%
+    \edef\f@family{#2}%
+    \edef\f@series{#3}%
+    \edef\f@shape{#4}\selectfont
+    \ignorespaces}
 \DeclareRobustCommand\usefont[4]{%
   \edef\tmp@item{{#1}}%
   \expandafter\expandafter\expandafter
@@ -697,13 +798,13 @@
   \fi}
 \DeclareRobustCommand\normalfont{%
     \kanjiencoding{\kanjiencodingdefault}%
-    \kanjifamily{\kanjifamilydefault}%
-    \kanjiseries{\kanjiseriesdefault}%
-    \kanjishape{\kanjishapedefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
     \romanencoding{\encodingdefault}%
-    \romanfamily{\familydefault}%
-    \romanseries{\seriesdefault}%
-    \romanshape{\shapedefault}%
+    \edef\f@family{\familydefault}%
+    \edef\f@series{\seriesdefault}%
+    \edef\f@shape{\shapedefault}%
     \selectfont\ignorespaces}
 \adjustbaseline
 \let\reset@font\normalfont
