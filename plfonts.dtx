@@ -3129,29 +3129,60 @@
 % \begin{macro}{\emph}
 % \begin{macro}{\eminnershape}
 % \changes{v1.3d}{1997/06/25}{\cs{em},\cs{emph}で和文を強調書体に}
-% \changes{v1.6}{2016/02/01}{\LaTeX\ \texttt{!<2015/01/01!>}での\cs{em}の
-%    定義変更に対応。\cs{eminnershape}を追加。}
 % 従来は|\em|, |\emph|で和文フォントの切り替えは行っていませんでしたが、
 % 和文フォントも|\gtfamily|に切り替えるようにしました。
+%
+% [p\LaTeXe~2016/04/17]
 % \LaTeX\ \texttt{<2015/01/01>}で追加された|\eminnershape|も取り入れ、
 % 強調コマンドを入れ子にする場合の書体を自由に再定義できるようになりました。
+% \changes{v1.6}{2016/02/01}{\LaTeX\ \texttt{!<2015/01/01!>}での\cs{em}の
+%    定義変更に対応。\cs{eminnershape}を追加。}
+%
+% [p\LaTeXe~2020-02-02]
+% \LaTeX\ \texttt{<2020-02-02>}で追加された|\DeclareEmphSequence|を
+% サポートしました。
+% \changes{v1.6v}{XXXX/XX/XX}{Support \cs{emph} sequences
+%    (sync with ltfssini.dtx 2019/12/17 v3.1e)}
 %    \begin{macrocode}
 %</pldefs>
-%<platexrelease>\plIncludeInRelease{2016/04/17}{\eminnershape}{\eminnershape}%
+%<platexrelease>\plIncludeInRelease{2020/02/02}{\DeclareEmphSequence}
+%<platexrelease>                               {Nested emph}%
 %<*pldefs|platexrelease>
+\ifx\DeclareEmphSequence\@undefined % old
 \DeclareRobustCommand\em
         {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
                        \eminnershape \else \gtfamily \itshape \fi}%
+\else
+\DeclareRobustCommand\em{%          % 2020-02-02
+  \@nomath\em
+  \ifx\emfontdeclare@clist\@empty
+    \ifdim \fontdimen\@ne\font >\z@
+      \eminnershape \else \gtfamily \itshape \fi
+  \else
+  \edef\em@currfont{\csname\curr@fontshape/\f@size\endcsname}%
+    \expandafter\do@emfont@update\emfontdeclare@clist\do@emfont@update
+  \fi
+}
+\fi
 \def\eminnershape{\mcfamily \upshape}%
 %</pldefs|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2015/01/01}{\eminnershape}{\eminnershape}%
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\DeclareEmphSequence}
+%<platexrelease>                               {Support \eminnershape}%
+%<platexrelease>\DeclareRobustCommand\em
+%<platexrelease>        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+%<platexrelease>                       \eminnershape \else \gtfamily \itshape \fi}%
+%<platexrelease>\def\eminnershape{\mcfamily \upshape}%
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2015/01/01}{\DeclareEmphSequence}
+%<platexrelease>                               {Non-supported \eminnershape}%
 %<platexrelease>\DeclareRobustCommand\em
 %<platexrelease>        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@ 
 %<platexrelease>                       \mcfamily \upshape \else \gtfamily \itshape \fi}
 %<platexrelease>\def\eminnershape{\upshape}% defined by LaTeX, but not used by pLaTeX
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\eminnershape}{\eminnershape}%
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\DeclareEmphSequence}
+%<platexrelease>                               {ASCII Corporation original}%
 %<platexrelease>\DeclareRobustCommand\em
 %<platexrelease>        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@ 
 %<platexrelease>                       \mcfamily \upshape \else \gtfamily \itshape \fi}

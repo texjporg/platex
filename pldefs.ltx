@@ -41,9 +41,22 @@
 \fontencoding{JY1}\selectfont
 \DeclareTextFontCommand{\textmc}{\mcfamily}
 \DeclareTextFontCommand{\textgt}{\gtfamily}
+\ifx\DeclareEmphSequence\@undefined % old
 \DeclareRobustCommand\em
         {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
                        \eminnershape \else \gtfamily \itshape \fi}%
+\else
+\DeclareRobustCommand\em{%          % 2020-02-02
+  \@nomath\em
+  \ifx\emfontdeclare@clist\@empty
+    \ifdim \fontdimen\@ne\font >\z@
+      \eminnershape \else \gtfamily \itshape \fi
+  \else
+  \edef\em@currfont{\csname\curr@fontshape/\f@size\endcsname}%
+    \expandafter\do@emfont@update\emfontdeclare@clist\do@emfont@update
+  \fi
+}
+\fi
 \def\eminnershape{\mcfamily \upshape}%
 \DeclarePreloadSizes{JY1}{mc}{m}{n}{5,7,10,12}
 \DeclarePreloadSizes{JY1}{gt}{m}{n}{5,7,10,12}
