@@ -676,6 +676,139 @@ of this package available from CTAN}
 \adjustbaseline
 \let\reset@font\normalfont
 \plEndIncludeInRelease
+\ifx\bfseries@rm\@undefined  % old
+\let\bfseries@mc\@undefined
+\let\bfseries@gt\@undefined
+\let\mdseries@mc\@undefined
+\let\mdseries@gt\@undefined
+\else                        % 2020-02-02
+\edef\bfseries@mc{\bfdefault}% b
+\edef\bfseries@gt{\bfdefault}% b
+\edef\mdseries@mc{\mddefault}% m
+\edef\mdseries@gt{\mddefault}% m
+\fi
+\ifx\expand@font@defaults\@undefined\else  % 2020-02-02
+\g@addto@macro\expand@font@defaults{%
+  \edef\mcdef@ult{\mcdefault}%
+  \edef\gtdef@ult{\gtdefault}%
+  \edef\kanjidef@ult{\kanjifamilydefault}%
+}
+\fi
+\ifx\bfseries@rm\@undefined\else  % 2020-02-02
+\DeclareRobustCommand\bfseries{%
+  \not@math@alphabet\bfseries\mathbf
+  \expand@font@defaults
+  \romanseries{% changed \fontseries -> \romanseries
+    \ifx\f@family\rmdef@ult      \bfseries@rm
+    \else\ifx\f@family\sfdef@ult \bfseries@sf
+    \else\ifx\f@family\ttdef@ult \bfseries@tt
+    \else                        \bfdefault
+    \fi\fi\fi
+  }%
+  \kanjiseries{%
+    \ifx\k@family\mcdef@ult      \bfseries@mc
+    \else\ifx\k@family\gtdef@ult \bfseries@gt
+    \else                        \bfdefault
+    \fi\fi
+  }%
+ \selectfont
+}
+\DeclareRobustCommand\mdseries{%
+  \not@math@alphabet\mdseries\relax
+  \expand@font@defaults
+  \romanseries{% changed \fontseries -> \romanseries
+    \ifx\f@family\rmdef@ult      \mdseries@rm
+    \else\ifx\f@family\sfdef@ult \mdseries@sf
+    \else\ifx\f@family\ttdef@ult \mdseries@tt
+    \else                        \mddefault
+    \fi\fi\fi
+  }%
+  \kanjiseries{%
+    \ifx\k@family\mcdef@ult      \mdseries@mc
+    \else\ifx\k@family\gtdef@ult \mdseries@gt
+    \else                        \mddefault
+    \fi\fi
+  }%
+  \selectfont
+}
+\fi
+\ifx\prepare@family@series@update\@undefined  % old
+\let\prepare@family@series@update@kanji\@undefined
+\let\@meta@family@list@kanji\@undefined
+\else                                         % 2020-02-02
+\def\prepare@family@series@update#1#2{%
+   \expand@font@defaults
+   \let\target@series@value\@empty
+   \def\target@meta@family@value{#1}%
+   \let\@elt\update@series@target@value
+      \@meta@family@list
+   \let\@elt\relax
+   \romanfamily#2%   % changed \fontfamily -> \romanfamily
+   \ifx\target@series@value\@empty
+   \else
+     \maybe@load@fontshape
+     \let\f@series\target@series@value
+   \fi
+}
+\def\prepare@family@series@update@kanji#1#2{%
+   \expand@font@defaults
+   \let\target@series@value\@empty
+   \def\target@meta@family@value{#1}%
+   \let\@elt\update@series@target@value@kanji
+      \@meta@family@list@kanji
+   \let\@elt\relax
+   \kanjifamily#2%
+   \ifx\target@series@value\@empty
+   \else
+     \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+       \maybe@load@fontshape\endgroup
+     \let\k@series\target@series@value
+   \fi
+}
+\def\@meta@family@list@kanji{\@elt{mc}\@elt{gt}}
+\def\update@series@target@value@kanji#1{%
+  \def\@reserveda{#1}%
+  \ifx\target@meta@family@value\@reserveda   % rm -> rm do nothing
+  \else
+    \expandafter\ifx\csname#1def@ult\endcsname\k@family
+      \let\@elt\@gobble
+      \expandafter\let\expandafter\@reservedb
+                      \csname mdseries@\target@meta@family@value\endcsname
+      \expandafter\let\expandafter\@reservedc
+                      \csname bfseries@\target@meta@family@value\endcsname
+      \expandafter\ifx\csname mdseries@#1\endcsname\k@series
+                                      \let\target@series@value\@reservedb
+      \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
+                                      \let\target@series@value\@reservedc
+      \else\ifx\k@series\mddef@ult    \let\target@series@value\@reservedb
+      \else\ifx\k@series\bfdef@ult    \let\target@series@value\@reservedc
+      \fi\fi\fi\fi
+    \fi
+  \fi
+}
+\fi
+\ifx\init@series@setup\@undefined\else  % 2020-02-02
+\g@addto@macro\init@series@setup{%
+  \ifx\kanjidef@ult\mcdef@ult      \mcfamily
+  \else\ifx\kanjidef@ult\gtdef@ult \gtfamily
+  \fi\fi
+}%
+\fi
+\ifx\prepare@family@series@update@kanji\@undefined  % 2020-02-02
+\DeclareRobustCommand\mcfamily
+        {\not@math@alphabet\mcfamily\mathmc
+         \kanjifamily\mcdefault\selectfont}
+\DeclareRobustCommand\gtfamily
+        {\not@math@alphabet\gtfamily\mathgt
+         \kanjifamily\gtdefault\selectfont}
+\else
+\DeclareRobustCommand\mcfamily
+    {\not@math@alphabet\mcfamily\mathmc
+     \prepare@family@series@update@kanji{mc}\mcdefault\selectfont}
+\DeclareRobustCommand\gtfamily
+    {\not@math@alphabet\gtfamily\mathgt
+     \prepare@family@series@update@kanji{gt}\gtdefault\selectfont}
+\fi
 \plIncludeInRelease{2017/04/08}{\textunderscore}
                    {Baseline shift for \textunderscore}%
 \DeclareTextCommandDefault{\textunderscore}{%
