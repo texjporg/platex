@@ -2,7 +2,7 @@
 %
 % This is file `exppl2e.sty', for experimental pLaTeX2e.
 %
-% Copyright (c) 2016-2018 Japanese TeX Development Community
+% Copyright (c) 2016-2020 Japanese TeX Development Community
 %
 % This file is part of the pLaTeX2e system (community edition).
 % -------------------------------------------------------------
@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2019/09/16 v1.1d Experimental pLaTeX2e features]
+                [2020/02/02 v1.1e Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -327,6 +327,28 @@
 % \end{macro}
 %
 % \cs{strutbox}の変更は2017/04/08に導入済み。
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \section{\cs{verb}先頭の合字抑制と\cs{xkanjiskip}}
+%
+% \begin{macro}{\do@noligs}
+% |>|などの一部の文字について、|\xspcode`\>=3|としたときに
+% |\texttt{>}|では前後に|\xkanjiskip|由来のアキが入るのに、
+% |\verb+>+|では後ろにしかアキが入らないという現象に対処します。
+%
+% 元の定義は\file{ltmiscen.dtx}を参照してください。
+% p\LaTeX{}では、|\kern\z@|を|\vadjust{}|に置き換えることで
+% 「合字処理を抑止」かつ「和欧文間スペースの挿入処理は透過」を実現します。
+% (Issue \#87)
+%    \begin{macrocode}
+\def\do@noligs#1{%
+  \catcode`#1\active
+  \begingroup
+     \lccode`\~`#1\relax
+     \lowercase{\endgroup\def~{\leavevmode\vadjust{}\char`#1}}}
+%    \end{macrocode}
+% \end{macro}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
