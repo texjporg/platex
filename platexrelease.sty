@@ -809,6 +809,47 @@ of this package available from CTAN}
     {\not@math@alphabet\gtfamily\mathgt
      \prepare@family@series@update@kanji{gt}\gtdefault\selectfont}
 \fi
+\plIncludeInRelease{2020/02/02}{\DeclareEmphSequence}
+                               {Nested emph}%
+\ifx\DeclareEmphSequence\@undefined % old
+\DeclareRobustCommand\em
+        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+                       \eminnershape \else \gtfamily \itshape \fi}%
+\else
+\DeclareRobustCommand\em{%          % 2020-02-02
+  \@nomath\em
+  \ifx\emfontdeclare@clist\@empty
+    \ifdim \fontdimen\@ne\font >\z@
+      \eminnershape \else \gtfamily \itshape \fi
+  \else
+  \edef\em@currfont{\csname\curr@fontshape/\f@size\endcsname}%
+    \expandafter\do@emfont@update\emfontdeclare@clist\do@emfont@update
+  \fi
+}
+\fi
+\def\eminnershape{\mcfamily \upshape}%
+\plEndIncludeInRelease
+\plIncludeInRelease{2016/04/17}{\DeclareEmphSequence}
+                               {Support \eminnershape}%
+\DeclareRobustCommand\em
+        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+                       \eminnershape \else \gtfamily \itshape \fi}%
+\def\eminnershape{\mcfamily \upshape}%
+\plEndIncludeInRelease
+\plIncludeInRelease{2015/01/01}{\DeclareEmphSequence}
+                               {Non-supported \eminnershape}%
+\DeclareRobustCommand\em
+        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+                       \mcfamily \upshape \else \gtfamily \itshape \fi}
+\def\eminnershape{\upshape}% defined by LaTeX, but not used by pLaTeX
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\DeclareEmphSequence}
+                               {ASCII Corporation original}%
+\DeclareRobustCommand\em
+        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+                       \mcfamily \upshape \else \gtfamily \itshape \fi}
+\let\eminnershape\@undefined
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\textunderscore}
                    {Baseline shift for \textunderscore}%
 \DeclareTextCommandDefault{\textunderscore}{%
@@ -1167,47 +1208,6 @@ of this package available from CTAN}
     \fi
   \fi
 }
-\plEndIncludeInRelease
-\plIncludeInRelease{2020/02/02}{\DeclareEmphSequence}
-                               {Nested emph}%
-\ifx\DeclareEmphSequence\@undefined % old
-\DeclareRobustCommand\em
-        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
-                       \eminnershape \else \gtfamily \itshape \fi}%
-\else
-\DeclareRobustCommand\em{%          % 2020-02-02
-  \@nomath\em
-  \ifx\emfontdeclare@clist\@empty
-    \ifdim \fontdimen\@ne\font >\z@
-      \eminnershape \else \gtfamily \itshape \fi
-  \else
-  \edef\em@currfont{\csname\curr@fontshape/\f@size\endcsname}%
-    \expandafter\do@emfont@update\emfontdeclare@clist\do@emfont@update
-  \fi
-}
-\fi
-\def\eminnershape{\mcfamily \upshape}%
-\plEndIncludeInRelease
-\plIncludeInRelease{2016/04/17}{\DeclareEmphSequence}
-                               {Support \eminnershape}%
-\DeclareRobustCommand\em
-        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
-                       \eminnershape \else \gtfamily \itshape \fi}%
-\def\eminnershape{\mcfamily \upshape}%
-\plEndIncludeInRelease
-\plIncludeInRelease{2015/01/01}{\DeclareEmphSequence}
-                               {Non-supported \eminnershape}%
-\DeclareRobustCommand\em
-        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
-                       \mcfamily \upshape \else \gtfamily \itshape \fi}
-\def\eminnershape{\upshape}% defined by LaTeX, but not used by pLaTeX
-\plEndIncludeInRelease
-\plIncludeInRelease{0000/00/00}{\DeclareEmphSequence}
-                               {ASCII Corporation original}%
-\DeclareRobustCommand\em
-        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
-                       \mcfamily \upshape \else \gtfamily \itshape \fi}
-\let\eminnershape\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/10/28}{\<}
                    {\inhibitglue in vertical mode}%

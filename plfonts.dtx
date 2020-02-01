@@ -2426,6 +2426,89 @@
 % \end{macro}
 % \end{macro}
 %
+% \begin{macro}{\textmc}
+% \begin{macro}{\textgt}
+% \changes{v1.3b}{1997/01/28}{\cs{textmc}, \cs{textgt}の動作修正}
+% \changes{v1.6v}{XXXX/XX/XX}{定義をpldefsからplcoreへ移動}
+% テキストファミリを切り替えるためのコマンドです。
+% \file{ltfntcmd.dtx}で定義されている|\textrm|などに対応します。
+%    \begin{macrocode}
+%<*plcore>
+\DeclareTextFontCommand{\textmc}{\mcfamily}
+\DeclareTextFontCommand{\textgt}{\gtfamily}
+%</plcore>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\em}
+% \begin{macro}{\emph}
+% \begin{macro}{\eminnershape}
+% \changes{v1.3d}{1997/06/25}{\cs{em},\cs{emph}で和文を強調書体に}
+% 従来は|\em|, |\emph|で和文フォントの切り替えは行っていませんでしたが、
+% 和文フォントも|\gtfamily|に切り替えるようにしました。
+%
+% [p\LaTeXe~2016/04/17]
+% \LaTeX\ \texttt{<2015/01/01>}で追加された|\eminnershape|も取り入れ、
+% 強調コマンドを入れ子にする場合の書体を自由に再定義できるようになりました。
+% \changes{v1.6}{2016/02/01}{\LaTeX\ \texttt{!<2015/01/01!>}での\cs{em}の
+%    定義変更に対応。\cs{eminnershape}を追加。}
+%
+% [p\LaTeXe~2020-02-02]
+% \LaTeX\ \texttt{<2020-02-02>}で追加された|\DeclareEmphSequence|を
+% サポートしました。
+% \changes{v1.6v}{XXXX/XX/XX}{Support \cs{emph} sequences
+%    (sync with ltfssini.dtx 2019/12/17 v3.1e)}
+% \changes{v1.6v}{XXXX/XX/XX}{定義をpldefsからplcoreへ移動}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2020/02/02}{\DeclareEmphSequence}
+%<platexrelease>                               {Nested emph}%
+%<*plcore|platexrelease>
+\ifx\DeclareEmphSequence\@undefined % old
+\DeclareRobustCommand\em
+        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+                       \eminnershape \else \gtfamily \itshape \fi}%
+\else
+\DeclareRobustCommand\em{%          % 2020-02-02
+  \@nomath\em
+  \ifx\emfontdeclare@clist\@empty
+    \ifdim \fontdimen\@ne\font >\z@
+      \eminnershape \else \gtfamily \itshape \fi
+  \else
+  \edef\em@currfont{\csname\curr@fontshape/\f@size\endcsname}%
+    \expandafter\do@emfont@update\emfontdeclare@clist\do@emfont@update
+  \fi
+}
+\fi
+\def\eminnershape{\mcfamily \upshape}%
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\DeclareEmphSequence}
+%<platexrelease>                               {Support \eminnershape}%
+%<platexrelease>\DeclareRobustCommand\em
+%<platexrelease>        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+%<platexrelease>                       \eminnershape \else \gtfamily \itshape \fi}%
+%<platexrelease>\def\eminnershape{\mcfamily \upshape}%
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2015/01/01}{\DeclareEmphSequence}
+%<platexrelease>                               {Non-supported \eminnershape}%
+%<platexrelease>\DeclareRobustCommand\em
+%<platexrelease>        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@ 
+%<platexrelease>                       \mcfamily \upshape \else \gtfamily \itshape \fi}
+%<platexrelease>\def\eminnershape{\upshape}% defined by LaTeX, but not used by pLaTeX
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\DeclareEmphSequence}
+%<platexrelease>                               {ASCII Corporation original}%
+%<platexrelease>\DeclareRobustCommand\em
+%<platexrelease>        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@ 
+%<platexrelease>                       \mcfamily \upshape \else \gtfamily \itshape \fi}
+%<platexrelease>\let\eminnershape\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
 %
 % \begin{macro}{\romanprocess@table}
 % \begin{macro}{\kanjiprocess@table}
@@ -3018,6 +3101,39 @@
 % \end{macro}
 %
 %
+% \begin{macro}{\<}
+% 最後に、|\inhibitglue|の簡略形を定義します。
+% このコマンドは、和文フォントのメトリック情報から、自動的に挿入される
+% グルーの挿入を禁止します。
+%
+% 2014年のp\TeX{}の|\inhibitglue|のバグ修正に伴い、
+% |\inhibitglue|が垂直モードでは効かなくなりました。
+% \LaTeX{}では垂直モードと水平モードの区別が隠されていますので、
+% p\LaTeX{}の追加命令である|\<|は段落頭でも効くように修正します。
+%
+% |\DeclareRobustCommand|を使うと|\protect|の影響で前方の文字に対する
+% |\inhibitglue|が効かなくなるので、e-\TeX{}の|\protected|が必要です。
+% \changes{v1.6i}{2017/09/24}{\cs{<}が段落頭でも効くようにした}
+% \changes{v1.6v}{XXXX/XX/XX}{定義をpldefsからplcoreへ移動}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2017/10/28}{\<}
+%<platexrelease>                   {\inhibitglue in vertical mode}%
+%<*plcore|platexrelease>
+\ifx\protected\@undefined
+\def\<{\inhibitglue}
+\else
+\protected\def\<{\ifvmode\leavevmode\fi\inhibitglue}
+\fi
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\<}
+%<platexrelease>                   {ASCII Corporation original}%
+%<platexrelease>\def\<{\inhibitglue}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%
 % \subsection{デフォルト設定ファイルの読み込み}
 % デフォルト設定ファイル\file{pldefs.ltx}は、もともと\file{plcore.ltx}の途中で
 % 読み込んでいましたが、2018年以降の新しいコミュニティ版\pLaTeX{}では
@@ -3025,8 +3141,6 @@
 % 実際の中身については、第\ref{plfonts:pldefs}節を参照してください。
 % \changes{v1.6k}{2017/12/05}{デフォルト設定ファイルの読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
-%
-%
 %
 %
 % \section{デフォルト設定ファイル}\label{plfonts:pldefs}
@@ -3113,88 +3227,6 @@
 \fontencoding{JY1}\selectfont
 %    \end{macrocode}
 %
-% \begin{macro}{\textmc}
-% \begin{macro}{\textgt}
-% \changes{v1.3b}{1997/01/28}{\cs{textmc}, \cs{textgt}の動作修正}
-% テキストファミリを切り替えるためのコマンドです。
-% \file{ltfntcmd.dtx}で定義されている|\textrm|などに対応します。
-%    \begin{macrocode}
-\DeclareTextFontCommand{\textmc}{\mcfamily}
-\DeclareTextFontCommand{\textgt}{\gtfamily}
-%    \end{macrocode}
-% \end{macro}
-% \end{macro}
-%
-% \begin{macro}{\em}
-% \begin{macro}{\emph}
-% \begin{macro}{\eminnershape}
-% \changes{v1.3d}{1997/06/25}{\cs{em},\cs{emph}で和文を強調書体に}
-% 従来は|\em|, |\emph|で和文フォントの切り替えは行っていませんでしたが、
-% 和文フォントも|\gtfamily|に切り替えるようにしました。
-%
-% [p\LaTeXe~2016/04/17]
-% \LaTeX\ \texttt{<2015/01/01>}で追加された|\eminnershape|も取り入れ、
-% 強調コマンドを入れ子にする場合の書体を自由に再定義できるようになりました。
-% \changes{v1.6}{2016/02/01}{\LaTeX\ \texttt{!<2015/01/01!>}での\cs{em}の
-%    定義変更に対応。\cs{eminnershape}を追加。}
-%
-% [p\LaTeXe~2020-02-02]
-% \LaTeX\ \texttt{<2020-02-02>}で追加された|\DeclareEmphSequence|を
-% サポートしました。
-% \changes{v1.6v}{XXXX/XX/XX}{Support \cs{emph} sequences
-%    (sync with ltfssini.dtx 2019/12/17 v3.1e)}
-%    \begin{macrocode}
-%</pldefs>
-%<platexrelease>\plIncludeInRelease{2020/02/02}{\DeclareEmphSequence}
-%<platexrelease>                               {Nested emph}%
-%<*pldefs|platexrelease>
-\ifx\DeclareEmphSequence\@undefined % old
-\DeclareRobustCommand\em
-        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
-                       \eminnershape \else \gtfamily \itshape \fi}%
-\else
-\DeclareRobustCommand\em{%          % 2020-02-02
-  \@nomath\em
-  \ifx\emfontdeclare@clist\@empty
-    \ifdim \fontdimen\@ne\font >\z@
-      \eminnershape \else \gtfamily \itshape \fi
-  \else
-  \edef\em@currfont{\csname\curr@fontshape/\f@size\endcsname}%
-    \expandafter\do@emfont@update\emfontdeclare@clist\do@emfont@update
-  \fi
-}
-\fi
-\def\eminnershape{\mcfamily \upshape}%
-%</pldefs|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2016/04/17}{\DeclareEmphSequence}
-%<platexrelease>                               {Support \eminnershape}%
-%<platexrelease>\DeclareRobustCommand\em
-%<platexrelease>        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
-%<platexrelease>                       \eminnershape \else \gtfamily \itshape \fi}%
-%<platexrelease>\def\eminnershape{\mcfamily \upshape}%
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2015/01/01}{\DeclareEmphSequence}
-%<platexrelease>                               {Non-supported \eminnershape}%
-%<platexrelease>\DeclareRobustCommand\em
-%<platexrelease>        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@ 
-%<platexrelease>                       \mcfamily \upshape \else \gtfamily \itshape \fi}
-%<platexrelease>\def\eminnershape{\upshape}% defined by LaTeX, but not used by pLaTeX
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\DeclareEmphSequence}
-%<platexrelease>                               {ASCII Corporation original}%
-%<platexrelease>\DeclareRobustCommand\em
-%<platexrelease>        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@ 
-%<platexrelease>                       \mcfamily \upshape \else \gtfamily \itshape \fi}
-%<platexrelease>\let\eminnershape\@undefined
-%<platexrelease>\plEndIncludeInRelease
-%<*pldefs>
-%    \end{macrocode}
-% \end{macro}
-% \end{macro}
-% \end{macro}
-%
-%
 % \changes{v1.3b}{1997/01/30}{数式用フォントの宣言をクラスファイルに移動した}
 %
 %
@@ -3271,39 +3303,6 @@
 %    \begin{macrocode}
 \jcharwidowpenalty=500
 %    \end{macrocode}
-%
-% \begin{macro}{\<}
-% 最後に、|\inhibitglue|の簡略形を定義します。
-% このコマンドは、和文フォントのメトリック情報から、自動的に挿入される
-% グルーの挿入を禁止します。
-%
-% 2014年のp\TeX{}の|\inhibitglue|のバグ修正に伴い、
-% |\inhibitglue|が垂直モードでは効かなくなりました。
-% \LaTeX{}では垂直モードと水平モードの区別が隠されていますので、
-% p\LaTeX{}の追加命令である|\<|は段落頭でも効くように修正します。
-%
-% |\DeclareRobustCommand|を使うと|\protect|の影響で前方の文字に対する
-% |\inhibitglue|が効かなくなるので、e-\TeX{}の|\protected|が必要です。
-% \changes{v1.6i}{2017/09/24}{\cs{<}が段落頭でも効くようにした}
-%    \begin{macrocode}
-%</pldefs>
-%<platexrelease>\plIncludeInRelease{2017/10/28}{\<}
-%<platexrelease>                   {\inhibitglue in vertical mode}%
-%<*pldefs|platexrelease>
-\ifx\protected\@undefined
-\def\<{\inhibitglue}
-\else
-\protected\def\<{\ifvmode\leavevmode\fi\inhibitglue}
-\fi
-%</pldefs|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\<}
-%<platexrelease>                   {ASCII Corporation original}%
-%<platexrelease>\def\<{\inhibitglue}
-%<platexrelease>\plEndIncludeInRelease
-%<*pldefs>
-%    \end{macrocode}
-% \end{macro}
 %
 % ここまでが、\file{pldefs.ltx}の内容です。
 %    \begin{macrocode}

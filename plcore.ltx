@@ -942,6 +942,25 @@
     {\not@math@alphabet\gtfamily\mathgt
      \prepare@family@series@update@kanji{gt}\gtdefault\selectfont}
 \fi
+\DeclareTextFontCommand{\textmc}{\mcfamily}
+\DeclareTextFontCommand{\textgt}{\gtfamily}
+\ifx\DeclareEmphSequence\@undefined % old
+\DeclareRobustCommand\em
+        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+                       \eminnershape \else \gtfamily \itshape \fi}%
+\else
+\DeclareRobustCommand\em{%          % 2020-02-02
+  \@nomath\em
+  \ifx\emfontdeclare@clist\@empty
+    \ifdim \fontdimen\@ne\font >\z@
+      \eminnershape \else \gtfamily \itshape \fi
+  \else
+  \edef\em@currfont{\csname\curr@fontshape/\f@size\endcsname}%
+    \expandafter\do@emfont@update\emfontdeclare@clist\do@emfont@update
+  \fi
+}
+\fi
+\def\eminnershape{\mcfamily \upshape}%
 \let\romanprocess@table\process@table
 \def\kanjiprocess@table{%
   \kanjiencoding{\kanjiencodingdefault}%
@@ -1056,6 +1075,11 @@
   \let\@text@composite@x\pltx@saved@text@composite@x
 }
 \nofixcompositeaccent
+\ifx\protected\@undefined
+\def\<{\inhibitglue}
+\else
+\protected\def\<{\ifvmode\leavevmode\fi\inhibitglue}
+\fi
 %% File: plcore.dtx
 \def\NeedsTeXFormat#1{%
    \def\reserved@a{#1}%
