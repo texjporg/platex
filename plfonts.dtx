@@ -3081,13 +3081,18 @@
 \KanjiEncodingPair{JY1}{JT1}
 %    \end{macrocode}
 % フォント属性のデフォルト値：
+% \LaTeXe~2019-10-01までは|\shapedefault|は|\updefault|でしたが、
+% \LaTeXe~2020-02-02で|\updefault|が``n''から``up''へと修正されたことに
+% 伴い、|\shapedefault|は明示的に``n''に設定されました。
+% \changes{v1.6v}{XXXX/XX/XX}{Set \cs{kanjishapedefault} explicitly to ``n''
+%    (sync with fontdef.dtx 2019/12/17 v3.0e)}
 %    \begin{macrocode}
 \newcommand\mcdefault{mc}
 \newcommand\gtdefault{gt}
 \newcommand\kanjiencodingdefault{JY1}
 \newcommand\kanjifamilydefault{\mcdefault}
 \newcommand\kanjiseriesdefault{\mddefault}
-\newcommand\kanjishapedefault{\updefault}
+\newcommand\kanjishapedefault{n}% formerly \updefault
 %    \end{macrocode}
 % 和文エンコードの指定：
 %    \begin{macrocode}
