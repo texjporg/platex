@@ -1,13 +1,17 @@
 # platex
 
-The bundle provides pLaTeX2e and miscellaneous macros for pTeX and e-pTeX.
+The bundle provides pLaTeX2e format and miscellaneous macros
+for pTeX and e-pTeX.
+This is a community edition maintained by
+[Japanese TeX Development Community](http://texjp.org),
+which forked from the original ASCII edition (ptex-texmf-2.5).
 
-The bundle is a community edition forked from the original ASCII edition
-(ptex-texmf-2.5). The GitHub repository
+## Repository
 
-- https://github.com/texjporg/platex
+The bundle is maintained on GitHub:
+https://github.com/texjporg/platex
 
-is now maintained by [Japanese TeX Development Community](http://texjp.org).
+If you have issues, please let us know from the above page.
 
 The original ASCII edition can be obtained from:
 
@@ -15,14 +19,20 @@ The original ASCII edition can be obtained from:
 
 ## Changes from the original ASCII edition
 
-See the documents (platex.pdf, pldoc.pdf, platexrelease.pdf) for more information.
+The original ASCII edition (pLaTeX2e 2006/11/10) was based on
+pTeX-3.1.10 and LaTeX2e 2005/12/01.
+The community edition (this package) has the following advantages:
 
-- Fix macros which are inconsistent with the latest e-pTeX
-  (e.g. \footnote, tabular, \parbox, \underline).
 - Fix several bugs in pLaTeX2e format and packages.
+- Fix macros which are inconsistent with the latest pTeX
+  (e.g. \footnote, tabular, \parbox, \underline).
+- Support LaTeX2e 2015/01/01 and later versions.
 - Add platexrelease.sty. As with the latexrelease package, this
   package enables us to use the old versions of pLaTeX2e (from
   2006/11/10 the ASCII edition).
+
+See the documents (platex.pdf, pldoc.pdf, platexrelease.pdf)
+for more information.
 
 ## Documentation
 
@@ -46,13 +56,6 @@ the following commands will be helpful:
 All the text files containing Japanese characters in this repository
 are encoded in ISO-2022-JP. This is because ISO-2022-JP encoded
 texts are most suitable for the traditional pTeX engine.
-
-## Repository
-
-The bundle is maintained on GitHub:
-https://github.com/texjporg/platex
-
-If you have issues, please let us know from the above page.
 
 ## License
 
