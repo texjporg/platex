@@ -1916,7 +1916,10 @@
 % \begin{macro}{\fontseries}
 % 書体のシリーズを指定するコマンドです。
 % |\fontseries|コマンドは和欧文の両方に影響します。
-% \LaTeXe~2020-02-02では|\merge@font@series|を使います。
+%
+% 2019年までは無条件に指定されたとおりのシリーズを選択していましたが、
+% \LaTeXe~2020-02-02以降では、|\DeclareFontSeriesChangeRule|によって
+% 宣言された「シリーズ更新規則」に基づきシリーズを選択します。
 %    \begin{macrocode}
 %<*plcore|platexrelease>
 \ifx\fontseriesforce\@undefined  % old
@@ -2007,7 +2010,10 @@
 % \begin{macro}{\fontshape}
 % 書体のシェイプを指定するコマンドです。
 % |\fontshape|コマンドは和欧文の両方に影響します。
-% \LaTeXe~2020-02-02では|\merge@font@shape|を使います。
+%
+% 2019年までは無条件に指定されたとおりのシェイプを選択していましたが、
+% \LaTeXe~2020-02-02以降では、|\DeclareFontShapeChangeRule|によって
+% 宣言された「シェイプ更新規則」に基づきシェイプを選択します。
 %    \begin{macrocode}
 \ifx\fontshapeforce\@undefined   % old
 \DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
@@ -2207,9 +2213,15 @@
 % \begin{macro}{\bfseries@gt}
 % \begin{macro}{\mdseries@mc}
 % \begin{macro}{\mdseries@gt}
-% \LaTeXe~2020-02-02ではmweightsパッケージを基にした
-% 欧文フォントのシリーズのカスタム設定が導入されていますので、
-% p\LaTeXe{}の和文フォントでもこれをサポートします。
+% \LaTeXe~2020-02-02では、欧文フォントについて
+% 「ファミリごとの実際のシリーズ値を設定できる」
+% という機能が導入されました（元はmweightsパッケージの機能）。
+% また、同時に
+% 「Computer ModernとLatin Modernの場合は互換性のため太字をbxに、
+% それ以外の欧文ファミリの場合は太字をbにする」
+% という仕様変更も入りました。
+% これに合わせて、p\LaTeXe{}の和文フォントにも同等の機能を追加し、
+% 和文ファミリの太字もbxではなくbに変更しました。
 % \changes{v1.6v}{2020/02/01}{\LaTeX{}がmweightsパッケージを基にした
 %    シリーズのカスタム設定を導入したので、これをサポート
 %    (sync with ltfssini.dtx 2019/12/17 v3.1e)}
@@ -2260,7 +2272,7 @@
 %
 % \begin{macro}{\bfseries}
 % \begin{macro}{\mdseries}
-% カスタム設定をチェックします。
+% ファミリごとの設定値を参照します。
 %    \begin{macrocode}
 \ifx\bfseries@rm\@undefined\else  % 2020-02-02
 \DeclareRobustCommand\bfseries{%
