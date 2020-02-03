@@ -127,13 +127,14 @@
 % \changes{v1.6v}{2020/02/01}{定義をpldefsからplcoreへ移動}
 % \changes{v1.6v}{2020/02/01}{Set \cs{kanjishapedefault} explicitly to ``n''
 %    (sync with fontdef.dtx 2019/12/17 v3.0e)}
+% \changes{v1.6w}{2020/02/03}{巻き戻しのバグ修正}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/02/01 v1.6v pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/02/03 v1.6w pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -2402,8 +2403,15 @@
 %}%
 %    \end{macrocode}
 % ここからがp\LaTeX{}による追加コードです。
+% \begin{itemize}
+%   \item \LaTeXe~2019-10-01以前：未定義
+%   \item \LaTeXe~2020-02-02以降：上のとおりの定義
+%   \item ただし、latexreleaseで巻き戻し：|\relax|と同義
+% \end{itemize}
+% になることに注意します。
+% \changes{v1.6w}{2020/02/03}{巻き戻しのバグ修正}
 %    \begin{macrocode}
-\ifx\init@series@setup\@undefined\else  % 2020-02-02
+\expandafter\ifx\csname init@series@setup\endcsname\relax\else  % 2020-02-02
 \g@addto@macro\init@series@setup{%
   \ifx\kanjidef@ult\mcdef@ult      \mcfamily
   \else\ifx\kanjidef@ult\gtdef@ult \gtfamily

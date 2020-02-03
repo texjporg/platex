@@ -920,7 +920,7 @@
   \fi
 }
 \fi
-\ifx\init@series@setup\@undefined\else  % 2020-02-02
+\expandafter\ifx\csname init@series@setup\endcsname\relax\else  % 2020-02-02
 \g@addto@macro\init@series@setup{%
   \ifx\kanjidef@ult\mcdef@ult      \mcfamily
   \else\ifx\kanjidef@ult\gtdef@ult \gtfamily
