@@ -2069,7 +2069,8 @@
   \ifx\@reserveda\@empty
     \edef\k@shape{#2}%
   \else
-    \maybe@load@fontshape
+    \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+      \maybe@load@fontshape\endgroup
     \edef\@reserveda{\k@encoding /\k@family /\k@series/#1}%
      \ifcsname \@reserveda\endcsname
        \edef\k@shape{#1}%
