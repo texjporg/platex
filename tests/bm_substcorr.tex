@@ -1,0 +1,61 @@
+% ダメになる例：ゴシックが明朝になる
+% disablejfam なので数式内で漢字が使えない最小化
+\documentclass[]{jarticle}
+\usepackage{etoolbox}% for \csshow
+\makeatletter
+\let\pl@do@subst@correction@al=\do@subst@correction
+\def\pl@do@subst@correction@yoko{\immediate\write-1{<<YOKO \curr@fontshape>>}}%
+\def\pl@do@subst@correction@tate{\immediate\write-1{<<TATE \curr@fontshape>>}}%
+\def\do@subst@correction{%
+  %% \f@encoding と \kyenc@list 内のエントリの catcode が違っているかもしれない
+  \begingroup
+	\everyeof{\noexpand}\endlinechar=-1%
+    \xdef\pl@f@enc{{\scantokens\expandafter{\f@encoding}}}%
+  \endgroup
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\pl@f@enc\expandafter{\kyenc@list}%
+  \ifin@\pl@do@subst@correction@yoko
+  \else
+    \expandafter\expandafter\expandafter
+	\inlist@\expandafter\pl@f@enc\expandafter{\ktenc@list}%
+    \ifin@\pl@do@subst@correction@tate\else
+	  \immediate\write-1{<<AL \curr@fontshape>>}\pl@do@subst@correction@al
+	\fi
+  \fi
+}
+
+\makeatother
+
+% ssub でなく明示定義されていれば大丈夫
+%\DeclareFontShape{JY1}{mc}{bx}{n}{<5> <7> <10> goth10}{}
+\DeclareSymbolFont{mincho}{JY1}{mc}{m}{n}
+\SetSymbolFont{mincho}{bold}{JY1}{mc}{bx}{n}%…(\UTF{3020})
+\usepackage{bm}
+
+\begin{document}
+
+% =======================
+{\sffamily\gtfamily ゴシックGT}のはずなのに
+
+\csshow{JY1/gt/m/n/10}%==> \JY1/gt/m/n/10=select font goth10.
+数式
+\setbox0=\hbox{$\empty$}%
+が一度でも入ると
+% 数式が使われた時に有効だった欧文ファミリに再定義されてしまう
+\csshow{JY1/gt/m/n/10}%==> \JY1/gt/m/n/10=select font cmr10. (???)
+
+{\sffamily\gtfamily 同じサイズは明朝体MCになる}
+% =======================
+
+% =======================
+{\sffamily\gtfamily\Large 別のサイズは大丈夫GT}
+
+{\Large
+だが数式
+\setbox0=\hbox{$\empty$}%
+が一度でも入ると}
+
+{\sffamily\gtfamily\Large 別のサイズも潰されるGT}
+% =======================
+
+\end{document}
