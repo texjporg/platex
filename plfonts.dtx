@@ -386,11 +386,20 @@
 % \begin{macro}{\inlist@}
 % 次のコマンドは、エンコードやファミリのリスト内に第二引数で指定された文字列
 % があるかどうかを調べるマクロです。
+%
+% [2020-02-05] 比較する際に引数・リストとも|\detokenize|によって文字列化するようにしました．
 %    \begin{macrocode}
 \def\inlist@#1#2{%
-  \def\in@@##1<#1>##2##3\in@@{%
-    \ifx\in@##2\in@false\else\in@true\fi}%
-  \in@@#2<#1>\in@\in@@}
+  \toks@{\def\in@@##1<}\toks2\expandafter{\detokenize{#1}}%
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \addto@hook\expandafter\expandafter\expandafter\toks@\expandafter%
+    {\the\toks2>##2##3\in@@{\ifx\in@##2\in@false\else\in@true\fi}\in@@}%
+  \toks4\expandafter{\detokenize{#2}}%
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \addto@hook\expandafter\expandafter\expandafter\toks@\expandafter{\the\toks4<}%
+  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+  \addto@hook\expandafter\expandafter\expandafter\toks@\expandafter{\the\toks2>\in@\in@@}%
+  \the\toks@}
 %    \end{macrocode}
 % \end{macro}
 %
