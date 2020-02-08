@@ -394,7 +394,7 @@
 % \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}
 % \end{verbatim}
 % \changes{v1.6x}{2020/02/05}{比較する際に引数・リストとも\cs{detokenize}によって
-% 文字列化するようにしました．}
+% 文字列化するようにしました。}
 %    \begin{macrocode}
 \def\inlist@#1#2{%
   \edef\reserved@a{%
@@ -1112,17 +1112,32 @@
 % \end{macro}
 %
 % \begin{macro}{\do@subst@correction}
-% \begin{macro}{\pl@do@subst@correction@al}
-% \begin{macro}{\pl@do@subst@correction@yoko}
-% \begin{macro}{\pl@do@subst@correction@tate}
-% \cs{do@subst@correction}は和文フォントに対して使えない（\cs{font}は欧文フォントを返すた
-% め），和文に対応させます．
-%
+% \begin{macro}{\pltx@do@subst@correction@al}
+% \begin{macro}{\pltx@do@subst@correction@yoko}
+% \begin{macro}{\pltx@do@subst@correction@tate}
+% |\font|は欧文フォントを返すため、\LaTeX{}の元の|\do@subst@correction|は
+% 和文フォントに対して使えませんので、和文に対応させます。
 % \changes{v1.6x}{2020/02/05}{\cs{do@subst@correction}の日本語化}
 %
+% オリジナルの\LaTeX{}の定義は、欧文用として使います。
 %    \begin{macrocode}
-\let\pl@do@subst@correction@al=\do@subst@correction
-\def\pl@do@subst@correction@yoko{%
+%</plcore>
+%<platexrelease>\plIncludeInRelease{9999/99/99}{\do@subst@correction}
+%<platexrelease>                   {Japanese font substitution}%
+%<*plcore|platexrelease>
+\def\pltx@do@subst@correction@al{%
+       \xdef\subst@correction{%
+          \font@name
+          \global\expandafter\font
+            \csname \curr@fontshape/\f@size\endcsname
+            \noexpand\fontname\font
+           \relax}%
+       \aftergroup\subst@correction
+}
+%    \end{macrocode}
+% 和文横組用と和文縦組用の定義では、それぞれ|\jfont|と|\tfont|を使います。
+%    \begin{macrocode}
+\def\pltx@do@subst@correction@yoko{%
        \xdef\subst@correction{%
           \font@name
           \global\expandafter\jfont
@@ -1131,7 +1146,7 @@
            \relax}%
        \aftergroup\subst@correction
 }
-\def\pl@do@subst@correction@tate{%
+\def\pltx@do@subst@correction@tate{%
        \xdef\subst@correction{%
           \font@name
           \global\expandafter\tfont
@@ -1140,24 +1155,46 @@
            \relax}%
        \aftergroup\subst@correction
 }
+%    \end{macrocode}
+% そして、エンコーディングに応じて3つの命令を使い分けます。
+%    \begin{macrocode}
 \def\do@subst@correction{%
   \edef\tmp@item{{\f@encoding}}%
   \expandafter\expandafter\expandafter
   \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
-  \ifin@\pl@do@subst@correction@yoko
+  \ifin@\pltx@do@subst@correction@yoko
   \else
     \expandafter\expandafter\expandafter
     \inlist@\expandafter\tmp@item\expandafter{\ktenc@list}%
-    \ifin@\pl@do@subst@correction@tate\else
-      \pl@do@subst@correction@al
+    \ifin@\pltx@do@subst@correction@tate\else
+      \pltx@do@subst@correction@al
     \fi
   \fi
 }
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\do@subst@correction}
+%<platexrelease>                   {LaTeX2e original}%
+%<platexrelease>\def\do@subst@correction{%
+%<platexrelease>       \xdef\subst@correction{%
+%<platexrelease>          \font@name
+%<platexrelease>          \global\expandafter\font
+%<platexrelease>            \csname \curr@fontshape/\f@size\endcsname
+%<platexrelease>            \noexpand\fontname\font
+%<platexrelease>           \relax}%
+%<platexrelease>       \aftergroup\subst@correction
+%<platexrelease>}
+%<platexrelease>\let\pltx@do@subst@correction@al\@undefined
+%<platexrelease>\let\pltx@do@subst@correction@yoko\@undefined
+%<platexrelease>\let\pltx@do@subst@correction@tate\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
 % \end{macro}
 % \end{macro}
+%
 %
 % \begin{macro}{\reDeclareMathAlphabet}
 % \changes{v1.0}{1997/01/30}{\break\cs{reDeclareMathAlphabet}を追加。
