@@ -397,16 +397,17 @@
 % 文字列化するようにしました．}
 %    \begin{macrocode}
 \def\inlist@#1#2{%
-  \toks@{\def\in@@##1<}\toks2\expandafter{\detokenize{#1}}%
-  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
-  \addto@hook\expandafter\expandafter\expandafter\toks@\expandafter%
-    {\the\toks2>##2##3\in@@{\ifx\in@##2\in@false\else\in@true\fi}\in@@}%
+  \toks2\expandafter{\detokenize{#1}}%
   \toks4\expandafter{\detokenize{#2}}%
-  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
-  \addto@hook\expandafter\expandafter\expandafter\toks@\expandafter{\the\toks4<}%
-  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
-  \addto@hook\expandafter\expandafter\expandafter\toks@\expandafter{\the\toks2>\in@\in@@}%
-  \the\toks@}
+  \edef\reserved@a{%
+    \unexpanded{\def\in@@##1<}%
+    \the\toks2 %
+    \unexpanded{>##2##3\in@@{\ifx\in@##2\in@false\else\in@true\fi}\in@@}
+    \the\toks4 %
+    \unexpanded{<}%
+    \the\toks2 %
+    \unexpanded{>\in@\in@@}}%
+    \reserved@a}
 %    \end{macrocode}
 % \end{macro}
 %
