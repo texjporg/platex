@@ -517,14 +517,14 @@ of this package available from CTAN}
     \@nil
 }
 \def\merge@kanji@series@#1#2#3\@nil{%
-  \def\@reserveda{#3}%
-  \ifx\@reserveda\@empty
+  \def\reserved@a{#3}%
+  \ifx\reserved@a\@empty
     \set@target@series@kanji{#2}%
   \else
     \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
       \maybe@load@fontshape\endgroup
-    \edef\@reserveda{\k@encoding /\k@family /#1/\k@shape}%
-     \ifcsname \@reserveda \endcsname
+    \edef\reserved@a{\k@encoding /\k@family /#1/\k@shape}%
+     \ifcsname \reserved@a \endcsname
        \set@target@series@kanji{#1}%
     \else
        \ifcsname \k@encoding /\k@family /#2/\k@shape \endcsname
@@ -571,14 +571,14 @@ of this package available from CTAN}
     \@nil
 }
 \def\merge@kanji@shape@#1#2#3\@nil{%
-  \def\@reserveda{#3}%
-  \ifx\@reserveda\@empty
+  \def\reserved@a{#3}%
+  \ifx\reserved@a\@empty
     \edef\k@shape{#2}%
   \else
     \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
       \maybe@load@fontshape\endgroup
-    \edef\@reserveda{\k@encoding /\k@family /\k@series/#1}%
-     \ifcsname \@reserveda\endcsname
+    \edef\reserved@a{\k@encoding /\k@family /\k@series/#1}%
+     \ifcsname \reserved@a\endcsname
        \edef\k@shape{#1}%
     \else
        \ifcsname \k@encoding /\k@family /\k@series/#2\endcsname
@@ -768,8 +768,8 @@ of this package available from CTAN}
 }
 \def\@meta@family@list@kanji{\@elt{mc}\@elt{gt}}
 \def\update@series@target@value@kanji#1{%
-  \def\@reserveda{#1}%
-  \ifx\target@meta@family@value\@reserveda   % rm -> rm do nothing
+  \def\reserved@a{#1}%
+  \ifx\target@meta@family@value\reserved@a   % rm -> rm do nothing
   \else
     \expandafter\ifx\csname#1def@ult\endcsname\k@family
       \let\@elt\@gobble
