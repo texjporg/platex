@@ -397,17 +397,15 @@
 % 文字列化するようにしました．}
 %    \begin{macrocode}
 \def\inlist@#1#2{%
-  \edef\reserved@a{\detokenize{#1}}%
-  \edef\reserved@b{\detokenize{#2}}%
-  \edef\reserved@c{%
+  \edef\reserved@a{%
     \unexpanded{\def\in@@##1<}%
-    \reserved@a
+    \detokenize{#1}%
     \unexpanded{>##2##3\in@@{\ifx\in@##2\in@false\else\in@true\fi}\in@@}
-    \reserved@b
+    \detokenize{#2}%
     \unexpanded{<}%
-    \reserved@a
+    \detokenize{#1}%
     \unexpanded{>\in@\in@@}}%
-    \reserved@c}
+    \reserved@a}
 %    \end{macrocode}
 % \end{macro}
 %
