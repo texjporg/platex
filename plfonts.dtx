@@ -403,12 +403,12 @@
   \edef\reserved@a{%
     \unexpanded{\def\in@@##1<}%
     \detokenize{#1}%
-    \unexpanded{>##2##3\in@@{\ifx\in@##2\in@false\else\in@true\fi}\in@@}
+    \unexpanded{>##2##3\in@@{\ifx\in@##2\in@false\else\in@true\fi}\in@@}%
     \detokenize{#2}%
     \unexpanded{<}%
     \detokenize{#1}%
     \unexpanded{>\in@\in@@}}%
-    \reserved@a}
+  \reserved@a}
 %    \end{macrocode}
 % \end{macro}
 %
