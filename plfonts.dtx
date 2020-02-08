@@ -392,11 +392,11 @@
 % があるかどうかを調べるマクロです。結果は\cs{ifin@}に格納されます。
 % 第二引数はリストそのもの（リストが格納されたマクロではなく）を指定することになります。
 % 典型的には以下のように呼び出します。
-% \begin{verbatim}
+%\begin{verbatim}
 % \edef\tmp@item{{\k@encoding}}%
 % \expandafter\expandafter\expandafter
 % \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}
-% \end{verbatim}
+%\end{verbatim}
 %
 % |\do@subst@correction|の日本語化に必要なので、
 % 比較する際に引数・リストとも\cs{detokenize}によって文字列化するようにしました。
