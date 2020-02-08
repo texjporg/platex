@@ -18,7 +18,7 @@
 \edef\p@known@latexreleaseversion
    {2020-02-02}
 \edef\platexreleaseversion
-   {2020-02-02}
+   {2020-03-01}
 \newif\if@plincludeinrelease
 \@plincludeinreleasefalse
 \def\plIncludeInRelease#1{%
@@ -134,6 +134,8 @@ of this package available from CTAN}
       some critical bugs. We advise you to\MessageBreak
       select another format date}
 \plIncludeInRelease{2017/10/28}{\PackageWarning}{pLaTeX Info}%
+  % * <2020-03-01>
+  % * <2020-02-02>
   % * <2019-10-01>
   % * <2019-04-06>
   % * <2018-12-01>
@@ -363,7 +365,7 @@ of this package available from CTAN}
    \gdef\f@size{#5}%
    \gdef\f@baselineskip{#5pt}}
 \plEndIncludeInRelease
-\plIncludeInRelease{9999/99/99}{\do@subst@correction}
+\plIncludeInRelease{2020/03/01}{\do@subst@correction}
                    {Japanese font substitution}%
 \def\pltx@do@subst@correction@al{%
        \xdef\subst@correction{%
@@ -2114,6 +2116,22 @@ of this package available from CTAN}
     \verbatim@font\@noligs
     \@ifstar\@sverb\@verb}
 \fi
+\plEndIncludeInRelease
+\plIncludeInRelease{2020/03/01}{\do@noligs}
+                   {Allow \xkanjiskip while avoiding ligature}%
+\def\do@noligs#1{%
+  \catcode`#1\active
+  \begingroup
+     \lccode`\~`#1\relax
+     \lowercase{\endgroup\def~{\leavevmode\vadjust{}\char`#1}}}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\do@noligs}
+                   {LaTeX2e original}%
+\def\do@noligs#1{%
+  \catcode`#1\active
+  \begingroup
+     \lccode`\~`#1\relax
+     \lowercase{\endgroup\def~{\leavevmode\kern\z@\char`#1}}}
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/10/28}{\@startline}
                    {Inhibit JFM glue at the beginning}%

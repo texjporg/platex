@@ -33,8 +33,8 @@
 \fi
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2020-02-02}
-\def\ppatch@level{1}
+   {2020-03-01}
+\def\ppatch@level{-1}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
                    \noexpand\platexNILb}
@@ -1504,6 +1504,11 @@
     \language\l@nohyphenation
     \@ifstar\@sverb\@verb}
 \fi
+\def\do@noligs#1{%
+  \catcode`#1\active
+  \begingroup
+     \lccode`\~`#1\relax
+     \lowercase{\endgroup\def~{\leavevmode\vadjust{}\char`#1}}}
 \gdef\@startline{%
      \ifnum \@nxttabmar >\@hightab
        \@badtab
