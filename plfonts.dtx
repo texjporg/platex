@@ -130,6 +130,7 @@
 % \changes{v1.6w}{2020/02/03}{巻き戻しのバグ修正}
 % \changes{v1.6x}{2020/02/05}{一時コマンドの名前を統一
 %    (sync with ltfssaxes.dtx 2020/02/05 v1.0b and ltfssini.dtx 2020/02/05 v3.1g)}
+% \changes{v1.6x}{2020/02/05}{引数・リストとも\cs{detokenize}によって文字列化}
 % \changes{v1.6x}{2020/02/05}{\cs{do@subst@correction}の日本語化}
 % \fi
 %
@@ -389,16 +390,22 @@
 % \begin{macro}{\inlist@}
 % 次のコマンドは、エンコードやファミリのリスト内に第二引数で指定された文字列
 % があるかどうかを調べるマクロです。結果は\cs{ifin@}に格納されます。
-%
 % 第二引数はリストそのもの（リストが格納されたマクロではなく）を指定することになります。
 % 典型的には以下のように呼び出します。
 % \begin{verbatim}
 % \edef\tmp@item{{\k@encoding}}%
+% \expandafter\expandafter\expandafter
 % \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}
 % \end{verbatim}
-% \changes{v1.6x}{2020/02/05}{比較する際に引数・リストとも\cs{detokenize}によって
-% 文字列化するようにしました。}
+%
+% |\do@subst@correction|の日本語化に必要なので、
+% 比較する際に引数・リストとも\cs{detokenize}によって文字列化するようにしました。
+% \changes{v1.6x}{2020/02/05}{引数・リストとも\cs{detokenize}によって文字列化}
 %    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2020/03/01}{\inlist@}
+%<platexrelease>                   {Detokenize}%
+%<*plcore|platexrelease>
 \def\inlist@#1#2{%
   \edef\reserved@a{%
     \unexpanded{\def\in@@##1<}%
@@ -409,6 +416,16 @@
     \detokenize{#1}%
     \unexpanded{>\in@\in@@}}%
   \reserved@a}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\inlist@}
+%<platexrelease>                   {ASCII Corporation original}%
+%<platexrelease>\def\inlist@#1#2{%
+%<platexrelease>  \def\in@@##1<#1>##2##3\in@@{%
+%<platexrelease>    \ifx\in@##2\in@false\else\in@true\fi}%
+%<platexrelease>  \in@@#2<#1>\in@\in@@}
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %

@@ -191,6 +191,26 @@ of this package available from CTAN}
   % * <2006/11/10>
 \plEndIncludeInRelease
 %% File: plfonts.dtx
+\plIncludeInRelease{2020/03/01}{\inlist@}
+                   {Detokenize}%
+\def\inlist@#1#2{%
+  \edef\reserved@a{%
+    \unexpanded{\def\in@@##1<}%
+    \detokenize{#1}%
+    \unexpanded{>##2##3\in@@{\ifx\in@##2\in@false\else\in@true\fi}\in@@}%
+    \detokenize{#2}%
+    \unexpanded{<}%
+    \detokenize{#1}%
+    \unexpanded{>\in@\in@@}}%
+  \reserved@a}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\inlist@}
+                   {ASCII Corporation original}%
+\def\inlist@#1#2{%
+  \def\in@@##1<#1>##2##3\in@@{%
+    \ifx\in@##2\in@false\else\in@true\fi}%
+  \in@@#2<#1>\in@\in@@}
+\plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\ystrutbox}
                    {Add \ystrutbox}%
 \newbox\ystrutbox
