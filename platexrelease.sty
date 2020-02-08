@@ -363,6 +363,64 @@ of this package available from CTAN}
    \gdef\f@size{#5}%
    \gdef\f@baselineskip{#5pt}}
 \plEndIncludeInRelease
+\plIncludeInRelease{9999/99/99}{\do@subst@correction}
+                   {Japanese font substitution}%
+\def\pltx@do@subst@correction@al{%
+       \xdef\subst@correction{%
+          \font@name
+          \global\expandafter\font
+            \csname \curr@fontshape/\f@size\endcsname
+            \noexpand\fontname\font
+           \relax}%
+       \aftergroup\subst@correction
+}
+\def\pltx@do@subst@correction@yoko{%
+       \xdef\subst@correction{%
+          \font@name
+          \global\expandafter\jfont
+            \csname \curr@fontshape/\f@size\endcsname
+            \noexpand\fontname\jfont
+           \relax}%
+       \aftergroup\subst@correction
+}
+\def\pltx@do@subst@correction@tate{%
+       \xdef\subst@correction{%
+          \font@name
+          \global\expandafter\tfont
+            \csname \curr@fontshape/\f@size\endcsname
+            \noexpand\fontname\tfont
+           \relax}%
+       \aftergroup\subst@correction
+}
+\def\do@subst@correction{%
+  \edef\tmp@item{{\f@encoding}}%
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
+  \ifin@\pltx@do@subst@correction@yoko
+  \else
+    \expandafter\expandafter\expandafter
+    \inlist@\expandafter\tmp@item\expandafter{\ktenc@list}%
+    \ifin@\pltx@do@subst@correction@tate\else
+      \pltx@do@subst@correction@al
+    \fi
+  \fi
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\do@subst@correction}
+                   {LaTeX2e original}%
+\def\do@subst@correction{%
+       \xdef\subst@correction{%
+          \font@name
+          \global\expandafter\font
+            \csname \curr@fontshape/\f@size\endcsname
+            \noexpand\fontname\font
+           \relax}%
+       \aftergroup\subst@correction
+}
+\let\pltx@do@subst@correction@al\@undefined
+\let\pltx@do@subst@correction@yoko\@undefined
+\let\pltx@do@subst@correction@tate\@undefined
+\plEndIncludeInRelease
 \plIncludeInRelease{2019/10/01}{\userelfont}
                    {Make robust}%
 \DeclareRobustCommand\userelfont{\@knjcmdtrue}

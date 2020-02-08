@@ -1,60 +1,13 @@
 % ダメになる例：ゴシックが明朝になる
 % disablejfam なので数式内で漢字が使えない最小化
-\documentclass[]{tarticle}
+\documentclass[disablejfam]{jarticle}
 \usepackage{etoolbox}% for \csshow
-\makeatletter
-
-\def\inlist@#1#2{%
-  \toks@{\def\in@@##1<}\toks2\expandafter{\detokenize{#1}}%
-  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
-  \addto@hook\expandafter\expandafter\expandafter\toks@\expandafter%
-    {\the\toks2>##2##3\in@@{\ifx\in@##2\in@false\else\in@true\fi}\in@@}%
-  \toks4\expandafter{\detokenize{#2}}%
-  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
-  \addto@hook\expandafter\expandafter\expandafter\toks@\expandafter{\the\toks4<}%
-  \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
-  \addto@hook\expandafter\expandafter\expandafter\toks@\expandafter{\the\toks2>\in@\in@@}%
-  \the\toks@}
-
-\let\pl@do@subst@correction@al=\do@subst@correction
-\def\pl@do@subst@correction@yoko{%
-       \xdef\subst@correction{%
-          \font@name
-          \global\expandafter\jfont
-            \csname \curr@fontshape/\f@size\endcsname
-            \noexpand\fontname\jfont
-           \relax}%
-       \aftergroup\subst@correction
-}
-\def\pl@do@subst@correction@tate{%
-       \xdef\subst@correction{%
-          \font@name
-          \global\expandafter\tfont
-            \csname \curr@fontshape/\f@size\endcsname
-            \noexpand\fontname\tfont
-           \relax}%
-       \aftergroup\subst@correction
-}
-\def\do@subst@correction{%
-  \edef\tmp@item{{\f@encoding}}%
-  \expandafter\expandafter\expandafter
-  \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
-  \ifin@\pl@do@subst@correction@yoko
-  \else
-    \expandafter\expandafter\expandafter
-    \inlist@\expandafter\tmp@item\expandafter{\ktenc@list}%
-    \ifin@\pl@do@subst@correction@tate\else
-      \pl@do@subst@correction@al
-    \fi
-  \fi
-}
-
-\makeatother
-
 % ssub でなく明示定義されていれば大丈夫
 %\DeclareFontShape{JY1}{mc}{bx}{n}{<5> <7> <10> goth10}{}
+\DeclareSymbolFont{mincho}{JY1}{mc}{m}{n}
+\SetSymbolFont{mincho}{bold}{JY1}{mc}{bx}{n}
 \DeclareSymbolFont{mincho}{JT1}{mc}{m}{n}
-\SetSymbolFont{mincho}{bold}{JT1}{mc}{bx}{n}%…(\UTF{3020})
+\SetSymbolFont{mincho}{bold}{JT1}{mc}{bx}{n}
 \usepackage{bm}
 
 \begin{document}
@@ -63,13 +16,13 @@
 {\sffamily\gtfamily ゴシックGT}のはずなのに
 
 \csshow{JY1/gt/m/n/10}%==> \JY1/gt/m/n/10=select font goth10.
-\csshow{JT1/gt/m/n/10}%==> \JY1/gt/m/n/10=select font goth10.
+\csshow{JT1/gt/m/n/10}%==> \JY1/gt/m/n/10=select font tgoth10.
 数式
 \setbox0=\hbox{$\empty$}%
 が一度でも入ると
 % 数式が使われた時に有効だった欧文ファミリに再定義されてしまう
 \csshow{JY1/gt/m/n/10}%==> \JY1/gt/m/n/10=select font cmr10. (???)
-\csshow{JT1/gt/m/n/10}%==> \JY1/gt/m/n/10=select font cmr10. (???)
+\csshow{JT1/gt/m/n/10}%==> \JT1/gt/m/n/10=select font cmr10. (???)
 
 {\sffamily\gtfamily 同じサイズは明朝体MCになる}
 % =======================
