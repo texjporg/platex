@@ -135,6 +135,7 @@ of this package available from CTAN}
       select another format date}
 \plIncludeInRelease{2017/10/28}{\PackageWarning}{pLaTeX Info}%
   % * <2020-03-01>
+  % * <2020-02-02>+2
   % * <2020-02-02>+1
   % * <2020-02-02>
   % * <2019-10-01>+1
@@ -877,14 +878,14 @@ of this package available from CTAN}
   \fi\fi
 }%
 \fi
-\ifx\prepare@family@series@update@kanji\@undefined  % 2020-02-02
+\ifx\prepare@family@series@update@kanji\@undefined  % old
 \DeclareRobustCommand\mcfamily
         {\not@math@alphabet\mcfamily\mathmc
          \kanjifamily\mcdefault\selectfont}
 \DeclareRobustCommand\gtfamily
         {\not@math@alphabet\gtfamily\mathgt
          \kanjifamily\gtdefault\selectfont}
-\else
+\else                                               % 2020-02-02
 \DeclareRobustCommand\mcfamily
     {\not@math@alphabet\mcfamily\mathmc
      \prepare@family@series@update@kanji{mc}\mcdefault\selectfont}

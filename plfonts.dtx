@@ -130,15 +130,15 @@
 % \changes{v1.6w}{2020/02/03}{巻き戻しのバグ修正}
 % \changes{v1.6x}{2020/02/05}{一時コマンドの名前を統一
 %    (sync with ltfssaxes.dtx 2020/02/05 v1.0b and ltfssini.dtx 2020/02/05 v3.1g)}
-% \changes{v1.6x}{2020/02/05}{引数・リストとも\cs{detokenize}によって文字列化}
-% \changes{v1.6x}{2020/02/05}{\cs{do@subst@correction}の日本語化}
+% \changes{v1.6y}{2020/02/10}{引数・リストとも\cs{detokenize}によって文字列化}
+% \changes{v1.6y}{2020/02/10}{\cs{do@subst@correction}の日本語化}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/02/05 v1.6x pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/02/10 v1.6y pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -400,7 +400,7 @@
 %
 % |\do@subst@correction|の日本語化に必要なので、
 % 比較する際に引数・リストとも\cs{detokenize}によって文字列化するようにしました。
-% \changes{v1.6x}{2020/02/05}{引数・リストとも\cs{detokenize}によって文字列化}
+% \changes{v1.6y}{2020/02/10}{引数・リストとも\cs{detokenize}によって文字列化}
 %    \begin{macrocode}
 %</plcore>
 %<platexrelease>\plIncludeInRelease{2020/03/01}{\inlist@}
@@ -1137,7 +1137,7 @@
 % \begin{macro}{\pltx@do@subst@correction@tate}
 % |\font|は欧文フォントを返すため、\LaTeX{}の元の|\do@subst@correction|は
 % 和文フォントに対して使えませんので、和文に対応させます。
-% \changes{v1.6x}{2020/02/05}{\cs{do@subst@correction}の日本語化}
+% \changes{v1.6y}{2020/02/10}{\cs{do@subst@correction}の日本語化}
 %
 % オリジナルの\LaTeX{}の定義は、欧文用として使います。
 %    \begin{macrocode}
@@ -2560,14 +2560,14 @@
 % これらは、|\rmfamily|などに対応します。
 % |\mathmc|と|\mathgt|は数式内で用いるときのコマンド名です。
 %    \begin{macrocode}
-\ifx\prepare@family@series@update@kanji\@undefined  % 2020-02-02
+\ifx\prepare@family@series@update@kanji\@undefined  % old
 \DeclareRobustCommand\mcfamily
         {\not@math@alphabet\mcfamily\mathmc
          \kanjifamily\mcdefault\selectfont}
 \DeclareRobustCommand\gtfamily
         {\not@math@alphabet\gtfamily\mathgt
          \kanjifamily\gtdefault\selectfont}
-\else
+\else                                               % 2020-02-02
 \DeclareRobustCommand\mcfamily
     {\not@math@alphabet\mcfamily\mathmc
      \prepare@family@series@update@kanji{mc}\mcdefault\selectfont}
