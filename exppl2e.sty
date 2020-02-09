@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2020/02/02 v1.1e Experimental pLaTeX2e features]
+                [2020/02/09 v1.1f Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -348,6 +348,90 @@
      \lccode`\~`#1\relax
      \lowercase{\endgroup\def~{\leavevmode\vadjust{}\char`#1}}}
 %    \end{macrocode}
+% \end{macro}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \section{NFSSのsize functionの日本語化}
+%
+% \begin{macro}{\inlist@}
+% |\do@subst@correction|の日本語化に必要なので、
+% 比較する際に引数・リストとも\cs{detokenize}によって文字列化するようにしました。
+% \changes{v1.6x}{2020/02/05}{引数・リストとも\cs{detokenize}によって文字列化}
+%    \begin{macrocode}
+\def\inlist@#1#2{%
+  \edef\reserved@a{%
+    \unexpanded{\def\in@@##1<}%
+    \detokenize{#1}%
+    \unexpanded{>##2##3\in@@{\ifx\in@##2\in@false\else\in@true\fi}\in@@}%
+    \detokenize{#2}%
+    \unexpanded{<}%
+    \detokenize{#1}%
+    \unexpanded{>\in@\in@@}}%
+  \reserved@a}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\do@subst@correction}
+% \begin{macro}{\pltx@do@subst@correction@al}
+% \begin{macro}{\pltx@do@subst@correction@yoko}
+% \begin{macro}{\pltx@do@subst@correction@tate}
+% |\font|は欧文フォントを返すため、\LaTeX{}の元の|\do@subst@correction|は
+% 和文フォントに対して使えませんので、和文に対応させます。
+% \changes{v1.6x}{2020/02/05}{\cs{do@subst@correction}の日本語化}
+%
+% オリジナルの\LaTeX{}の定義は、欧文用として使います。
+%    \begin{macrocode}
+\def\pltx@do@subst@correction@al{%
+       \xdef\subst@correction{%
+          \font@name
+          \global\expandafter\font
+            \csname \curr@fontshape/\f@size\endcsname
+            \noexpand\fontname\font
+           \relax}%
+       \aftergroup\subst@correction
+}
+%    \end{macrocode}
+% 和文横組用と和文縦組用の定義では、それぞれ|\jfont|と|\tfont|を使います。
+%    \begin{macrocode}
+\def\pltx@do@subst@correction@yoko{%
+       \xdef\subst@correction{%
+          \font@name
+          \global\expandafter\jfont
+            \csname \curr@fontshape/\f@size\endcsname
+            \noexpand\fontname\jfont
+           \relax}%
+       \aftergroup\subst@correction
+}
+\def\pltx@do@subst@correction@tate{%
+       \xdef\subst@correction{%
+          \font@name
+          \global\expandafter\tfont
+            \csname \curr@fontshape/\f@size\endcsname
+            \noexpand\fontname\tfont
+           \relax}%
+       \aftergroup\subst@correction
+}
+%    \end{macrocode}
+% そして、エンコーディングに応じて3つの命令を使い分けます。
+%    \begin{macrocode}
+\def\do@subst@correction{%
+  \edef\tmp@item{{\f@encoding}}%
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
+  \ifin@\pltx@do@subst@correction@yoko
+  \else
+    \expandafter\expandafter\expandafter
+    \inlist@\expandafter\tmp@item\expandafter{\ktenc@list}%
+    \ifin@\pltx@do@subst@correction@tate\else
+      \pltx@do@subst@correction@al
+    \fi
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
 % \end{macro}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
