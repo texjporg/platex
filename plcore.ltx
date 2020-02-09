@@ -928,14 +928,14 @@
   \fi\fi
 }%
 \fi
-\ifx\prepare@family@series@update@kanji\@undefined  % 2020-02-02
+\ifx\prepare@family@series@update@kanji\@undefined  % old
 \DeclareRobustCommand\mcfamily
         {\not@math@alphabet\mcfamily\mathmc
          \kanjifamily\mcdefault\selectfont}
 \DeclareRobustCommand\gtfamily
         {\not@math@alphabet\gtfamily\mathgt
          \kanjifamily\gtdefault\selectfont}
-\else
+\else                                               % 2020-02-02
 \DeclareRobustCommand\mcfamily
     {\not@math@alphabet\mcfamily\mathmc
      \prepare@family@series@update@kanji{mc}\mcdefault\selectfont}
