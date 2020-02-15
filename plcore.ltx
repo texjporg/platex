@@ -952,16 +952,16 @@
   \else
     \expandafter\ifx\csname#1def@ult\endcsname\k@family
       \let\@elt\@gobble
-      \expandafter\let\expandafter\@reservedb
+      \expandafter\let\expandafter\reserved@b
                       \csname mdseries@\target@meta@family@value\endcsname
-      \expandafter\let\expandafter\@reservedc
+      \expandafter\let\expandafter\reserved@c
                       \csname bfseries@\target@meta@family@value\endcsname
       \expandafter\ifx\csname mdseries@#1\endcsname\k@series
-                                      \let\target@series@value\@reservedb
+                                      \let\target@series@value\reserved@b
       \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
-                                      \let\target@series@value\@reservedc
-      \else\ifx\k@series\mddef@ult    \let\target@series@value\@reservedb
-      \else\ifx\k@series\bfdef@ult    \let\target@series@value\@reservedc
+                                      \let\target@series@value\reserved@c
+      \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b
+      \else\ifx\k@series\bfdef@ult    \let\target@series@value\reserved@c
       \fi\fi\fi\fi
     \fi
   \fi
