@@ -570,21 +570,29 @@ of this package available from CTAN}
   \fi}
 \expandafter \let \csname adjustbaseline \endcsname \@undefined
 \plEndIncludeInRelease
+\ifx\fontseriesforce\@undefined      % old
+\else                                % 2020-02-02
+  \ifx\@forced@seriestrue\@undefined % patch level 0, 1, 2
+    \errhelp{LaTeX2e 2020-02-02 patch level 2 has a bug.}%
+    \errmessage{Please update LaTeX2e!^^J%
+                At least LaTeX2e 2020-02-02 patch level 3 is required}\@@end
+  \fi
+\fi
 \ifx\fontseriesforce\@undefined  % old
 \DeclareRobustCommand\romanseries[1]{\edef\f@series{#1}}
 \DeclareRobustCommand\kanjiseries[1]{\edef\k@series{#1}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
 \else                            % 2020-02-02
-\DeclareRobustCommand\romanseries[1]{\merge@font@series{#1}}
-\DeclareRobustCommand\kanjiseries[1]{\merge@kanji@series{#1}}
+\DeclareRobustCommand\romanseries[1]{\@forced@seriesfalse\merge@font@series{#1}}
+\DeclareRobustCommand\kanjiseries[1]{\@forced@seriesfalse\merge@kanji@series{#1}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
 \fi
 \ifx\fontseriesforce\@undefined  % old
 \let\romanseriesforce\@undefined
 \let\kanjiseriesforce\@undefined
 \else                            % 2020-02-02
-\DeclareRobustCommand\romanseriesforce[1]{\edef\f@series{#1}}
-\DeclareRobustCommand\kanjiseriesforce[1]{\edef\k@series{#1}}
+\DeclareRobustCommand\romanseriesforce[1]{\@forced@seriestrue\edef\f@series{#1}}
+\DeclareRobustCommand\kanjiseriesforce[1]{\@forced@seriestrue\edef\k@series{#1}}
 \DeclareRobustCommand\fontseriesforce[1]{\kanjiseriesforce{#1}\romanseriesforce{#1}}
 \fi
 \ifx\fontseriesforce\@undefined  % old
@@ -782,37 +790,33 @@ of this package available from CTAN}
 \DeclareRobustCommand\bfseries{%
   \not@math@alphabet\bfseries\mathbf
   \expand@font@defaults
-  \romanseries{% changed \fontseries -> \romanseries
-    \ifx\f@family\rmdef@ult      \bfseries@rm
-    \else\ifx\f@family\sfdef@ult \bfseries@sf
-    \else\ifx\f@family\ttdef@ult \bfseries@tt
-    \else                        \bfdefault
+  % changed \fontseries -> \romanseries
+    \ifx\f@family\rmdef@ult      \romanseries\bfseries@rm
+    \else\ifx\f@family\sfdef@ult \romanseries\bfseries@sf
+    \else\ifx\f@family\ttdef@ult \romanseries\bfseries@tt
+    \else                        \romanseries\bfdefault
     \fi\fi\fi
-  }%
-  \kanjiseries{%
-    \ifx\k@family\mcdef@ult      \bfseries@mc
-    \else\ifx\k@family\gtdef@ult \bfseries@gt
-    \else                        \bfdefault
+  % changed \fontseries -> \kanjiseries
+    \ifx\k@family\mcdef@ult      \kanjiseries\bfseries@mc
+    \else\ifx\k@family\gtdef@ult \kanjiseries\bfseries@gt
+    \else                        \kanjiseries\bfdefault
     \fi\fi
-  }%
  \selectfont
 }
 \DeclareRobustCommand\mdseries{%
   \not@math@alphabet\mdseries\relax
   \expand@font@defaults
-  \romanseries{% changed \fontseries -> \romanseries
-    \ifx\f@family\rmdef@ult      \mdseries@rm
-    \else\ifx\f@family\sfdef@ult \mdseries@sf
-    \else\ifx\f@family\ttdef@ult \mdseries@tt
-    \else                        \mddefault
+  % changed \fontseries -> \romanseries
+    \ifx\f@family\rmdef@ult      \romanseries\mdseries@rm
+    \else\ifx\f@family\sfdef@ult \romanseries\mdseries@sf
+    \else\ifx\f@family\ttdef@ult \romanseries\mdseries@tt
+    \else                        \romanseries\mddefault
     \fi\fi\fi
-  }%
-  \kanjiseries{%
-    \ifx\k@family\mcdef@ult      \mdseries@mc
-    \else\ifx\k@family\gtdef@ult \mdseries@gt
-    \else                        \mddefault
+  % changed \fontseries -> \kanjiseries
+    \ifx\k@family\mcdef@ult      \kanjiseries\mdseries@mc
+    \else\ifx\k@family\gtdef@ult \kanjiseries\mdseries@gt
+    \else                        \kanjiseries\mddefault
     \fi\fi
-  }%
   \selectfont
 }
 \fi
@@ -821,33 +825,51 @@ of this package available from CTAN}
 \let\@meta@family@list@kanji\@undefined
 \else                                         % 2020-02-02
 \def\prepare@family@series@update#1#2{%
+ \if@forced@series
+   \romanfamily#2%   % changed \fontfamily -> \romanfamily
+ \else
    \expand@font@defaults
    \let\target@series@value\@empty
    \def\target@meta@family@value{#1}%
+   \expandafter\edef\csname ??def@ult\endcsname{\f@family}%
    \let\@elt\update@series@target@value
       \@meta@family@list
+      \@elt{??}%
    \let\@elt\relax
    \romanfamily#2%   % changed \fontfamily -> \romanfamily
    \ifx\target@series@value\@empty
    \else
-     \maybe@load@fontshape
-     \let\f@series\target@series@value
+     \ifx \f@series\target@series@value
+     \else
+       \maybe@load@fontshape
+       \let\f@series\target@series@value
+     \fi
    \fi
+ \fi
 }
 \def\prepare@family@series@update@kanji#1#2{%
+ \if@forced@series
+   \kanjifamily#2%
+ \else
    \expand@font@defaults
    \let\target@series@value\@empty
    \def\target@meta@family@value{#1}%
+   \expandafter\edef\csname ??def@ult\endcsname{\k@family}%
    \let\@elt\update@series@target@value@kanji
       \@meta@family@list@kanji
+      \@elt{??}%
    \let\@elt\relax
    \kanjifamily#2%
    \ifx\target@series@value\@empty
    \else
-     \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
-       \maybe@load@fontshape\endgroup
-     \let\k@series\target@series@value
+     \ifx \k@series\target@series@value
+     \else
+       \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+         \maybe@load@fontshape\endgroup
+       \let\k@series\target@series@value
+     \fi
    \fi
+ \fi
 }
 \def\@meta@family@list@kanji{\@elt{mc}\@elt{gt}}
 \def\update@series@target@value@kanji#1{%
