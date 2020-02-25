@@ -2480,6 +2480,7 @@
 \ifx\prepare@family@series@update\@undefined  % old
 \let\prepare@family@series@update@kanji\@undefined
 \let\@meta@family@list@kanji\@undefined
+\let\update@series@target@value@kanji\@undefined
 \else                                         % 2020-02-02
 \def\prepare@family@series@update#1#2{%
  \if@forced@series
@@ -2535,6 +2536,8 @@
      \else
        \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
          \maybe@load@fontshape\endgroup
+%<+debug> \series@change@debug{Target series:
+%<+debug>                      \k@series \space -> \target@series@value}%
        \let\k@series\target@series@value
      \fi
    \fi
