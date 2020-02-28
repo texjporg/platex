@@ -2159,7 +2159,11 @@
 }
 \def\set@target@series@kanji#1{%
     \edef\k@series{#1}%
-    \series@maybe@drop@one@m\k@series\k@series
+%x--- for LaTeX2e 2020-02-02 patch level 5
+    \expandafter\series@maybe@drop@one@m\expandafter{\k@series}\k@series
+%x--- for LaTeX2e develop
+%x  \series@maybe@drop@one@m\k@series\k@series
+%x--- for LaTeX2e end
 }
 \fi
 %    \end{macrocode}
@@ -2417,8 +2421,13 @@
 %  \edef\rmdef@ult{\rmdefault}%
 %  \edef\sfdef@ult{\sfdefault}%
 %  \edef\ttdef@ult{\ttdefault}%
+%x--- for LaTeX2e 2020-02-02 patch level 5
+%  \edef\bfdef@ult{\bfdefault}%
+%  \edef\mddef@ult{\mddefault}%
+%x--- for LaTeX2e develop
 %  \series@maybe@drop@one@m\bfdefault\bfdef@ult
 %  \series@maybe@drop@one@m\mddefault\mddef@ult
+%x--- for LaTeX2e end
 %  \edef\famdef@ult{\familydefault}%
 %}
 %    \end{macrocode}
@@ -2534,8 +2543,12 @@
        \maybe@load@fontshape
 %<+debug> \series@change@debug{Target series:
 %<+debug>                      \f@series \space -> \target@series@value}%
-%      \let\f@series\target@series@value
-       \series@maybe@drop@one@m\target@series@value\f@series
+%x--- for LaTeX2e 2020-02-02 patch level 5
+       \let\f@series\target@series@value
+%x--- for LaTeX2e develop
+%x%    \let\f@series\target@series@value
+%x     \series@maybe@drop@one@m\target@series@value\f@series
+%x--- for LaTeX2e end
      \fi
    \fi
  \fi
@@ -2566,8 +2579,12 @@
          \maybe@load@fontshape\endgroup
 %<+debug> \series@change@debug{Target series:
 %<+debug>                      \k@series \space -> \target@series@value}%
-%      \let\k@series\target@series@value
-       \series@maybe@drop@one@m\target@series@value\k@series
+%x--- for LaTeX2e 2020-02-02 patch level 5
+       \let\k@series\target@series@value
+%x--- for LaTeX2e develop
+%x%    \let\k@series\target@series@value
+%x     \series@maybe@drop@one@m\target@series@value\k@series
+%x--- for LaTeX2e end
      \fi
    \fi
  \fi
@@ -2587,15 +2604,23 @@
                       \csname bfseries@\target@meta@family@value\endcsname
 %<+debug>\series@change@debug{Targets for mdseries and bfseries:
 %<+debug>                     \reserved@b\space and \reserved@c}%
-      \expandafter\series@maybe@drop@one@m
-          \csname mdseries@#1\endcsname\reserved@d
-      \ifx\reserved@d\k@series
+%x--- for LaTeX2e 2020-02-02 patch level 5
+      \expandafter\ifx\csname mdseries@#1\endcsname\k@series
+%x--- for LaTeX2e develop
+%x    \expandafter\series@maybe@drop@one@m
+%x        \csname mdseries@#1\endcsname\reserved@d
+%x    \ifx\reserved@d\k@series
+%x--- for LaTeX2e end
 %<+debug>   \series@change@debug{mdseries@#1 matched -> \reserved@b}%
                                       \let\target@series@value\reserved@b
-      \else
-        \expandafter\series@maybe@drop@one@m
-           \csname bfseries@#1\endcsname\reserved@d
-        \ifx\reserved@d\k@series
+%x--- for LaTeX2e 2020-02-02 patch level 5
+      \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
+%x--- for LaTeX2e develop
+%x    \else
+%x      \expandafter\series@maybe@drop@one@m
+%x         \csname bfseries@#1\endcsname\reserved@d
+%x      \ifx\reserved@d\k@series
+%x--- for LaTeX2e end
 %<+debug>  \series@change@debug{bfseries@#1 matched -> \reserved@c}%
                                       \let\target@series@value\reserved@c
       \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b

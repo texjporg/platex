@@ -631,7 +631,7 @@ of this package available from CTAN}
 }
 \def\set@target@series@kanji#1{%
     \edef\k@series{#1}%
-    \series@maybe@drop@one@m\k@series\k@series
+    \expandafter\series@maybe@drop@one@m\expandafter{\k@series}\k@series
 }
 \fi
 \ifx\fontshapeforce\@undefined   % old
@@ -844,7 +844,7 @@ of this package available from CTAN}
      \ifx \f@series\target@series@value
      \else
        \maybe@load@fontshape
-       \series@maybe@drop@one@m\target@series@value\f@series
+       \let\f@series\target@series@value
      \fi
    \fi
  \fi
@@ -868,7 +868,7 @@ of this package available from CTAN}
      \else
        \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
          \maybe@load@fontshape\endgroup
-       \series@maybe@drop@one@m\target@series@value\k@series
+       \let\k@series\target@series@value
      \fi
    \fi
  \fi
@@ -884,14 +884,9 @@ of this package available from CTAN}
                       \csname mdseries@\target@meta@family@value\endcsname
       \expandafter\let\expandafter\reserved@c
                       \csname bfseries@\target@meta@family@value\endcsname
-      \expandafter\series@maybe@drop@one@m
-          \csname mdseries@#1\endcsname\reserved@d
-      \ifx\reserved@d\k@series
+      \expandafter\ifx\csname mdseries@#1\endcsname\k@series
                                       \let\target@series@value\reserved@b
-      \else
-        \expandafter\series@maybe@drop@one@m
-           \csname bfseries@#1\endcsname\reserved@d
-        \ifx\reserved@d\k@series
+      \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
                                       \let\target@series@value\reserved@c
       \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b
       \else\ifx\k@series\bfdef@ult    \let\target@series@value\reserved@c
