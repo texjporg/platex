@@ -724,10 +724,12 @@
   \fi\fi}
 \ifx\fontseriesforce\@undefined      % old
 \else                                % 2020-02-02
-  \ifx\@forced@seriestrue\@undefined % patch level 0, 1, 2
-    \errhelp{LaTeX2e 2020-02-02 patch level 2 has a bug.}%
-    \errmessage{Please update LaTeX2e!^^J%
-                At least LaTeX2e 2020-02-02 patch level 3 is required}\@@end
+  \ifx\series@maybe@drop@one@m\@undefined % patch level 0--4
+    \@latex@error
+      {Please update LaTeX2e!^^J\space\space
+       At least LaTeX2e 2020-02-02 patch level 5 is required}
+      {LaTeX2e 2020-02-02 patch level 2 and 4 has a bug.}
+    \@@end
   \fi
 \fi
 \ifx\fontseriesforce\@undefined  % old
@@ -782,7 +784,7 @@
 }
 \def\set@target@series@kanji#1{%
     \edef\k@series{#1}%
-    \edef\k@series{\expandafter\series@drop@one@m\k@series mm\series@drop@one@m}%
+    \series@maybe@drop@one@m\k@series\k@series
 }
 \fi
 \ifx\fontshapeforce\@undefined   % old
@@ -939,7 +941,7 @@
      \ifx \f@series\target@series@value
      \else
        \maybe@load@fontshape
-       \let\f@series\target@series@value
+       \series@maybe@drop@one@m\target@series@value\f@series
      \fi
    \fi
  \fi
@@ -963,7 +965,7 @@
      \else
        \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
          \maybe@load@fontshape\endgroup
-       \let\k@series\target@series@value
+       \series@maybe@drop@one@m\target@series@value\k@series
      \fi
    \fi
  \fi
@@ -979,9 +981,14 @@
                       \csname mdseries@\target@meta@family@value\endcsname
       \expandafter\let\expandafter\reserved@c
                       \csname bfseries@\target@meta@family@value\endcsname
-      \expandafter\ifx\csname mdseries@#1\endcsname\k@series
+      \expandafter\series@maybe@drop@one@m
+          \csname mdseries@#1\endcsname\reserved@d
+      \ifx\reserved@d\k@series
                                       \let\target@series@value\reserved@b
-      \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
+      \else
+        \expandafter\series@maybe@drop@one@m
+           \csname bfseries@#1\endcsname\reserved@d
+        \ifx\reserved@d\k@series
                                       \let\target@series@value\reserved@c
       \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b
       \else\ifx\k@series\bfdef@ult    \let\target@series@value\reserved@c

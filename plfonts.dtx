@@ -2030,20 +2030,25 @@
 % \end{macro}
 %
 %
-% \begin{macro}{\if@forced@series}
-% 本家\LaTeXe~2020-02-02 patch level~3で追加されたフラグです。
-% \NFSS{}が拡張された\LaTeXe~2020-02-02のpatch level~2以前には
-% |https://github.com/latex3/latex2e/issues/277| のバグがあったため，
-% サポート外になります。
-% \changes{v1.6z}{2020/02/24}{\cs{if@forced@series}スイッチの存在確認}
+% \begin{macro}{\series@maybe@drop@one@m}
+% 本家\LaTeXe~2020-02-02 patch level~5で追加された命令です。
+% \NFSS{}が拡張された\LaTeXe~2020-02-02のうち、
+% patch level~2には% 対策として \if@forced@series が追加された
+% |https://github.com/latex3/latex2e/issues/277| のバグがあり、
+% patch level~4には% 対策として \series@maybe@drop@one@m が追加された
+% |https://github.com/latex3/latex2e/issues/293| のバグがあったため、
+% 安定した\LaTeXe{}のみをサポートします。
+% \changes{v1.7a}{2020/02/27}{\cs{series@maybe@drop@one@m}の存在確認}
 %    \begin{macrocode}
 %<*plcore|platexrelease>
 \ifx\fontseriesforce\@undefined      % old
 \else                                % 2020-02-02
-  \ifx\@forced@seriestrue\@undefined % patch level 0, 1, 2
-    \errhelp{LaTeX2e 2020-02-02 patch level 2 has a bug.}%
-    \errmessage{Please update LaTeX2e!^^J%
-                At least LaTeX2e 2020-02-02 patch level 3 is required}\@@end
+  \ifx\series@maybe@drop@one@m\@undefined % patch level 0--4
+    \@latex@error
+      {Please update LaTeX2e!^^J\space\space
+       At least LaTeX2e 2020-02-02 patch level 5 is required}
+      {LaTeX2e 2020-02-02 patch level 2 and 4 has a bug.}
+%<plcore>    \@@end
   \fi
 \fi
 %</plcore|platexrelease>
@@ -2101,6 +2106,8 @@
 % \begin{macro}{\merge@kanji@series@}
 % \begin{macro}{\set@target@series@kanji}
 % \cs{merge@font@series}の和文版です。
+% \changes{v1.7a}{2020/02/27}{Drop ``m'' only in a specific set of values
+%    (sync with ltfssaxes.dtx 2020/02/27 v1.0d)}
 %    \begin{macrocode}
 \ifx\fontseriesforce\@undefined  % old
 \let\merge@kanji@series\@undefined
@@ -2137,7 +2144,7 @@
 }
 \def\set@target@series@kanji#1{%
     \edef\k@series{#1}%
-    \edef\k@series{\expandafter\series@drop@one@m\k@series mm\series@drop@one@m}%
+    \series@maybe@drop@one@m\k@series\k@series
 }
 \fi
 %    \end{macrocode}
@@ -2388,14 +2395,15 @@
 %
 % \begin{macro}{\expand@font@defaults}
 % ファミリのデフォルトを完全展開します。
-% まず、オリジナルの\LaTeX{}の定義を載せておきます。
+% まず、オリジナルの\LaTeX{}の定義（ltfssini.dtx 2020/02/25 v3.1j以降）を
+% 載せておきます。
 %    \begin{macrocode}
 %\def\expand@font@defaults{%
 %  \edef\rmdef@ult{\rmdefault}%
 %  \edef\sfdef@ult{\sfdefault}%
 %  \edef\ttdef@ult{\ttdefault}%
-%  \edef\bfdef@ult{\bfdefault}%
-%  \edef\mddef@ult{\mddefault}%
+%  \series@maybe@drop@one@m\bfdefault\bfdef@ult
+%  \series@maybe@drop@one@m\mddefault\mddef@ult
 %  \edef\famdef@ult{\familydefault}%
 %}
 %    \end{macrocode}
@@ -2417,7 +2425,7 @@
 % ファミリごとの設定値を参照します。
 % \changes{v1.6z}{2020/02/24}{Make the \cs{ifx} selection outside of
 %    \cs{fontseries} argument so that it is not done several times
-%    (sync with ltfssaxes.dtx 2020/02/18 v3.1i)}
+%    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
 %    \begin{macrocode}
 \ifx\bfseries@rm\@undefined\else  % 2020-02-02
 \DeclareRobustCommand\bfseries{%
@@ -2473,9 +2481,13 @@
 % \begin{macro}{\@meta@family@list@kanji}
 % \begin{macro}{\update@series@target@value@kanji}
 % |\prepare@family@series@update|の和文版です。
-% \changes{v3.1i}{2020/02/18}{No series auto-update when forced (gh/277)}
-% \changes{v3.1i}{2020/02/18}{Recognize current family if it is not a
-%    ``meta'' family and auto-update series using \cs{bfdefault} (gh/277)}
+% \changes{v1.6z}{2020/02/24}{No series auto-update when forced
+%    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
+% \changes{v1.6z}{2020/02/24}{Recognize current family if it is not a
+%    ``meta'' family and auto-update series using \cs{bfdefault}
+%    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
+% \changes{v1.7a}{2020/02/27}{Drop surplus ``m'' from \cs{target@series@value}
+%    (sync with ltfssini.dtx 2020/02/25 v3.1j)}
 %    \begin{macrocode}
 \ifx\prepare@family@series@update\@undefined  % old
 \let\prepare@family@series@update@kanji\@undefined
@@ -2507,7 +2519,8 @@
        \maybe@load@fontshape
 %<+debug> \series@change@debug{Target series:
 %<+debug>                      \f@series \space -> \target@series@value}%
-       \let\f@series\target@series@value
+%      \let\f@series\target@series@value
+       \series@maybe@drop@one@m\target@series@value\f@series
      \fi
    \fi
  \fi
@@ -2538,7 +2551,8 @@
          \maybe@load@fontshape\endgroup
 %<+debug> \series@change@debug{Target series:
 %<+debug>                      \k@series \space -> \target@series@value}%
-       \let\k@series\target@series@value
+%      \let\k@series\target@series@value
+       \series@maybe@drop@one@m\target@series@value\k@series
      \fi
    \fi
  \fi
@@ -2558,10 +2572,15 @@
                       \csname bfseries@\target@meta@family@value\endcsname
 %<+debug>\series@change@debug{Targets for mdseries and bfseries:
 %<+debug>                     \reserved@b\space and \reserved@c}%
-      \expandafter\ifx\csname mdseries@#1\endcsname\k@series
-                                      \let\target@series@value\reserved@b
+      \expandafter\series@maybe@drop@one@m
+          \csname mdseries@#1\endcsname\reserved@d
+      \ifx\reserved@d\k@series
 %<+debug>   \series@change@debug{mdseries@#1 matched -> \reserved@b}%
-      \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
+                                      \let\target@series@value\reserved@b
+      \else
+        \expandafter\series@maybe@drop@one@m
+           \csname bfseries@#1\endcsname\reserved@d
+        \ifx\reserved@d\k@series
 %<+debug>  \series@change@debug{bfseries@#1 matched -> \reserved@c}%
                                       \let\target@series@value\reserved@c
       \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b
