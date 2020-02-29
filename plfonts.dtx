@@ -145,6 +145,7 @@
 %    (sync with ltfssaxes.dtx 2020/02/27 v1.0d)}
 % \changes{v1.6z}{2020/02/28}{Drop surplus ``m'' from \cs{target@series@value}
 %    (sync with ltfssini.dtx 2020/02/25 v3.1j)}
+% \changes{v1.7}{2020/02/29}{\cs{series@maybe@drop@one@m@x}の存在確認}
 % \changes{v1.7}{2020/02/29}{引数・リストとも\cs{detokenize}によって文字列化}
 % \changes{v1.7}{2020/02/29}{\cs{do@subst@correction}の日本語化}
 % \fi
@@ -2053,17 +2054,28 @@
 % patch level~4には |latex3/latex2e#293| のバグがあったため、
 % ^^A    →対策として \series@maybe@drop@one@m が追加された
 % 安定した\LaTeXe{}のみをサポートします。
+% さらに開発版\LaTeXe{}では |latex3/latex2e#291| の対策も施されています。
+% ^^A    →対策として \series@maybe@drop@one@m@x が追加された
 % \changes{v1.6z}{2020/02/28}{\cs{series@maybe@drop@one@m}の存在確認}
+% \changes{v1.7}{2020/02/29}{\cs{series@maybe@drop@one@m@x}の存在確認}
 %    \begin{macrocode}
 %<*plcore|platexrelease>
 \ifx\fontseriesforce\@undefined      % old
 \else                                % 2020-02-02
-  \ifx\series@maybe@drop@one@m\@undefined % patch level 0--4
+  \ifx\series@maybe@drop@one@m\@undefined     % patch level 0--4
     \@latex@error
       {Please update LaTeX2e!^^J\space\space
        At least LaTeX2e 2020-02-02 patch level 5 is required}
       {LaTeX2e 2020-02-02 patch level 2 and 4 has a bug.}
 %<plcore>    \@@end
+  \else
+    \ifx\series@maybe@drop@one@m@x\@undefined % patch level 5
+      % anticipating LaTeX2e 'develop' branch (after 23b7244)
+      % this temporary code will be removed in the future
+      \let\series@maybe@drop@one@m@x\series@maybe@drop@one@m
+      \def\series@maybe@drop@one@m#1{%
+        \expandafter\series@maybe@drop@one@m@x\expandafter{#1}}
+    \fi
   \fi
 \fi
 %</plcore|platexrelease>
@@ -2160,9 +2172,9 @@
 \def\set@target@series@kanji#1{%
     \edef\k@series{#1}%
 %x--- for LaTeX2e 2020-02-02 patch level 5
-    \expandafter\series@maybe@drop@one@m\expandafter{\k@series}\k@series
+%x  \expandafter\series@maybe@drop@one@m\expandafter{\k@series}\k@series
 %x--- for LaTeX2e develop
-%x  \series@maybe@drop@one@m\k@series\k@series
+    \series@maybe@drop@one@m\k@series\k@series
 %x--- for LaTeX2e end
 }
 \fi
@@ -2544,10 +2556,10 @@
 %<+debug> \series@change@debug{Target series:
 %<+debug>                      \f@series \space -> \target@series@value}%
 %x--- for LaTeX2e 2020-02-02 patch level 5
-       \let\f@series\target@series@value
+%x     \let\f@series\target@series@value
 %x--- for LaTeX2e develop
-%x%    \let\f@series\target@series@value
-%x     \series@maybe@drop@one@m\target@series@value\f@series
+%      \let\f@series\target@series@value
+       \series@maybe@drop@one@m\target@series@value\f@series
 %x--- for LaTeX2e end
      \fi
    \fi
@@ -2580,10 +2592,10 @@
 %<+debug> \series@change@debug{Target series:
 %<+debug>                      \k@series \space -> \target@series@value}%
 %x--- for LaTeX2e 2020-02-02 patch level 5
-       \let\k@series\target@series@value
+%x     \let\k@series\target@series@value
 %x--- for LaTeX2e develop
-%x%    \let\k@series\target@series@value
-%x     \series@maybe@drop@one@m\target@series@value\k@series
+%      \let\k@series\target@series@value
+       \series@maybe@drop@one@m\target@series@value\k@series
 %x--- for LaTeX2e end
      \fi
    \fi
@@ -2605,21 +2617,21 @@
 %<+debug>\series@change@debug{Targets for mdseries and bfseries:
 %<+debug>                     \reserved@b\space and \reserved@c}%
 %x--- for LaTeX2e 2020-02-02 patch level 5
-      \expandafter\ifx\csname mdseries@#1\endcsname\k@series
+%x    \expandafter\ifx\csname mdseries@#1\endcsname\k@series
 %x--- for LaTeX2e develop
-%x    \expandafter\series@maybe@drop@one@m
-%x        \csname mdseries@#1\endcsname\reserved@d
-%x    \ifx\reserved@d\k@series
+      \expandafter\series@maybe@drop@one@m
+          \csname mdseries@#1\endcsname\reserved@d
+      \ifx\reserved@d\k@series
 %x--- for LaTeX2e end
 %<+debug>   \series@change@debug{mdseries@#1 matched -> \reserved@b}%
                                       \let\target@series@value\reserved@b
 %x--- for LaTeX2e 2020-02-02 patch level 5
-      \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
+%x    \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
 %x--- for LaTeX2e develop
-%x    \else
-%x      \expandafter\series@maybe@drop@one@m
-%x         \csname bfseries@#1\endcsname\reserved@d
-%x      \ifx\reserved@d\k@series
+      \else
+        \expandafter\series@maybe@drop@one@m
+           \csname bfseries@#1\endcsname\reserved@d
+        \ifx\reserved@d\k@series
 %x--- for LaTeX2e end
 %<+debug>  \series@change@debug{bfseries@#1 matched -> \reserved@c}%
                                       \let\target@series@value\reserved@c
