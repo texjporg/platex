@@ -130,13 +130,28 @@
 % \changes{v1.6w}{2020/02/03}{巻き戻しのバグ修正}
 % \changes{v1.6x}{2020/02/05}{一時コマンドの名前を統一
 %    (sync with ltfssaxes.dtx 2020/02/05 v1.0b and ltfssini.dtx 2020/02/05 v3.1g)}
+% \changes{v1.6y}{2020/02/24}{Switch \cs{if@forced@series} added
+%    (sync with ltfssaxes.dtx 2020/02/18 v1.0c)}
+% \changes{v1.6y}{2020/02/24}{Make the \cs{ifx} selection outside of
+%    \cs{fontseries} argument so that it is not done several times
+%    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
+% \changes{v1.6y}{2020/02/24}{No series auto-update when forced
+%    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
+% \changes{v1.6y}{2020/02/24}{Recognize current family if it is not a
+%    ``meta'' family and auto-update series using \cs{bfdefault}
+%    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
+% \changes{v1.6z}{2020/02/28}{\cs{series@maybe@drop@one@m}の存在確認}
+% \changes{v1.6z}{2020/02/28}{Drop ``m'' only in a specific set of values
+%    (sync with ltfssaxes.dtx 2020/02/27 v1.0d)}
+% \changes{v1.6z}{2020/02/28}{Drop surplus ``m'' from \cs{target@series@value}
+%    (sync with ltfssini.dtx 2020/02/25 v3.1j)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/02/03 v1.6w pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/02/28 v1.6z pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -1913,6 +1928,31 @@
 % \end{macro}
 %
 %
+% \begin{macro}{\series@maybe@drop@one@m}
+% 本家\LaTeXe~2020-02-02 patch level~5で追加された命令です。
+% \NFSS{}が大幅に修正・拡張された\LaTeXe~2020-02-02のうち、
+% patch level~2には |latex3/latex2e#277| のバグがあり、
+% ^^A    →対策として \if@forced@series が追加された
+% patch level~4には |latex3/latex2e#293| のバグがあったため、
+% ^^A    →対策として \series@maybe@drop@one@m が追加された
+% 安定した\LaTeXe{}のみをサポートします。
+% \changes{v1.6z}{2020/02/28}{\cs{series@maybe@drop@one@m}の存在確認}
+%    \begin{macrocode}
+%<*plcore|platexrelease>
+\ifx\fontseriesforce\@undefined      % old
+\else                                % 2020-02-02
+  \ifx\series@maybe@drop@one@m\@undefined % patch level 0--4
+    \@latex@error
+      {Please update LaTeX2e!^^J\space\space
+       At least LaTeX2e 2020-02-02 patch level 5 is required}
+      {LaTeX2e 2020-02-02 patch level 2 and 4 has a bug.}
+%<plcore>    \@@end
+  \fi
+\fi
+%</plcore|platexrelease>
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\romanseries}
 % \begin{macro}{\kanjiseries}
 % \begin{macro}{\fontseries}
@@ -1929,8 +1969,8 @@
 \DeclareRobustCommand\kanjiseries[1]{\edef\k@series{#1}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
 \else                            % 2020-02-02
-\DeclareRobustCommand\romanseries[1]{\merge@font@series{#1}}
-\DeclareRobustCommand\kanjiseries[1]{\merge@kanji@series{#1}}
+\DeclareRobustCommand\romanseries[1]{\@forced@seriesfalse\merge@font@series{#1}}
+\DeclareRobustCommand\kanjiseries[1]{\@forced@seriesfalse\merge@kanji@series{#1}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
 \fi
 %    \end{macrocode}
@@ -1944,13 +1984,15 @@
 % 無条件にシリーズを変更します。
 % \changes{v1.6v}{2020/02/01}{New commands \cs{fontseriesforce} etc.
 %    (sync with ltfssaxes.dtx 2019/12/16 v1.0a)}
+% \changes{v1.6y}{2020/02/24}{Switch \cs{if@forced@series} added
+%    (sync with ltfssaxes.dtx 2020/02/18 v1.0c)}
 %    \begin{macrocode}
 \ifx\fontseriesforce\@undefined  % old
 \let\romanseriesforce\@undefined
 \let\kanjiseriesforce\@undefined
 \else                            % 2020-02-02
-\DeclareRobustCommand\romanseriesforce[1]{\edef\f@series{#1}}
-\DeclareRobustCommand\kanjiseriesforce[1]{\edef\k@series{#1}}
+\DeclareRobustCommand\romanseriesforce[1]{\@forced@seriestrue\edef\f@series{#1}}
+\DeclareRobustCommand\kanjiseriesforce[1]{\@forced@seriestrue\edef\k@series{#1}}
 \DeclareRobustCommand\fontseriesforce[1]{\kanjiseriesforce{#1}\romanseriesforce{#1}}
 \fi
 %    \end{macrocode}
@@ -1962,6 +2004,8 @@
 % \begin{macro}{\merge@kanji@series@}
 % \begin{macro}{\set@target@series@kanji}
 % \cs{merge@font@series}の和文版です。
+% \changes{v1.6z}{2020/02/28}{Drop ``m'' only in a specific set of values
+%    (sync with ltfssaxes.dtx 2020/02/27 v1.0d)}
 %    \begin{macrocode}
 \ifx\fontseriesforce\@undefined  % old
 \let\merge@kanji@series\@undefined
@@ -1998,7 +2042,7 @@
 }
 \def\set@target@series@kanji#1{%
     \edef\k@series{#1}%
-    \edef\k@series{\expandafter\series@drop@one@m\k@series mm\series@drop@one@m}%
+    \expandafter\series@maybe@drop@one@m\expandafter{\k@series}\k@series
 }
 \fi
 %    \end{macrocode}
@@ -2276,27 +2320,28 @@
 % \begin{macro}{\bfseries}
 % \begin{macro}{\mdseries}
 % ファミリごとの設定値を参照します。
+% \changes{v1.6y}{2020/02/24}{Make the \cs{ifx} selection outside of
+%    \cs{fontseries} argument so that it is not done several times
+%    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
 %    \begin{macrocode}
 \ifx\bfseries@rm\@undefined\else  % 2020-02-02
 \DeclareRobustCommand\bfseries{%
   \not@math@alphabet\bfseries\mathbf
   \expand@font@defaults
-  \romanseries{% changed \fontseries -> \romanseries
-    \ifx\f@family\rmdef@ult      \bfseries@rm
-    \else\ifx\f@family\sfdef@ult \bfseries@sf
-    \else\ifx\f@family\ttdef@ult \bfseries@tt
-    \else                        \bfdefault
+  % changed \fontseries -> \romanseries
+    \ifx\f@family\rmdef@ult      \romanseries\bfseries@rm
+    \else\ifx\f@family\sfdef@ult \romanseries\bfseries@sf
+    \else\ifx\f@family\ttdef@ult \romanseries\bfseries@tt
+    \else                        \romanseries\bfdefault
     \fi\fi\fi
-  }%
 %    \end{macrocode}
 % ここからがp\LaTeX{}による追加コードです。
 %    \begin{macrocode}
-  \kanjiseries{%
-    \ifx\k@family\mcdef@ult      \bfseries@mc
-    \else\ifx\k@family\gtdef@ult \bfseries@gt
-    \else                        \bfdefault
+  % changed \fontseries -> \kanjiseries
+    \ifx\k@family\mcdef@ult      \kanjiseries\bfseries@mc
+    \else\ifx\k@family\gtdef@ult \kanjiseries\bfseries@gt
+    \else                        \kanjiseries\bfdefault
     \fi\fi
-  }%
 %    \end{macrocode}
 % ここまで。
 %    \begin{macrocode}
@@ -2305,22 +2350,20 @@
 \DeclareRobustCommand\mdseries{%
   \not@math@alphabet\mdseries\relax
   \expand@font@defaults
-  \romanseries{% changed \fontseries -> \romanseries
-    \ifx\f@family\rmdef@ult      \mdseries@rm
-    \else\ifx\f@family\sfdef@ult \mdseries@sf
-    \else\ifx\f@family\ttdef@ult \mdseries@tt
-    \else                        \mddefault
+  % changed \fontseries -> \romanseries
+    \ifx\f@family\rmdef@ult      \romanseries\mdseries@rm
+    \else\ifx\f@family\sfdef@ult \romanseries\mdseries@sf
+    \else\ifx\f@family\ttdef@ult \romanseries\mdseries@tt
+    \else                        \romanseries\mddefault
     \fi\fi\fi
-  }%
 %    \end{macrocode}
 % ここからがp\LaTeX{}による追加コードです。
 %    \begin{macrocode}
-  \kanjiseries{%
-    \ifx\k@family\mcdef@ult      \mdseries@mc
-    \else\ifx\k@family\gtdef@ult \mdseries@gt
-    \else                        \mddefault
+  % changed \fontseries -> \kanjiseries
+    \ifx\k@family\mcdef@ult      \kanjiseries\mdseries@mc
+    \else\ifx\k@family\gtdef@ult \kanjiseries\mdseries@gt
+    \else                        \kanjiseries\mddefault
     \fi\fi
-  }%
 %    \end{macrocode}
 % ここまで。
 %    \begin{macrocode}
@@ -2335,57 +2378,105 @@
 % \begin{macro}{\@meta@family@list@kanji}
 % \begin{macro}{\update@series@target@value@kanji}
 % |\prepare@family@series@update|の和文版です。
+% \changes{v1.6y}{2020/02/24}{No series auto-update when forced
+%    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
+% \changes{v1.6y}{2020/02/24}{Recognize current family if it is not a
+%    ``meta'' family and auto-update series using \cs{bfdefault}
+%    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
+% \changes{v1.6z}{2020/02/28}{Drop surplus ``m'' from \cs{target@series@value}
+%    (sync with ltfssini.dtx 2020/02/25 v3.1j)}
 %    \begin{macrocode}
 \ifx\prepare@family@series@update\@undefined  % old
 \let\prepare@family@series@update@kanji\@undefined
 \let\@meta@family@list@kanji\@undefined
+\let\update@series@target@value@kanji\@undefined
 \else                                         % 2020-02-02
 \def\prepare@family@series@update#1#2{%
+ \if@forced@series
+%<+debug> \series@change@debug{No series preparation (forced \f@series)\on@line}%
+   \romanfamily#2%   % changed \fontfamily -> \romanfamily
+ \else
+%<+debug> \series@change@debug{Prepearing for switching to #1 (#2)\on@line}%
    \expand@font@defaults
    \let\target@series@value\@empty
    \def\target@meta@family@value{#1}%
+   \expandafter\edef\csname ??def@ult\endcsname{\f@family}%
    \let\@elt\update@series@target@value
       \@meta@family@list
+      \@elt{??}%
    \let\@elt\relax
    \romanfamily#2%   % changed \fontfamily -> \romanfamily
    \ifx\target@series@value\@empty
+%<+debug> \series@change@debug{Target series still empty ...}%
    \else
-     \maybe@load@fontshape
-     \let\f@series\target@series@value
+     \ifx \f@series\target@series@value
+%<+debug> \series@change@debug{Target series unchanged:
+%<+debug>                      \f@series \space = \target@series@value}%
+     \else
+       \maybe@load@fontshape
+%<+debug> \series@change@debug{Target series:
+%<+debug>                      \f@series \space -> \target@series@value}%
+       \let\f@series\target@series@value
+     \fi
    \fi
+ \fi
 }
 \def\prepare@family@series@update@kanji#1#2{%
+ \if@forced@series
+%<+debug> \series@change@debug{No series preparation (forced \k@series)\on@line}%
+   \kanjifamily#2%
+ \else
+%<+debug> \series@change@debug{Prepearing for switching to #1 (#2)\on@line}%
    \expand@font@defaults
    \let\target@series@value\@empty
    \def\target@meta@family@value{#1}%
+   \expandafter\edef\csname ??def@ult\endcsname{\k@family}%
    \let\@elt\update@series@target@value@kanji
       \@meta@family@list@kanji
+      \@elt{??}%
    \let\@elt\relax
    \kanjifamily#2%
    \ifx\target@series@value\@empty
+%<+debug> \series@change@debug{Target series still empty ...}%
    \else
-     \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
-       \maybe@load@fontshape\endgroup
-     \let\k@series\target@series@value
+     \ifx \k@series\target@series@value
+%<+debug> \series@change@debug{Target series unchanged:
+%<+debug>                      \k@series \space = \target@series@value}%
+     \else
+       \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+         \maybe@load@fontshape\endgroup
+%<+debug> \series@change@debug{Target series:
+%<+debug>                      \k@series \space -> \target@series@value}%
+       \let\k@series\target@series@value
+     \fi
    \fi
+ \fi
 }
 \def\@meta@family@list@kanji{\@elt{mc}\@elt{gt}}
 \def\update@series@target@value@kanji#1{%
   \def\reserved@a{#1}%
   \ifx\target@meta@family@value\reserved@a   % rm -> rm do nothing
   \else
+%<+debug> \series@change@debug{Trying to match #1: \csname#1def@ult\endcsname
+%<+debug>                      \space = \k@family\space ?}%
     \expandafter\ifx\csname#1def@ult\endcsname\k@family
       \let\@elt\@gobble
-      \expandafter\let\expandafter\@reservedb
+      \expandafter\let\expandafter\reserved@b
                       \csname mdseries@\target@meta@family@value\endcsname
-      \expandafter\let\expandafter\@reservedc
+      \expandafter\let\expandafter\reserved@c
                       \csname bfseries@\target@meta@family@value\endcsname
+%<+debug>\series@change@debug{Targets for mdseries and bfseries:
+%<+debug>                     \reserved@b\space and \reserved@c}%
       \expandafter\ifx\csname mdseries@#1\endcsname\k@series
-                                      \let\target@series@value\@reservedb
+%<+debug>   \series@change@debug{mdseries@#1 matched -> \reserved@b}%
+                                      \let\target@series@value\reserved@b
       \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
-                                      \let\target@series@value\@reservedc
-      \else\ifx\k@series\mddef@ult    \let\target@series@value\@reservedb
-      \else\ifx\k@series\bfdef@ult    \let\target@series@value\@reservedc
+%<+debug>  \series@change@debug{bfseries@#1 matched -> \reserved@c}%
+                                      \let\target@series@value\reserved@c
+      \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b
+%<+debug>  \series@change@debug{mddef@ult matched -> \reserved@b}%
+      \else\ifx\k@series\bfdef@ult    \let\target@series@value\reserved@c
+%<+debug>  \series@change@debug{bfdef@ult matched -> \reserved@c}%
       \fi\fi\fi\fi
     \fi
   \fi
