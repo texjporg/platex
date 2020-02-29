@@ -130,30 +130,30 @@
 % \changes{v1.6w}{2020/02/03}{巻き戻しのバグ修正}
 % \changes{v1.6x}{2020/02/05}{一時コマンドの名前を統一
 %    (sync with ltfssaxes.dtx 2020/02/05 v1.0b and ltfssini.dtx 2020/02/05 v3.1g)}
-% \changes{v1.6y}{2020/02/10}{引数・リストとも\cs{detokenize}によって文字列化}
-% \changes{v1.6y}{2020/02/10}{\cs{do@subst@correction}の日本語化}
-% \changes{v1.6z}{2020/02/24}{Switch \cs{if@forced@series} added
+% \changes{v1.6y}{2020/02/24}{Switch \cs{if@forced@series} added
 %    (sync with ltfssaxes.dtx 2020/02/18 v1.0c)}
-% \changes{v1.6z}{2020/02/24}{Make the \cs{ifx} selection outside of
+% \changes{v1.6y}{2020/02/24}{Make the \cs{ifx} selection outside of
 %    \cs{fontseries} argument so that it is not done several times
 %    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
-% \changes{v1.6z}{2020/02/24}{No series auto-update when forced
+% \changes{v1.6y}{2020/02/24}{No series auto-update when forced
 %    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
-% \changes{v1.6z}{2020/02/24}{Recognize current family if it is not a
+% \changes{v1.6y}{2020/02/24}{Recognize current family if it is not a
 %    ``meta'' family and auto-update series using \cs{bfdefault}
 %    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
-% \changes{v1.7}{2020/02/27}{\cs{series@maybe@drop@one@m}の存在確認}
-% \changes{v1.7}{2020/02/27}{Drop ``m'' only in a specific set of values
+% \changes{v1.6z}{2020/02/28}{\cs{series@maybe@drop@one@m}の存在確認}
+% \changes{v1.6z}{2020/02/28}{Drop ``m'' only in a specific set of values
 %    (sync with ltfssaxes.dtx 2020/02/27 v1.0d)}
-% \changes{v1.7}{2020/02/27}{Drop surplus ``m'' from \cs{target@series@value}
+% \changes{v1.6z}{2020/02/28}{Drop surplus ``m'' from \cs{target@series@value}
 %    (sync with ltfssini.dtx 2020/02/25 v3.1j)}
+% \changes{v1.7}{2020/02/29}{引数・リストとも\cs{detokenize}によって文字列化}
+% \changes{v1.7}{2020/02/29}{\cs{do@subst@correction}の日本語化}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/02/27 v1.7 pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/02/29 v1.7 pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -415,7 +415,7 @@
 %
 % |\do@subst@correction|の日本語化に必要なので、
 % 比較する際に引数・リストとも\cs{detokenize}によって文字列化するようにしました。
-% \changes{v1.6y}{2020/02/10}{引数・リストとも\cs{detokenize}によって文字列化}
+% \changes{v1.7}{2020/02/29}{引数・リストとも\cs{detokenize}によって文字列化}
 %    \begin{macrocode}
 %</plcore>
 %<platexrelease>\plIncludeInRelease{2020/03/01}{\inlist@}
@@ -1152,7 +1152,7 @@
 % \begin{macro}{\pltx@do@subst@correction@tate}
 % |\font|は欧文フォントを返すため、\LaTeX{}の元の|\do@subst@correction|は
 % 和文フォントに対して使えませんので、和文に対応させます。
-% \changes{v1.6y}{2020/02/10}{\cs{do@subst@correction}の日本語化}
+% \changes{v1.7}{2020/02/29}{\cs{do@subst@correction}の日本語化}
 %
 % オリジナルの\LaTeX{}の定義は、欧文用として使います。
 %    \begin{macrocode}
@@ -2053,7 +2053,7 @@
 % patch level~4には |latex3/latex2e#293| のバグがあったため、
 % ^^A    →対策として \series@maybe@drop@one@m が追加された
 % 安定した\LaTeXe{}のみをサポートします。
-% \changes{v1.7}{2020/02/27}{\cs{series@maybe@drop@one@m}の存在確認}
+% \changes{v1.6z}{2020/02/28}{\cs{series@maybe@drop@one@m}の存在確認}
 %    \begin{macrocode}
 %<*plcore|platexrelease>
 \ifx\fontseriesforce\@undefined      % old
@@ -2101,7 +2101,7 @@
 % 無条件にシリーズを変更します。
 % \changes{v1.6v}{2020/02/01}{New commands \cs{fontseriesforce} etc.
 %    (sync with ltfssaxes.dtx 2019/12/16 v1.0a)}
-% \changes{v1.6z}{2020/02/24}{Switch \cs{if@forced@series} added
+% \changes{v1.6y}{2020/02/24}{Switch \cs{if@forced@series} added
 %    (sync with ltfssaxes.dtx 2020/02/18 v1.0c)}
 %    \begin{macrocode}
 \ifx\fontseriesforce\@undefined  % old
@@ -2121,7 +2121,7 @@
 % \begin{macro}{\merge@kanji@series@}
 % \begin{macro}{\set@target@series@kanji}
 % \cs{merge@font@series}の和文版です。
-% \changes{v1.7}{2020/02/27}{Drop ``m'' only in a specific set of values
+% \changes{v1.6z}{2020/02/28}{Drop ``m'' only in a specific set of values
 %    (sync with ltfssaxes.dtx 2020/02/27 v1.0d)}
 %    \begin{macrocode}
 \ifx\fontseriesforce\@undefined  % old
@@ -2447,7 +2447,7 @@
 % \begin{macro}{\bfseries}
 % \begin{macro}{\mdseries}
 % ファミリごとの設定値を参照します。
-% \changes{v1.6z}{2020/02/24}{Make the \cs{ifx} selection outside of
+% \changes{v1.6y}{2020/02/24}{Make the \cs{ifx} selection outside of
 %    \cs{fontseries} argument so that it is not done several times
 %    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
 %    \begin{macrocode}
@@ -2505,12 +2505,12 @@
 % \begin{macro}{\@meta@family@list@kanji}
 % \begin{macro}{\update@series@target@value@kanji}
 % |\prepare@family@series@update|の和文版です。
-% \changes{v1.6z}{2020/02/24}{No series auto-update when forced
+% \changes{v1.6y}{2020/02/24}{No series auto-update when forced
 %    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
-% \changes{v1.6z}{2020/02/24}{Recognize current family if it is not a
+% \changes{v1.6y}{2020/02/24}{Recognize current family if it is not a
 %    ``meta'' family and auto-update series using \cs{bfdefault}
 %    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
-% \changes{v1.7}{2020/02/27}{Drop surplus ``m'' from \cs{target@series@value}
+% \changes{v1.6z}{2020/02/28}{Drop surplus ``m'' from \cs{target@series@value}
 %    (sync with ltfssini.dtx 2020/02/25 v3.1j)}
 %    \begin{macrocode}
 \ifx\prepare@family@series@update\@undefined  % old
