@@ -572,12 +572,21 @@ of this package available from CTAN}
 \plEndIncludeInRelease
 \ifx\fontseriesforce\@undefined      % old
 \else                                % 2020-02-02
-  \ifx\series@maybe@drop@one@m\@undefined % patch level 0--4
+  \ifx\@forced@seriestrue\@undefined % patch level 0, 1, 2
     \@latex@error
       {Please update LaTeX2e!^^J\space\space
-       At least LaTeX2e 2020-02-02 patch level 5 is required}
-      {LaTeX2e 2020-02-02 patch level 2 and 4 has a bug.}
+       At least LaTeX2e 2020-02-02 patch level 3 is required}
+      {LaTeX2e 2020-02-02 patch level 2 has a bug.}
   \fi
+  % actually we'd like to check the below too,
+  % but commented out for TL19 frozen since
+  % platex-dev format generation fails
+  %\ifx\series@maybe@drop@one@m\@undefined % patch level 0--4
+  %  \@latex@error
+  %    {Please update LaTeX2e!^^J\space\space
+  %     At least LaTeX2e 2020-02-02 patch level 5 is required}
+  %    {LaTeX2e 2020-02-02 patch level 2 and 4 has a bug.}
+  %\fi
 \fi
 \ifx\fontseriesforce\@undefined  % old
 \DeclareRobustCommand\romanseries[1]{\edef\f@series{#1}}
@@ -629,10 +638,17 @@ of this package available from CTAN}
     \fi
   \fi
 }
+\ifx\series@maybe@drop@one@m\@undefined % patch level 0--4
+\def\set@target@series@kanji#1{%
+    \edef\k@series{#1}%
+    \edef\k@series{\expandafter\series@drop@one@m\k@series mm\series@drop@one@m}%
+}
+\else                                   % patch level 5
 \def\set@target@series@kanji#1{%
     \edef\k@series{#1}%
     \expandafter\series@maybe@drop@one@m\expandafter{\k@series}\k@series
 }
+\fi
 \fi
 \ifx\fontshapeforce\@undefined   % old
 \DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
