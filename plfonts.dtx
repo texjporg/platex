@@ -2062,19 +2062,30 @@
 %<*plcore|platexrelease>
 \ifx\fontseriesforce\@undefined      % old
 \else                                % 2020-02-02
-  \ifx\series@maybe@drop@one@m\@undefined     % patch level 0--4
+  \ifx\@forced@seriestrue\@undefined % patch level 0, 1, 2
     \@latex@error
       {Please update LaTeX2e!^^J\space\space
-       At least LaTeX2e 2020-02-02 patch level 5 is required}
-      {LaTeX2e 2020-02-02 patch level 2 and 4 has a bug.}
+       At least LaTeX2e 2020-02-02 patch level 3 is required}
+      {LaTeX2e 2020-02-02 patch level 2 has a bug.}
 %<plcore>    \@@end
   \else
-    \ifx\series@maybe@drop@one@m@x\@undefined % patch level 5
-      % anticipating LaTeX2e 'develop' branch (after 23b7244)
-      % this temporary code will be removed in the future
-      \let\series@maybe@drop@one@m@x\series@maybe@drop@one@m
-      \def\series@maybe@drop@one@m#1{%
-        \expandafter\series@maybe@drop@one@m@x\expandafter{#1}}
+    \ifx\series@maybe@drop@one@m\@undefined     % patch level 3, 4
+      % actually we'd like to throw an error for the below too,
+      % but commented out for TL19 frozen since
+      % platex-dev format generation fails
+      % due to delay of latex-base-dev
+      %\@latex@error
+      %  {Please update LaTeX2e!^^J\space\space
+      %   At least LaTeX2e 2020-02-02 patch level 5 is required}
+      %  {LaTeX2e 2020-02-02 patch level 2 and 4 has a bug.}
+    \else
+      \ifx\series@maybe@drop@one@m@x\@undefined % patch level 5
+        % anticipating LaTeX2e 'develop' branch (after 23b7244)
+        % this temporary code will be removed in the future
+        \let\series@maybe@drop@one@m@x\series@maybe@drop@one@m
+        \def\series@maybe@drop@one@m#1{%
+          \expandafter\series@maybe@drop@one@m@x\expandafter{#1}}
+      \fi
     \fi
   \fi
 \fi
@@ -2169,6 +2180,12 @@
     \fi
   \fi
 }
+\ifx\series@maybe@drop@one@m\@undefined % patch level 0--4
+\def\set@target@series@kanji#1{%
+    \edef\k@series{#1}%
+    \edef\k@series{\expandafter\series@drop@one@m\k@series mm\series@drop@one@m}%
+}
+\else                                   % patch level 5
 \def\set@target@series@kanji#1{%
     \edef\k@series{#1}%
 %x--- for LaTeX2e 2020-02-02 patch level 5
@@ -2177,6 +2194,7 @@
     \series@maybe@drop@one@m\k@series\k@series
 %x--- for LaTeX2e end
 }
+\fi
 \fi
 %    \end{macrocode}
 % \end{macro}
