@@ -145,16 +145,16 @@
 %    (sync with ltfssaxes.dtx 2020/02/27 v1.0d)}
 % \changes{v1.6z}{2020/02/28}{Drop surplus ``m'' from \cs{target@series@value}
 %    (sync with ltfssini.dtx 2020/02/25 v3.1j)}
-% \changes{v1.7}{2020/02/29}{\cs{series@maybe@drop@one@m@x}の存在確認}
-% \changes{v1.7}{2020/02/29}{引数・リストとも\cs{detokenize}によって文字列化}
-% \changes{v1.7}{2020/02/29}{\cs{do@subst@correction}の日本語化}
+% \changes{v1.7}{2020/03/05}{\cs{series@maybe@drop@one@m@x}の存在確認}
+% \changes{v1.7}{2020/03/05}{引数・リストとも\cs{detokenize}によって文字列化}
+% \changes{v1.7}{2020/03/05}{\cs{do@subst@correction}の日本語化}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/02/29 v1.7 pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/03/05 v1.7 pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -416,10 +416,10 @@
 %
 % |\do@subst@correction|の日本語化に必要なので、
 % 比較する際に引数・リストとも\cs{detokenize}によって文字列化するようにしました。
-% \changes{v1.7}{2020/02/29}{引数・リストとも\cs{detokenize}によって文字列化}
+% \changes{v1.7}{2020/03/05}{引数・リストとも\cs{detokenize}によって文字列化}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2020/03/01}{\inlist@}
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\inlist@}
 %<platexrelease>                   {Detokenize}%
 %<*plcore|platexrelease>
 \def\inlist@#1#2{%
@@ -1153,12 +1153,12 @@
 % \begin{macro}{\pltx@do@subst@correction@tate}
 % |\font|は欧文フォントを返すため、\LaTeX{}の元の|\do@subst@correction|は
 % 和文フォントに対して使えませんので、和文に対応させます。
-% \changes{v1.7}{2020/02/29}{\cs{do@subst@correction}の日本語化}
+% \changes{v1.7}{2020/03/05}{\cs{do@subst@correction}の日本語化}
 %
 % オリジナルの\LaTeX{}の定義は、欧文用として使います。
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2020/03/01}{\do@subst@correction}
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\do@subst@correction}
 %<platexrelease>                   {Japanese font substitution}%
 %<*plcore|platexrelease>
 \def\pltx@do@subst@correction@al{%
@@ -2057,7 +2057,7 @@
 % さらに開発版\LaTeXe{}では |latex3/latex2e#291| の対策も施されています。
 % ^^A    →対策として \series@maybe@drop@one@m@x が追加された
 % \changes{v1.6z}{2020/02/28}{\cs{series@maybe@drop@one@m}の存在確認}
-% \changes{v1.7}{2020/02/29}{\cs{series@maybe@drop@one@m@x}の存在確認}
+% \changes{v1.7}{2020/03/05}{\cs{series@maybe@drop@one@m@x}の存在確認}
 %    \begin{macrocode}
 %<*plcore|platexrelease>
 \ifx\fontseriesforce\@undefined      % old

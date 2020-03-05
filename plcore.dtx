@@ -123,14 +123,14 @@
 % \changes{v1.3d}{2019/10/19}{判定順序を修正；extended modeかつ
 %    FAM256拡張ありの場合に限りレジスタ数が65536個のため。}
 % \changes{v1.3d}{2019/10/19}{コピー忘れ}
-% \changes{v1.3e}{2020/02/08}{合字処理を抑止しつつ\cs{xkanjiskip}は挿入}
+% \changes{v1.3e}{2020/03/05}{合字処理を抑止しつつ\cs{xkanjiskip}は挿入}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2020/02/08 v1.3e pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2020/03/05 v1.3e pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1886,10 +1886,10 @@
 % p\LaTeX{}では、|\kern\z@|を|\vadjust{}|に置き換えることで
 % 「合字処理を抑止」かつ「和欧文間スペースの挿入処理は透過」を実現します。
 % (Issue \#87)
-% \changes{v1.3e}{2020/02/08}{合字処理を抑止しつつ\cs{xkanjiskip}は挿入}
+% \changes{v1.3e}{2020/03/05}{合字処理を抑止しつつ\cs{xkanjiskip}は挿入}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2020/03/01}{\do@noligs}
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\do@noligs}
 %<platexrelease>                   {Allow \xkanjiskip while avoiding ligature}%
 %<*plcore|platexrelease>
 \def\do@noligs#1{%
