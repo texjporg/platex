@@ -15,7 +15,7 @@ If you have issues, please let us know from the above page.
 
 The original ASCII edition can be obtained from:
 
-- https://ctan.org/pkg/ptex-texmf
+- https://asciidwango.github.io/ptex/base/sources.html#platex
 
 ## Changes from the original ASCII edition
 
