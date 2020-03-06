@@ -148,13 +148,15 @@
 % \changes{v1.7}{2020/03/05}{\cs{series@maybe@drop@one@m@x}の存在確認}
 % \changes{v1.7}{2020/03/05}{引数・リストとも\cs{detokenize}によって文字列化}
 % \changes{v1.7}{2020/03/05}{\cs{do@subst@correction}の日本語化}
+% \changes{v1.7a}{2020/03/06}{\cs{@defaultfamilyhook}を活用
+%    (sync with ltfssini.dtx 2020/02/10 v3.1h)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/03/05 v1.7 pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/03/06 v1.7a pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -2370,23 +2372,49 @@
 % 和文書体もデフォルト値になるように再定義しています。
 % ただし高速化のため、|\usekanji|と|\useroman|を展開し、
 % |\selectfont|を一度しか呼び出さないようにしています。
+%
+% \LaTeXe~2020-02-02 patch level~2で新設されたフック
+% |\@defaultfamilyhook|を使うことで、元の定義を上書きする必要が
+% なくなりました。（注意：アスキー版の末尾にあった
+% |\ignorespaces|を削除することで、元の\LaTeXe{}と互換に
+% なりました。ltfssini.dtx 1995/10/16 v3.0fの変更も参考。）
+% \changes{v1.7a}{2020/03/06}{\cs{@defaultfamilyhook}を活用
+%    (sync with ltfssini.dtx 2020/02/10 v3.1h)}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2020/02/02}{\normalfont}
-%<platexrelease>                   {Don't call \fontseries or \fontshape}%
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\normalfont}
+%<platexrelease>                   {Use \@defaultfamilyhook}%
 %<*plcore|platexrelease>
-\DeclareRobustCommand\normalfont{%
+%<platexrelease>\DeclareRobustCommand\normalfont{%
+%<platexrelease>   \fontencoding\encodingdefault
+%<platexrelease>   \edef\f@family{\familydefault}%
+%<platexrelease>   \edef\f@series{\seriesdefault}%
+%<platexrelease>   \edef\f@shape{\shapedefault}%
+%<platexrelease>   \@defaultfamilyhook
+%<platexrelease>   \selectfont}
+\g@addto@macro\@defaultfamilyhook{%
     \kanjiencoding{\kanjiencodingdefault}%
     \edef\k@family{\kanjifamilydefault}%
     \edef\k@series{\kanjiseriesdefault}%
     \edef\k@shape{\kanjishapedefault}%
-    \romanencoding{\encodingdefault}%
-    \edef\f@family{\familydefault}%
-    \edef\f@series{\seriesdefault}%
-    \edef\f@shape{\shapedefault}%
-    \selectfont\ignorespaces}
+}
 \adjustbaseline
 \let\reset@font\normalfont
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2020/02/02}{\normalfont}
+%<platexrelease>                   {Don't call \fontseries or \fontshape}%
+%<platexrelease>\DeclareRobustCommand\normalfont{%
+%<platexrelease>    \kanjiencoding{\kanjiencodingdefault}%
+%<platexrelease>    \edef\k@family{\kanjifamilydefault}%
+%<platexrelease>    \edef\k@series{\kanjiseriesdefault}%
+%<platexrelease>    \edef\k@shape{\kanjishapedefault}%
+%<platexrelease>    \romanencoding{\encodingdefault}%
+%<platexrelease>    \edef\f@family{\familydefault}%
+%<platexrelease>    \edef\f@series{\seriesdefault}%
+%<platexrelease>    \edef\f@shape{\shapedefault}%
+%<platexrelease>    \selectfont\ignorespaces}
+%<platexrelease>\adjustbaseline
+%<platexrelease>\let\reset@font\normalfont
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\normalfont}
 %<platexrelease>                   {ASCII Corporation original}%

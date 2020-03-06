@@ -766,6 +766,24 @@ of this package available from CTAN}
 \expandafter \let \csname useroman \endcsname \@undefined
 \expandafter \let \csname usefont \endcsname \@undefined
 \plEndIncludeInRelease
+\plIncludeInRelease{2020/04/12}{\normalfont}
+                   {Use \@defaultfamilyhook}%
+\DeclareRobustCommand\normalfont{%
+   \fontencoding\encodingdefault
+   \edef\f@family{\familydefault}%
+   \edef\f@series{\seriesdefault}%
+   \edef\f@shape{\shapedefault}%
+   \@defaultfamilyhook
+   \selectfont}
+\g@addto@macro\@defaultfamilyhook{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
+}
+\adjustbaseline
+\let\reset@font\normalfont
+\plEndIncludeInRelease
 \plIncludeInRelease{2020/02/02}{\normalfont}
                    {Don't call \fontseries or \fontshape}%
 \DeclareRobustCommand\normalfont{%
