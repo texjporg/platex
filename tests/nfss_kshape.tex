@@ -1,0 +1,40 @@
+\documentclass{article}
+\begin{document}
+
+{\itshape a}
+% 内部で \fontshape が欧文と和文の両方を変えようとする
+% => 和文の変更に失敗しても警告は出したくない
+
+{\fontshape{ait}
+ \selectfont}
+% \fontshape は欧文と和文の両方を変えようとする
+% => 和文の変更に失敗しても警告は出したくない
+
+{\fontshapeforce{asl}
+ \selectfont}
+% \fontshapeforce は欧文と和文の両方を変えようとする
+% => 和文の変更に失敗しても警告は出したくない
+
+{\kanjishape{kit}
+ \selectfont}
+% \kanjishape は和文だけを変更 => 警告すべき
+
+{\kanjishapeforce{ksl}
+ \selectfont}
+% \kanjishapeforce は和文だけを変更 => 警告すべき
+
+{\usefont{JY1}{mc}{m}{ksc}}
+% \usefont は encoding に応じて \useroman と \usekanji の一方だけを実行
+% この例は和文横組フォントだけを変えることを意図 => 警告すべき
+
+{\fontshape{asc}
+ \selectfont}
+% \fontshape は欧文と和文の両方を変えようとする
+% => 和文の変更に失敗しても警告は出したくない
+
+{\fontshapeforce{asw}
+ \selectfont}
+% \fontshapeforce は欧文と和文の両方を変えようとする
+% => 和文の変更に失敗しても警告は出したくない
+
+\end{document}
