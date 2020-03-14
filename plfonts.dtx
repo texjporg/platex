@@ -2048,48 +2048,65 @@
 % \end{macro}
 %
 %
-% \begin{macro}{\series@maybe@drop@one@m}
-% 本家\LaTeXe~2020-02-02 patch level~5で追加された命令です。
+% \begin{macro}{\pltx@latex@level}
+% ここから新NFSS対応コードが始まります。
+% \pLaTeXe{}のコードを本家\LaTeXe{}の機能に応じて切り替えます。
 % \NFSS{}が大幅に修正・拡張された\LaTeXe~2020-02-02のうち、
 % patch level~2には |latex3/latex2e#277| のバグがあり、
-% ^^A    →対策として \if@forced@series が追加された
-% patch level~4には |latex3/latex2e#293| のバグがあったため、
-% ^^A    →対策として \series@maybe@drop@one@m が追加された
-% 安定した\LaTeXe{}のみをサポートします。
+% ^^A    →対策として |\if@forced@series| が追加された
+% patch level~4には |latex3/latex2e#293| のバグがありました。
+% ^^A    →対策として |\series@maybe@drop@one@m| が追加された
 % さらに開発版\LaTeXe{}では |latex3/latex2e#291| の対策も施されています。
-% ^^A    →対策として \series@maybe@drop@one@m@x が追加された
+% ^^A    →対策として |\series@maybe@drop@one@m@x| が追加された
 % \changes{v1.6z}{2020/02/28}{\cs{series@maybe@drop@one@m}の存在確認}
 % \changes{v1.7}{2020/03/05}{\cs{series@maybe@drop@one@m@x}の存在確認}
 %    \begin{macrocode}
 %<*plcore|platexrelease>
 \ifx\fontseriesforce\@undefined      % old
+        \def\pltx@latex@level{0}
 \else                                % 2020-02-02
-  \ifx\@forced@seriestrue\@undefined % patch level 0, 1, 2
-    \@latex@error
-      {Please update LaTeX2e!^^J\space\space
-       At least LaTeX2e 2020-02-02 patch level 3 is required}
-      {LaTeX2e 2020-02-02 patch level 2 has a bug.}
-%<plcore>    \@@end
+  \ifx\@forced@seriestrue\@undefined
+    \ifnum\patch@level<1\relax                  % patch level 0
+        \def\pltx@latex@level{1}% use \@reserveda
+    \else                                       % patch level 1, 2
+        \def\pltx@latex@level{2}
+    \fi
   \else
     \ifx\series@maybe@drop@one@m\@undefined     % patch level 3, 4
-      % actually we'd like to throw an error for the below too,
-      % but commented out for TL19 frozen since
-      % platex-dev format generation fails
-      % due to delay of latex-base-dev
-      %\@latex@error
-      %  {Please update LaTeX2e!^^J\space\space
-      %   At least LaTeX2e 2020-02-02 patch level 5 is required}
-      %  {LaTeX2e 2020-02-02 patch level 2 and 4 has a bug.}
+        \def\pltx@latex@level{3}
     \else
       \ifx\series@maybe@drop@one@m@x\@undefined % patch level 5
+        \def\pltx@latex@level{4}
         % anticipating LaTeX2e 'develop' branch (after 23b7244)
         % this temporary code will be removed in the future
         \let\series@maybe@drop@one@m@x\series@maybe@drop@one@m
         \def\series@maybe@drop@one@m#1{%
           \expandafter\series@maybe@drop@one@m@x\expandafter{#1}}
+      \else
+        \def\pltx@latex@level{5}
       \fi
     \fi
   \fi
+\fi
+%    \end{macrocode}
+% ここでは、最低限どのバージョンの\LaTeXe{}上でもフォーマット生成が
+% 成功するように|\catcode|トリックを使います。
+% ^^A    → |\if@forced@series|フラグを隠す必要があるため面倒
+% 現在の主要なコードは
+% \begin{itemize}
+%  \item \LaTeXe~2019-10-01 patch level~3以前
+%  \item \LaTeXe{}の開発版（最新のdevelopブランチ）
+% \end{itemize}
+% 向けに最適化しており、他のバージョンへの対処は後回しにします。
+% ^^A    → 将来的に削除しやすいように
+%    \begin{macrocode}
+\edef\pltx@reset@catcode@trick{\catcode`\noexpand\~=\the\catcode`\~\relax}
+\def\pltx@temp@catcode@ix{\catcode`\~=9\relax}
+\def\pltx@temp@catcode@xiv{\catcode`\~=14\relax}
+\ifnum\pltx@latex@level<3\relax
+  \pltx@temp@catcode@xiv % hide if-tokens
+\else
+  \pltx@temp@catcode@ix  % reveal if-tokens
 \fi
 %</plcore|platexrelease>
 %    \end{macrocode}
@@ -2182,21 +2199,10 @@
     \fi
   \fi
 }
-\ifx\series@maybe@drop@one@m\@undefined % patch level 0--4
 \def\set@target@series@kanji#1{%
     \edef\k@series{#1}%
-    \edef\k@series{\expandafter\series@drop@one@m\k@series mm\series@drop@one@m}%
-}
-\else                                   % patch level 5
-\def\set@target@series@kanji#1{%
-    \edef\k@series{#1}%
-%x--- for LaTeX2e 2020-02-02 patch level 5
-%x  \expandafter\series@maybe@drop@one@m\expandafter{\k@series}\k@series
-%x--- for LaTeX2e develop
     \series@maybe@drop@one@m\k@series\k@series
-%x--- for LaTeX2e end
 }
-\fi
 \fi
 %    \end{macrocode}
 % \end{macro}
@@ -2590,10 +2596,10 @@
 \let\update@series@target@value@kanji\@undefined
 \else                                         % 2020-02-02
 \def\prepare@family@series@update#1#2{%
- \if@forced@series
+~\if@forced@series
 %<+debug> \series@change@debug{No series preparation (forced \f@series)\on@line}%
-   \romanfamily#2%   % changed \fontfamily -> \romanfamily
- \else
+~  \romanfamily#2%   % changed \fontfamily -> \romanfamily
+~\else
 %<+debug> \series@change@debug{Prepearing for switching to #1 (#2)\on@line}%
    \expand@font@defaults
    \let\target@series@value\@empty
@@ -2614,21 +2620,17 @@
        \maybe@load@fontshape
 %<+debug> \series@change@debug{Target series:
 %<+debug>                      \f@series \space -> \target@series@value}%
-%x--- for LaTeX2e 2020-02-02 patch level 5
-%x     \let\f@series\target@series@value
-%x--- for LaTeX2e develop
 %      \let\f@series\target@series@value
        \series@maybe@drop@one@m\target@series@value\f@series
-%x--- for LaTeX2e end
      \fi
    \fi
- \fi
+~\fi
 }
 \def\prepare@family@series@update@kanji#1#2{%
- \if@forced@series
+~\if@forced@series
 %<+debug> \series@change@debug{No series preparation (forced \k@series)\on@line}%
-   \kanjifamily#2%
- \else
+~  \kanjifamily#2%
+~\else
 %<+debug> \series@change@debug{Prepearing for switching to #1 (#2)\on@line}%
    \expand@font@defaults
    \let\target@series@value\@empty
@@ -2650,15 +2652,11 @@
          \maybe@load@fontshape\endgroup
 %<+debug> \series@change@debug{Target series:
 %<+debug>                      \k@series \space -> \target@series@value}%
-%x--- for LaTeX2e 2020-02-02 patch level 5
-%x     \let\k@series\target@series@value
-%x--- for LaTeX2e develop
 %      \let\k@series\target@series@value
        \series@maybe@drop@one@m\target@series@value\k@series
-%x--- for LaTeX2e end
      \fi
    \fi
- \fi
+~\fi
 }
 \def\@meta@family@list@kanji{\@elt{mc}\@elt{gt}}
 \def\update@series@target@value@kanji#1{%
@@ -2675,23 +2673,15 @@
                       \csname bfseries@\target@meta@family@value\endcsname
 %<+debug>\series@change@debug{Targets for mdseries and bfseries:
 %<+debug>                     \reserved@b\space and \reserved@c}%
-%x--- for LaTeX2e 2020-02-02 patch level 5
-%x    \expandafter\ifx\csname mdseries@#1\endcsname\k@series
-%x--- for LaTeX2e develop
       \expandafter\series@maybe@drop@one@m
           \csname mdseries@#1\endcsname\reserved@d
       \ifx\reserved@d\k@series
-%x--- for LaTeX2e end
 %<+debug>   \series@change@debug{mdseries@#1 matched -> \reserved@b}%
                                       \let\target@series@value\reserved@b
-%x--- for LaTeX2e 2020-02-02 patch level 5
-%x    \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
-%x--- for LaTeX2e develop
       \else
         \expandafter\series@maybe@drop@one@m
            \csname bfseries@#1\endcsname\reserved@d
         \ifx\reserved@d\k@series
-%x--- for LaTeX2e end
 %<+debug>  \series@change@debug{bfseries@#1 matched -> \reserved@c}%
                                       \let\target@series@value\reserved@c
       \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b
@@ -2789,6 +2779,179 @@
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
+%
+% 後回しにしていた他のバージョンへの対処です。
+% ここで新NFSS対応コードが終わりますので、|\catcode|トリックを元に戻します。
+%    \begin{macrocode}
+%<*plcore|platexrelease>
+%%
+\ifnum\pltx@latex@level>0\relax       % 2020-02-02
+%
+\ifnum\pltx@latex@level<3\relax       % 2020-02-02 patch level 0--2 (no flags)
+\DeclareRobustCommand\romanseries[1]{\merge@font@series{#1}}
+\DeclareRobustCommand\kanjiseries[1]{\merge@kanji@series{#1}}
+\DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
+\DeclareRobustCommand\romanseriesforce[1]{\edef\f@series{#1}}
+\DeclareRobustCommand\kanjiseriesforce[1]{\edef\k@series{#1}}
+\DeclareRobustCommand\fontseriesforce[1]{\kanjiseriesforce{#1}\romanseriesforce{#1}}
+\fi
+%
+\ifnum\pltx@latex@level=1\relax       % 2020-02-02 patch level 0 (\@reserveda)
+\def\merge@kanji@series@#1#2#3\@nil{%
+  \def\@reserveda{#3}%
+  \ifx\@reserveda\@empty
+    \set@target@series@kanji{#2}%
+  \else
+    \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+      \maybe@load@fontshape\endgroup
+    \edef\@reserveda{\k@encoding /\k@family /#1/\k@shape}%
+     \ifcsname \@reserveda \endcsname
+       \set@target@series@kanji{#1}%
+    \else
+       \ifcsname \k@encoding /\k@family /#2/\k@shape \endcsname
+         \set@target@series@kanji{#2}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \else
+         \set@target@series@kanji{#3}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \fi
+    \fi
+  \fi
+}
+\def\merge@kanji@shape@#1#2#3\@nil{%
+  \def\@reserveda{#3}%
+  \ifx\@reserveda\@empty
+    \edef\k@shape{#2}%
+  \else
+    \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+      \maybe@load@fontshape\endgroup
+    \edef\@reserveda{\k@encoding /\k@family /\k@series/#1}%
+     \ifcsname \@reserveda\endcsname
+       \edef\k@shape{#1}%
+    \else
+       \ifcsname \k@encoding /\k@family /\k@series/#2\endcsname
+         \edef\k@shape{#2}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \else
+         \edef\k@shape{#3}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \fi
+    \fi
+  \fi
+}
+\fi
+%
+\ifnum\pltx@latex@level<4\relax       % 2020-02-02 patch level 0--4 (drop m)
+\def\set@target@series@kanji#1{%
+    \edef\k@series{#1}%
+    \edef\k@series{\expandafter\series@drop@one@m\k@series mm\series@drop@one@m}%
+}
+\else\ifnum\pltx@latex@level=4\relax  % 2020-02-02 patch level 5 (old syntax)
+\def\set@target@series@kanji#1{%
+    \edef\k@series{#1}%
+    \expandafter\series@maybe@drop@one@m\expandafter{\k@series}\k@series
+}
+\fi\fi
+%
+\ifnum\pltx@latex@level<5\relax       % 2020-02-02 patch level 0--5
+\def\prepare@family@series@update#1#2{%
+~\if@forced@series
+%<+debug> \series@change@debug{No series preparation (forced \f@series)\on@line}%
+~  \romanfamily#2%   % changed \fontfamily -> \romanfamily
+~\else
+%<+debug> \series@change@debug{Prepearing for switching to #1 (#2)\on@line}%
+   \expand@font@defaults
+   \let\target@series@value\@empty
+   \def\target@meta@family@value{#1}%
+~  \expandafter\edef\csname ??def@ult\endcsname{\f@family}%
+   \let\@elt\update@series@target@value
+      \@meta@family@list
+~     \@elt{??}%
+   \let\@elt\relax
+   \romanfamily#2%   % changed \fontfamily -> \romanfamily
+   \ifx\target@series@value\@empty
+%<+debug> \series@change@debug{Target series still empty ...}%
+   \else
+     \ifx \f@series\target@series@value
+%<+debug> \series@change@debug{Target series unchanged:
+%<+debug>                      \f@series \space = \target@series@value}%
+     \else
+       \maybe@load@fontshape
+%<+debug> \series@change@debug{Target series:
+%<+debug>                      \f@series \space -> \target@series@value}%
+       \let\f@series\target@series@value
+     \fi
+   \fi
+~\fi
+}
+\def\prepare@family@series@update@kanji#1#2{%
+~\if@forced@series
+%<+debug> \series@change@debug{No series preparation (forced \k@series)\on@line}%
+~  \kanjifamily#2%
+~\else
+%<+debug> \series@change@debug{Prepearing for switching to #1 (#2)\on@line}%
+   \expand@font@defaults
+   \let\target@series@value\@empty
+   \def\target@meta@family@value{#1}%
+~  \expandafter\edef\csname ??def@ult\endcsname{\k@family}%
+   \let\@elt\update@series@target@value@kanji
+      \@meta@family@list@kanji
+~     \@elt{??}%
+   \let\@elt\relax
+   \kanjifamily#2%
+   \ifx\target@series@value\@empty
+%<+debug> \series@change@debug{Target series still empty ...}%
+   \else
+     \ifx \k@series\target@series@value
+%<+debug> \series@change@debug{Target series unchanged:
+%<+debug>                      \k@series \space = \target@series@value}%
+     \else
+       \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+         \maybe@load@fontshape\endgroup
+%<+debug> \series@change@debug{Target series:
+%<+debug>                      \k@series \space -> \target@series@value}%
+       \let\k@series\target@series@value
+     \fi
+   \fi
+~\fi
+}
+\def\@meta@family@list@kanji{\@elt{mc}\@elt{gt}}
+\def\update@series@target@value@kanji#1{%
+  \def\reserved@a{#1}%
+  \ifx\target@meta@family@value\reserved@a   % rm -> rm do nothing
+  \else
+%<+debug> \series@change@debug{Trying to match #1: \csname#1def@ult\endcsname
+%<+debug>                      \space = \k@family\space ?}%
+    \expandafter\ifx\csname#1def@ult\endcsname\k@family
+      \let\@elt\@gobble
+      \expandafter\let\expandafter\reserved@b
+                      \csname mdseries@\target@meta@family@value\endcsname
+      \expandafter\let\expandafter\reserved@c
+                      \csname bfseries@\target@meta@family@value\endcsname
+%<+debug>\series@change@debug{Targets for mdseries and bfseries:
+%<+debug>                     \reserved@b\space and \reserved@c}%
+      \expandafter\ifx\csname mdseries@#1\endcsname\k@series
+%<+debug>   \series@change@debug{mdseries@#1 matched -> \reserved@b}%
+                                      \let\target@series@value\reserved@b
+      \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
+%<+debug>  \series@change@debug{bfseries@#1 matched -> \reserved@c}%
+                                      \let\target@series@value\reserved@c
+      \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b
+%<+debug>  \series@change@debug{mddef@ult matched -> \reserved@b}%
+      \else\ifx\k@series\bfdef@ult    \let\target@series@value\reserved@c
+%<+debug>  \series@change@debug{bfdef@ult matched -> \reserved@c}%
+      \fi\fi\fi\fi
+    \fi
+  \fi
+}
+\fi
+%
+\fi
+%%
+\pltx@reset@catcode@trick
+%</plcore|platexrelease>
+%    \end{macrocode}
+%
 %
 % \begin{macro}{\em}
 % \begin{macro}{\emph}

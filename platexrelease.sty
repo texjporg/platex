@@ -572,32 +572,38 @@ of this package available from CTAN}
 \expandafter \let \csname adjustbaseline \endcsname \@undefined
 \plEndIncludeInRelease
 \ifx\fontseriesforce\@undefined      % old
+        \def\pltx@latex@level{0}
 \else                                % 2020-02-02
-  \ifx\@forced@seriestrue\@undefined % patch level 0, 1, 2
-    \@latex@error
-      {Please update LaTeX2e!^^J\space\space
-       At least LaTeX2e 2020-02-02 patch level 3 is required}
-      {LaTeX2e 2020-02-02 patch level 2 has a bug.}
+  \ifx\@forced@seriestrue\@undefined
+    \ifnum\patch@level<1\relax                  % patch level 0
+        \def\pltx@latex@level{1}% use \@reserveda
+    \else                                       % patch level 1, 2
+        \def\pltx@latex@level{2}
+    \fi
   \else
     \ifx\series@maybe@drop@one@m\@undefined     % patch level 3, 4
-      % actually we'd like to throw an error for the below too,
-      % but commented out for TL19 frozen since
-      % platex-dev format generation fails
-      % due to delay of latex-base-dev
-      %\@latex@error
-      %  {Please update LaTeX2e!^^J\space\space
-      %   At least LaTeX2e 2020-02-02 patch level 5 is required}
-      %  {LaTeX2e 2020-02-02 patch level 2 and 4 has a bug.}
+        \def\pltx@latex@level{3}
     \else
       \ifx\series@maybe@drop@one@m@x\@undefined % patch level 5
+        \def\pltx@latex@level{4}
         % anticipating LaTeX2e 'develop' branch (after 23b7244)
         % this temporary code will be removed in the future
         \let\series@maybe@drop@one@m@x\series@maybe@drop@one@m
         \def\series@maybe@drop@one@m#1{%
           \expandafter\series@maybe@drop@one@m@x\expandafter{#1}}
+      \else
+        \def\pltx@latex@level{5}
       \fi
     \fi
   \fi
+\fi
+\edef\pltx@reset@catcode@trick{\catcode`\noexpand\~=\the\catcode`\~\relax}
+\def\pltx@temp@catcode@ix{\catcode`\~=9\relax}
+\def\pltx@temp@catcode@xiv{\catcode`\~=14\relax}
+\ifnum\pltx@latex@level<3\relax
+  \pltx@temp@catcode@xiv % hide if-tokens
+\else
+  \pltx@temp@catcode@ix  % reveal if-tokens
 \fi
 \ifx\fontseriesforce\@undefined  % old
 \DeclareRobustCommand\romanseries[1]{\edef\f@series{#1}}
@@ -649,17 +655,10 @@ of this package available from CTAN}
     \fi
   \fi
 }
-\ifx\series@maybe@drop@one@m\@undefined % patch level 0--4
-\def\set@target@series@kanji#1{%
-    \edef\k@series{#1}%
-    \edef\k@series{\expandafter\series@drop@one@m\k@series mm\series@drop@one@m}%
-}
-\else                                   % patch level 5
 \def\set@target@series@kanji#1{%
     \edef\k@series{#1}%
     \series@maybe@drop@one@m\k@series\k@series
 }
-\fi
 \fi
 \ifx\fontshapeforce\@undefined   % old
 \DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
@@ -885,9 +884,9 @@ of this package available from CTAN}
 \let\update@series@target@value@kanji\@undefined
 \else                                         % 2020-02-02
 \def\prepare@family@series@update#1#2{%
- \if@forced@series
-   \romanfamily#2%   % changed \fontfamily -> \romanfamily
- \else
+~\if@forced@series
+~  \romanfamily#2%   % changed \fontfamily -> \romanfamily
+~\else
    \expand@font@defaults
    \let\target@series@value\@empty
    \def\target@meta@family@value{#1}%
@@ -905,12 +904,12 @@ of this package available from CTAN}
        \series@maybe@drop@one@m\target@series@value\f@series
      \fi
    \fi
- \fi
+~\fi
 }
 \def\prepare@family@series@update@kanji#1#2{%
- \if@forced@series
-   \kanjifamily#2%
- \else
+~\if@forced@series
+~  \kanjifamily#2%
+~\else
    \expand@font@defaults
    \let\target@series@value\@empty
    \def\target@meta@family@value{#1}%
@@ -929,7 +928,7 @@ of this package available from CTAN}
        \series@maybe@drop@one@m\target@series@value\k@series
      \fi
    \fi
- \fi
+~\fi
 }
 \def\@meta@family@list@kanji{\@elt{mc}\@elt{gt}}
 \def\update@series@target@value@kanji#1{%
@@ -980,6 +979,144 @@ of this package available from CTAN}
     {\not@math@alphabet\gtfamily\mathgt
      \prepare@family@series@update@kanji{gt}\gtdefault\selectfont}
 \fi
+%%
+\ifnum\pltx@latex@level>0\relax       % 2020-02-02
+\ifnum\pltx@latex@level<3\relax       % 2020-02-02 patch level 0--2 (no flags)
+\DeclareRobustCommand\romanseries[1]{\merge@font@series{#1}}
+\DeclareRobustCommand\kanjiseries[1]{\merge@kanji@series{#1}}
+\DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
+\DeclareRobustCommand\romanseriesforce[1]{\edef\f@series{#1}}
+\DeclareRobustCommand\kanjiseriesforce[1]{\edef\k@series{#1}}
+\DeclareRobustCommand\fontseriesforce[1]{\kanjiseriesforce{#1}\romanseriesforce{#1}}
+\fi
+\ifnum\pltx@latex@level=1\relax       % 2020-02-02 patch level 0 (\@reserveda)
+\def\merge@kanji@series@#1#2#3\@nil{%
+  \def\@reserveda{#3}%
+  \ifx\@reserveda\@empty
+    \set@target@series@kanji{#2}%
+  \else
+    \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+      \maybe@load@fontshape\endgroup
+    \edef\@reserveda{\k@encoding /\k@family /#1/\k@shape}%
+     \ifcsname \@reserveda \endcsname
+       \set@target@series@kanji{#1}%
+    \else
+       \ifcsname \k@encoding /\k@family /#2/\k@shape \endcsname
+         \set@target@series@kanji{#2}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \else
+         \set@target@series@kanji{#3}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \fi
+    \fi
+  \fi
+}
+\def\merge@kanji@shape@#1#2#3\@nil{%
+  \def\@reserveda{#3}%
+  \ifx\@reserveda\@empty
+    \edef\k@shape{#2}%
+  \else
+    \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+      \maybe@load@fontshape\endgroup
+    \edef\@reserveda{\k@encoding /\k@family /\k@series/#1}%
+     \ifcsname \@reserveda\endcsname
+       \edef\k@shape{#1}%
+    \else
+       \ifcsname \k@encoding /\k@family /\k@series/#2\endcsname
+         \edef\k@shape{#2}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \else
+         \edef\k@shape{#3}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \fi
+    \fi
+  \fi
+}
+\fi
+\ifnum\pltx@latex@level<4\relax       % 2020-02-02 patch level 0--4 (drop m)
+\def\set@target@series@kanji#1{%
+    \edef\k@series{#1}%
+    \edef\k@series{\expandafter\series@drop@one@m\k@series mm\series@drop@one@m}%
+}
+\else\ifnum\pltx@latex@level=4\relax  % 2020-02-02 patch level 5 (old syntax)
+\def\set@target@series@kanji#1{%
+    \edef\k@series{#1}%
+    \expandafter\series@maybe@drop@one@m\expandafter{\k@series}\k@series
+}
+\fi\fi
+\ifnum\pltx@latex@level<5\relax       % 2020-02-02 patch level 0--5
+\def\prepare@family@series@update#1#2{%
+~\if@forced@series
+~  \romanfamily#2%   % changed \fontfamily -> \romanfamily
+~\else
+   \expand@font@defaults
+   \let\target@series@value\@empty
+   \def\target@meta@family@value{#1}%
+~  \expandafter\edef\csname ??def@ult\endcsname{\f@family}%
+   \let\@elt\update@series@target@value
+      \@meta@family@list
+~     \@elt{??}%
+   \let\@elt\relax
+   \romanfamily#2%   % changed \fontfamily -> \romanfamily
+   \ifx\target@series@value\@empty
+   \else
+     \ifx \f@series\target@series@value
+     \else
+       \maybe@load@fontshape
+       \let\f@series\target@series@value
+     \fi
+   \fi
+~\fi
+}
+\def\prepare@family@series@update@kanji#1#2{%
+~\if@forced@series
+~  \kanjifamily#2%
+~\else
+   \expand@font@defaults
+   \let\target@series@value\@empty
+   \def\target@meta@family@value{#1}%
+~  \expandafter\edef\csname ??def@ult\endcsname{\k@family}%
+   \let\@elt\update@series@target@value@kanji
+      \@meta@family@list@kanji
+~     \@elt{??}%
+   \let\@elt\relax
+   \kanjifamily#2%
+   \ifx\target@series@value\@empty
+   \else
+     \ifx \k@series\target@series@value
+     \else
+       \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+         \maybe@load@fontshape\endgroup
+       \let\k@series\target@series@value
+     \fi
+   \fi
+~\fi
+}
+\def\@meta@family@list@kanji{\@elt{mc}\@elt{gt}}
+\def\update@series@target@value@kanji#1{%
+  \def\reserved@a{#1}%
+  \ifx\target@meta@family@value\reserved@a   % rm -> rm do nothing
+  \else
+    \expandafter\ifx\csname#1def@ult\endcsname\k@family
+      \let\@elt\@gobble
+      \expandafter\let\expandafter\reserved@b
+                      \csname mdseries@\target@meta@family@value\endcsname
+      \expandafter\let\expandafter\reserved@c
+                      \csname bfseries@\target@meta@family@value\endcsname
+      \expandafter\ifx\csname mdseries@#1\endcsname\k@series
+                                      \let\target@series@value\reserved@b
+      \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
+                                      \let\target@series@value\reserved@c
+      \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b
+      \else\ifx\k@series\bfdef@ult    \let\target@series@value\reserved@c
+      \fi\fi\fi\fi
+    \fi
+  \fi
+}
+\fi
+\fi
+%%
+\pltx@reset@catcode@trick
 \plIncludeInRelease{2020/02/02}{\DeclareEmphSequence}
                                {Nested emph}%
 \ifx\DeclareEmphSequence\@undefined % old
