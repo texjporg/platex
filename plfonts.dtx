@@ -150,13 +150,14 @@
 % \changes{v1.7}{2020/03/05}{\cs{do@subst@correction}の日本語化}
 % \changes{v1.7a}{2020/03/06}{\cs{@defaultfamilyhook}を活用
 %    (sync with ltfssini.dtx 2020/02/10 v3.1h)}
+% \changes{v1.7b}{2020/03/14}{古い\LaTeXe{}でもフォーマット生成が通るように}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/03/06 v1.7a pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/03/14 v1.7b pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -2782,6 +2783,7 @@
 %
 % 後回しにしていた他のバージョンへの対処です。
 % ここで新NFSS対応コードが終わりますので、|\catcode|トリックを元に戻します。
+% \changes{v1.7b}{2020/03/14}{古い\LaTeXe{}でもフォーマット生成が通るように}
 %    \begin{macrocode}
 %<*plcore|platexrelease>
 %%
