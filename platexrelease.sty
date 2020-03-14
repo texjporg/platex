@@ -768,6 +768,18 @@ of this package available from CTAN}
 \plEndIncludeInRelease
 \plIncludeInRelease{2020/04/12}{\normalfont}
                    {Use \@defaultfamilyhook}%
+\ifx\@defaultfamilyhook\@undefined  % old
+\DeclareRobustCommand\normalfont{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
+    \romanencoding{\encodingdefault}%
+    \edef\f@family{\familydefault}%
+    \edef\f@series{\seriesdefault}%
+    \edef\f@shape{\shapedefault}%
+    \selectfont\ignorespaces}
+\else                               % 2020-02-02 PL2
 \DeclareRobustCommand\normalfont{%
    \fontencoding\encodingdefault
    \edef\f@family{\familydefault}%
@@ -781,6 +793,7 @@ of this package available from CTAN}
     \edef\k@series{\kanjiseriesdefault}%
     \edef\k@shape{\kanjishapedefault}%
 }
+\fi
 \adjustbaseline
 \let\reset@font\normalfont
 \plEndIncludeInRelease

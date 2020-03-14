@@ -2384,6 +2384,18 @@
 %<platexrelease>\plIncludeInRelease{2020/04/12}{\normalfont}
 %<platexrelease>                   {Use \@defaultfamilyhook}%
 %<*plcore|platexrelease>
+\ifx\@defaultfamilyhook\@undefined  % old
+\DeclareRobustCommand\normalfont{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
+    \romanencoding{\encodingdefault}%
+    \edef\f@family{\familydefault}%
+    \edef\f@series{\seriesdefault}%
+    \edef\f@shape{\shapedefault}%
+    \selectfont\ignorespaces}
+\else                               % 2020-02-02 PL2
 %<platexrelease>\DeclareRobustCommand\normalfont{%
 %<platexrelease>   \fontencoding\encodingdefault
 %<platexrelease>   \edef\f@family{\familydefault}%
@@ -2397,6 +2409,7 @@
     \edef\k@series{\kanjiseriesdefault}%
     \edef\k@shape{\kanjishapedefault}%
 }
+\fi
 \adjustbaseline
 \let\reset@font\normalfont
 %</plcore|platexrelease>
