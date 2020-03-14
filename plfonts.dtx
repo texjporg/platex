@@ -151,13 +151,15 @@
 % \changes{v1.7a}{2020/03/06}{\cs{@defaultfamilyhook}を活用
 %    (sync with ltfssini.dtx 2020/02/10 v3.1h)}
 % \changes{v1.7b}{2020/03/14}{古い\LaTeXe{}でもフォーマット生成が通るように}
+% \changes{v1.7c}{2020/03/15}{\cs{fontshape}/\cs{fontshapeforce}が
+%    和文シェイプ未定義の場合は\cs{k@shape}を更新しないように変更}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/03/14 v1.7b pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/03/15 v1.7c pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -2205,6 +2207,7 @@
     \series@maybe@drop@one@m\k@series\k@series
 }
 \fi
+%</plcore|platexrelease>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -2220,7 +2223,38 @@
 % 2019年までは無条件に指定されたとおりのシェイプを選択していましたが、
 % \LaTeXe~2020-02-02以降では、|\DeclareFontShapeChangeRule|によって
 % 宣言された「シェイプ更新規則」に基づきシェイプを選択します。
+%
+% コミュニティ版\pLaTeXe~2020-04-12での変更：
+% 従来は、|\itshape|などの命令を実行すると
+%\begin{verbatim}
+% LaTeX Font Warning: Font shape `JT1/mc/m/it' undefined
+% (Font)              using `JT1/mc/m/n' instead on input line 4.
+% LaTeX Font Warning: Font shape `JY1/mc/m/it' undefined
+% (Font)              using `JY1/mc/m/n' instead on input line 4.
+%\end{verbatim}
+% のような警告を発していました。これは以下の理由によります。
+% \begin{itemize}
+%  \item \LaTeXe{}が定義する|\itshape|などのシェイプ変更命令は
+%    内部で|\fontshape|を呼び出す。
+%  \item \pLaTeXe{}では、|\fontshape|を欧文書体だけでなく
+%    和文書体も変更するように再定義する。
+%  \item しかし、和文書体のシェイプはほとんど``n''しか用いられず、
+%    |\DeclareFontShape|での定義も``n''しか与えられないことが多い。
+%  \item 結果的に、欧文書体のシェイプを変更するつもりでも
+%    「和文書体のシェイプが未定義」という警告が出てしまう。
+% \end{itemize}
+% そこで、和文書体のシェイプが未定義の場合は
+% |\fontshape|（及び|\fontshapeforce|）が和文書体には影響せず、
+% 欧文書体のシェイプのみを変更するように改良します。
+% \changes{v1.7c}{2020/03/15}{\cs{fontshape}/\cs{fontshapeforce}が
+%    和文シェイプ未定義の場合は\cs{k@shape}を更新しないように変更}
 %    \begin{macrocode}
+%<*plcore|platexrelease>
+\newif\if@shape@roman@kanji
+%</plcore|platexrelease>
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\fontshape}
+%<platexrelease>                   {No \k@shape update if unavailable}%
+%<*plcore|platexrelease>
 \ifx\fontshapeforce\@undefined   % old
 \DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\edef\k@shape{#1}}
@@ -2228,8 +2262,25 @@
 \else                            % 2020-02-02
 \DeclareRobustCommand\romanshape[1]{\merge@font@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\merge@kanji@shape{#1}}
-\DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
+\DeclareRobustCommand\fontshape[1]{%
+  \@shape@roman@kanjitrue
+  \kanjishape{#1}\romanshape{#1}%
+  \@shape@roman@kanjifalse}
 \fi
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\fontshape}
+%<platexrelease>                   {ASCII Corporation / TeXJP original}%
+%<platexrelease>\ifx\fontshapeforce\@undefined   % old
+%<platexrelease>\DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
+%<platexrelease>\DeclareRobustCommand\kanjishape[1]{\edef\k@shape{#1}}
+%<platexrelease>\DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
+%<platexrelease>\else                            % 2020-02-02
+%<platexrelease>\DeclareRobustCommand\romanshape[1]{\merge@font@shape{#1}}
+%<platexrelease>\DeclareRobustCommand\kanjishape[1]{\merge@kanji@shape{#1}}
+%<platexrelease>\DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
+%<platexrelease>\fi
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -2242,14 +2293,32 @@
 % \changes{v1.6v}{2020/02/01}{New commands \cs{fontshapeforce} etc.
 %    (sync with ltfssaxes.dtx 2019/12/16 v1.0a)}
 %    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\fontshapeforce}
+%<platexrelease>                   {No \k@shape update if unavailable}%
+%<*plcore|platexrelease>
 \ifx\fontshapeforce\@undefined   % old
 \let\romanshapeforce\@undefined
 \let\kanjishapeforce\@undefined
 \else                            % 2020-02-02
 \DeclareRobustCommand\romanshapeforce[1]{\edef\f@shape{#1}}
 \DeclareRobustCommand\kanjishapeforce[1]{\edef\k@shape{#1}}
-\DeclareRobustCommand\fontshapeforce[1]{\kanjishapeforce{#1}\romanshapeforce{#1}}
+\DeclareRobustCommand\fontshapeforce[1]{%
+  \set@safe@kanji@shape{#1}{}%
+  \edef\f@shape{#1}%
+}
 \fi
+%</plcore|platexrelease>
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\fontshapeforce}
+%<platexrelease>                   {ASCII Corporation / TeXJP original}%
+%<platexrelease>\ifx\fontshapeforce\@undefined   % old
+%<platexrelease>\let\romanshapeforce\@undefined
+%<platexrelease>\let\kanjishapeforce\@undefined
+%<platexrelease>\else                            % 2020-02-02
+%<platexrelease>\DeclareRobustCommand\romanshapeforce[1]{\edef\f@shape{#1}}
+%<platexrelease>\DeclareRobustCommand\kanjishapeforce[1]{\edef\k@shape{#1}}
+%<platexrelease>\DeclareRobustCommand\fontshapeforce[1]{\kanjishapeforce{#1}\romanshapeforce{#1}}
+%<platexrelease>\fi
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -2259,9 +2328,13 @@
 % \begin{macro}{\merge@kanji@shape@}
 % \cs{merge@font@shape}の和文版です。
 %    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\merge@kanji@shape@}
+%<platexrelease>                   {No \k@shape update if unavailable}%
+%<*plcore|platexrelease>
 \ifx\fontseriesforce\@undefined  % old
 \let\merge@kanji@shape\@undefined
 \let\merge@kanji@shape@\@undefined
+\let\set@safe@kanji@shape\@undefined
 \else                            % 2020-02-02
 \def\merge@kanji@shape#1{%
   \expandafter\expandafter\expandafter
@@ -2273,7 +2346,11 @@
 \def\merge@kanji@shape@#1#2#3\@nil{%
   \def\reserved@a{#3}%
   \ifx\reserved@a\@empty
+   \if@shape@roman@kanji
+    \set@safe@kanji@shape{#2}{}%
+   \else
     \edef\k@shape{#2}%
+   \fi
   \else
     \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
       \maybe@load@fontshape\endgroup
@@ -2285,14 +2362,68 @@
          \edef\k@shape{#2}%
          {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
        \else
+        \if@shape@roman@kanji
+         \set@safe@kanji@shape{#3}
+         {{\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}}%
+        \else
          \edef\k@shape{#3}%
          {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+        \fi
        \fi
     \fi
   \fi
 }
+\def\set@safe@kanji@shape#1#2{%
+  \edef\reserved@b{\k@encoding /\k@family /\k@series/#1}%
+   \ifcsname \reserved@b\endcsname
+     \edef\k@shape{#1}%
+     #2%
+  \else
+    \@font@info{Kanji font shape `\reserved@b' undefined\MessageBreak
+                No change}%
+  \fi
+}
 \fi
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\merge@kanji@shape@}
+%<platexrelease>                   {ASCII Corporation / TeXJP original}%
+%<platexrelease>\ifx\fontseriesforce\@undefined  % old
+%<platexrelease>\let\merge@kanji@shape\@undefined
+%<platexrelease>\let\merge@kanji@shape@\@undefined
+%<platexrelease>\let\set@safe@kanji@shape\@undefined
+%<platexrelease>\else                            % 2020-02-02
+%<platexrelease>\def\merge@kanji@shape#1{%
+%<platexrelease>  \expandafter\expandafter\expandafter
+%<platexrelease>  \merge@kanji@shape@
+%<platexrelease>    \csname shape@\k@shape @#1\endcsname
+%<platexrelease>    {#1}%
+%<platexrelease>    \@nil
+%<platexrelease>}
+%<platexrelease>\def\merge@kanji@shape@#1#2#3\@nil{%
+%<platexrelease>  \def\reserved@a{#3}%
+%<platexrelease>  \ifx\reserved@a\@empty
+%<platexrelease>    \edef\k@shape{#2}%
+%<platexrelease>  \else
+%<platexrelease>    \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+%<platexrelease>      \maybe@load@fontshape\endgroup
+%<platexrelease>    \edef\reserved@a{\k@encoding /\k@family /\k@series/#1}%
+%<platexrelease>     \ifcsname \reserved@a\endcsname
+%<platexrelease>       \edef\k@shape{#1}%
+%<platexrelease>    \else
+%<platexrelease>       \ifcsname \k@encoding /\k@family /\k@series/#2\endcsname
+%<platexrelease>         \edef\k@shape{#2}%
+%<platexrelease>         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+%<platexrelease>       \else
+%<platexrelease>         \edef\k@shape{#3}%
+%<platexrelease>         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+%<platexrelease>       \fi
+%<platexrelease>    \fi
+%<platexrelease>  \fi
+%<platexrelease>}
+%<platexrelease>\let\set@safe@kanji@shape\@undefined
+%<platexrelease>\fi
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}

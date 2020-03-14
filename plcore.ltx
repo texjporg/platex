@@ -34,7 +34,7 @@
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
    {2020-04-12}
-\def\ppatch@level{-2}
+\def\ppatch@level{-3}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
                    \noexpand\platexNILb}
@@ -811,6 +811,7 @@
     \series@maybe@drop@one@m\k@series\k@series
 }
 \fi
+\newif\if@shape@roman@kanji
 \ifx\fontshapeforce\@undefined   % old
 \DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\edef\k@shape{#1}}
@@ -818,7 +819,10 @@
 \else                            % 2020-02-02
 \DeclareRobustCommand\romanshape[1]{\merge@font@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\merge@kanji@shape{#1}}
-\DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
+\DeclareRobustCommand\fontshape[1]{%
+  \@shape@roman@kanjitrue
+  \kanjishape{#1}\romanshape{#1}%
+  \@shape@roman@kanjifalse}
 \fi
 \ifx\fontshapeforce\@undefined   % old
 \let\romanshapeforce\@undefined
@@ -826,11 +830,15 @@
 \else                            % 2020-02-02
 \DeclareRobustCommand\romanshapeforce[1]{\edef\f@shape{#1}}
 \DeclareRobustCommand\kanjishapeforce[1]{\edef\k@shape{#1}}
-\DeclareRobustCommand\fontshapeforce[1]{\kanjishapeforce{#1}\romanshapeforce{#1}}
+\DeclareRobustCommand\fontshapeforce[1]{%
+  \set@safe@kanji@shape{#1}{}%
+  \edef\f@shape{#1}%
+}
 \fi
 \ifx\fontseriesforce\@undefined  % old
 \let\merge@kanji@shape\@undefined
 \let\merge@kanji@shape@\@undefined
+\let\set@safe@kanji@shape\@undefined
 \else                            % 2020-02-02
 \def\merge@kanji@shape#1{%
   \expandafter\expandafter\expandafter
@@ -842,7 +850,11 @@
 \def\merge@kanji@shape@#1#2#3\@nil{%
   \def\reserved@a{#3}%
   \ifx\reserved@a\@empty
+   \if@shape@roman@kanji
+    \set@safe@kanji@shape{#2}{}%
+   \else
     \edef\k@shape{#2}%
+   \fi
   \else
     \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
       \maybe@load@fontshape\endgroup
@@ -854,10 +866,25 @@
          \edef\k@shape{#2}%
          {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
        \else
+        \if@shape@roman@kanji
+         \set@safe@kanji@shape{#3}
+         {{\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}}%
+        \else
          \edef\k@shape{#3}%
          {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+        \fi
        \fi
     \fi
+  \fi
+}
+\def\set@safe@kanji@shape#1#2{%
+  \edef\reserved@b{\k@encoding /\k@family /\k@series/#1}%
+   \ifcsname \reserved@b\endcsname
+     \edef\k@shape{#1}%
+     #2%
+  \else
+    \@font@info{Kanji font shape `\reserved@b' undefined\MessageBreak
+                No change}%
   \fi
 }
 \fi

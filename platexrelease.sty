@@ -660,6 +660,24 @@ of this package available from CTAN}
     \series@maybe@drop@one@m\k@series\k@series
 }
 \fi
+\newif\if@shape@roman@kanji
+\plIncludeInRelease{2020/04/12}{\fontshape}
+                   {No \k@shape update if unavailable}%
+\ifx\fontshapeforce\@undefined   % old
+\DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
+\DeclareRobustCommand\kanjishape[1]{\edef\k@shape{#1}}
+\DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
+\else                            % 2020-02-02
+\DeclareRobustCommand\romanshape[1]{\merge@font@shape{#1}}
+\DeclareRobustCommand\kanjishape[1]{\merge@kanji@shape{#1}}
+\DeclareRobustCommand\fontshape[1]{%
+  \@shape@roman@kanjitrue
+  \kanjishape{#1}\romanshape{#1}%
+  \@shape@roman@kanjifalse}
+\fi
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\fontshape}
+                   {ASCII Corporation / TeXJP original}%
 \ifx\fontshapeforce\@undefined   % old
 \DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\edef\k@shape{#1}}
@@ -669,6 +687,22 @@ of this package available from CTAN}
 \DeclareRobustCommand\kanjishape[1]{\merge@kanji@shape{#1}}
 \DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
 \fi
+\plEndIncludeInRelease
+\plIncludeInRelease{2020/04/12}{\fontshapeforce}
+                   {No \k@shape update if unavailable}%
+\ifx\fontshapeforce\@undefined   % old
+\let\romanshapeforce\@undefined
+\let\kanjishapeforce\@undefined
+\else                            % 2020-02-02
+\DeclareRobustCommand\romanshapeforce[1]{\edef\f@shape{#1}}
+\DeclareRobustCommand\kanjishapeforce[1]{\edef\k@shape{#1}}
+\DeclareRobustCommand\fontshapeforce[1]{%
+  \set@safe@kanji@shape{#1}{}%
+  \edef\f@shape{#1}%
+}
+\fi
+\plIncludeInRelease{0000/00/00}{\fontshapeforce}
+                   {ASCII Corporation / TeXJP original}%
 \ifx\fontshapeforce\@undefined   % old
 \let\romanshapeforce\@undefined
 \let\kanjishapeforce\@undefined
@@ -677,9 +711,69 @@ of this package available from CTAN}
 \DeclareRobustCommand\kanjishapeforce[1]{\edef\k@shape{#1}}
 \DeclareRobustCommand\fontshapeforce[1]{\kanjishapeforce{#1}\romanshapeforce{#1}}
 \fi
+\plEndIncludeInRelease
+\plIncludeInRelease{2020/04/12}{\merge@kanji@shape@}
+                   {No \k@shape update if unavailable}%
 \ifx\fontseriesforce\@undefined  % old
 \let\merge@kanji@shape\@undefined
 \let\merge@kanji@shape@\@undefined
+\let\set@safe@kanji@shape\@undefined
+\else                            % 2020-02-02
+\def\merge@kanji@shape#1{%
+  \expandafter\expandafter\expandafter
+  \merge@kanji@shape@
+    \csname shape@\k@shape @#1\endcsname
+    {#1}%
+    \@nil
+}
+\def\merge@kanji@shape@#1#2#3\@nil{%
+  \def\reserved@a{#3}%
+  \ifx\reserved@a\@empty
+   \if@shape@roman@kanji
+    \set@safe@kanji@shape{#2}{}%
+   \else
+    \edef\k@shape{#2}%
+   \fi
+  \else
+    \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+      \maybe@load@fontshape\endgroup
+    \edef\reserved@a{\k@encoding /\k@family /\k@series/#1}%
+     \ifcsname \reserved@a\endcsname
+       \edef\k@shape{#1}%
+    \else
+       \ifcsname \k@encoding /\k@family /\k@series/#2\endcsname
+         \edef\k@shape{#2}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+       \else
+        \if@shape@roman@kanji
+         \set@safe@kanji@shape{#3}
+         {{\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}}%
+        \else
+         \edef\k@shape{#3}%
+         {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
+        \fi
+       \fi
+    \fi
+  \fi
+}
+\def\set@safe@kanji@shape#1#2{%
+  \edef\reserved@b{\k@encoding /\k@family /\k@series/#1}%
+   \ifcsname \reserved@b\endcsname
+     \edef\k@shape{#1}%
+     #2%
+  \else
+    \@font@info{Kanji font shape `\reserved@b' undefined\MessageBreak
+                No change}%
+  \fi
+}
+\fi
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\merge@kanji@shape@}
+                   {ASCII Corporation / TeXJP original}%
+\ifx\fontseriesforce\@undefined  % old
+\let\merge@kanji@shape\@undefined
+\let\merge@kanji@shape@\@undefined
+\let\set@safe@kanji@shape\@undefined
 \else                            % 2020-02-02
 \def\merge@kanji@shape#1{%
   \expandafter\expandafter\expandafter
@@ -709,7 +803,9 @@ of this package available from CTAN}
     \fi
   \fi
 }
+\let\set@safe@kanji@shape\@undefined
 \fi
+\plEndIncludeInRelease
 \plIncludeInRelease{2020/02/02}{\usefont}
                    {Don't call \fontseries or \fontshape}%
 \DeclareRobustCommand\usekanji[4]{\kanjiencoding{#1}%
