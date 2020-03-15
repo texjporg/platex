@@ -217,6 +217,61 @@
 % \MakeShortVerb{\|}
 %
 %
+% \subsection{拡張コマンド}
+% \pLaTeXe{}は、以下の新しいコマンドを定義します。
+%
+% \DeleteShortVerb{\|}
+% \MakeShortVerb{\+}
+% \begin{center}
+% \begin{tabular}{l|l}
+% \emph{コマンド} & \emph{意味}\\\hline
+% +\Declare{Yoko|Tate}KanjiEncoding+ & 和文エンコードの宣言\\
+% +\DeclareKanjiEncodingDefaults+ &
+%        デフォルトの和文エンコードの宣言\\
+% +\KanjiEncodingPair+ & 和文エンコードのセット化\\
+% +\DeclareKanjiFamily+ & ファミリの宣言\\
+% +\DeclareKanjiSubstitution+ & 和文の代用フォントの宣言\\
+% +\DeclareErrorKanjiFont+ & 和文のエラーフォントの宣言 \\
+% +\reDeclareMathAlphabet+ & 和欧文を同時に切り替えるコマンド宣言\\
+% +\{Declare|Set}RelationFont+ & 従属書体の宣言\\
+% +\userelfont+ & 欧文書体を従属書体にする\\
+% +\adjustbaseline+ & ベースラインシフト量の設定\\
+% +\{roman|kanji}encoding+ & エンコードの指定\\
+% +\{roman|kanji}family+ & ファミリの指定\\
+% +\{roman|kanji}series[force]+ & シリーズの指定\\
+% +\{roman|kanji}shape[force]+ & シェイプの指定\\
+% +\use{roman|kanji}+ & 書体の切り替え\\
+% +\mcfamily+, +\gtfamily+ & 和文書体を明朝体、ゴシック体にする\\
+% \end{tabular}
+% \end{center}
+% \DeleteShortVerb{\+}
+% \MakeShortVerb{\|}
+%
+% さらに、オリジナルの\LaTeXe{}の以下のコマンドを再定義します。
+%
+% \DeleteShortVerb{\|}
+% \MakeShortVerb{\+}
+% \begin{center}
+% \begin{tabular}{l|l}
+% \emph{コマンド} & \emph{意味}\\\hline
+% +\DeclareFontEncoding+ & エンコードの宣言\\
+% +\DeclareFontFamily+ & ファミリの宣言\\
+% +\DeclareFixedFont+ & フォントの名前の宣言 \\
+% +\selectfont+ & フォントを切り替える\\
+% +\set@fontsize+ & フォントサイズの変更\\
+% +\fontencoding+ & エンコードの指定\\
+% +\fontfamily+ & ファミリの指定\\
+% +\fontseries[force]+ & シリーズの指定\\
+% +\fontshape[force]+ & シェイプの指定\\
+% +\usefont+ & 書体の切り替え\\
+% +\normalfont+ & デフォルト値の設定に切り替える\\
+% +\bfseries+, +\mdseries+ & シリーズを太字、中字にする\\
+% +\textunderscore+ & テキストモードでの下線マクロ\\
+% \end{tabular}
+% \end{center}
+% \DeleteShortVerb{\+}
+% \MakeShortVerb{\|}
+%
 %
 % \section{コード}\label{plfonts:codes}
 % この節で、具体的に\NFSS2を拡張するコマンドやマクロの定義を行なっています。
@@ -706,40 +761,9 @@
 %
 %
 % \subsection{コマンド}
-% 次のコマンドの定義をしています。
+% \NFSS2の拡張コマンドを定義します。
 %
-% \DeleteShortVerb{\|}
-% \MakeShortVerb{\+}
-% \begin{center}
-% \begin{tabular}{l|l}
-% \emph{コマンド} & \emph{意味}\\\hline
-% +\Declare{Font|YokoKanji|TateKanji}Encoding+ & エンコードの宣言\\
-% +\Declare{Yoko|Tate}KanjiEncodingDefaults+ &
-%        デフォルトの和文エンコードの宣言\\
-% +\Declare{Font|Kanji}Family+ & ファミリの宣言\\
-% +\DeclareKanjiSubstitution+ & 和文の代用フォントの宣言\\
-% +\DeclareErrorKanjiFont+ & 和文のエラーフォントの宣言 \\
-% +\DeclareFixedFont+ & フォントの名前の宣言 \\
-% +\reDeclareMathAlphabet+ & 和欧文を同時に切り替えるコマンド宣言\\
-% +\{Declare|Set}RelationFont+ & 従属書体の宣言\\
-% +\userelfont+ & 欧文書体を従属書体にする\\
-% +\selectfont+ & フォントを切り替える\\
-% +\set@fontsize+ & フォントサイズの変更\\
-% +\adjustbaseline+ & ベースラインシフト量の設定\\
-% +\{font|roman|kanji}encoding+ & エンコードの指定\\
-% +\{font|roman|kanji}family+ & ファミリの指定\\
-% +\{font|roman|kanji}series+ & シリーズの指定\\
-% +\{font|roman|kanji}shape+ & シェイプの指定\\
-% +\use{font|roman|kanji}+ & 書体の切り替え\\
-% +\normalfont+ & デフォルト値の設定に切り替える\\
-% +\mcfamily+,+\gtfamily+ & 和文書体を明朝体、ゴシック体にする\\
-% +\textunderscore+ & テキストモードでの下線マクロ\\
-% \end{tabular}
-% \end{center}
-% \DeleteShortVerb{\+}
-% \MakeShortVerb{\|}
-%
-%
+% \subsubsection{エンコードの宣言}
 % \begin{macro}{\DeclareFontEncoding}
 % \begin{macro}{\DeclareFontEncoding@}
 % 欧文エンコードを宣言するためのコマンドです。
@@ -991,6 +1015,7 @@
 % \end{macro}
 %
 %
+% \subsubsection{ファミリの宣言}
 % \begin{macro}{\DeclareFontFamily}
 % 欧文ファミリを宣言するためのコマンドです。
 % |\ffam@list|を作るように再定義をします。
@@ -1237,6 +1262,7 @@
 % \end{macro}
 %
 %
+% \subsubsection{数式用フォント}
 % \begin{macro}{\reDeclareMathAlphabet}
 % \changes{v1.0}{1997/01/30}{\break\cs{reDeclareMathAlphabet}を追加。
 %    ありがとう、ymtさん。}
@@ -1365,6 +1391,7 @@
 % \end{macro}
 %
 %
+% \subsubsection{従属書体の宣言}
 % \begin{macro}{\DeclareRelationFont}
 % \begin{macro}{\SetRelationFont}
 % 和文書体に対する従属書体を宣言するコマンドです。\emph{従属書体}とは、
@@ -1454,6 +1481,7 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \subsubsection{フォントの選択}
 % \begin{macro}{\selectfont}
 % |\selectfont|のオリジナルからの変更部分は、次の３点です。
 % \begin{itemize}
@@ -1774,6 +1802,7 @@
 % \end{macro}
 %
 %
+% \subsubsection{エンコードの指定}
 % \begin{macro}{\romanencoding}
 % \begin{macro}{\kanjiencoding}
 % \begin{macro}{\fontencoding}
@@ -1889,6 +1918,7 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \subsubsection{ファミリの指定}
 % \begin{macro}{\@notkfam}
 % \begin{macro}{\@notffam}
 % |\fontfamily|コマンド内で使用するフラグです。
@@ -2051,6 +2081,7 @@
 % \end{macro}
 %
 %
+% \subsubsection{シリーズの指定}
 % \begin{macro}{\pltx@latex@level}
 % ここから新NFSS対応コードが始まります。
 % \pLaTeXe{}のコードを本家\LaTeXe{}の機能に応じて切り替えます。
@@ -2184,18 +2215,30 @@
 \def\merge@kanji@series@#1#2#3\@nil{%
   \def\reserved@a{#3}%
   \ifx\reserved@a\@empty
+%    \end{macrocode}
+% シリーズ更新規則がない場合：|#2|が要求シリーズであり、これを使う。
+%    \begin{macrocode}
     \set@target@series@kanji{#2}%
   \else
     \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
       \maybe@load@fontshape\endgroup
     \edef\reserved@a{\k@encoding /\k@family /#1/\k@shape}%
      \ifcsname \reserved@a \endcsname
+%    \end{macrocode}
+% シリーズ更新規則に基づく新シリーズ |#1| が利用可能：
+%    \begin{macrocode}
        \set@target@series@kanji{#1}%
     \else
        \ifcsname \k@encoding /\k@family /#2/\k@shape \endcsname
+%    \end{macrocode}
+% シリーズ更新規則に基づく代替シリーズ |#2| が利用可能：
+%    \begin{macrocode}
          \set@target@series@kanji{#2}%
          {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
        \else
+%    \end{macrocode}
+% いずれも利用不可：要求シリーズ |#3| を使う。
+%    \begin{macrocode}
          \set@target@series@kanji{#3}%
          {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
        \fi
@@ -2214,16 +2257,7 @@
 % \end{macro}
 %
 %
-% \begin{macro}{\romanshape}
-% \begin{macro}{\kanjishape}
-% \begin{macro}{\fontshape}
-% 書体のシェイプを指定するコマンドです。
-% |\fontshape|コマンドは和欧文の両方に影響します。
-%
-% 2019年までは無条件に指定されたとおりのシェイプを選択していましたが、
-% \LaTeXe~2020-02-02以降では、|\DeclareFontShapeChangeRule|によって
-% 宣言された「シェイプ更新規則」に基づきシェイプを選択します。
-%
+% \subsubsection{シェイプの指定}
 % コミュニティ版\pLaTeXe~2020-04-12での変更：
 % 従来は、|\itshape|などの命令を実行すると
 %\begin{verbatim}
@@ -2244,14 +2278,32 @@
 %    「和文書体のシェイプが未定義」という警告が出てしまう。
 % \end{itemize}
 % そこで、和文書体のシェイプが未定義の場合は
-% |\fontshape|（及び|\fontshapeforce|）が和文書体には影響せず、
+% |\fontshape|及び|\fontshapeforce|が和文書体には影響せず、
 % 欧文書体のシェイプのみを変更するように改良します。
+%
+% \begin{macro}{\if@shape@roman@kanji}
+% 和欧文の両方に影響しようとする|\fontshape|コマンド実行中に
+% 真になるフラグです。|\fontshapeforce|は実装が単純なので、
+% このフラグは使っていません。
 % \changes{v1.7c}{2020/03/15}{\cs{fontshape}/\cs{fontshapeforce}が
 %    和文シェイプ未定義の場合は\cs{k@shape}を更新しないように変更}
 %    \begin{macrocode}
 %<*plcore|platexrelease>
 \newif\if@shape@roman@kanji
 %</plcore|platexrelease>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\romanshape}
+% \begin{macro}{\kanjishape}
+% \begin{macro}{\fontshape}
+% 書体のシェイプを指定するコマンドです。
+% |\fontshape|コマンドは和欧文の両方に影響します。
+%
+% 2019年までは無条件に指定されたとおりのシェイプを選択していましたが、
+% \LaTeXe~2020-02-02以降では、|\DeclareFontShapeChangeRule|によって
+% 宣言された「シェイプ更新規則」に基づきシェイプを選択します。
+%    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2020/04/12}{\fontshape}
 %<platexrelease>                   {No \k@shape update if unavailable}%
 %<*plcore|platexrelease>
@@ -2347,6 +2399,11 @@
 \def\merge@kanji@shape@#1#2#3\@nil{%
   \def\reserved@a{#3}%
   \ifx\reserved@a\@empty
+%    \end{macrocode}
+% シェイプ更新規則がない場合：|#2|が要求シェイプである。\\
+% |\fontshape|の下請けなら、|#2|が利用可能かどうか予めチェックする。\\
+% |\kanjishape|の下請けなら、|#2|を使う。
+%    \begin{macrocode}
    \if@shape@roman@kanji
     \set@safe@kanji@shape{#2}{}%
    \else
@@ -2357,14 +2414,25 @@
       \maybe@load@fontshape\endgroup
     \edef\reserved@a{\k@encoding /\k@family /\k@series/#1}%
      \ifcsname \reserved@a\endcsname
+%    \end{macrocode}
+% シェイプ更新規則に基づく新シェイプ |#1| が利用可能：
+%    \begin{macrocode}
        \edef\k@shape{#1}%
     \else
        \ifcsname \k@encoding /\k@family /\k@series/#2\endcsname
+%    \end{macrocode}
+% シェイプ更新規則に基づく代替シェイプ |#2| が利用可能：
+%    \begin{macrocode}
          \edef\k@shape{#2}%
          {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
        \else
+%    \end{macrocode}
+% いずれも利用不可：要求シェイプ |#3| について\\
+% |\fontshape|の下請けなら、|#3|が利用可能かどうか予めチェックする。\\
+% |\kanjishape|の下請けなら、|#3|を使う。
+%    \begin{macrocode}
         \if@shape@roman@kanji
-         \set@safe@kanji@shape{#3}
+         \set@safe@kanji@shape{#3}%
          {{\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}}%
         \else
          \edef\k@shape{#3}%
@@ -2430,6 +2498,7 @@
 % \end{macro}
 %
 %
+% \subsubsection{書体の切り替え}
 % \begin{macro}{\usekanji}
 % \begin{macro}{\useroman}
 % \begin{macro}{\usefont}
@@ -2533,7 +2602,7 @@
     \edef\f@family{\familydefault}%
     \edef\f@series{\seriesdefault}%
     \edef\f@shape{\shapedefault}%
-    \selectfont\ignorespaces}
+    \selectfont}
 \else                               % 2020-02-02 PL2
 %<platexrelease>\DeclareRobustCommand\normalfont{%
 %<platexrelease>   \fontencoding\encodingdefault

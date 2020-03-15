@@ -867,7 +867,7 @@
          {\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}%
        \else
         \if@shape@roman@kanji
-         \set@safe@kanji@shape{#3}
+         \set@safe@kanji@shape{#3}%
          {{\let\curr@fontshape\curr@kfontshape\@font@shape@subst@warning}}%
         \else
          \edef\k@shape{#3}%
@@ -915,7 +915,7 @@
     \edef\f@family{\familydefault}%
     \edef\f@series{\seriesdefault}%
     \edef\f@shape{\shapedefault}%
-    \selectfont\ignorespaces}
+    \selectfont}
 \else                               % 2020-02-02 PL2
 \g@addto@macro\@defaultfamilyhook{%
     \kanjiencoding{\kanjiencodingdefault}%
