@@ -266,7 +266,6 @@
 % +\usefont+ & 書体の切り替え\\
 % +\normalfont+ & デフォルト値の設定に切り替える\\
 % +\bfseries+, +\mdseries+ & シリーズを太字、中字にする\\
-% +\textunderscore+ & テキストモードでの下線マクロ\\
 % \end{tabular}
 % \end{center}
 % \DeleteShortVerb{\+}
@@ -3156,6 +3155,35 @@
 %    \end{macrocode}
 %
 %
+% \begin{macro}{\romanprocess@table}
+% \begin{macro}{\kanjiprocess@table}
+% \begin{macro}{\process@table}
+% 文書の先頭で、和文デフォルトフォントの変更が反映されないのを修正します。
+% \changes{v1.3g}{1999/04/05}{plpatch.ltxの内容を反映。
+%    ありがとう、山本さん。}
+%    \begin{macrocode}
+%<*plcore>
+\let\romanprocess@table\process@table
+\def\kanjiprocess@table{%
+  \kanjiencoding{\kanjiencodingdefault}%
+  \kanjifamily{\kanjifamilydefault}%
+  \kanjiseries{\kanjiseriesdefault}%
+  \kanjishape{\kanjishapedefault}%
+}
+\def\process@table{%
+  \romanprocess@table
+  \kanjiprocess@table
+}
+\@onlypreamble\romanprocess@table
+\@onlypreamble\kanjiprocess@table
+%</plcore>
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+%
+% \subsection{強調書体}
 % \begin{macro}{\em}
 % \begin{macro}{\emph}
 % \begin{macro}{\eminnershape}
@@ -3225,35 +3253,7 @@
 % \end{macro}
 %
 %
-% \begin{macro}{\romanprocess@table}
-% \begin{macro}{\kanjiprocess@table}
-% \begin{macro}{\process@table}
-% 文書の先頭で、和文デフォルトフォントの変更が反映されないのを修正します。
-% \changes{v1.3g}{1999/04/05}{plpatch.ltxの内容を反映。
-%    ありがとう、山本さん。}
-%    \begin{macrocode}
-%<*plcore>
-\let\romanprocess@table\process@table
-\def\kanjiprocess@table{%
-  \kanjiencoding{\kanjiencodingdefault}%
-  \kanjifamily{\kanjifamilydefault}%
-  \kanjiseries{\kanjiseriesdefault}%
-  \kanjishape{\kanjishapedefault}%
-}
-\def\process@table{%
-  \romanprocess@table
-  \kanjiprocess@table
-}
-\@onlypreamble\romanprocess@table
-\@onlypreamble\kanjiprocess@table
-%</plcore>
-%    \end{macrocode}
-% \end{macro}
-% \end{macro}
-% \end{macro}
-%
-%
-%
+% \subsection{下線マクロ}
 % \begin{macro}{\textunderscore}
 % \changes{v1.1b}{1995/04/12}{下線マクロを追加}
 % このコマンドはテキストモードで指定された|\_|の内部コマンドです。

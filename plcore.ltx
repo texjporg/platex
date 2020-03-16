@@ -1219,6 +1219,19 @@
 \fi
 %%
 \pltx@reset@catcode@trick
+\let\romanprocess@table\process@table
+\def\kanjiprocess@table{%
+  \kanjiencoding{\kanjiencodingdefault}%
+  \kanjifamily{\kanjifamilydefault}%
+  \kanjiseries{\kanjiseriesdefault}%
+  \kanjishape{\kanjishapedefault}%
+}
+\def\process@table{%
+  \romanprocess@table
+  \kanjiprocess@table
+}
+\@onlypreamble\romanprocess@table
+\@onlypreamble\kanjiprocess@table
 \ifx\DeclareEmphSequence\@undefined % old
 \DeclareRobustCommand\em
         {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
@@ -1236,19 +1249,6 @@
 }
 \fi
 \def\eminnershape{\mcfamily \upshape}%
-\let\romanprocess@table\process@table
-\def\kanjiprocess@table{%
-  \kanjiencoding{\kanjiencodingdefault}%
-  \kanjifamily{\kanjifamilydefault}%
-  \kanjiseries{\kanjiseriesdefault}%
-  \kanjishape{\kanjishapedefault}%
-}
-\def\process@table{%
-  \romanprocess@table
-  \kanjiprocess@table
-}
-\@onlypreamble\romanprocess@table
-\@onlypreamble\kanjiprocess@table
 \DeclareTextCommandDefault{\textunderscore}{%
   \leavevmode\kern.06em
   \raise-\iftdir\ifmdir\ybaselineshift
