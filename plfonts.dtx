@@ -2447,9 +2447,12 @@
      \edef\k@shape{#1}%
      #2%
   \else
-    \@font@info{Kanji font shape `\reserved@b' undefined\MessageBreak
-                No change}%
+    \@kanji@shape@nochange@info{\reserved@b}%
   \fi
+}
+\def\@kanji@shape@nochange@info#1{%
+    \@font@info{Kanji font shape `#1' undefined\MessageBreak
+                No change}%
 }
 \fi
 %</plcore|platexrelease>
@@ -2490,6 +2493,7 @@
 %<platexrelease>  \fi
 %<platexrelease>}
 %<platexrelease>\let\set@safe@kanji@shape\@undefined
+%<platexrelease>\let\@kanji@shape@nochange@info\@undefined
 %<platexrelease>\fi
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}

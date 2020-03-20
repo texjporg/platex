@@ -883,9 +883,12 @@
      \edef\k@shape{#1}%
      #2%
   \else
-    \@font@info{Kanji font shape `\reserved@b' undefined\MessageBreak
-                No change}%
+    \@kanji@shape@nochange@info{\reserved@b}%
   \fi
+}
+\def\@kanji@shape@nochange@info#1{%
+    \@font@info{Kanji font shape `#1' undefined\MessageBreak
+                No change}%
 }
 \fi
 \DeclareRobustCommand\usekanji[4]{\kanjiencoding{#1}%
