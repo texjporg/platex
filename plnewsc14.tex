@@ -1,0 +1,209 @@
+%% <2020-02-02> and <2020-04-12>
+\documentclass{plnews}
+
+\publicationyear{2020}% 発行年
+\publicationmonth{04}% 発行月
+\publicationissue{c14}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\cs#1{\texttt{\char92\nobreak #1}}
+\def\pTeX{p\kern-.15em\TeX}
+\def\eTeX{$\varepsilon$-\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+\xspcode`\\=1
+
+\begin{document}
+
+\maketitle
+
+コミュニティ版\pLaTeXe\ \texttt{<2020-02-02>}および
+\texttt{<2020-04-12>}について、
+\pLaTeXe\ \texttt{<2019-10-01>}からの更新箇所をまとめます。
+
+
+\section{\LaTeXe\ \texttt{<2020-02-02>}対応}
+\LaTeXe\ \texttt{<2020-02-02>}で
+NFSS（フォント選択の仕組み）が大幅に拡張されたことを受け、
+\pLaTeXe\ \texttt{<2020-02-02>}で対応を施しました。
+シリーズ・シェープの多軸化は\file{fontaxes}から、
+ファミリごとの実シリーズ値は\file{mweights}から、
+それぞれアイデアを取り入れたようです。
+\file{ltnews31}も参照してください。
+
+\pLaTeXe{}での拡張部分は以下のとおりです。
+
+\paragraph{シリーズの多軸化}
+\begin{itemize}
+ \item |\kanjiseries|, |\romanseries| (, |\fontseries|)\\
+   |\DeclareFontSeriesChangeRule|による
+   シリーズ更新規則に従うようにした。
+ \item |\kanjiseriesforce|, |\romanseriesforce|\\
+   無条件にシリーズを更新する（新規）。\\
+   |\fontseriesforce|は和欧文両方に影響。
+\end{itemize}
+
+\paragraph{シェープの多軸化}
+\begin{itemize}
+ \item |\kanjishape|, |\romanshape| (, |\fontshape|)\\
+   |\DeclareFontShapeChangeRule|による
+   シェープ更新規則に従うようにした。
+ \item |\kanjishapeforce|, |\romanshapeforce|\\
+   無条件にシェープを更新する（新規）。\\
+   |\fontshapeforce|は和欧文両方に影響。
+\end{itemize}
+
+\paragraph{総称ファミリごとの実シリーズ値の設定}
+\begin{itemize}
+ \item |\DeclareFontSeriesDefault|\\
+   第一引数（オプション）の総称ファミリ名に
+   |rm|, |sf|, |tt|に加え|mc|, |gt|も指定できるようにした。
+\end{itemize}
+
+\paragraph{強調書体指定の一般化}
+\begin{itemize}
+ \item \pLaTeX{}で再定義している|\em| (, |\emph|)でも
+   |\DeclareEmphSequence|による
+   入れ子の強調書体のカスタマイズ機能をサポートした。
+\end{itemize}
+
+\paragraph{既定値}
+\LaTeXe{}に追随して\pLaTeXe{}でも調整。
+
+まず、\LaTeXe{}での既定値の変更を見てみます。
+\begin{itemize}
+ \item |\bfdefault|: |bx| → |b| に変更
+ \item |\updefault|: |n| → |up| に変更
+ \item |\shapedefault|: |\updefault| → |n| に変更
+\end{itemize}
+このうち「|bx| → |b|」は
+太字を原則|b| (bold)に変更することを意味します。
+これだけでは互換性に関して懸念がありますが、
+\LaTeXe{}では同時に
+「総称ファミリごとの実シリーズ値の設定」の新機能を活用して
+\begin{itemize}
+ \item Computer ModernとLatin Modernの場合だけは
+   従来どおり太字を|bx| (bold-extended)に維持
+\end{itemize}
+という挙動を実現しています。
+
+\pLaTeXe{}では、|\bfdefault|と|\updefault|について
+\LaTeXe{}の設定がそのまま和文にも引き継がれます。
+残る一つは和文用の既定値が別に存在します。
+\begin{itemize}
+ \item |\kanjishapedefault|: |\updefault| → |n| に変更
+\end{itemize}
+
+さて、和文の太字は従来|\bfdefault|一択（結果的に|bx|）
+でしたが、\pLaTeXe\ \texttt{<2020-02-02>}では
+「総称ファミリごとの実シリーズ値の設定」の新機能が
+和文ファミリ|mc|, |gt|にも使えます。
+ここで、|mc|, |gt|の太字をどう設定するかは議論の余地があります：
+\begin{enumerate}
+ \item 互換性のため、従来どおり|bx|を維持する。
+ \item Computer ModernでもLatin Modernでもないので、
+   |b|に変更する。
+\end{enumerate}
+この2案のうち、現在の版では2.すなわち
+\begin{itemize}
+ \item 和文ファミリ|mc|と|gt|の太字も|b| (bold)に変更
+\end{itemize}
+を採っています。これは、和文の太字は線が太いだけで、
+横幅が広がるわけではないためです。
+
+
+\section{NFSSの和文対応の改善}
+\pLaTeXe\ \texttt{<2020-04-12>}での修正です。
+\LaTeXe\ \texttt{<2020-02-02>}でのNFSSの拡張とは無関係に、
+従来から\pLaTeXe{}のNFSSに存在した和文フォントでの不具合に
+対処しました。
+
+\paragraph{\cs{fontshape}で和文シェープが未定義なら維持}
+端的には |{\itshape a}| のようなシェープ変更で
+\begin{verbatim}
+    Font shape `JT1/mc/m/it' undefined
+    using `JT1/mc/m/n' instead on ....
+    Font shape `JY1/mc/m/it' undefined
+    using `JY1/mc/m/n' instead on ....
+\end{verbatim}
+という|LaTeX Font Warning|が出るのを抑制することを
+目的とした修正です。
+
+\pLaTeXe{}の|\fontshape|は、欧文に加えて和文のシェープも変更するように
+再定義されていました（アスキー\pLaTeXe{}の仕様）。
+しかし、これでは|\itshape|のような命令で余分な警告を発してしまいます。
+\begin{itemize}
+ \item \LaTeXe{}が定義する|\itshape|などのシェープ変更命令は、
+   内部で|\fontshape|を呼び出す。
+ \item \pLaTeXe{}の|\fontshape|は、欧文書体だけでなく
+   和文書体のシェープも変更しようとする。
+ \item しかし、和文書体のシェープはほとんど``n''しか用いられず、
+   |\DeclareFontShape|での定義も``n''しか与えられないことが多い。
+ \item 結果的に、欧文書体のシェープを変更するつもりでも
+   「和文書体のシェープが未定義」という警告が出てしまう。
+\end{itemize}
+これを改善するため、\pLaTeXe\ \texttt{<2020-04-12>}では
+\begin{itemize}
+ \item |\fontshape|が選択しようとした
+   和文のシェープが未定義の場合は、
+   和文のシェープは変更せず、欧文のシェープのみを変更する
+\end{itemize}
+という仕様に変更しました。これは|\fontshapeforce|も同様です。
+
+なお、|\kanjishape|や|\kanjishapeforce|は
+和文書体のシェープを変更する意図でしか実行されないため、
+未定義かどうかは確認しません。
+また、|\usefont|は和欧文両用ですが、一緒に指定された
+エンコーディングに応じて|\useroman|と|\usekanji|の一方だけが
+実行されることが明白なため、やはり未定義かどうかは確認しません。
+
+\paragraph{sub, ssubの和文対応}
+|\DeclareFontShape|で使われるsize functionの
+|sub|, |ssub|が和文フォントを正しく取得できない不具合を修正。
+
+これが露呈する具体的な症例としては、GitHubの
+|texjporg/jsclasses#53|で報告されている
+\begin{itemize}
+ \item 日本語の数式ファミリを宣言した状態で
+   \file{bm}パッケージを使うとゴシックにならない
+\end{itemize}
+がありましたが、今回のリリースで解消しました。
+
+\paragraph{\cs{normalfont}末尾の\cs{ignorespaces}削除}
+オリジナルの\LaTeXe{}の1995年の修正に追随し、
+\pLaTeXe{}の|\normalfont|末尾になぜか残っていた
+|\ignorespaces|を削除しました。
+
+
+\section{その他の修正}
+\pLaTeXe\ \texttt{<2020-04-12>}での修正：
+\begin{itemize}
+ \item |\verb+>+|を和文で挟むと後ろだけアキが入り、前には入らない
+   現象への対処（|\texttt{>}|と同様に前後にアキが入るようにした）
+\end{itemize}
+
+
+\section{開発版のテストのお願い}
+今後\pLaTeX{}に導入するかもしれない修正パッチや仕様変更のテストに
+ご協力ください。\TeX{}ファイルの冒頭（|\documentclass|より前）で
+\begin{verbatim}
+  \RequirePackage{exppl2e}
+\end{verbatim}
+と書くことで、現在の開発版をテストすることができます。
+現在は
+\begin{itemize}
+  \item 支柱コマンドで用いられる|\strut|の挙動
+  \item 空のフロートだけのページが発生した場合の処理
+\end{itemize}
+に関するパッチが入っています。
+
+詳細は\file{exppl2e.pdf}を参照してください。ここには、
+その他の\pLaTeXe{}の既知の制約事項も記載しています。
+\TeX\ ForumやGitHubのIssueでのバグ報告やご意見を歓迎します。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
