@@ -153,13 +153,14 @@
 % \changes{v1.7b}{2020/03/14}{古い\LaTeXe{}でもフォーマット生成が通るように}
 % \changes{v1.7c}{2020/03/15}{\cs{fontshape}/\cs{fontshapeforce}が
 %    和文シェイプ未定義の場合は\cs{k@shape}を更新しないように変更}
+% \changes{v1.7d}{2020/03/23}{ドキュメント改良}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/03/15 v1.7c pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/03/23 v1.7d pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -1191,12 +1192,12 @@
 % 書かれていましたが、実際にはこの命令は
 % \begin{itemize}
 % \item \cs{selectfont}内の\cs{pickup@font}から呼ばれる場合
-% \item そうでない場合
+% \item それ以外の\cs{pickup@font}から呼ばれる場合
 % \end{itemize}
 % の2通りがあるようです。前者は\cs{let}\cs{font}\cs{jfont}によって
 % 対処できていましたが、後者は未対策だったため、例えば
 % 和文数式フォントを定義した状態でbmパッケージを使った場合に
-% 問題が起きていました（参考：texjporg/jsclasses/\#53）。}。
+% 問題が起きていました（参考：texjporg/jsclasses\#53）。}。
 % \changes{v1.7}{2020/03/05}{\cs{do@subst@correction}の日本語化}
 %
 % オリジナルの\LaTeX{}の定義は、欧文用として使います。
