@@ -435,7 +435,7 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \subsubsection{一時コマンド}
+% \subsubsection{一時コマンド}\label{afont-ascii}
 %
 % \begin{macro}{\afont}
 % \LaTeX{}内部の|\do@subst@correction|マクロでは、
@@ -474,7 +474,8 @@
 %\end{verbatim}
 %
 % |\do@subst@correction|の日本語化に必要なので、
-% 比較する際に引数・リストとも\cs{detokenize}によって文字列化するようにしました。
+% \pLaTeXe~2020-04-12以降では比較時に
+% 引数・リストとも\cs{detokenize}によって文字列化するようにしました。
 % \changes{v1.7}{2020/03/05}{引数・リストとも\cs{detokenize}によって文字列化}
 %    \begin{macrocode}
 %</plcore>
@@ -1184,7 +1185,18 @@
 % \begin{macro}{\pltx@do@subst@correction@yoko}
 % \begin{macro}{\pltx@do@subst@correction@tate}
 % |\font|は欧文フォントを返すため、\LaTeX{}の元の|\do@subst@correction|は
-% 和文フォントに対して使えませんので、和文に対応させます。
+% 和文フォントに対して使えませんので、和文に対応させます
+% \footnote{\pLaTeXe~2020-04-12で対応。元のアスキー版の文書にも
+% 第\ref{afont-ascii}節で\cs{do@subst@correction}を日本語対応させた旨が
+% 書かれていましたが、実際にはこの命令は
+% \begin{itemize}
+% \item \cs{selectfont}内の\cs{pickup@font}から呼ばれる場合
+% \item そうでない場合
+% \end{itemize}
+% の2通りがあるようです。前者は\cs{let}\cs{font}\cs{jfont}によって
+% 対処できていましたが、後者は未対策だったため、例えば
+% 和文数式フォントを定義した状態でbmパッケージを使った場合に
+% 問題が起きていました（参考：texjporg/jsclasses/\#53）。}。
 % \changes{v1.7}{2020/03/05}{\cs{do@subst@correction}の日本語化}
 %
 % オリジナルの\LaTeX{}の定義は、欧文用として使います。
