@@ -27,7 +27,7 @@
 \LaTeXe\ \texttt{<2020-02-02>}で
 NFSS（フォント選択の仕組み）が大幅に拡張されたことを受け、
 \pLaTeXe\ \texttt{<2020-02-02>}で対応を施しました。
-シリーズ・シェープの多軸化は\file{fontaxes}から、
+シリーズ・シェイプの多軸化は\file{fontaxes}から、
 ファミリごとの実シリーズ値は\file{mweights}から、
 それぞれアイデアを取り入れたようです。
 \file{ltnews31}も参照してください。
@@ -44,13 +44,13 @@ NFSS（フォント選択の仕組み）が大幅に拡張されたことを受け、
    |\fontseriesforce|は和欧文両方に影響。
 \end{itemize}
 
-\paragraph{シェープの多軸化}
+\paragraph{シェイプの多軸化}
 \begin{itemize}
  \item |\kanjishape|, |\romanshape| (, |\fontshape|)\\
    |\DeclareFontShapeChangeRule|による
-   シェープ更新規則に従うようにした。
+   シェイプ更新規則に従うようにした。
  \item |\kanjishapeforce|, |\romanshapeforce|\\
-   無条件にシェープを更新する（新規）。\\
+   無条件にシェイプを更新する（新規）。\\
    |\fontshapeforce|は和欧文両方に影響。
 \end{itemize}
 
@@ -119,8 +119,8 @@ NFSS（フォント選択の仕組み）が大幅に拡張されたことを受け、
 従来から\pLaTeXe{}のNFSSに存在した和文フォントでの不具合に
 対処しました。
 
-\paragraph{\cs{fontshape}で和文シェープが未定義なら維持}
-端的には |{\itshape a}| のようなシェープ変更で
+\paragraph{\cs{fontshape}で和文シェイプが未定義なら維持}
+端的には |{\itshape a}| のようなシェイプ変更で
 \begin{verbatim}
     Font shape `JT1/mc/m/it' undefined
     using `JT1/mc/m/n' instead on ....
@@ -130,29 +130,29 @@ NFSS（フォント選択の仕組み）が大幅に拡張されたことを受け、
 という|LaTeX Font Warning|が出るのを抑制することを
 目的とした修正です。
 
-\pLaTeXe{}の|\fontshape|は、欧文に加えて和文のシェープも変更するように
+\pLaTeXe{}の|\fontshape|は、欧文に加えて和文のシェイプも変更するように
 再定義されていました（アスキー\pLaTeXe{}の仕様）。
 しかし、これでは|\itshape|のような命令で余分な警告を発してしまいます。
 \begin{itemize}
- \item \LaTeXe{}が定義する|\itshape|などのシェープ変更命令は、
+ \item \LaTeXe{}が定義する|\itshape|などのシェイプ変更命令は、
    内部で|\fontshape|を呼び出す。
  \item \pLaTeXe{}の|\fontshape|は、欧文書体だけでなく
-   和文書体のシェープも変更しようとする。
- \item しかし、和文書体のシェープはほとんど``n''しか用いられず、
+   和文書体のシェイプも変更しようとする。
+ \item しかし、和文書体のシェイプはほとんど``n''しか用いられず、
    |\DeclareFontShape|での定義も``n''しか与えられないことが多い。
- \item 結果的に、欧文書体のシェープを変更するつもりでも
-   「和文書体のシェープが未定義」という警告が出てしまう。
+ \item 結果的に、欧文書体のシェイプを変更するつもりでも
+   「和文書体のシェイプが未定義」という警告が出てしまう。
 \end{itemize}
 これを改善するため、\pLaTeXe\ \texttt{<2020-04-12>}では
 \begin{itemize}
  \item |\fontshape|が選択しようとした
-   和文のシェープが未定義の場合は、
-   和文のシェープは変更せず、欧文のシェープのみを変更する
+   和文のシェイプが未定義の場合は、
+   和文のシェイプは変更せず、欧文のシェイプのみを変更する
 \end{itemize}
 という仕様に変更しました。これは|\fontshapeforce|も同様です。
 
 なお、|\kanjishape|や|\kanjishapeforce|は
-和文書体のシェープを変更する意図でしか実行されないため、
+和文書体のシェイプを変更する意図でしか実行されないため、
 未定義かどうかは確認しません。
 また、|\usefont|は和欧文両用ですが、一緒に指定された
 エンコーディングに応じて|\useroman|と|\usekanji|の一方だけが

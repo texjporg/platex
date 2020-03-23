@@ -1067,8 +1067,8 @@
 % \end{macro}
 %
 % \begin{macro}{\DeclareKanjiSubstitution}
-% 目的の和文フォントが見つからなかったときに使うフォントの宣言をする
-% コマンドです。
+% 目的の和文フォントが見つからなかったときに使う代用書体の
+% 宣言をするコマンドです。
 % |\DeclareFontSubstitution|に対応します。
 %    \begin{macrocode}
 \def\DeclareKanjiSubstitution#1#2#3#4{%
@@ -1098,6 +1098,8 @@
 %
 % \begin{macro}{\DeclareErrorKanjiFont}
 % |\DeclareErrorFont|に対応するコマンドです。
+% 代用書体で示された書体も見つからなかったときに
+% 最後の手段として使われるエラー書体を定義します。
 % \changes{v1.6s}{2019/08/13}{\cs{DeclareErrorKanjiFont}:
 %    Don't set any \cs{k@...} macros
 %    (sync with ltfssbas.dtx 2019/07/09 v3.2c)}
@@ -1141,7 +1143,8 @@
 %
 % \begin{macro}{\DeclareFixedFont}
 % フォント名を宣言するコマンドです。
-%
+% エンコード／ファミリ／シリーズ／シェイプ／サイズの5つの属性を
+% 一度に切り替えるためのコマンドを定義できます。
 % \changes{v1.2}{1995/11/09}{\break\cs{DeclareFixedFont}の日本語化}
 % \changes{v1.3c}{1997/04/09}{縦横エンコード・リストの分離による拡張}
 % \changes{v1.3f}{1998/08/10}{プリアンブル・コマンドにしてしまっていたのを解除}
