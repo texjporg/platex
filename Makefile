@@ -5,7 +5,8 @@ DOCTARGET = platex platexrelease pldoc exppl2e \
 PDFTARGET = $(addsuffix .pdf,$(DOCTARGET))
 DVITARGET = $(addsuffix .dvi,$(DOCTARGET))
 KANJI = -kanji=jis
-FONTMAP = -f ipaex.map -f ptex-ipaex.map
+#FONTMAP = -f ipaex.map -f ptex-ipaex.map
+FONTMAP = -f haranoaji.map -f ptex-haranoaji.map
 TEXMF = $(shell kpsewhich -var-value=TEXMFHOME)
 
 default: $(STRIPTARGET) $(DVITARGET)
