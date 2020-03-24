@@ -1192,7 +1192,7 @@
 % 書かれていましたが、実際にはこの命令は
 % \begin{itemize}
 % \item \cs{selectfont}内の\cs{pickup@font}から呼ばれる場合
-% \item それ以外の\cs{pickup@font}から呼ばれる場合
+% \item \cs{getanddefine@fonts}内の\cs{pickup@font}から呼ばれる場合
 % \end{itemize}
 % の2通りがあるようです。前者は\cs{let}\cs{font}\cs{jfont}によって
 % 対処できていましたが、後者は未対策だったため、例えば
