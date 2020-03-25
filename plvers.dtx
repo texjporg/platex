@@ -94,12 +94,13 @@
 % \changes{v1.1q}{2019/10/01}{\LaTeX\ \texttt{!<2019-10-01!>}版対応確認}
 % \changes{v1.1r}{2020/02/01}{\LaTeX\ \texttt{!<2020-02-02!>}版対応確認}
 % \changes{v1.1s}{2020/03/14}{\LaTeX\ \texttt{!<2020-02-02!> PL5}版対応確認}
+% \changes{v1.1t}{2020/03/25}{バナーの再構築を効率化}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2020/03/14 v1.1s pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2020/03/25 v1.1t pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -114,9 +115,8 @@
 % \fi
 %
 % \section{p\LaTeXe{}のバージョンの設定}
-% まず、このディストリビューションでのp\LaTeXe{}の日付とバージョン番号
-% を定義します。
 %
+% 現在のp\LaTeXe{}がベースとした\LaTeXe{}のバージョンは、下記のとおりです。
 % \changes{v1.0}{1995/05/16}{p\LaTeXe\ 用に\file{ltvers.dtx}を修正}
 % \changes{v1.0a}{1995/08/30}{\LaTeX\ \texttt{!<1995/06/01!>}版用に修正}
 % \changes{v1.0b}{1996/01/31}{\LaTeX\ \texttt{!<1995/12/01!>}版用に修正}
@@ -140,11 +140,6 @@
 % \changes{v1.1q}{2019/10/01}{\LaTeX\ \texttt{!<2019-10-01!>}版対応確認}
 % \changes{v1.1r}{2020/02/01}{\LaTeX\ \texttt{!<2020-02-02!>}版対応確認}
 % \changes{v1.1s}{2020/03/14}{\LaTeX\ \texttt{!<2020-02-02!> PL5}版対応確認}
-%
-% このバージョンのp\LaTeXe{}は、次のバージョンの\LaTeX{}\footnote{%
-% \LaTeX\ authors: Johannes Braams, David Carlisle, Alan Jeffrey,
-%   Leslie Lamport, Frank Mittelbach, Chris Rowley, Rainer Sch\"opf}を
-% もとにしています。
 %    \begin{macrocode}
 %<*2ekernel>
 %\def\fmtname{LaTeX2e}
@@ -157,10 +152,10 @@
 %</2ekernel|latexrelease|platexrelease>
 %    \end{macrocode}
 %
-% まず、次のバージョンの\LaTeX{}が利用可能なことを確認します。
-% \LaTeXe\ 2017-04-15で、バージョン番号（日付）のフォーマットが
-% YYYY/MM/DD形式からYYYY-MM-DDに変更されています。
-% ^^A \LaTeXe\ 2017/01/01以降はe-\TeX{}必須になっています。
+% また、現在のp\LaTeXe{}は最低でも\LaTeXe\ 2017-04-15以降
+% （バージョン番号すなわち日付が|YYYY/MM/DD|形式から
+% |YYYY-MM-DD|形式に変更された版）を前提とします。
+% なお、\LaTeXe\ 2017/01/01以降はe-\TeX{}必須になっています。
 % \changes{v1.1i}{2018/03/31}{\LaTeXe\ 2017-04-15以降必須}
 %    \begin{macrocode}
 %<*plcore>
@@ -185,7 +180,7 @@
 % \begin{macro}{\pfmtname}
 % \begin{macro}{\pfmtversion}
 % \begin{macro}{\ppatch@level}
-% p\LaTeXe{}のフォーマットファイル名とバージョンです。
+% p\LaTeXe{}のフォーマットファイル名とバージョンを定義します。
 % \changes{v1.0x}{2016/06/19}{パッチレベルを\file{plvers.dtx}で設定}
 %    \begin{macrocode}
 %<*plcore>
@@ -204,34 +199,8 @@
 % \end{macro}
 % \end{macro}
 %
-% \subsection{\LaTeXe{}のバージョンの取得}
-% このファイルの直前で\LaTeXe{}の\file{latex.ltx}が読み込まれているはず
-% なので、その起動時のバナーを保存します。
-%
-% \LaTeXe\ 2018-04-01 patch level 1までは、|\everyjob|が
-%\begin{verbatim}
-%   \typeout{LaTeX2e version}\typeout{Babel version}
-%\end{verbatim}
-% だけでしたが、\LaTeXe\ 2018-04-01 patch level 2で新たなトークン列が
-% 追加されました。今後も\LaTeXe{}側で|\everyjob|に実行を遅らせる
-% コードが追加される可能性がありますので、そのコードを抽出しなければ
-% なりません。そこで、最初と最後に区切りトークン（それぞれ|\platexNILa|と
-% |\platexNILb|）を付けておきます。
-% \changes{v1.1f}{2017/11/11}{\LaTeX{}のバナーを保存するコードを
-%    \file{platex.ltx}から\file{plcore.ltx}へ移動}
-% \changes{v1.1l}{2018/04/09}{バナーの保存しかたを改良}
-%    \begin{macrocode}
-%<*plcore>
-\edef\platexBANNER{\noexpand\platexNILa
-                   \the\everyjob % LaTeX banner and delayed codes
-                   \noexpand\platexNILb}
-%</plcore>
-%    \end{macrocode}
-%
-% \subsection{パッチファイルのロード}
-%
 % コミュニティ版\pLaTeXe{}ではパッチファイルを使用しないので、
-% コメントアウトしました。
+% パッチファイルをロードするコードは削除しました。
 % \changes{v1.0v}{2016/05/07}{パッチファイルをロードするのをやめた。}
 %
 % \iffalse
@@ -275,43 +244,54 @@
 %    \end{macrocode}
 % \fi
 %
-% \subsection{起動時に実行するコード}
+% \section{起動時に実行するコード}
+%
+% \subsection{\LaTeXe{}起動時の実行コードの取得}
+% このファイルの直前で\LaTeXe{}の\file{latex.ltx}が読み込まれているはず
+% なので、その起動時の実行コード（|\everyjob|トークンの内容）を保存します。
+%
+% \LaTeXe\ 2018-04-01 patch level~1までは、|\everyjob|が
+%\begin{verbatim}
+%   \typeout{LaTeX2e version}\typeout{Babel version}
+%\end{verbatim}
+% だけでしたが、patch level~2以降では
+% いくつかのコードが|\everyjob|で遅延実行されるようになっています。
+% それらのコードを抽出するため、最初と最後に区切りトークン
+% （それぞれ|\platexNILa|と|\platexNILb|）を付けておきます。
+% \changes{v1.1f}{2017/11/11}{\LaTeX{}のバナーを保存するコードを
+%    \file{platex.ltx}から\file{plcore.ltx}へ移動}
+% \changes{v1.1l}{2018/04/09}{バナーの保存しかたを改良}
+%    \begin{macrocode}
+%<*plcore>
+\edef\platexBANNER{\noexpand\platexNILa
+                   \the\everyjob % LaTeX banner and delayed codes
+                   \noexpand\platexNILb}
+%    \end{macrocode}
+%
+% \subsection{\pLaTeXe{}起動時に実行するコードの構築}
 %
 % \begin{macro}{\everyjob}
-% p\LaTeXe{}が起動されたときに実行されるコードです。
-% \LaTeXe{}の実行コードを元に、\pLaTeXe{}用の調整を加えます。
+% \LaTeXe{}起動時の実行コードを元に、\pLaTeXe{}用の調整を加えます。
+% \changes{v1.0v}{2016/05/07}{起動時の文字列を最新の\LaTeX{}に合わせた。}
+% \changes{v1.0w}{2016/05/12}{起動時の文字列に入れる\LaTeX{}のバージョンを
+%    元の\LaTeX{}のバナーから引き継ぐように改良}
+% \changes{v1.0w}{2016/05/12}{起動時の文字列に入れるBabelのバージョンを
+%    元の\LaTeX{}のバナーから取得するコードを\file{platex.ini}から取り入れた}
 % \changes{v1.1}{2016/09/14}{起動時のバナーを取得するコードを改良}
+% \changes{v1.1d}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
+% \changes{v1.1g}{2017/12/04}{\pLaTeX{}のバナーの定義時に
+%    \cs{pfmtname}, \cs{pfmtversion}, \cs{ppatch@level}を展開しないように}
 % \changes{v1.1k}{2018/04/08}{バナー調節のコードを最後(plfinal)ではなく
 %    最初(plcore)に早めた}
 % \changes{v1.1l}{2018/04/09}{バナーの再構築のしかたを改良}
 % \changes{v1.1m}{2018/09/24}{バナーの再構築を簡略化}
-%
-% まず、\LaTeXe{}のバージョン表示（|\typeout{LaTeX2e version}|）より
-% 前に実行されるコードがあれば、それを抽出して|\everyjob|に入れます。
-% \LaTeXe\ 2018-04-01 patch level 2の時点では空です。
+% \changes{v1.1t}{2020/03/25}{バナーの再構築を効率化}
 %    \begin{macrocode}
-%<*plcore>
 \begingroup
-  \def\platexNILa#1\typeout#2#3\platexNILb{#1}
-  \toks0=\expandafter\expandafter\expandafter{\platexBANNER}
-  \global\everyjob\expandafter{\the\toks0}%
-\endgroup
 %    \end{macrocode}
 %
-% 次に、\LaTeXe{}のバージョンを表示するコードを抽出し、
-% \pLaTeXe{}のバージョンとまとめて表示するように整形します。
-% \changes{v1.0v}{2016/05/07}{起動時の文字列を最新の\LaTeX{}に合わせた。}
-% \changes{v1.0w}{2016/05/12}{起動時の文字列に入れる\LaTeX{}のバージョンを
-%    元の\LaTeX{}のバナーから引き継ぐように改良}
-% \changes{v1.1d}{2017/09/24}{パッチレベルが負の数の場合をpre-release扱いへ}
-% \changes{v1.1g}{2017/12/04}{\pLaTeX{}のバナーの定義時に
-%    \cs{pfmtname}, \cs{pfmtversion}, \cs{ppatch@level}を展開しないように}
+% \pLaTeXe{}のバージョン表示を作ります。
 %    \begin{macrocode}
-%\ifx\ppatch@level\@undefined % fallback if undefined in pLaTeX
-%  \def\ppatch@level{0}\fi
-\begingroup
-  \def\platexNILa#1\typeout#2#3\platexNILb{#2}
-  \toks0=\expandafter\expandafter\expandafter{\platexBANNER}
   \ifnum\ppatch@level=0
     \toks2={\pfmtname\space<\pfmtversion>\space}%
   \else\ifnum\ppatch@level>0
@@ -319,24 +299,28 @@
   \else
     \toks2={\pfmtname\space<\pfmtversion>-pre\ppatch@level\space}%
   \fi\fi
-  \edef\platexBANNER{\the\everyjob
-    \noexpand\typeout{\the\toks2 (based on \the\toks0)}}
-  \global\everyjob\expandafter{\platexBANNER}%
-\endgroup
 %    \end{macrocode}
 %
-% \LaTeXe{}のバージョン表示の後に残っているコードを、
-% そのまま|\everyjob|に追加します。
+% |\everyjob|の内容をパースして
+% \begin{itemize}
+% \item \LaTeXe{}のバージョン表示の中身（|\typeout{}|の引数）を |#2|
+% \item バージョン表示の前に実行されるコードがあれば |#1|
+% \item バージョン表示の後に残っているコードがあれば |#3|
+% \end{itemize}
+% に入れます。2020年時点では |#1| は空、|#3| は欧文inputencのUTF-8化で
+% 遅延されたコードに該当します。
 % ^^A Babel v3.20まではこの中に|\typeout{Babel version}|も含まれて
 % ^^A いましたが、Babel v3.21からはこのバナー表示は無くなったようです。
-% \changes{v1.0w}{2016/05/12}{起動時の文字列に入れるBabelのバージョンを
-%    元の\LaTeX{}のバナーから取得するコードを\file{platex.ini}から取り入れた}
+% そして、\LaTeXe{}のバージョンと\pLaTeXe{}のバージョンを
+% まとめて表示するように整形します。
 %    \begin{macrocode}
-\begingroup
-  \def\platexNILa#1\typeout#2#3\platexNILb{#3}
-  \toks0=\expandafter\expandafter\expandafter{\platexBANNER}
-  \edef\platexBANNER{\the\everyjob \the\toks0}
-  \global\everyjob\expandafter{\platexBANNER}%
+  \edef\platexNILa#1\typeout#2#3\platexNILb{%
+    #1\noexpand\typeout{\the\toks2 (based on #2)}#3}
+  \global\everyjob\expandafter\expandafter\expandafter{\platexBANNER}%
+%    \end{macrocode}
+%
+% 不要になったマクロ定義は削除しておきます。
+%    \begin{macrocode}
 \endgroup
 \let\platexBANNER=\@undefined
 %</plcore>
@@ -364,6 +348,8 @@
 %
 % 最後に、latexreleaseパッケージへの対応です。
 % \begin{macro}{\plIncludeInRelease}
+% platexreleaseパッケージでは
+% |\plIncludeInRelease|...|\plEndIncludeInRelease|のブロックを使います。
 % \changes{v1.0t}{2016/02/03}{\cs{plIncludeInRelease}と
 %    \cs{plEndIncludeInRelease}を新設。}
 % \changes{v1.1e}{2017/11/09}{\file{latexrelease}と
@@ -449,8 +435,9 @@
 % \end{macro}
 %
 % \LaTeXe{}が提供するlatexreleaseパッケージが読み込まれていて、
-% かつp\LaTeXe{}が提供するplatexreleaseパッケージが読み込まれていない
-% 場合は、警告を出します。
+% かつ\pLaTeXe{}が提供するplatexreleaseパッケージが読み込まれていない
+% 場合は、巻き戻し機能によって\pLaTeXe{}のコマンドが\LaTeXe{}のコマンドで
+% 上書きされ、動作が壊れてしまいますので、警告を出します。
 % \changes{v1.0s}{2016/02/01}{latexrelease利用時に警告を出すようにした}
 %    \begin{macrocode}
 %<*plfinal>

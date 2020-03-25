@@ -274,14 +274,19 @@
 %
 %
 % \section{コード}\label{plfonts:codes}
-% この節で、具体的に\NFSS2を拡張するコマンドやマクロの定義を行なっています。
+% この節で、実際のコードを説明します。
 %
 % \subsection{準備}
 % \NFSS2を拡張するための準備です。
 % 和文フォントの属性を格納するオブジェクトや長さ変数、
 % 属性を切替える際の判断材料として使うリストなどを定義しています。
 %
-% \file{ptrace}パッケージは\LaTeX{}の\file{tracefnt}パッケージに依存します。
+% \LaTeX{}の\file{tracefnt}パッケージに相当するデバッグ機能は、
+% \pLaTeX{}では\file{ptrace}パッケージで提供します。
+% 以前（アスキー版）では\file{ptrace}の前に\file{tracefnt}を
+% 手動で|\usepackage|する必要がありましたが、
+% コミュニティ版では\file{ptrace}が自動で\file{tracefnt}を
+% 読み込むように改良してあります。
 % \changes{v1.6b}{2016/04/30}{ptrace.styの冒頭でtracefnt.styを
 %    \cs{RequirePackageWithOptions}するようにした}
 %    \begin{macrocode}
@@ -594,20 +599,19 @@
 % \subsubsection{支柱}
 % 行間の調整などに用いる支柱です。
 % 支柱のもととなるボックスの大きさは、フォントサイズが変更されるたびに、
-% |\set@fontsize|コマンドによって変化します。
+% |\set@fontsize|コマンドによって更新されます。
 %
-% フォントサイズが変更されたときに、|\set@fontsize|コマンドで更新されます。
-%
+% コミュニティ版\pLaTeXe~2017/04/08での変更：
 % 従来、横組ボックス用の支柱は|\strutbox|で、高さと深さが7対3となっていました。
 % これはp\LaTeX{}単体では問題になりませんでしたが、海外製の\LaTeX{}パッケージを
 % 縦組で使用した場合に、意図しない幅や高さが取得されることがありました。
 % この不都合を回避するため、コミュニティ版p\LaTeX{}では次の方法をとります。
 % \begin{itemize}
-% \item |\ystrutbox|（新設）：高さと深さが7対3の横組ボックス用の支柱
-% \item |\tstrutbox|：高さと深さが5対5の縦組ボックス用の支柱
-% \item |\zstrutbox|：高さと深さが7対3の縦組ボックス用の支柱
+% \item |\ystrutbox|（新設）：高さと深さが7対3の横組用の支柱ボックスレジスタ
+% \item |\tstrutbox|：高さと深さが5対5の縦組用の支柱ボックスレジスタ
+% \item |\zstrutbox|：高さと深さが7対3の縦組用の支柱ボックスレジスタ
 % \item |\strutbox|（仕様変更）：縦横のディレクションに応じて
-%                     |\tstrutbox|または|\ystrutbox|に展開されるマクロ
+%                     |\tstrutbox|または|\ystrutbox|に展開される\emph{マクロ}
 % \end{itemize}
 % すなわち、従来のp\LaTeX{}における|\strutbox|と同じ挙動を示すのが、
 % 新設された|\ystrutbox|ということになります。
@@ -625,7 +629,7 @@
 % \end{macro}
 %
 % \begin{macro}{\ystrutbox}
-% |\ystrutbox|は高さと深さが7対3の横組ボックス用の支柱です。
+% |\ystrutbox|は高さと深さが7対3の横組用の支柱ボックスです。
 % \changes{v1.6f}{2017/02/20}{\cs{ystrutbox}を追加}
 %    \begin{macrocode}
 %</plcore>
@@ -761,7 +765,7 @@
 %
 %
 %
-% \subsection{コマンド}
+% \subsection{\NFSS2の拡張コマンド}
 % \NFSS2の拡張コマンドを定義します。
 %
 % \subsubsection{エンコードの宣言}
@@ -2097,11 +2101,13 @@
 % \end{macro}
 %
 %
-% \subsubsection{シリーズの指定}
+% \subsubsection{シリーズの指定（新NFSS対応）}
 % \begin{macro}{\pltx@latex@level}
-% ここから新NFSS対応コードが始まります。
+% コミュニティ版\pLaTeXe~2020-02-02での変更：ここから
+% \LaTeXe~2020-02-02で拡張された新しいNFSSへの対応コードが始まります。
 % \pLaTeXe{}のコードを本家\LaTeXe{}の機能に応じて切り替えます。
-% \NFSS{}が大幅に修正・拡張された\LaTeXe~2020-02-02のうち、
+%
+% \LaTeXe~2020-02-02のうち、
 % patch level~2には |latex3/latex2e#277| のバグがあり、
 % ^^A    →対策として |\if@forced@series| が追加された
 % patch level~4には |latex3/latex2e#293| のバグがありました。
@@ -2144,7 +2150,7 @@
 % ^^A    → |\if@forced@series|フラグを隠す必要があるため面倒
 % 現在の主要なコードは
 % \begin{itemize}
-%  \item \LaTeXe~2019-10-01 patch level~3以前
+%  \item \LaTeXe~2019-10-01 patch level~3以前（従来の\NFSS2）
 %  \item \LaTeXe{}の開発版（最新のdevelopブランチ）
 % \end{itemize}
 % 向けに最適化しており、他のバージョンへの対処は後回しにします。
@@ -2273,7 +2279,7 @@
 % \end{macro}
 %
 %
-% \subsubsection{シェイプの指定}
+% \subsubsection{シェイプの指定（新NFSS対応）}
 % コミュニティ版\pLaTeXe~2020-04-12での変更：
 % 従来は、|\itshape|などの命令を実行すると
 %\begin{verbatim}
@@ -2518,7 +2524,7 @@
 % \end{macro}
 %
 %
-% \subsubsection{書体の切り替え}
+% \subsubsection{書体の切り替え（新NFSS対応）}
 % \begin{macro}{\usekanji}
 % \begin{macro}{\useroman}
 % \begin{macro}{\usefont}
