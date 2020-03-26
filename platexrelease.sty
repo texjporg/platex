@@ -361,6 +361,22 @@ of this package available from CTAN}
   }
 \let\DeclareFontEncoding@saved\@undefined
 \plEndIncludeInRelease
+\plIncludeInRelease{2020/04/12}{\ensure@KanjiEncodingPair}
+                   {Check \KanjiEncodingPair}%
+\def\ensure@KanjiEncodingPair#1{%
+  \edef\reserved@a{\csname #1@enc@\k@encoding\endcsname}%
+  \edef\reserved@b{\csname c#1@encoding\endcsname}%
+  \expandafter\ifx\reserved@a\relax
+    \@latex@error
+      {KANJI Encoding pair for `\k@encoding' undefined}%
+      {Use \string\KanjiEncodingPair, falling back to `\reserved@b'...}%
+    \expandafter\edef\reserved@a{\reserved@b}%
+  \fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\ensure@KanjiEncodingPair}
+                   {ASCII Corporation original}%
+\let\ensure@KanjiEncodingPair\@undefined
+\plEndIncludeInRelease
 \plIncludeInRelease{2019/10/01}{\DeclareErrorKanjiFont}
                    {No side effects please}%
 \def\DeclareErrorKanjiFont#1#2#3#4#5{%
@@ -455,6 +471,120 @@ of this package available from CTAN}
                    {ASCII Corporation original}%
 \def\userelfont{\@knjcmdtrue}
 \expandafter \let \csname userelfont \endcsname \@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{2020/04/12}{\selectfont}
+                   {Check \KanjiEncodingPair}%
+\DeclareRobustCommand\selectfont{%
+  \let\tmp@error@fontshape\error@fontshape
+  \let\error@fontshape\error@kfontshape
+  \edef\tmp@item{{\k@encoding}}%
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
+  \ifin@
+    \let\cy@encoding\k@encoding
+    \ensure@KanjiEncodingPair{t}%
+    \edef\ct@encoding{\csname t@enc@\k@encoding\endcsname}%
+  \else
+    \expandafter\expandafter\expandafter
+    \inlist@\expandafter\tmp@item\expandafter{\ktenc@list}%
+    \ifin@
+      \let\ct@encoding\k@encoding
+      \ensure@KanjiEncodingPair{y}%
+      \edef\cy@encoding{\csname y@enc@\k@encoding\endcsname}%
+    \else
+      \@latex@error{KANJI Encoding scheme `\k@encoding' unknown}\@eha
+    \fi
+  \fi
+  \let\font\tfont
+  \let\k@encoding\ct@encoding
+  \xdef\font@name{\csname\curr@kfontshape/\f@size\endcsname}%
+  \pickup@font
+  \font@name
+  \let\font\jfont
+  \let\k@encoding\cy@encoding
+  \xdef\font@name{\csname\curr@kfontshape/\f@size\endcsname}%
+  \pickup@font
+  \font@name
+  \expandafter\def\expandafter\k@encoding\tmp@item
+  \kenc@update
+  \let\error@fontshape\tmp@error@fontshape
+  \if@knjcmd \@knjcmdfalse
+    \expandafter\ifx
+    \csname rel@\k@encoding/\k@family/\k@series/\k@shape\endcsname\relax
+      \expandafter\ifx
+         \csname rel@\k@encoding/\k@family/\k@series/all\endcsname\relax
+      \else
+         \csname rel@\k@encoding/\k@family/\k@series/all\endcsname
+      \fi
+    \else
+       \csname rel@\k@encoding/\k@family/\k@series/\k@shape\endcsname
+    \fi
+  \fi
+  \let\font\afont
+  \xdef\font@name{\csname\curr@fontshape/\f@size\endcsname}%
+  \pickup@font
+  \font@name
+  \enc@update
+  \ifx\f@linespread\baselinestretch \else
+    \set@fontsize\baselinestretch\f@size\f@baselineskip
+  \fi
+  \size@update}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\selectfont}
+                   {ASCII Corporation original}%
+\DeclareRobustCommand\selectfont{%
+  \let\tmp@error@fontshape\error@fontshape
+  \let\error@fontshape\error@kfontshape
+  \edef\tmp@item{{\k@encoding}}%
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
+  \ifin@
+    \let\cy@encoding\k@encoding
+    \edef\ct@encoding{\csname t@enc@\k@encoding\endcsname}%
+  \else
+    \expandafter\expandafter\expandafter
+    \inlist@\expandafter\tmp@item\expandafter{\ktenc@list}%
+    \ifin@
+      \let\ct@encoding\k@encoding
+      \edef\cy@encoding{\csname y@enc@\k@encoding\endcsname}%
+    \else
+      \@latex@error{KANJI Encoding scheme `\k@encoding' unknown}\@eha
+    \fi
+  \fi
+  \let\font\tfont
+  \let\k@encoding\ct@encoding
+  \xdef\font@name{\csname\curr@kfontshape/\f@size\endcsname}%
+  \pickup@font
+  \font@name
+  \let\font\jfont
+  \let\k@encoding\cy@encoding
+  \xdef\font@name{\csname\curr@kfontshape/\f@size\endcsname}%
+  \pickup@font
+  \font@name
+  \expandafter\def\expandafter\k@encoding\tmp@item
+  \kenc@update
+  \let\error@fontshape\tmp@error@fontshape
+  \if@knjcmd \@knjcmdfalse
+    \expandafter\ifx
+    \csname rel@\k@encoding/\k@family/\k@series/\k@shape\endcsname\relax
+      \expandafter\ifx
+         \csname rel@\k@encoding/\k@family/\k@series/all\endcsname\relax
+      \else
+         \csname rel@\k@encoding/\k@family/\k@series/all\endcsname
+      \fi
+    \else
+       \csname rel@\k@encoding/\k@family/\k@series/\k@shape\endcsname
+    \fi
+  \fi
+  \let\font\afont
+  \xdef\font@name{\csname\curr@fontshape/\f@size\endcsname}%
+  \pickup@font
+  \font@name
+  \enc@update
+  \ifx\f@linespread\baselinestretch \else
+    \set@fontsize\baselinestretch\f@size\f@baselineskip
+  \fi
+  \size@update}
 \plEndIncludeInRelease
 \plIncludeInRelease{2017/04/08}{\set@fontsize}
                    {Construct \ystrutbox}%

@@ -285,6 +285,15 @@
 \let\default@KM\@empty
 \@onlypreamble\DeclareKanjiEncodingDefaults
 \def\KanjiEncodingPair#1#2{\@namedef{t@enc@#1}{#2}\@namedef{y@enc@#2}{#1}}
+\def\ensure@KanjiEncodingPair#1{%
+  \edef\reserved@a{\csname #1@enc@\k@encoding\endcsname}%
+  \edef\reserved@b{\csname c#1@encoding\endcsname}%
+  \expandafter\ifx\reserved@a\relax
+    \@latex@error
+      {KANJI Encoding pair for `\k@encoding' undefined}%
+      {Use \string\KanjiEncodingPair, falling back to `\reserved@b'...}%
+    \expandafter\edef\reserved@a{\reserved@b}%
+  \fi}
 \def\DeclareFontFamily#1#2#3{%
  \@ifundefined{T@#1}%
     {\@latex@error{Encoding scheme `#1' unknown}\@eha}%
@@ -499,12 +508,14 @@
   \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
   \ifin@
     \let\cy@encoding\k@encoding
+    \ensure@KanjiEncodingPair{t}%
     \edef\ct@encoding{\csname t@enc@\k@encoding\endcsname}%
   \else
     \expandafter\expandafter\expandafter
     \inlist@\expandafter\tmp@item\expandafter{\ktenc@list}%
     \ifin@
       \let\ct@encoding\k@encoding
+      \ensure@KanjiEncodingPair{y}%
       \edef\cy@encoding{\csname y@enc@\k@encoding\endcsname}%
     \else
       \@latex@error{KANJI Encoding scheme `\k@encoding' unknown}\@eha

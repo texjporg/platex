@@ -154,13 +154,14 @@
 % \changes{v1.7c}{2020/03/15}{\cs{fontshape}/\cs{fontshapeforce}が
 %    和文シェイプ未定義の場合は\cs{k@shape}を更新しないように変更}
 % \changes{v1.7d}{2020/03/23}{ドキュメント改良}
+% \changes{v1.7e}{2020/03/26}{縦横エンコーディングのセット化確認}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/03/23 v1.7d pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/03/25 v1.7e pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -1019,6 +1020,40 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\ensure@KanjiEncodingPair}
+% 横書きと縦書きのエンコーディングは必ず|\KanjiEncodingPair|で
+% セット化しないと使えません。もしセット化されていなければ、
+% 明快なエラーで知らせます。
+% ^^A 最近の\file{plfonts.dtx}の変更(2017/11/06 v1.6j)で、
+% ^^A u\pLaTeX{}と\pLaTeX{}のソース共通化の一環として
+% ^^A 実行コード|\KanjiEncodingPair{JY1}{JT1}|を
+% ^^A \file{plcore.ltx}から\file{pldefs.ltx}へ移動したので、
+% ^^A 万が一古い\file{pldefs.cfg}が読み込まれた場合に実行されない可能性がある。
+% \changes{v1.7e}{2020/03/26}{縦横エンコーディングのセット化確認}
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\ensure@KanjiEncodingPair}
+%<platexrelease>                   {Check \KanjiEncodingPair}%
+%<*plcore|platexrelease>
+\def\ensure@KanjiEncodingPair#1{%
+  \edef\reserved@a{\csname #1@enc@\k@encoding\endcsname}%
+  \edef\reserved@b{\csname c#1@encoding\endcsname}%
+  \expandafter\ifx\reserved@a\relax
+    \@latex@error
+      {KANJI Encoding pair for `\k@encoding' undefined}%
+      {Use \string\KanjiEncodingPair, falling back to `\reserved@b'...}%
+    \expandafter\edef\reserved@a{\reserved@b}%
+  \fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\ensure@KanjiEncodingPair}
+%<platexrelease>                   {ASCII Corporation original}%
+%<platexrelease>\let\ensure@KanjiEncodingPair\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
+%    \end{macrocode}
+% \end{macro}
+%
 %
 % \subsubsection{ファミリの宣言}
 % \begin{macro}{\DeclareFontFamily}
@@ -1513,10 +1548,13 @@
 % \changes{v1.0c}{1995/08/22}{縦横両方のフォントを切り替えるようにした}
 % \changes{v1.2}{1995/11/22}{エラーフォントに対応した}
 % \changes{v1.3n}{2004/08/10}{和文エンコーディングの切り替えを有効化}
+% \changes{v1.7e}{2020/03/26}{縦横エンコーディングのセット化確認}
 % |\selectfont|コマンドは、まず、和文フォントを切り替えます。
 %    \begin{macrocode}
 %</plcore>
-%<*plcore|trace>
+%<platexrelease|trace>\plIncludeInRelease{2020/04/12}{\selectfont}
+%<platexrelease|trace>                   {Check \KanjiEncodingPair}%
+%<*plcore|platexrelease|trace>
 \DeclareRobustCommand\selectfont{%
   \let\tmp@error@fontshape\error@fontshape
   \let\error@fontshape\error@kfontshape
@@ -1525,12 +1563,14 @@
   \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
   \ifin@
     \let\cy@encoding\k@encoding
+    \ensure@KanjiEncodingPair{t}%
     \edef\ct@encoding{\csname t@enc@\k@encoding\endcsname}%
   \else
     \expandafter\expandafter\expandafter
     \inlist@\expandafter\tmp@item\expandafter{\ktenc@list}%
     \ifin@
       \let\ct@encoding\k@encoding
+      \ensure@KanjiEncodingPair{y}%
       \edef\cy@encoding{\csname y@enc@\k@encoding\endcsname}%
     \else
       \@latex@error{KANJI Encoding scheme `\k@encoding' unknown}\@eha
@@ -1590,7 +1630,68 @@
     \set@fontsize\baselinestretch\f@size\f@baselineskip
   \fi
   \size@update}
-%</plcore|trace>
+%</plcore|platexrelease|trace>
+%<platexrelease|trace>\plEndIncludeInRelease
+%<platexrelease|trace>\plIncludeInRelease{0000/00/00}{\selectfont}
+%<platexrelease|trace>                   {ASCII Corporation original}%
+%<platexrelease|trace>\DeclareRobustCommand\selectfont{%
+%<platexrelease|trace>  \let\tmp@error@fontshape\error@fontshape
+%<platexrelease|trace>  \let\error@fontshape\error@kfontshape
+%<platexrelease|trace>  \edef\tmp@item{{\k@encoding}}%
+%<platexrelease|trace>  \expandafter\expandafter\expandafter
+%<platexrelease|trace>  \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
+%<platexrelease|trace>  \ifin@
+%<platexrelease|trace>    \let\cy@encoding\k@encoding
+%<platexrelease|trace>    \edef\ct@encoding{\csname t@enc@\k@encoding\endcsname}%
+%<platexrelease|trace>  \else
+%<platexrelease|trace>    \expandafter\expandafter\expandafter
+%<platexrelease|trace>    \inlist@\expandafter\tmp@item\expandafter{\ktenc@list}%
+%<platexrelease|trace>    \ifin@
+%<platexrelease|trace>      \let\ct@encoding\k@encoding
+%<platexrelease|trace>      \edef\cy@encoding{\csname y@enc@\k@encoding\endcsname}%
+%<platexrelease|trace>    \else
+%<platexrelease|trace>      \@latex@error{KANJI Encoding scheme `\k@encoding' unknown}\@eha
+%<platexrelease|trace>    \fi
+%<platexrelease|trace>  \fi
+%<platexrelease|trace>  \let\font\tfont
+%<platexrelease|trace>  \let\k@encoding\ct@encoding
+%<platexrelease|trace>  \xdef\font@name{\csname\curr@kfontshape/\f@size\endcsname}%
+%<platexrelease|trace>  \pickup@font
+%<platexrelease|trace>  \font@name
+%<platexrelease|trace>  \let\font\jfont
+%<platexrelease|trace>  \let\k@encoding\cy@encoding
+%<platexrelease|trace>  \xdef\font@name{\csname\curr@kfontshape/\f@size\endcsname}%
+%<platexrelease|trace>  \pickup@font
+%<platexrelease|trace>  \font@name
+%<platexrelease|trace>  \expandafter\def\expandafter\k@encoding\tmp@item
+%<platexrelease|trace>  \kenc@update
+%<platexrelease|trace>  \let\error@fontshape\tmp@error@fontshape
+%<platexrelease|trace>  \if@knjcmd \@knjcmdfalse
+%<platexrelease|trace>    \expandafter\ifx
+%<platexrelease|trace>    \csname rel@\k@encoding/\k@family/\k@series/\k@shape\endcsname\relax
+%<platexrelease|trace>      \expandafter\ifx
+%<platexrelease|trace>         \csname rel@\k@encoding/\k@family/\k@series/all\endcsname\relax
+%<platexrelease|trace>      \else
+%<platexrelease|trace>         \csname rel@\k@encoding/\k@family/\k@series/all\endcsname
+%<platexrelease|trace>      \fi
+%<platexrelease|trace>    \else
+%<platexrelease|trace>       \csname rel@\k@encoding/\k@family/\k@series/\k@shape\endcsname
+%<platexrelease|trace>    \fi
+%<platexrelease|trace>  \fi
+%<platexrelease|trace>  \let\font\afont
+%<platexrelease|trace>  \xdef\font@name{\csname\curr@fontshape/\f@size\endcsname}%
+%<platexrelease|trace>  \pickup@font
+%<platexrelease|trace>  \font@name
+%<*trace>
+%<platexrelease|trace>  \ifnum \tracingfonts>\tw@
+%<platexrelease|trace>    \@font@info{Roman:Switching to \font@name}\fi
+%</trace>
+%<platexrelease|trace>  \enc@update
+%<platexrelease|trace>  \ifx\f@linespread\baselinestretch \else
+%<platexrelease|trace>    \set@fontsize\baselinestretch\f@size\f@baselineskip
+%<platexrelease|trace>  \fi
+%<platexrelease|trace>  \size@update}
+%<platexrelease|trace>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
 % \end{macro}
