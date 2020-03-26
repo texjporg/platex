@@ -366,7 +366,7 @@ of this package available from CTAN}
 \def\ensure@KanjiEncodingPair#1{%
   \edef\reserved@a{\csname #1@enc@\k@encoding\endcsname}%
   \edef\reserved@b{\csname c#1@encoding\endcsname}%
-  \expandafter\ifx\reserved@a\relax
+  \ifcat\relax\reserved@a
     \@latex@error
       {KANJI Encoding pair for `\k@encoding' undefined}%
       {Use \string\KanjiEncodingPair, falling back to `\reserved@b'...}%

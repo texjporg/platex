@@ -1014,6 +1014,7 @@
 % \begin{macro}{\KanjiEncodingPair}
 % 和文の縦横のエンコーディングはそれぞれ対にして扱うため、セット化するための
 % コマンドを定義します。
+% 第一引数が横組エンコード、第二引数が縦組エンコードです。
 % \changes{v1.3n}{2004/08/10}{和文エンコーディングの切り替えを有効化}
 %    \begin{macrocode}
 \def\KanjiEncodingPair#1#2{\@namedef{t@enc@#1}{#2}\@namedef{y@enc@#2}{#1}}
@@ -1038,7 +1039,15 @@
 \def\ensure@KanjiEncodingPair#1{%
   \edef\reserved@a{\csname #1@enc@\k@encoding\endcsname}%
   \edef\reserved@b{\csname c#1@encoding\endcsname}%
-  \expandafter\ifx\reserved@a\relax
+%    \end{macrocode}
+% |\reserved@a|は、セット化が有効ならエンコードを表す文字トークン列、
+% 無効なら|\relax|と同義の制御綴になっています。
+% ここで、|\ifcat|（展開不能トークンが現れるまで展開してから比較）を使います。
+% ^^A 文字トークン列は複数文字から成り得るが、
+% ^^A |\relax|と先頭一文字の比較は必ず偽となり、残りの文字は読み飛ばされる。
+% ^^A 制御綴の場合は必ずトークン1個であり、|\relax|との比較で真になる。
+%    \begin{macrocode}
+  \ifcat\relax\reserved@a
     \@latex@error
       {KANJI Encoding pair for `\k@encoding' undefined}%
       {Use \string\KanjiEncodingPair, falling back to `\reserved@b'...}%
