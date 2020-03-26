@@ -990,6 +990,7 @@
 %
 % \begin{macro}{\DeclareKanjiEncodingDefaults}
 % 和文エンコードのデフォルト値を宣言するコマンドです。
+% |\DeclareFontEncodingDefaults|に相当します。
 %    \begin{macrocode}
 \def\DeclareKanjiEncodingDefaults#1#2{%
   \ifx\relax#1\else
@@ -1014,7 +1015,7 @@
 % \begin{macro}{\KanjiEncodingPair}
 % 和文の縦横のエンコーディングはそれぞれ対にして扱うため、セット化するための
 % コマンドを定義します。
-% 第一引数が横組エンコード、第二引数が縦組エンコードです。
+% 第一引数が横組用、第二引数が縦組用です。
 % \changes{v1.3n}{2004/08/10}{和文エンコーディングの切り替えを有効化}
 %    \begin{macrocode}
 \def\KanjiEncodingPair#1#2{\@namedef{t@enc@#1}{#2}\@namedef{y@enc@#2}{#1}}
@@ -1119,7 +1120,7 @@
 % \begin{macro}{\DeclareKanjiSubstitution}
 % 目的の和文フォントが見つからなかったときに使う代用書体の
 % 宣言をするコマンドです。
-% |\DeclareFontSubstitution|に対応します。
+% |\DeclareFontSubstitution|に相当します。
 %    \begin{macrocode}
 \def\DeclareKanjiSubstitution#1#2#3#4{%
   \expandafter\ifx\csname T@#1\endcsname\relax
