@@ -1,0 +1,11 @@
+% https://github.com/texjporg/platex/issues/92
+\documentclass{article}
+\DeclareYokoKanjiEncoding{JY1X}{}{}
+\DeclareErrorKanjiFont{JY1X}{mc}{m}{n}{10}
+\DeclareKanjiSubstitution{JY1X}{mc}{m}{n}
+\DeclareKanjiFamily{JY1X}{mc}{}
+\DeclareFontShape{JY1X}{mc}{m}{n}{ <-> min10 }{}
+\renewcommand{\kanjiencodingdefault}{JY1X}
+%\KanjiEncodingPair{JY1X}{JT1}% => これが無いのは許されない
+\begin{document}
+\stop

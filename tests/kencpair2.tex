@@ -1,0 +1,20 @@
+% https://github.com/texjporg/platex/issues/92
+\documentclass{article}
+%
+\DeclareYokoKanjiEncoding{JJYX1}{}{}
+\DeclareErrorKanjiFont{JJYX1}{mc}{m}{n}{10}
+\DeclareKanjiSubstitution{JJYX1}{mc}{m}{n}
+\DeclareKanjiFamily{JJYX1}{mc}{}
+\DeclareFontShape{JJYX1}{mc}{m}{n}{ <-> min10 }{}
+%
+\DeclareTateKanjiEncoding{JJTX1}{}{}
+\DeclareErrorKanjiFont{JJTX1}{mc}{m}{n}{10}
+\DeclareKanjiSubstitution{JJTX1}{mc}{m}{n}
+\DeclareKanjiFamily{JJTX1}{mc}{}
+\DeclareFontShape{JJTX1}{mc}{m}{n}{ <-> tmin10 }{}
+%
+%\KanjiEncodingPair{JJYX1}{JJTX1}% => これが無いのは許されない
+\begin{document}
+\kanjiencoding{JJYX1}\selectfont
+\kanjiencoding{JJTX1}\selectfont
+\stop
