@@ -1139,9 +1139,9 @@
        \cdp@list
        \xdef\cdp@list{\the\toks@}%
     \endgroup
-    \global\@namedef{D@#1}{\def\default@family{#2}%
-                           \def\default@series{#3}%
-                           \def\default@shape{#4}}%
+    \global\@namedef{D@#1}{\def\default@k@family{#2}% !!!
+                           \def\default@k@series{#3}% !!!
+                           \def\default@k@shape{#4}}% !!!
   \fi}
 \@onlypreamble\DeclareKanjiSubstitution
 %    \end{macrocode}
@@ -1191,6 +1191,42 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\wrong@kfontshape}
+% |\wrong@fontshape|の和文版です。
+%    \begin{macrocode}
+\def\wrong@kfontshape{%
+    \csname D@\f@encoding\endcsname   % install defaults if in math
+    \edef\reserved@a{\csname\curr@fontshape\endcsname}%
+  \ifx\last@fontshape\reserved@a
+     \errmessage{Corrupted NFSS tables}%
+     \error@fontshape
+  \else
+    \let\f@shape\default@k@shape % !!!
+    \expandafter\ifx\csname\curr@fontshape\endcsname\relax
+       \let\f@series\default@k@series % !!!
+        \expandafter
+          \ifx\csname\curr@fontshape\endcsname\relax
+           \let\f@family\default@k@family % !!!
+           \begingroup
+              \try@load@fontshape
+           \endgroup
+        \fi \fi
+  \fi
+     \@font@warning{Font shape `\expandafter\string\reserved@a'
+                     \expandafter\@gobble\string\@undefined\MessageBreak
+                   using `\curr@fontshape' instead\@wrong@font@char}%
+    \global\let\last@fontshape\reserved@a
+    \gdef\@defaultsubs{%
+      \@font@warning{Some font shapes were not available, defaults
+                      substituted.\@gobbletwo}}%
+    \global\expandafter\expandafter\expandafter\let
+       \expandafter\reserved@a
+           \csname\curr@fontshape\endcsname
+    \xdef\font@name{%
+      \csname\curr@fontshape/\f@size\endcsname}%
+    \pickup@font}
+%    \end{macrocode}
+% \end{macro}
 %
 % \begin{macro}{\DeclareFixedFont}
 % フォント名を宣言するコマンドです。
@@ -1568,6 +1604,8 @@
 \DeclareRobustCommand\selectfont{%
   \let\tmp@error@fontshape\error@fontshape
   \let\error@fontshape\error@kfontshape
+  \let\tmp@wrong@fontshape\wrong@fontshape
+  \let\wrong@fontshape\wrong@kfontshape
   \edef\tmp@item{{\k@encoding}}%
   \expandafter\expandafter\expandafter
   \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
@@ -1599,6 +1637,7 @@
   \expandafter\def\expandafter\k@encoding\tmp@item
   \kenc@update
   \let\error@fontshape\tmp@error@fontshape
+  \let\wrong@fontshape\tmp@wrong@fontshape
 %    \end{macrocode}
 % 次に、|\if@knjcmd|が真の場合、
 % 欧文書体を現在の和文書体に関連付けされたフォントに変えます。

@@ -1,0 +1,13 @@
+\documentclass{minimal}
+\DeclareFontEncoding{FOO1}{}{}
+\DeclareYokoKanjiEncoding{FOO2}{}{}
+%%%
+\DeclareFontFamily{OT1}{guha}{}
+\DeclareFontShape{OT1}{guha}{m}{n}{<-> cmfi10}{}
+\DeclareFontShape{JY1}{gt}{l}{it}{<-> hgotheb-h}{}
+\DeclareFontSubstitution{OT1}{guha}{m}{n}
+\DeclareKanjiSubstitution{JY1}{gt}{l}{it}
+\begin{document}
+\romanfamily{hoge}\kanjifamily{piyo}\selectfont
+abcあいう
+\end{document}

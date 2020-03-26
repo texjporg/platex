@@ -22,6 +22,8 @@
 \DeclareRobustCommand\selectfont{%
   \let\tmp@error@fontshape\error@fontshape
   \let\error@fontshape\error@kfontshape
+  \let\tmp@wrong@fontshape\wrong@fontshape
+  \let\wrong@fontshape\wrong@kfontshape
   \edef\tmp@item{{\k@encoding}}%
   \expandafter\expandafter\expandafter
   \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
@@ -53,6 +55,7 @@
   \expandafter\def\expandafter\k@encoding\tmp@item
   \kenc@update
   \let\error@fontshape\tmp@error@fontshape
+  \let\wrong@fontshape\tmp@wrong@fontshape
   \if@knjcmd \@knjcmdfalse
     \expandafter\ifx
     \csname rel@\k@encoding/\k@family/\k@series/\k@shape\endcsname\relax
