@@ -377,6 +377,54 @@ of this package available from CTAN}
                    {ASCII Corporation original}%
 \let\ensure@KanjiEncodingPair\@undefined
 \plEndIncludeInRelease
+\plIncludeInRelease{2020/04/12}{\DeclareKanjiSubstitution}
+                   {Use \default@k@family etc.}%
+\def\DeclareKanjiSubstitution#1#2#3#4{%
+  \expandafter\ifx\csname T@#1\endcsname\relax
+    \@latex@error{KANJI Encoding scheme `#1' unknown}\@eha
+  \else
+    \begingroup
+       \def\reserved@a{#1}%
+       \toks@{}%
+       \def\cdp@elt##1##2##3##4{%
+         \def\reserved@b{##1}%
+         \ifx\reserved@a\reserved@b
+           \addto@hook\toks@{\cdp@elt{#1}{#2}{#3}{#4}}%
+         \else
+           \addto@hook\toks@{\cdp@elt{##1}{##2}{##3}{##4}}%
+         \fi}%
+       \cdp@list
+       \xdef\cdp@list{\the\toks@}%
+    \endgroup
+    \global\@namedef{D@#1}{\def\default@k@family{#2}% !!!
+                           \def\default@k@series{#3}% !!!
+                           \def\default@k@shape{#4}}% !!!
+  \fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\DeclareKanjiSubstitution}
+                   {ASCII Corporation original}%
+\def\DeclareKanjiSubstitution#1#2#3#4{%
+  \expandafter\ifx\csname T@#1\endcsname\relax
+    \@latex@error{KANJI Encoding scheme `#1' unknown}\@eha
+  \else
+    \begingroup
+       \def\reserved@a{#1}%
+       \toks@{}%
+       \def\cdp@elt##1##2##3##4{%
+         \def\reserved@b{##1}%
+         \ifx\reserved@a\reserved@b
+           \addto@hook\toks@{\cdp@elt{#1}{#2}{#3}{#4}}%
+         \else
+           \addto@hook\toks@{\cdp@elt{##1}{##2}{##3}{##4}}%
+         \fi}%
+       \cdp@list
+       \xdef\cdp@list{\the\toks@}%
+    \endgroup
+    \global\@namedef{D@#1}{\def\default@family{#2}%
+                           \def\default@series{#3}%
+                           \def\default@shape{#4}}%
+  \fi}
+\plEndIncludeInRelease
 \plIncludeInRelease{2019/10/01}{\DeclareErrorKanjiFont}
                    {No side effects please}%
 \def\DeclareErrorKanjiFont#1#2#3#4#5{%
@@ -404,6 +452,44 @@ of this package available from CTAN}
    \global\let\k@shape\default@k@shape
    \gdef\f@size{#5}%
    \gdef\f@baselineskip{#5pt}}
+\plEndIncludeInRelease
+\plIncludeInRelease{2020/04/12}{\wrong@kfontshape}
+                   {Add \wrong@kfontshape}%
+\def\wrong@kfontshape{%
+    \csname D@\f@encoding\endcsname   % install defaults if in math
+    \edef\reserved@a{\csname\curr@fontshape\endcsname}%
+  \ifx\last@fontshape\reserved@a
+     \errmessage{Corrupted NFSS tables}%
+     \error@fontshape
+  \else
+    \let\f@shape\default@k@shape % !!!
+    \expandafter\ifx\csname\curr@fontshape\endcsname\relax
+       \let\f@series\default@k@series % !!!
+        \expandafter
+          \ifx\csname\curr@fontshape\endcsname\relax
+           \let\f@family\default@k@family % !!!
+           \begingroup
+              \try@load@fontshape
+           \endgroup
+        \fi \fi
+  \fi
+     \@font@warning{Font shape `\expandafter\string\reserved@a'
+                     \expandafter\@gobble\string\@undefined\MessageBreak
+                   using `\curr@fontshape' instead\@wrong@font@char}%
+    \global\let\last@fontshape\reserved@a
+    \gdef\@defaultsubs{%
+      \@font@warning{Some font shapes were not available, defaults
+                      substituted.\@gobbletwo}}%
+    \global\expandafter\expandafter\expandafter\let
+       \expandafter\reserved@a
+           \csname\curr@fontshape\endcsname
+    \xdef\font@name{%
+      \csname\curr@fontshape/\f@size\endcsname}%
+    \pickup@font}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\wrong@kfontshape}
+                   {ASCII Corporation original}%
+\let\wrong@kfontshape\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2020/04/12}{\do@subst@correction}
                    {Japanese font substitution}%
@@ -477,6 +563,8 @@ of this package available from CTAN}
 \DeclareRobustCommand\selectfont{%
   \let\tmp@error@fontshape\error@fontshape
   \let\error@fontshape\error@kfontshape
+  \let\tmp@wrong@fontshape\wrong@fontshape
+  \let\wrong@fontshape\wrong@kfontshape
   \edef\tmp@item{{\k@encoding}}%
   \expandafter\expandafter\expandafter
   \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
@@ -508,6 +596,7 @@ of this package available from CTAN}
   \expandafter\def\expandafter\k@encoding\tmp@item
   \kenc@update
   \let\error@fontshape\tmp@error@fontshape
+  \let\wrong@fontshape\tmp@wrong@fontshape
   \if@knjcmd \@knjcmdfalse
     \expandafter\ifx
     \csname rel@\k@encoding/\k@family/\k@series/\k@shape\endcsname\relax

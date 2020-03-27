@@ -155,6 +155,9 @@
 %    和文シェイプ未定義の場合は\cs{k@shape}を更新しないように変更}
 % \changes{v1.7d}{2020/03/23}{ドキュメント改良}
 % \changes{v1.7e}{2020/03/26}{縦横エンコーディングのセット化確認}
+% \changes{v1.7e}{2020/03/26}{\cs{wrong@fontshape}の和文版を追加}
+% \changes{v1.7e}{2020/03/26}{\cs{wrong@kfontshape}を使用}
+% \changes{v1.7e}{2020/03/26}{\cs{default@k@...}を使用}
 % \fi
 %
 % \iffalse
@@ -1121,7 +1124,12 @@
 % 目的の和文フォントが見つからなかったときに使う代用書体の
 % 宣言をするコマンドです。
 % |\DeclareFontSubstitution|に相当します。
+% \changes{v1.7e}{2020/03/26}{\cs{default@k@...}を使用}
 %    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\DeclareKanjiSubstitution}
+%<platexrelease>                   {Use \default@k@family etc.}%
+%<*plcore|platexrelease>
 \def\DeclareKanjiSubstitution#1#2#3#4{%
   \expandafter\ifx\csname T@#1\endcsname\relax
     \@latex@error{KANJI Encoding scheme `#1' unknown}\@eha
@@ -1143,6 +1151,33 @@
                            \def\default@k@series{#3}% !!!
                            \def\default@k@shape{#4}}% !!!
   \fi}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\DeclareKanjiSubstitution}
+%<platexrelease>                   {ASCII Corporation original}%
+%<platexrelease>\def\DeclareKanjiSubstitution#1#2#3#4{%
+%<platexrelease>  \expandafter\ifx\csname T@#1\endcsname\relax
+%<platexrelease>    \@latex@error{KANJI Encoding scheme `#1' unknown}\@eha
+%<platexrelease>  \else
+%<platexrelease>    \begingroup
+%<platexrelease>       \def\reserved@a{#1}%
+%<platexrelease>       \toks@{}%
+%<platexrelease>       \def\cdp@elt##1##2##3##4{%
+%<platexrelease>         \def\reserved@b{##1}%
+%<platexrelease>         \ifx\reserved@a\reserved@b
+%<platexrelease>           \addto@hook\toks@{\cdp@elt{#1}{#2}{#3}{#4}}%
+%<platexrelease>         \else
+%<platexrelease>           \addto@hook\toks@{\cdp@elt{##1}{##2}{##3}{##4}}%
+%<platexrelease>         \fi}%
+%<platexrelease>       \cdp@list
+%<platexrelease>       \xdef\cdp@list{\the\toks@}%
+%<platexrelease>    \endgroup
+%<platexrelease>    \global\@namedef{D@#1}{\def\default@family{#2}%
+%<platexrelease>                           \def\default@series{#3}%
+%<platexrelease>                           \def\default@shape{#4}}%
+%<platexrelease>  \fi}
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 \@onlypreamble\DeclareKanjiSubstitution
 %    \end{macrocode}
 % \end{macro}
@@ -1193,7 +1228,12 @@
 %
 % \begin{macro}{\wrong@kfontshape}
 % |\wrong@fontshape|の和文版です。
+% \changes{v1.7e}{2020/03/26}{\cs{wrong@fontshape}の和文版を追加}
 %    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\wrong@kfontshape}
+%<platexrelease>                   {Add \wrong@kfontshape}%
+%<*plcore|platexrelease>
 \def\wrong@kfontshape{%
     \csname D@\f@encoding\endcsname   % install defaults if in math
     \edef\reserved@a{\csname\curr@fontshape\endcsname}%
@@ -1225,6 +1265,13 @@
     \xdef\font@name{%
       \csname\curr@fontshape/\f@size\endcsname}%
     \pickup@font}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\wrong@kfontshape}
+%<platexrelease>                   {ASCII Corporation original}%
+%<platexrelease>\let\wrong@kfontshape\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1594,6 +1641,7 @@
 % \changes{v1.0c}{1995/08/22}{縦横両方のフォントを切り替えるようにした}
 % \changes{v1.2}{1995/11/22}{エラーフォントに対応した}
 % \changes{v1.3n}{2004/08/10}{和文エンコーディングの切り替えを有効化}
+% \changes{v1.7e}{2020/03/26}{\cs{wrong@kfontshape}を使用}
 % \changes{v1.7e}{2020/03/26}{縦横エンコーディングのセット化確認}
 % |\selectfont|コマンドは、まず、和文フォントを切り替えます。
 %    \begin{macrocode}
