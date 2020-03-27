@@ -24,6 +24,8 @@
 
 
 \section{\LaTeXe\ \texttt{<2020-02-02>}対応}
+→参考：|texjporg/platex#88|
+
 \LaTeXe\ \texttt{<2020-02-02>}で
 NFSS（フォント選択の仕組み）が大幅に拡張されたことを受け、
 \pLaTeXe\ \texttt{<2020-02-02>}で対応を施しました。
@@ -128,7 +130,7 @@ NFSS（フォント選択の仕組み）が大幅に拡張されたことを受け、
     using `JY1/mc/m/n' instead on ....
 \end{verbatim}
 という|LaTeX Font Warning|が出るのを抑制することを
-目的とした修正です。
+目的とした修正です。→|texjporg/platex#90|
 
 \pLaTeXe{}の|\fontshape|は、欧文に加えて和文のシェイプも変更するように
 再定義されていました（アスキー\pLaTeXe{}の仕様）。
@@ -175,13 +177,19 @@ NFSS（フォント選択の仕組み）が大幅に拡張されたことを受け、
 \pLaTeXe{}の|\normalfont|末尾になぜか残っていた
 |\ignorespaces|を削除しました。
 
+\paragraph{\cs{KanjiEncodingPair}不在のエラー改善}
+2004年のアスキー\pLaTeXe{}で、|\KanjiEncodingPair|による
+和文縦横エンコードのセット化が必須となっています。
+しかし、セット化せずにエンコードを定義した場合のエラーが
+判りづらかったため、改善しました。(|#92|)
 
-\section{その他の修正}
-\pLaTeXe\ \texttt{<2020-04-12>}での修正：
-\begin{itemize}
- \item |\verb+>+|を和文で挟むと後ろだけアキが入り、前には入らない
-   現象への対処（|\texttt{>}|と同様に前後にアキが入るようにした）
-\end{itemize}
+\paragraph{\cs{DeclareKanjiSubstitution}の改良}
+和文の代用書体の宣言が、
+欧文の|\DeclareFontSubstitution|と干渉しないようにしました。(|#93|)
+
+\paragraph{\cs{verb}の改良}
+|\verb+>+|を和文で挟むと後ろだけアキが入って前には入らない現象に
+対処し、|\texttt{>}|と同様に前後にアキが入るようにしました。(|#87|)
 
 
 \section{開発版のテストのお願い}
@@ -191,13 +199,6 @@ NFSS（フォント選択の仕組み）が大幅に拡張されたことを受け、
   \RequirePackage{exppl2e}
 \end{verbatim}
 と書くことで、現在の開発版をテストすることができます。
-現在は
-\begin{itemize}
-  \item 支柱コマンドで用いられる|\strut|の挙動
-  \item 空のフロートだけのページが発生した場合の処理
-\end{itemize}
-に関するパッチが入っています。
-
 詳細は\file{exppl2e.pdf}を参照してください。ここには、
 その他の\pLaTeXe{}の既知の制約事項も記載しています。
 \TeX\ ForumやGitHubのIssueでのバグ報告やご意見を歓迎します。
