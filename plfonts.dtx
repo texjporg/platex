@@ -1178,6 +1178,8 @@
 %<platexrelease>  \fi}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>% !!! Special case BEGIN
+%<platexrelease>% required for any emulation date
+%<platexrelease>% copied from (u)pldefs.ltx
 %<platexrelease>\def\pltx@tempa{JY1}\ifx\pltx@tempa\k@encoding
 %<platexrelease>\DeclareKanjiSubstitution{JY1}{mc}{m}{n}
 %<platexrelease>\DeclareKanjiSubstitution{JT1}{mc}{m}{n}
@@ -1185,6 +1187,7 @@
 %<platexrelease>\DeclareKanjiSubstitution{JY2}{mc}{m}{n}
 %<platexrelease>\DeclareKanjiSubstitution{JT2}{mc}{m}{n}
 %<platexrelease>\fi\fi
+%<platexrelease>% excerpt from \@@kenc@update inside \selectfont
 %<platexrelease>\csname D@\k@encoding\endcsname
 %<platexrelease>% !!! Special case END
 %<*plcore>
