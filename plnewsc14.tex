@@ -166,11 +166,9 @@ NFSS（フォント選択の仕組み）が大幅に拡張されたことを受け、
 
 これが露呈する具体的な症例としては、GitHubの
 |texjporg/jsclasses#53|で報告されている
-\begin{itemize}
- \item 日本語の数式ファミリを宣言した状態で
-   \file{bm}パッケージを使うとゴシックにならない
-\end{itemize}
-がありましたが、今回のリリースで解消しました。
+「日本語の数式ファミリを宣言した状態で\file{bm}パッケージを
+使うとゴシックにならない」がありましたが、
+今回のリリースで解消しました。
 
 \paragraph{\cs{normalfont}末尾の\cs{ignorespaces}削除}
 オリジナルの\LaTeXe{}の1995年の修正に追随し、
@@ -183,9 +181,10 @@ NFSS（フォント選択の仕組み）が大幅に拡張されたことを受け、
 しかし、セット化せずにエンコードを定義した場合のエラーが
 判りづらかったため、改善しました。(|#92|)
 
-\paragraph{\cs{DeclareKanjiSubstitution}の改良}
-和文の代用書体の宣言が、
-欧文の|\DeclareFontSubstitution|と干渉しないようにしました。(|#93|)
+\paragraph{\cs{DeclareKanjiSubstitution}の修正}
+和文の代用書体の宣言が
+欧文の|\DeclareFontSubstitution|と干渉し、
+誤ったフォント定義ファイルが読まれようとする問題を解消しました。(|#93|)
 
 \paragraph{\cs{verb}の改良}
 |\verb+>+|を和文で挟むと後ろだけアキが入って前には入らない現象に
