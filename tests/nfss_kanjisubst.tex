@@ -1,3 +1,20 @@
+% https://github.com/texjporg/platex/issues/93
+%%% FOO1: Afont
+\begin{filecontents}[overwrite]{foo1mc.fd}
+\errhelp{}\errmessage{Wrong!}
+\end{filecontents}
+\begin{filecontents}[overwrite]{foo1cmr.fd}
+\DeclareFontShape{FOO1}{cmr}{m}{n}{ <-> cmss10 }{}
+\end{filecontents}
+
+%%% FOO2: Jfont
+\begin{filecontents}[overwrite]{foo2mc.fd}
+\DeclareFontShape{FOO2}{mc}{m}{n}{ <-> goth10 }{}
+\end{filecontents}
+\begin{filecontents}[overwrite]{foo2cmr.fd}
+\errhelp{}\errmessage{Wrong!}
+\end{filecontents}
+
 \documentclass{minimal}
 \DeclareFontEncoding{FOO1}{}{}
 \DeclareYokoKanjiEncoding{FOO2}{}{}

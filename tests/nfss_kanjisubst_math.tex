@@ -1,0 +1,37 @@
+% https://github.com/texjporg/platex/issues/93
+%%% OT1: Afont
+\begin{filecontents}[overwrite]{ot1piyo.fd}
+\errhelp{}\errmessage{Wrong!}
+\end{filecontents}
+\begin{filecontents}[overwrite]{ot1hoge.fd}
+%\DeclareFontShape{OT1}{hoge}{m}{n}{ <-> cmss10 }{}
+\end{filecontents}
+\begin{filecontents}[overwrite]{ot1mc.fd}
+\errhelp{}\errmessage{Wrong!}
+\end{filecontents}
+
+%%% JY1: Jfont
+\begin{filecontents}[overwrite]{jy1piyo.fd}
+%\DeclareFontShape{JY1}{piyo}{m}{n}{ <-> goth10 }{}
+\end{filecontents}
+\begin{filecontents}[overwrite]{jy1hoge.fd}
+\errhelp{}\errmessage{Wrong!}
+\end{filecontents}
+\begin{filecontents}[overwrite]{jy1cmr.fd}
+\errhelp{}\errmessage{Wrong!}
+\end{filecontents}
+
+\documentclass{jarticle}
+\DeclareSymbolFont{hogemath}{OT1}{hoge}{m}{n}
+\DeclareSymbolFont{piyomath}{JY1}{piyo}{m}{n}
+%
+\DeclareFontFamily{OT1}{guha}{}
+\DeclareFontShape{OT1}{guha}{m}{n}{<-> cmfi10}{}
+\DeclareFontShape{JY1}{gt}{l}{it}{<-> hgotheb-h}{}
+\DeclareFontSubstitution{OT1}{guha}{m}{n}
+\DeclareKanjiSubstitution{JY1}{gt}{l}{it}
+%
+\begin{document}
+%\romanfamily{hoge}\kanjifamily{piyo}\selectfont
+\setbox0=\hbox{$\empty$}%
+\end{document}
