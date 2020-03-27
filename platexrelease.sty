@@ -425,6 +425,16 @@ of this package available from CTAN}
                            \def\default@shape{#4}}%
   \fi}
 \plEndIncludeInRelease
+% !!! Special case BEGIN
+\def\pltx@tempa{JY1}\ifx\pltx@tempa\k@encoding
+\DeclareKanjiSubstitution{JY1}{mc}{m}{n}
+\DeclareKanjiSubstitution{JT1}{mc}{m}{n}
+\else\def\pltx@tempa{JY2}\ifx\pltx@tempa\k@encoding
+\DeclareKanjiSubstitution{JY2}{mc}{m}{n}
+\DeclareKanjiSubstitution{JT2}{mc}{m}{n}
+\fi\fi
+\csname D@\k@encoding\endcsname
+% !!! Special case END
 \plIncludeInRelease{2019/10/01}{\DeclareErrorKanjiFont}
                    {No side effects please}%
 \def\DeclareErrorKanjiFont#1#2#3#4#5{%

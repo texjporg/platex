@@ -1177,6 +1177,16 @@
 %<platexrelease>                           \def\default@shape{#4}}%
 %<platexrelease>  \fi}
 %<platexrelease>\plEndIncludeInRelease
+%<platexrelease>% !!! Special case BEGIN
+%<platexrelease>\def\pltx@tempa{JY1}\ifx\pltx@tempa\k@encoding
+%<platexrelease>\DeclareKanjiSubstitution{JY1}{mc}{m}{n}
+%<platexrelease>\DeclareKanjiSubstitution{JT1}{mc}{m}{n}
+%<platexrelease>\else\def\pltx@tempa{JY2}\ifx\pltx@tempa\k@encoding
+%<platexrelease>\DeclareKanjiSubstitution{JY2}{mc}{m}{n}
+%<platexrelease>\DeclareKanjiSubstitution{JT2}{mc}{m}{n}
+%<platexrelease>\fi\fi
+%<platexrelease>\csname D@\k@encoding\endcsname
+%<platexrelease>% !!! Special case END
 %<*plcore>
 \@onlypreamble\DeclareKanjiSubstitution
 %    \end{macrocode}
