@@ -470,9 +470,40 @@ of this package available from CTAN}
    \gdef\f@size{#5}%
    \gdef\f@baselineskip{#5pt}}
 \plEndIncludeInRelease
-\plIncludeInRelease{2020/04/12}{\wrong@kfontshape}
-                   {Add \wrong@kfontshape}%
-\def\wrong@kfontshape{%
+\plIncludeInRelease{2020/04/12}{\wrong@fontshape}
+                   {Japanese \wrong@fontshape}%
+\def\wrong@al@fontshape{%
+    \csname D@\f@encoding\endcsname   % install defaults if in math
+    \edef\reserved@a{\csname\curr@fontshape\endcsname}%
+  \ifx\last@fontshape\reserved@a
+     \errmessage{Corrupted NFSS tables}%
+     \error@fontshape
+  \else
+    \let\f@shape\default@shape
+    \expandafter\ifx\csname\curr@fontshape\endcsname\relax
+       \let\f@series\default@series
+        \expandafter
+          \ifx\csname\curr@fontshape\endcsname\relax
+           \let\f@family\default@family
+           \begingroup
+              \try@load@fontshape
+           \endgroup
+        \fi \fi
+  \fi
+     \@font@warning{Font shape `\expandafter\string\reserved@a'
+                     \expandafter\@gobble\string\@undefined\MessageBreak
+                   using `\curr@fontshape' instead\@wrong@font@char}%
+    \global\let\last@fontshape\reserved@a
+    \gdef\@defaultsubs{%
+      \@font@warning{Some font shapes were not available, defaults
+                      substituted.\@gobbletwo}}%
+    \global\expandafter\expandafter\expandafter\let
+       \expandafter\reserved@a
+           \csname\curr@fontshape\endcsname
+    \xdef\font@name{%
+      \csname\curr@fontshape/\f@size\endcsname}%
+    \pickup@font}
+\def\wrong@ja@fontshape{%
     \csname D@\f@encoding\endcsname   % install defaults if in math
     \edef\reserved@a{\csname\curr@fontshape\endcsname}%
   \ifx\last@fontshape\reserved@a
@@ -503,10 +534,87 @@ of this package available from CTAN}
     \xdef\font@name{%
       \csname\curr@fontshape/\f@size\endcsname}%
     \pickup@font}
+\def\wrong@fontshape{%
+  \edef\tmp@item{{\f@encoding}}%
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\kenc@list}%
+  \ifin@
+    \wrong@ja@fontshape
+  \else
+    \wrong@al@fontshape
+  \fi
+}
 \plEndIncludeInRelease
-\plIncludeInRelease{0000/00/00}{\wrong@kfontshape}
-                   {ASCII Corporation original}%
-\let\wrong@kfontshape\@undefined
+\plIncludeInRelease{2015/01/01}{\wrong@fontshape}
+                   {LaTeX2e original (2015)}%
+\def\wrong@fontshape{%
+    \csname D@\f@encoding\endcsname   % install defaults if in math
+    \edef\reserved@a{\csname\curr@fontshape\endcsname}%
+  \ifx\last@fontshape\reserved@a
+     \errmessage{Corrupted NFSS tables}%
+     \error@fontshape
+  \else
+    \let\f@shape\default@shape
+    \expandafter\ifx\csname\curr@fontshape\endcsname\relax
+       \let\f@series\default@series
+        \expandafter
+          \ifx\csname\curr@fontshape\endcsname\relax
+           \let\f@family\default@family
+           \begingroup
+              \try@load@fontshape
+           \endgroup
+        \fi \fi
+  \fi
+     \@font@warning{Font shape `\expandafter\string\reserved@a'
+                     \expandafter\@gobble\string\@undefined\MessageBreak
+                   using `\curr@fontshape' instead\@wrong@font@char}%
+    \global\let\last@fontshape\reserved@a
+    \gdef\@defaultsubs{%
+      \@font@warning{Some font shapes were not available, defaults
+                      substituted.\@gobbletwo}}%
+    \global\expandafter\expandafter\expandafter\let
+       \expandafter\reserved@a
+           \csname\curr@fontshape\endcsname
+    \xdef\font@name{%
+      \csname\curr@fontshape/\f@size\endcsname}%
+    \pickup@font}
+\let\wrong@al@fontshape\@undefined
+\let\wrong@ja@fontshape\@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\wrong@fontshape}
+                   {LaTeX2e original (old)}%
+\def\wrong@fontshape{%
+    \csname D@\f@encoding\endcsname
+    \edef\reserved@a{\csname\curr@fontshape\endcsname}%
+  \ifx\last@fontshape\reserved@a
+     \errmessage{Corrupted NFSS tables}%
+     \error@fontshape
+  \else
+    \let\f@shape\default@shape
+    \expandafter\ifx\csname\curr@fontshape\endcsname\relax
+       \let\f@series\default@series
+        \expandafter
+          \ifx\csname\curr@fontshape\endcsname\relax
+           \let\f@family\default@family
+        \fi \fi
+  \fi
+     \@font@warning{Font shape
+            `\expandafter\string\reserved@a'
+            \expandafter\@gobble\string\@undefined
+            \MessageBreak
+            using `\curr@fontshape' instead\@wrong@font@char}%
+    \global\let\last@fontshape\reserved@a
+    \gdef\@defaultsubs{%
+      \@font@warning{Some font shapes were not available,
+                       defaults substituted.\@gobbletwo}}%
+    \global\expandafter\expandafter\expandafter\let
+       \expandafter\reserved@a
+           \csname\curr@fontshape\endcsname
+    \xdef\font@name{%
+      \csname\curr@fontshape/\f@size\endcsname}%
+    \pickup@font}
+\let\wrong@al@fontshape\@undefined
+\let\wrong@ja@fontshape\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2020/04/12}{\do@subst@correction}
                    {Japanese font substitution}%
@@ -580,8 +688,6 @@ of this package available from CTAN}
 \DeclareRobustCommand\selectfont{%
   \let\tmp@error@fontshape\error@fontshape
   \let\error@fontshape\error@kfontshape
-  \let\tmp@wrong@fontshape\wrong@fontshape
-  \let\wrong@fontshape\wrong@kfontshape
   \edef\tmp@item{{\k@encoding}}%
   \expandafter\expandafter\expandafter
   \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
@@ -613,7 +719,6 @@ of this package available from CTAN}
   \expandafter\def\expandafter\k@encoding\tmp@item
   \kenc@update
   \let\error@fontshape\tmp@error@fontshape
-  \let\wrong@fontshape\tmp@wrong@fontshape
   \if@knjcmd \@knjcmdfalse
     \expandafter\ifx
     \csname rel@\k@encoding/\k@family/\k@series/\k@shape\endcsname\relax

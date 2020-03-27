@@ -155,8 +155,7 @@
 %    和文シェイプ未定義の場合は\cs{k@shape}を更新しないように変更}
 % \changes{v1.7d}{2020/03/23}{ドキュメント改良}
 % \changes{v1.7e}{2020/03/26}{縦横エンコーディングのセット化確認}
-% \changes{v1.7e}{2020/03/26}{\cs{wrong@fontshape}の和文版を追加}
-% \changes{v1.7e}{2020/03/26}{\cs{wrong@kfontshape}を使用}
+% \changes{v1.7e}{2020/03/26}{\cs{wrong@fontshape}の和文対応}
 % \changes{v1.7e}{2020/03/26}{\cs{default@k@...}を使用}
 % \fi
 %
@@ -1243,15 +1242,55 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\wrong@kfontshape}
-% |\wrong@fontshape|の和文版です。
-% \changes{v1.7e}{2020/03/26}{\cs{wrong@fontshape}の和文版を追加}
+% \begin{macro}{\wrong@fontshape}
+% \begin{macro}{\wrong@al@fontshape}
+% \begin{macro}{\wrong@ja@fontshape}
+% |\wrong@fontshape|を和文対応にします。
+% |\DeclareKanjiSubstitution|で|\default@k@...|を使用する改良と
+% 同時でなければなりません。
+% \changes{v1.7e}{2020/03/26}{\cs{wrong@fontshape}の和文対応}
+%
+% オリジナルの\LaTeX{}の定義は、欧文用として使います。
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2020/04/12}{\wrong@kfontshape}
-%<platexrelease>                   {Add \wrong@kfontshape}%
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\wrong@fontshape}
+%<platexrelease>                   {Japanese \wrong@fontshape}%
 %<*plcore|platexrelease>
-\def\wrong@kfontshape{%
+\def\wrong@al@fontshape{%
+    \csname D@\f@encoding\endcsname   % install defaults if in math
+    \edef\reserved@a{\csname\curr@fontshape\endcsname}%
+  \ifx\last@fontshape\reserved@a
+     \errmessage{Corrupted NFSS tables}%
+     \error@fontshape
+  \else
+    \let\f@shape\default@shape
+    \expandafter\ifx\csname\curr@fontshape\endcsname\relax
+       \let\f@series\default@series
+        \expandafter
+          \ifx\csname\curr@fontshape\endcsname\relax
+           \let\f@family\default@family
+           \begingroup
+              \try@load@fontshape
+           \endgroup
+        \fi \fi
+  \fi
+     \@font@warning{Font shape `\expandafter\string\reserved@a'
+                     \expandafter\@gobble\string\@undefined\MessageBreak
+                   using `\curr@fontshape' instead\@wrong@font@char}%
+    \global\let\last@fontshape\reserved@a
+    \gdef\@defaultsubs{%
+      \@font@warning{Some font shapes were not available, defaults
+                      substituted.\@gobbletwo}}%
+    \global\expandafter\expandafter\expandafter\let
+       \expandafter\reserved@a
+           \csname\curr@fontshape\endcsname
+    \xdef\font@name{%
+      \csname\curr@fontshape/\f@size\endcsname}%
+    \pickup@font}
+%    \end{macrocode}
+% 和文用の定義です。
+%    \begin{macrocode}
+\def\wrong@ja@fontshape{%
     \csname D@\f@encoding\endcsname   % install defaults if in math
     \edef\reserved@a{\csname\curr@fontshape\endcsname}%
   \ifx\last@fontshape\reserved@a
@@ -1282,14 +1321,96 @@
     \xdef\font@name{%
       \csname\curr@fontshape/\f@size\endcsname}%
     \pickup@font}
+%    \end{macrocode}
+% そして、エンコーディングに応じて欧文用と和文用を使い分けます。
+%    \begin{macrocode}
+\def\wrong@fontshape{%
+  \edef\tmp@item{{\f@encoding}}%
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\kenc@list}%
+  \ifin@
+    \wrong@ja@fontshape
+  \else
+    \wrong@al@fontshape
+  \fi
+}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\wrong@kfontshape}
-%<platexrelease>                   {ASCII Corporation original}%
-%<platexrelease>\let\wrong@kfontshape\@undefined
+%<platexrelease>\plIncludeInRelease{2015/01/01}{\wrong@fontshape}
+%<platexrelease>                   {LaTeX2e original (2015)}%
+%<platexrelease>\def\wrong@fontshape{%
+%<platexrelease>    \csname D@\f@encoding\endcsname   % install defaults if in math
+%<platexrelease>    \edef\reserved@a{\csname\curr@fontshape\endcsname}%
+%<platexrelease>  \ifx\last@fontshape\reserved@a
+%<platexrelease>     \errmessage{Corrupted NFSS tables}%
+%<platexrelease>     \error@fontshape
+%<platexrelease>  \else
+%<platexrelease>    \let\f@shape\default@shape
+%<platexrelease>    \expandafter\ifx\csname\curr@fontshape\endcsname\relax
+%<platexrelease>       \let\f@series\default@series
+%<platexrelease>        \expandafter
+%<platexrelease>          \ifx\csname\curr@fontshape\endcsname\relax
+%<platexrelease>           \let\f@family\default@family
+%<platexrelease>           \begingroup
+%<platexrelease>              \try@load@fontshape
+%<platexrelease>           \endgroup
+%<platexrelease>        \fi \fi
+%<platexrelease>  \fi
+%<platexrelease>     \@font@warning{Font shape `\expandafter\string\reserved@a'
+%<platexrelease>                     \expandafter\@gobble\string\@undefined\MessageBreak
+%<platexrelease>                   using `\curr@fontshape' instead\@wrong@font@char}%
+%<platexrelease>    \global\let\last@fontshape\reserved@a
+%<platexrelease>    \gdef\@defaultsubs{%
+%<platexrelease>      \@font@warning{Some font shapes were not available, defaults
+%<platexrelease>                      substituted.\@gobbletwo}}%
+%<platexrelease>    \global\expandafter\expandafter\expandafter\let
+%<platexrelease>       \expandafter\reserved@a
+%<platexrelease>           \csname\curr@fontshape\endcsname
+%<platexrelease>    \xdef\font@name{%
+%<platexrelease>      \csname\curr@fontshape/\f@size\endcsname}%
+%<platexrelease>    \pickup@font}
+%<platexrelease>\let\wrong@al@fontshape\@undefined
+%<platexrelease>\let\wrong@ja@fontshape\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\wrong@fontshape}
+%<platexrelease>                   {LaTeX2e original (old)}%
+%<platexrelease>\def\wrong@fontshape{%
+%<platexrelease>    \csname D@\f@encoding\endcsname
+%<platexrelease>    \edef\reserved@a{\csname\curr@fontshape\endcsname}%
+%<platexrelease>  \ifx\last@fontshape\reserved@a
+%<platexrelease>     \errmessage{Corrupted NFSS tables}%
+%<platexrelease>     \error@fontshape
+%<platexrelease>  \else
+%<platexrelease>    \let\f@shape\default@shape
+%<platexrelease>    \expandafter\ifx\csname\curr@fontshape\endcsname\relax
+%<platexrelease>       \let\f@series\default@series
+%<platexrelease>        \expandafter
+%<platexrelease>          \ifx\csname\curr@fontshape\endcsname\relax
+%<platexrelease>           \let\f@family\default@family
+%<platexrelease>        \fi \fi
+%<platexrelease>  \fi
+%<platexrelease>     \@font@warning{Font shape
+%<platexrelease>            `\expandafter\string\reserved@a'
+%<platexrelease>            \expandafter\@gobble\string\@undefined
+%<platexrelease>            \MessageBreak
+%<platexrelease>            using `\curr@fontshape' instead\@wrong@font@char}%
+%<platexrelease>    \global\let\last@fontshape\reserved@a
+%<platexrelease>    \gdef\@defaultsubs{%
+%<platexrelease>      \@font@warning{Some font shapes were not available,
+%<platexrelease>                       defaults substituted.\@gobbletwo}}%
+%<platexrelease>    \global\expandafter\expandafter\expandafter\let
+%<platexrelease>       \expandafter\reserved@a
+%<platexrelease>           \csname\curr@fontshape\endcsname
+%<platexrelease>    \xdef\font@name{%
+%<platexrelease>      \csname\curr@fontshape/\f@size\endcsname}%
+%<platexrelease>    \pickup@font}
+%<platexrelease>\let\wrong@al@fontshape\@undefined
+%<platexrelease>\let\wrong@ja@fontshape\@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
+% \end{macro}
+% \end{macro}
 % \end{macro}
 %
 % \begin{macro}{\DeclareFixedFont}
@@ -1658,7 +1779,6 @@
 % \changes{v1.0c}{1995/08/22}{縦横両方のフォントを切り替えるようにした}
 % \changes{v1.2}{1995/11/22}{エラーフォントに対応した}
 % \changes{v1.3n}{2004/08/10}{和文エンコーディングの切り替えを有効化}
-% \changes{v1.7e}{2020/03/26}{\cs{wrong@kfontshape}を使用}
 % \changes{v1.7e}{2020/03/26}{縦横エンコーディングのセット化確認}
 % |\selectfont|コマンドは、まず、和文フォントを切り替えます。
 %    \begin{macrocode}
@@ -1669,8 +1789,6 @@
 \DeclareRobustCommand\selectfont{%
   \let\tmp@error@fontshape\error@fontshape
   \let\error@fontshape\error@kfontshape
-  \let\tmp@wrong@fontshape\wrong@fontshape
-  \let\wrong@fontshape\wrong@kfontshape
   \edef\tmp@item{{\k@encoding}}%
   \expandafter\expandafter\expandafter
   \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
@@ -1702,7 +1820,6 @@
   \expandafter\def\expandafter\k@encoding\tmp@item
   \kenc@update
   \let\error@fontshape\tmp@error@fontshape
-  \let\wrong@fontshape\tmp@wrong@fontshape
 %    \end{macrocode}
 % 次に、|\if@knjcmd|が真の場合、
 % 欧文書体を現在の和文書体に関連付けされたフォントに変えます。
