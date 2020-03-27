@@ -1187,7 +1187,11 @@
 %<platexrelease>\DeclareKanjiSubstitution{JY2}{mc}{m}{n}
 %<platexrelease>\DeclareKanjiSubstitution{JT2}{mc}{m}{n}
 %<platexrelease>\fi\fi
-%<platexrelease>% excerpt from \@@kenc@update inside \selectfont
+%<platexrelease>% emulate execution of \enc@update in \selectfont
+%<platexrelease>% before (u)pldefs.ltx is loaded
+%<platexrelease>\csname D@\f@encoding\endcsname
+%<platexrelease>% emulate execution of \kenc@update in \selectfont
+%<platexrelease>% inside (u)pldefs.ltx
 %<platexrelease>\csname D@\k@encoding\endcsname
 %<platexrelease>% !!! Special case END
 %<*plcore>

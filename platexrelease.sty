@@ -435,7 +435,11 @@ of this package available from CTAN}
 \DeclareKanjiSubstitution{JY2}{mc}{m}{n}
 \DeclareKanjiSubstitution{JT2}{mc}{m}{n}
 \fi\fi
-% excerpt from \@@kenc@update inside \selectfont
+% emulate execution of \enc@update in \selectfont
+% before (u)pldefs.ltx is loaded
+\csname D@\f@encoding\endcsname
+% emulate execution of \kenc@update in \selectfont
+% inside (u)pldefs.ltx
 \csname D@\k@encoding\endcsname
 % !!! Special case END
 \plIncludeInRelease{2019/10/01}{\DeclareErrorKanjiFont}
