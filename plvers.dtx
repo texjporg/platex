@@ -95,12 +95,13 @@
 % \changes{v1.1r}{2020/02/01}{\LaTeX\ \texttt{!<2020-02-02!>}版対応確認}
 % \changes{v1.1s}{2020/03/14}{\LaTeX\ \texttt{!<2020-02-02!> PL5}版対応確認}
 % \changes{v1.1t}{2020/03/25}{バナーの再構築を効率化}
+% \changes{v1.1u}{2020/03/28}{latexrelease利用時の警告を早めた}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2020/03/25 v1.1t pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2020/03/28 v1.1u pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -439,18 +440,38 @@
 % 場合は、巻き戻し機能によって\pLaTeXe{}のコマンドが\LaTeXe{}のコマンドで
 % 上書きされ、動作が壊れてしまいますので、警告を出します。
 % \changes{v1.0s}{2016/02/01}{latexrelease利用時に警告を出すようにした}
+%
+% 以前は|\AtBeginDocument|を使って|\@begindocumenthook|の末尾に
+% 警告文を入れていましたが、\LaTeXe~2020-02-02以降に付属の
+% latexreleaseパッケージで巻き戻すとフックの実行より早い段階
+% （具体的には|\process@table|内の|\kanjiprocess@table|実行中）で
+% 「|\series@maybe@drop@one@m|が未定義」というエラーが出てしまうので、
+% |\process@table|の先頭に警告文を入れます。
+% 万が一|\process@table|も巻き戻し対象とされてしまった場合のため、
+% |\@begindocumenthook|の先頭にも入れておきます。
+% ^^A この場合は|\process@table|が|\romanprocess@table|相当へと
+% ^^A 上書きされているはずであり、|\kanjiprocess@table|は
+% ^^A 実行されないのでエラーは出ない。
+% \changes{v1.1u}{2020/03/28}{latexrelease利用時の警告を早めた}
 %    \begin{macrocode}
 %<*plfinal>
-\AtBeginDocument{%
-  \@ifpackageloaded{latexrelease}{%
-    \@ifpackageloaded{platexrelease}{}{%
+\expandafter\def\expandafter\process@table\expandafter{%
+  \expandafter\p@warn@latexrelease\process@table}
+\begingroup
+\toks@\expandafter{\expandafter\p@warn@latexrelease\@begindocumenthook}
+\xdef\@begindocumenthook{\the\toks@}
+\endgroup
+\def\p@warn@latexrelease{%
+  \ifx\latexreleaseversion\@undefined\else
+    \ifx\platexreleaseversion\@undefined
       \@latex@warning@no@line{%
         Package latexrelease is loaded.\MessageBreak
         Some patches in pLaTeX2e core may be overwritten.\MessageBreak
         Consider using platexrelease.\MessageBreak
         See platex.pdf for detail}%
-    }%
-  }{}%
+    \fi
+  \fi
+  \let\p@warn@latexrelease\relax
 }
 %</plfinal>
 %    \end{macrocode}

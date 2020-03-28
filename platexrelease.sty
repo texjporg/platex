@@ -69,8 +69,16 @@
 %% File: platexrelease.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{platexrelease}
-          [2018/05/22 v1.0m latexrelease support for pLaTeX Kernel
+          [2020/03/28 v1.0n latexrelease support for pLaTeX Kernel
               (including releases up to \platexreleaseversion)]
+\ifx\p@warn@latexrelease\@undefined\else
+\let\p@warn@latexrelease\relax
+\fi
+\ifx\latexreleaseversion\@undefined\else
+  \PackageWarningNoLine{platexrelease}{%
+    Package `latexrelease' is already loaded;\MessageBreak
+    load `platexrelease' earlier}
+\fi
 \RequirePackageWithOptions{latexrelease}
 \ifnum\expandafter\@parse@version\latexreleaseversion//00\@nil
   >\expandafter\@parse@version\p@known@latexreleaseversion//00\@nil

@@ -1938,16 +1938,23 @@
   \let\document@default@language\m@ne
 \fi
 %% File: plvers.dtx
-\AtBeginDocument{%
-  \@ifpackageloaded{latexrelease}{%
-    \@ifpackageloaded{platexrelease}{}{%
+\expandafter\def\expandafter\process@table\expandafter{%
+  \expandafter\p@warn@latexrelease\process@table}
+\begingroup
+\toks@\expandafter{\expandafter\p@warn@latexrelease\@begindocumenthook}
+\xdef\@begindocumenthook{\the\toks@}
+\endgroup
+\def\p@warn@latexrelease{%
+  \ifx\latexreleaseversion\@undefined\else
+    \ifx\platexreleaseversion\@undefined
       \@latex@warning@no@line{%
         Package latexrelease is loaded.\MessageBreak
         Some patches in pLaTeX2e core may be overwritten.\MessageBreak
         Consider using platexrelease.\MessageBreak
         See platex.pdf for detail}%
-    }%
-  }{}%
+    \fi
+  \fi
+  \let\p@warn@latexrelease\relax
 }
 \endinput
 %%

@@ -31,6 +31,7 @@
 % \changes{v1.0m}{2018/05/22}{reset \cs{\requestedLaTeXdate} for
 %      current and latest options
 %      (sync with latexrelease.dtx 2018/05/08 v1.0k)}
+% \changes{v1.0n}{2020/03/28}{先にlatexreleaseが読み込まれていたら警告}
 % \fi
 %
 % \iffalse
@@ -40,7 +41,7 @@
 \ProvidesFile{platexrelease.dtx}
 %</driver>
 %<platexrelease>\ProvidesPackage{platexrelease}
-          [2018/05/22 v1.0m latexrelease support for pLaTeX Kernel
+          [2020/03/28 v1.0n latexrelease support for pLaTeX Kernel
               (including releases up to \platexreleaseversion)]
 %<*driver>
 \documentclass{jltxdoc}
@@ -198,9 +199,25 @@
 %
 % \section{コード}
 %
-% 最初に\Lpack{latexrelease}パッケージを読み込みます。
+% \Lpack{platexrelease}パッケージが読み込まれましたので、
+% 効率化のため|\begin{document|での確認コードを無効化します。
+% （\file{plvers.dtx}の2020/03/28 v1.1u以降）。
 %    \begin{macrocode}
 %<*platexrelease>
+\ifx\p@warn@latexrelease\@undefined\else
+\let\p@warn@latexrelease\relax
+\fi
+%    \end{macrocode}
+%
+% 最初に\Lpack{latexrelease}パッケージを読み込みます。
+% これより前にすでに読み込まれている場合は警告します。
+% \changes{v1.0n}{2020/03/28}{先にlatexreleaseが読み込まれていたら警告}
+%    \begin{macrocode}
+\ifx\latexreleaseversion\@undefined\else
+  \PackageWarningNoLine{platexrelease}{%
+    Package `latexrelease' is already loaded;\MessageBreak
+    load `platexrelease' earlier}
+\fi
 \RequirePackageWithOptions{latexrelease}
 %    \end{macrocode}
 %
@@ -300,7 +317,6 @@ of this package available from CTAN}
 %    \begin{macrocode}
 \let\pfmtversion\requestedplpatchdate
 \let\currentpLaTeXdate\requestedpLaTeXdate
-%</platexrelease>
 %    \end{macrocode}
 %
 % このあとは、p\LaTeXe{}のカーネルの変更点を示すコードが入ります。
@@ -383,6 +399,7 @@ of this package available from CTAN}
 \plIncludeInRelease{0000/00/00}{\PackageWarning}{pLaTeX Info}%
   % * <2006/11/10>
 \plEndIncludeInRelease
+%</platexrelease>
 %    \end{macrocode}
 %
 % \Finale
