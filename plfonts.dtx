@@ -157,13 +157,16 @@
 % \changes{v1.7e}{2020/03/26}{縦横エンコーディングのセット化確認}
 % \changes{v1.7e}{2020/03/26}{\cs{wrong@fontshape}の和文対応}
 % \changes{v1.7e}{2020/03/26}{\cs{default@k@...}を使用}
+% \changes{v1.7f}{2020/04/07}{Support legacy use of \cs{bfdefault}
+%    and \cs{mddefault}, use \cs{@setYYseriesdefaultshook}
+%    (sync with ltfssini.dtx 2020/03/19 v3.1k and 2020/04/06 v3.1m)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/03/26 v1.7e pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/04/07 v1.7f pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -3053,24 +3056,22 @@
 %
 % \begin{macro}{\expand@font@defaults}
 % ファミリのデフォルトを完全展開します。
-% まず、オリジナルの\LaTeX{}の定義（ltfssini.dtx 2020/02/25 v3.1j以降）を
+% まず、オリジナルの\LaTeX{}の定義（ltfssini.dtx 2020/04/06 v3.1m以降）を
 % 載せておきます。
 %    \begin{macrocode}
 %\def\expand@font@defaults{%
 %  \edef\rmdef@ult{\rmdefault}%
 %  \edef\sfdef@ult{\sfdefault}%
 %  \edef\ttdef@ult{\ttdefault}%
-%x--- for LaTeX2e 2020-02-02 patch level 5
-%  \edef\bfdef@ult{\bfdefault}%
-%  \edef\mddef@ult{\mddefault}%
-%x--- for LaTeX2e develop
-%  \series@maybe@drop@one@m\bfdefault\bfdef@ult
-%  \series@maybe@drop@one@m\mddefault\mddef@ult
-%x--- for LaTeX2e end
+%  \series@maybe@drop@one@m\bfdefault\bfdef@ult % !! changed 2020/02/25 v3.1j
+%  \series@maybe@drop@one@m\mddefault\mddef@ult % !! changed 2020/02/25 v3.1j
 %  \edef\famdef@ult{\familydefault}%
+%  \@expandfontdefaultshook                     % !! added 2020/04/06 v3.1m
 %}
 %    \end{macrocode}
 % p\LaTeX{}では、以下のコードを末尾に追加します。
+% ^^A  ltfssini.dtx 2020/04/06 v3.1m に基づけば |\@expandfontdefaultshook| を
+% ^^A  使うこともできるが、とりあえず |\g@addto@macro| で末尾追加で問題ない。
 %    \begin{macrocode}
 \ifx\expand@font@defaults\@undefined\else  % 2020-02-02
 \g@addto@macro\expand@font@defaults{%
@@ -3086,55 +3087,110 @@
 % \begin{macro}{\bfseries}
 % \begin{macro}{\mdseries}
 % ファミリごとの設定値を参照します。
+% まず、オリジナルの\LaTeX{}の定義（ltfssini.dtx 2020/04/06 v3.1m以降）を
+% 載せておきます。
+%    \begin{macrocode}
+%\DeclareRobustCommand\bfseries{%
+%  \not@math@alphabet\bfseries\mathbf
+%  \expand@font@defaults
+%  \ifx\bfdefault\bfdefault@previous\else
+%    \expandafter\def\expandafter\bfdefault
+%                    \expandafter{\bfdefault\@empty}%
+%    \let\bfseries@previous\bfdefault
+%    \let\bfseries@rm\bfdef@ult
+%    \let\bfseries@sf\bfdef@ult
+%    \let\bfseries@tt\bfdef@ult
+%    \@setbfseriesdefaultshook % !! added 2020/04/06 v3.1m
+%  \fi
+%    \ifx\f@family\rmdef@ult      \fontseries\bfseries@rm
+%    \else\ifx\f@family\sfdef@ult \fontseries\bfseries@sf
+%    \else\ifx\f@family\ttdef@ult \fontseries\bfseries@tt
+%    \else                        \fontseries\bfdefault
+%    \fi\fi\fi
+%  \selectfont
+%}
+%\DeclareRobustCommand\mdseries{%
+%  \not@math@alphabet\mdseries\relax
+%  \expand@font@defaults
+%  \ifx\mddefault\mddefault@previous\else
+%    \expandafter\def\expandafter\mddefault
+%                    \expandafter{\mddefault\@empty}%
+%    \let\mdseries@previous\mddefault
+%    \let\mdseries@rm\mddef@ult
+%    \let\mdseries@sf\mddef@ult
+%    \let\mdseries@tt\mddef@ult
+%    \@setmdseriesdefaultshook % !! added 2020/04/06 v3.1m
+%  \fi
+%    \ifx\f@family\rmdef@ult      \fontseries\mdseries@rm
+%    \else\ifx\f@family\sfdef@ult \fontseries\mdseries@sf
+%    \else\ifx\f@family\ttdef@ult \fontseries\mdseries@tt
+%    \else                        \fontseries\mddefault
+%    \fi\fi\fi
+%  \selectfont
+%}
+%    \end{macrocode}
+% 以下でp\LaTeX{}用に再定義します。
 % \changes{v1.6y}{2020/02/24}{Make the \cs{ifx} selection outside of
 %    \cs{fontseries} argument so that it is not done several times
 %    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
+% \changes{v1.7f}{2020/04/07}{Support legacy use of \cs{bfdefault}
+%    and \cs{mddefault}, use \cs{@setYYseriesdefaultshook}
+%    (sync with ltfssini.dtx 2020/03/19 v3.1k and 2020/04/06 v3.1m)}
 %    \begin{macrocode}
-\ifx\bfseries@rm\@undefined\else  % 2020-02-02
-\DeclareRobustCommand\bfseries{%
-  \not@math@alphabet\bfseries\mathbf
-  \expand@font@defaults
-  % changed \fontseries -> \romanseries
-    \ifx\f@family\rmdef@ult      \romanseries\bfseries@rm
-    \else\ifx\f@family\sfdef@ult \romanseries\bfseries@sf
-    \else\ifx\f@family\ttdef@ult \romanseries\bfseries@tt
-    \else                        \romanseries\bfdefault
-    \fi\fi\fi
-%    \end{macrocode}
-% ここからがp\LaTeX{}による追加コードです。
-%    \begin{macrocode}
+\ifx\bfseries@rm\@undefined  % old
+\let\pltx@fontseries@saved\@undefined
+\let\pltx@patch@bfseries\@undefined
+\let\pltx@patch@mdseries\@undefined
+\else                        % 2020-02-02
+\let\pltx@fontseries@saved\fontseries
+\def\pltx@patch@bfseries\not@math@alphabet#1#2#3\selectfont{%
+ \long\expandafter\def\csname bfseries \endcsname{%
+  \not@math@alphabet#1#2% should be \bfseries\mathbf
+  % \fontseries of pLaTeX tries to change both Latin and Japanese;
+  % here we want only Latin, so use \romanseries
+  \let\fontseries\romanseries
+  #3% contains \fontseries and \@setbfseriesdefaultshook
+  \let\fontseries\pltx@fontseries@saved % recover
   % changed \fontseries -> \kanjiseries
     \ifx\k@family\mcdef@ult      \kanjiseries\bfseries@mc
     \else\ifx\k@family\gtdef@ult \kanjiseries\bfseries@gt
     \else                        \kanjiseries\bfdefault
     \fi\fi
-%    \end{macrocode}
-% ここまで。
-%    \begin{macrocode}
- \selectfont
+  \selectfont
+ }%
 }
-\DeclareRobustCommand\mdseries{%
-  \not@math@alphabet\mdseries\relax
-  \expand@font@defaults
-  % changed \fontseries -> \romanseries
-    \ifx\f@family\rmdef@ult      \romanseries\mdseries@rm
-    \else\ifx\f@family\sfdef@ult \romanseries\mdseries@sf
-    \else\ifx\f@family\ttdef@ult \romanseries\mdseries@tt
-    \else                        \romanseries\mddefault
-    \fi\fi\fi
-%    \end{macrocode}
-% ここからがp\LaTeX{}による追加コードです。
-%    \begin{macrocode}
+\ifx\@setbfseriesdefaultshook\@undefined\else
+\g@addto@macro\@setbfseriesdefaultshook{%
+    \let\bfseries@mc\bfdef@ult
+    \let\bfseries@gt\bfdef@ult
+}
+\fi
+\expandafter\expandafter\expandafter
+  \pltx@patch@bfseries\csname bfseries \endcsname
+\def\pltx@patch@mdseries\not@math@alphabet#1#2#3\selectfont{%
+ \long\expandafter\def\csname mdseries \endcsname{%
+  \not@math@alphabet#1#2% should be \mdseries\relax
+  % \fontseries of pLaTeX tries to change both Latin and Japanese;
+  % here we want only Latin, so use \romanseries
+  \let\fontseries\romanseries
+  #3% contains \fontseries and \@setmdseriesdefaultshook
+  \let\fontseries\pltx@fontseries@saved % recover
   % changed \fontseries -> \kanjiseries
     \ifx\k@family\mcdef@ult      \kanjiseries\mdseries@mc
     \else\ifx\k@family\gtdef@ult \kanjiseries\mdseries@gt
     \else                        \kanjiseries\mddefault
     \fi\fi
-%    \end{macrocode}
-% ここまで。
-%    \begin{macrocode}
   \selectfont
+ }%
 }
+\ifx\@setmdseriesdefaultshook\@undefined\else
+\g@addto@macro\@setmdseriesdefaultshook{%
+    \let\mdseries@mc\mddef@ult
+    \let\mdseries@gt\mddef@ult
+}
+\fi
+\expandafter\expandafter\expandafter
+  \pltx@patch@mdseries\csname mdseries \endcsname
 \fi
 %    \end{macrocode}
 % \end{macro}
