@@ -2667,7 +2667,10 @@
 \ifx\fontshapeforce\@undefined   % old
 \DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\edef\k@shape{#1}}
-\DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
+\DeclareRobustCommand\fontshape[1]{%
+  \set@safe@kanji@shape{#1}{}%
+  \edef\f@shape{#1}%
+}
 \else                            % 2020-02-02
 \DeclareRobustCommand\romanshape[1]{\merge@font@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\merge@kanji@shape{#1}}
@@ -2744,8 +2747,6 @@
 \ifx\fontseriesforce\@undefined  % old
 \let\merge@kanji@shape\@undefined
 \let\merge@kanji@shape@\@undefined
-\let\set@safe@kanji@shape\@undefined
-\let\@kanji@shape@nochange@info\@undefined
 \else                            % 2020-02-02
 \def\merge@kanji@shape#1{%
   \expandafter\expandafter\expandafter
@@ -2800,19 +2801,6 @@
     \fi
   \fi
 }
-\def\set@safe@kanji@shape#1#2{%
-  \edef\reserved@b{\k@encoding /\k@family /\k@series/#1}%
-   \ifcsname \reserved@b\endcsname
-     \edef\k@shape{#1}%
-     #2%
-  \else
-    \@kanji@shape@nochange@info{\reserved@b}%
-  \fi
-}
-\def\@kanji@shape@nochange@info#1{%
-    \@font@info{Kanji font shape `#1' undefined\MessageBreak
-                No change}%
-}
 \fi
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
@@ -2821,8 +2809,6 @@
 %<platexrelease>\ifx\fontseriesforce\@undefined  % old
 %<platexrelease>\let\merge@kanji@shape\@undefined
 %<platexrelease>\let\merge@kanji@shape@\@undefined
-%<platexrelease>\let\set@safe@kanji@shape\@undefined
-%<platexrelease>\let\@kanji@shape@nochange@info\@undefined
 %<platexrelease>\else                            % 2020-02-02
 %<platexrelease>\def\merge@kanji@shape#1{%
 %<platexrelease>  \expandafter\expandafter\expandafter
@@ -2852,9 +2838,38 @@
 %<platexrelease>    \fi
 %<platexrelease>  \fi
 %<platexrelease>}
+%<platexrelease>\fi
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\set@safe@kanji@shape}
+% \begin{macro}{\@kanji@shape@nochange@info}
+% 和文シェープが利用可能かどうか予めチェックしてから設定します。
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\set@safe@kanji@shape}
+%<platexrelease>                   {No \k@shape update if unavailable}%
+%<*plcore|platexrelease>
+\def\set@safe@kanji@shape#1#2{%
+  \edef\reserved@b{\k@encoding /\k@family /\k@series/#1}%
+   \ifcsname \reserved@b\endcsname
+     \edef\k@shape{#1}%
+     #2%
+  \else
+    \@kanji@shape@nochange@info{\reserved@b}%
+  \fi
+}
+\def\@kanji@shape@nochange@info#1{%
+    \@font@info{Kanji font shape `#1' undefined\MessageBreak
+                No change}%
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\merge@kanji@shape@}
+%<platexrelease>                   {ASCII Corporation original}%
 %<platexrelease>\let\set@safe@kanji@shape\@undefined
 %<platexrelease>\let\@kanji@shape@nochange@info\@undefined
-%<platexrelease>\fi
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}

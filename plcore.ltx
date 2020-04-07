@@ -885,7 +885,10 @@
 \ifx\fontshapeforce\@undefined   % old
 \DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\edef\k@shape{#1}}
-\DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
+\DeclareRobustCommand\fontshape[1]{%
+  \set@safe@kanji@shape{#1}{}%
+  \edef\f@shape{#1}%
+}
 \else                            % 2020-02-02
 \DeclareRobustCommand\romanshape[1]{\merge@font@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\merge@kanji@shape{#1}}
@@ -908,8 +911,6 @@
 \ifx\fontseriesforce\@undefined  % old
 \let\merge@kanji@shape\@undefined
 \let\merge@kanji@shape@\@undefined
-\let\set@safe@kanji@shape\@undefined
-\let\@kanji@shape@nochange@info\@undefined
 \else                            % 2020-02-02
 \def\merge@kanji@shape#1{%
   \expandafter\expandafter\expandafter
@@ -948,6 +949,7 @@
     \fi
   \fi
 }
+\fi
 \def\set@safe@kanji@shape#1#2{%
   \edef\reserved@b{\k@encoding /\k@family /\k@series/#1}%
    \ifcsname \reserved@b\endcsname
@@ -961,7 +963,6 @@
     \@font@info{Kanji font shape `#1' undefined\MessageBreak
                 No change}%
 }
-\fi
 \DeclareRobustCommand\usekanji[4]{\kanjiencoding{#1}%
     \edef\k@family{#2}%
     \edef\k@series{#3}%

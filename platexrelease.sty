@@ -1015,7 +1015,10 @@ of this package available from CTAN}
 \ifx\fontshapeforce\@undefined   % old
 \DeclareRobustCommand\romanshape[1]{\edef\f@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\edef\k@shape{#1}}
-\DeclareRobustCommand\fontshape[1]{\kanjishape{#1}\romanshape{#1}}
+\DeclareRobustCommand\fontshape[1]{%
+  \set@safe@kanji@shape{#1}{}%
+  \edef\f@shape{#1}%
+}
 \else                            % 2020-02-02
 \DeclareRobustCommand\romanshape[1]{\merge@font@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\merge@kanji@shape{#1}}
@@ -1067,8 +1070,6 @@ of this package available from CTAN}
 \ifx\fontseriesforce\@undefined  % old
 \let\merge@kanji@shape\@undefined
 \let\merge@kanji@shape@\@undefined
-\let\set@safe@kanji@shape\@undefined
-\let\@kanji@shape@nochange@info\@undefined
 \else                            % 2020-02-02
 \def\merge@kanji@shape#1{%
   \expandafter\expandafter\expandafter
@@ -1107,19 +1108,6 @@ of this package available from CTAN}
     \fi
   \fi
 }
-\def\set@safe@kanji@shape#1#2{%
-  \edef\reserved@b{\k@encoding /\k@family /\k@series/#1}%
-   \ifcsname \reserved@b\endcsname
-     \edef\k@shape{#1}%
-     #2%
-  \else
-    \@kanji@shape@nochange@info{\reserved@b}%
-  \fi
-}
-\def\@kanji@shape@nochange@info#1{%
-    \@font@info{Kanji font shape `#1' undefined\MessageBreak
-                No change}%
-}
 \fi
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\merge@kanji@shape@}
@@ -1127,8 +1115,6 @@ of this package available from CTAN}
 \ifx\fontseriesforce\@undefined  % old
 \let\merge@kanji@shape\@undefined
 \let\merge@kanji@shape@\@undefined
-\let\set@safe@kanji@shape\@undefined
-\let\@kanji@shape@nochange@info\@undefined
 \else                            % 2020-02-02
 \def\merge@kanji@shape#1{%
   \expandafter\expandafter\expandafter
@@ -1158,9 +1144,28 @@ of this package available from CTAN}
     \fi
   \fi
 }
+\fi
+\plEndIncludeInRelease
+\plIncludeInRelease{2020/04/12}{\set@safe@kanji@shape}
+                   {No \k@shape update if unavailable}%
+\def\set@safe@kanji@shape#1#2{%
+  \edef\reserved@b{\k@encoding /\k@family /\k@series/#1}%
+   \ifcsname \reserved@b\endcsname
+     \edef\k@shape{#1}%
+     #2%
+  \else
+    \@kanji@shape@nochange@info{\reserved@b}%
+  \fi
+}
+\def\@kanji@shape@nochange@info#1{%
+    \@font@info{Kanji font shape `#1' undefined\MessageBreak
+                No change}%
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\merge@kanji@shape@}
+                   {ASCII Corporation original}%
 \let\set@safe@kanji@shape\@undefined
 \let\@kanji@shape@nochange@info\@undefined
-\fi
 \plEndIncludeInRelease
 \plIncludeInRelease{2020/02/02}{\usefont}
                    {Don't call \fontseries or \fontshape}%
