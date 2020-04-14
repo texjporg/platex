@@ -1317,10 +1317,10 @@
 \pltx@reset@catcode@trick
 \let\romanprocess@table\process@table
 \def\kanjiprocess@table{%
-  \kanjiencoding{\kanjiencodingdefault}%
-  \kanjifamily{\kanjifamilydefault}%
-  \kanjiseries{\kanjiseriesdefault}%
-  \kanjishape{\kanjishapedefault}%
+  \kanjiencoding\kanjiencodingdefault
+  \edef\k@family{\kanjifamilydefault}%
+  \edef\k@series{\kanjiseriesdefault}%
+  \edef\k@shape{\kanjishapedefault}%
 }
 \def\process@table{%
   \romanprocess@table

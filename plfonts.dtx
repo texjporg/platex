@@ -160,13 +160,15 @@
 % \changes{v1.7f}{2020/04/07}{Support legacy use of \cs{bfdefault}
 %    and \cs{mddefault}, use \cs{@setYYseriesdefaultshook}
 %    (sync with ltfssini.dtx 2020/03/19 v3.1k and 2020/04/06 v3.1m)}
+% \changes{v1.7g}{2020/04/14}{Small update for speed.
+%    (sync with ltfssdcl.dtx 2020/04/13 v3.0v)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/04/07 v1.7f pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/04/14 v1.7g pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -3080,13 +3082,32 @@
 %  \edef\ttdef@ult{\ttdefault}%
 %  \series@maybe@drop@one@m\bfdefault\bfdef@ult % !! changed 2020/02/25 v3.1j
 %  \series@maybe@drop@one@m\mddefault\mddef@ult % !! changed 2020/02/25 v3.1j
-%  \edef\famdef@ult{\familydefault}%
+% %\edef\famdef@ult{\familydefault}%            % !! deleted 2020/04/13 v3.1n
 %  \@expandfontdefaultshook                     % !! added 2020/04/06 v3.1m
 %}
 %    \end{macrocode}
 % p\LaTeX{}では、以下のコードを末尾に追加します。
+% ^^A  [TODO] Code still based on ltfssini.dtx 2020/03/19 v3.1l;
+% ^^A    Extra work needed to support both 'latex' and 'latex-dev'
+% ^^A    See changes in ltfssini.dtx:
+% ^^A    * 2020/04/06 v3.1m (latex3/latex2e@a3064ea)
+% ^^A    * 2020/04/13 v3.1n (latex3/latex2e@3503b28)
+% ^^A  ===== v3.1m =====
 % ^^A  ltfssini.dtx 2020/04/06 v3.1m に基づけば |\@expandfontdefaultshook| を
 % ^^A  使うこともできるが、とりあえず |\g@addto@macro| で末尾追加で問題ない。
+% ^^A  ltfssini.dtx 2020/04/13 v3.1n で |latex3/latex2e#315| 対策が入ったが、
+% ^^A  ===== v3.1n =====
+% ^^A  従来は |\init@series@setup| から呼び出される
+% ^^A    |\expand@font@defaults| が |\famdef@ult| を設定していた。
+% ^^A  新版は |\init@series@setup| からもはや
+% ^^A    |\expand@font@defaults| は呼び出さず、代わりに
+% ^^A    |\init@series@setup| で一度 |\reset@font| を実行し、
+% ^^A    それに基づいて |\seriesdefault| 設定する。
+% ^^A  =================
+% ^^A  現時点では安定版 latex に従っておくが、本来は
+% ^^A    |\init@series@setup| が |\reset@font| を実行するかどうか
+% ^^A  を判定して |\@expand@font@defaults| 及び |\init@series@setup| への
+% ^^A  フック内容を調整すべきである。
 %    \begin{macrocode}
 \ifx\expand@font@defaults\@undefined\else  % 2020-02-02
 \g@addto@macro\expand@font@defaults{%
@@ -3593,14 +3614,16 @@
 % 文書の先頭で、和文デフォルトフォントの変更が反映されないのを修正します。
 % \changes{v1.3g}{1999/04/05}{plpatch.ltxの内容を反映。
 %    ありがとう、山本さん。}
+% \changes{v1.7g}{2020/04/14}{Small update for speed.
+%    (sync with ltfssdcl.dtx 2020/04/13 v3.0v)}
 %    \begin{macrocode}
 %<*plcore>
 \let\romanprocess@table\process@table
 \def\kanjiprocess@table{%
-  \kanjiencoding{\kanjiencodingdefault}%
-  \kanjifamily{\kanjifamilydefault}%
-  \kanjiseries{\kanjiseriesdefault}%
-  \kanjishape{\kanjishapedefault}%
+  \kanjiencoding\kanjiencodingdefault
+  \edef\k@family{\kanjifamilydefault}%
+  \edef\k@series{\kanjiseriesdefault}%
+  \edef\k@shape{\kanjishapedefault}%
 }
 \def\process@table{%
   \romanprocess@table
