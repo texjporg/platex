@@ -1763,9 +1763,10 @@
   \stepcounter{page}%
   \let\firstmark\botmark
 }
+\@ifl@t@r{\fmtversion}{2020/10/01}{}{%
 \DeclareRobustCommand \AtBeginDvi [1]{%
   \global \setbox \@begindvibox
-    \vbox{\yoko \unvbox \@begindvibox #1}%
+    \vbox{\yoko \unvbox \@begindvibox #1}}%
 }
 \renewcommand\@makefnmark{%
   \ifydir \hbox{}\hbox{\@textsuperscript{\normalfont\@thefnmark}}\hbox{}%

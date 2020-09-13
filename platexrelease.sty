@@ -2629,25 +2629,30 @@ of this package available from CTAN}
 \plEndIncludeInRelease
 \plIncludeInRelease{2019/10/01}{\AtBeginDvi}
                    {Make robust}%
+\ifx\ExplSyntaxOn\@undefined\else
+\ExplSyntaxOn
+\DeclareRobustCommand \AtBeginDvi
+  {\__shipout_add_firstpage_material:Nn \AtBeginDvi}
+\ExplSyntaxOff
+\fi
+\@ifl@t@r{\fmtversion}{2020/10/01}{}{%
 \DeclareRobustCommand \AtBeginDvi [1]{%
   \global \setbox \@begindvibox
-    \vbox{\yoko \unvbox \@begindvibox #1}%
+    \vbox{\yoko \unvbox \@begindvibox #1}}%
 }
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/07/01}{\AtBeginDvi}
                    {Fix for incompatible direction}%
 \def \AtBeginDvi #1{%
   \global \setbox \@begindvibox
-    \vbox{\yoko \unvbox \@begindvibox #1}%
-}
+    \vbox{\yoko \unvbox \@begindvibox #1}}
 \expandafter \let \csname AtBeginDvi \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\AtBeginDvi}
                    {LaTeX2e original}%
 \def \AtBeginDvi #1{%
   \global \setbox \@begindvibox
-    \vbox{\unvbox \@begindvibox #1}%
-}
+    \vbox{\unvbox \@begindvibox #1}}
 \expandafter \let \csname AtBeginDvi \endcsname \@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@makefnmark}

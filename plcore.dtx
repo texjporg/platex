@@ -1434,6 +1434,14 @@
 % \end{macro}
 %
 % \begin{macro}{\AtBeginDvi}
+% \LaTeXe{}のバージョンが2020-02-02までの場合は、
+% |\AtBeginDvi|が「|\unvbox|してから再び|\vbox|する」という動作のため、
+% 再定義が必要です。
+% \LaTeXe~2020-10-01以降では、フックにどんどんコードを追加していくだけ
+% ですので、再定義は不要です。
+% \changes{v1.3f}{2020/09/13}{\cs{AtBeginDvi}を再定義しない
+%    (sync with ltshipout.dtx 2020/09/09 v1.0b)}
+%
 % p\LaTeX{}の出力ルーチンの|\@outputpage|では、|\shipout|するvboxの中身に
 % |\yoko|を指定しています。このため、|\AtBeginDocument{\AtBeginDvi{}}|という
 % コードを書くと\texttt{Incompatible direction list can't be unboxed.}という
@@ -1453,9 +1461,16 @@
 %<platexrelease>\plIncludeInRelease{2019/10/01}{\AtBeginDvi}
 %<platexrelease>                   {Make robust}%
 %<*plcore|platexrelease>
+%<platexrelease>\ifx\ExplSyntaxOn\@undefined\else
+%<platexrelease>\ExplSyntaxOn
+%<platexrelease>\DeclareRobustCommand \AtBeginDvi
+%<platexrelease>  {\__shipout_add_firstpage_material:Nn \AtBeginDvi}
+%<platexrelease>\ExplSyntaxOff
+%<platexrelease>\fi
+\@ifl@t@r{\fmtversion}{2020/10/01}{}{%
 \DeclareRobustCommand \AtBeginDvi [1]{%
   \global \setbox \@begindvibox
-    \vbox{\yoko \unvbox \@begindvibox #1}%
+    \vbox{\yoko \unvbox \@begindvibox #1}}%
 }
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
@@ -1463,16 +1478,14 @@
 %<platexrelease>                   {Fix for incompatible direction}%
 %<platexrelease>\def \AtBeginDvi #1{%
 %<platexrelease>  \global \setbox \@begindvibox
-%<platexrelease>    \vbox{\yoko \unvbox \@begindvibox #1}%
-%<platexrelease>}
+%<platexrelease>    \vbox{\yoko \unvbox \@begindvibox #1}}
 %<platexrelease>\expandafter \let \csname AtBeginDvi \endcsname \@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\AtBeginDvi}
 %<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>\def \AtBeginDvi #1{%
 %<platexrelease>  \global \setbox \@begindvibox
-%<platexrelease>    \vbox{\unvbox \@begindvibox #1}%
-%<platexrelease>}
+%<platexrelease>    \vbox{\unvbox \@begindvibox #1}}
 %<platexrelease>\expandafter \let \csname AtBeginDvi \endcsname \@undefined
 %<platexrelease>\plEndIncludeInRelease
 %<*plcore>
