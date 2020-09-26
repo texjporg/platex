@@ -1550,20 +1550,19 @@
   {
     % if \l_shipout_box is not a \yoko-box (= horizontal writing),
     % then make it a \yoko-box behorehand.
-    \if_box_yoko:N \l_shipout_box
-    \else:
+    \platex_if_box_yoko:NF \l_shipout_box {
       \vbox_set:Nn \l_shipout_box
         {
             \tex_yoko:D
             \box_use:N \l_shipout_box
         }
-    \fi:
+    }
     % if the current direction is not \yoko,
     % then enclose \__shipout_execute_cont: with
     % a dummy \yoko-box named \l__platex_shipout_dummy_box.
-    \if_direction_yoko:
+    \platex_if_direction_yoko:TF {
       \__platex_original_shipout_execute_cont:
-    \else:
+    }{
       \vbox_set:Nn \l__platex_shipout_dummy_box
         {
           \tex_yoko:D
@@ -1574,7 +1573,7 @@
       % however, an infinite loop occurs if we uncomment the line below
       % so we can't.
       %\box_use:N \l__platex_shipout_dummy_box
-    \fi:
+    }
   }
 \fi:
 \ExplSyntaxOff
