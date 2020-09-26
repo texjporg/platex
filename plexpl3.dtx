@@ -30,7 +30,7 @@
 %</driver>
 % \fi
 %
-% \LaTeX3 (expl3)で用意されていない「\pTeX{}系列の独自機能」を
+% \LaTeX3 (expl3)で用意されていない「p\TeX{}系列の独自機能」を
 % expl3の文法で使えるようにするコードです。
 %
 % \setcounter{StandardModuleDepth}{1}
@@ -48,6 +48,7 @@
 %</package>
 %    \end{macrocode}
 %
+%    \begin{macrocode}
 %<plcore>\ifx\ExplSyntaxOn\@undefined\else
 %<plcore>\ExplSyntaxOn
 %<*plcore|package>
@@ -55,10 +56,11 @@
 %</plcore|package>
 %<plcore>\ExplSyntaxOff
 %<plcore>\fi
+%    \end{macrocode}
 %
 % \section{pTeX{}系列の条件文}
 %
-% \pTeX{}系列の条件文を|\if-|トークンに見えるようにします。
+% p\TeX{}系列の条件文を|\if-|トークンに見えるようにします。
 % \changes{v1.0}{2020/09/26}{初版：p\TeX{}の条件文を定義}
 %    \begin{macrocode}
 %<*code>

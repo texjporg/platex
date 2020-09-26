@@ -15,10 +15,10 @@ all: $(STRIPTARGET) $(PDFTARGET)
 
 PLFMT = platex.ltx plcore.ltx kinsoku.tex pldefs.ltx \
 	jy1mc.fd jy1gt.fd jt1mc.fd jt1gt.fd plext.sty \
-	ptrace.sty pfltrace.sty
+	ptrace.sty pfltrace.sty plexpl3.sty plexpl3.code.tex
 
 PLFMT_SRC = platex.dtx plvers.dtx plfonts.dtx plcore.dtx \
-	kinsoku.dtx plext.dtx
+	kinsoku.dtx plext.dtx plexpl3.dtx
 
 PLCLS = jarticle.cls jreport.cls jbook.cls jsize10.clo \
 	jsize11.clo jsize12.clo jbk10.clo jbk11.clo jbk12.clo \
