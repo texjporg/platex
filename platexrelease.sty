@@ -2627,19 +2627,30 @@ of this package available from CTAN}
   \let\firstmark\botmark
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{2019/10/01}{\AtBeginDvi}
-                   {Make robust}%
-\ifx\ExplSyntaxOn\@undefined\else
+\plIncludeInRelease{2020/10/01}{\AtBeginDvi}
+                   {Adapt to new shipout code}%
+\chardef\pltx@AtBeginDvi@untouched\z@
+\ifdefined\ExplSyntaxOn %--- expl3 available BEGIN
 \ExplSyntaxOn
+\if_cs_exist:N \__shipout_add_firstpage_material:Nn
+  \chardef\pltx@AtBeginDvi@untouched\@ne
 \DeclareRobustCommand \AtBeginDvi
   {\__shipout_add_firstpage_material:Nn \AtBeginDvi}
+\fi:
 \ExplSyntaxOff
-\fi
-\@ifl@t@r{\fmtversion}{2020/10/01}{}{%
+\fi                     %--- expl3 available END
+\ifnum\pltx@AtBeginDvi@untouched>\z@\else
 \DeclareRobustCommand \AtBeginDvi [1]{%
   \global \setbox \@begindvibox
     \vbox{\yoko \unvbox \@begindvibox #1}}%
-}
+\fi
+\let\pltx@AtBeginDvi@untouched\@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{2019/10/01}{\AtBeginDvi}
+                   {Make robust}%
+\DeclareRobustCommand \AtBeginDvi [1]{%
+  \global \setbox \@begindvibox
+    \vbox{\yoko \unvbox \@begindvibox #1}}
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/07/01}{\AtBeginDvi}
                    {Fix for incompatible direction}%
@@ -2654,6 +2665,51 @@ of this package available from CTAN}
   \global \setbox \@begindvibox
     \vbox{\unvbox \@begindvibox #1}}
 \expandafter \let \csname AtBeginDvi \endcsname \@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{2020/10/01}{\__shipout_execute_cont:}
+                   {Adapt to new shipout code}%
+\ifdefined\ExplSyntaxOn %--- expl3 available BEGIN
+\ExplSyntaxOn
+\if_cs_exist:N \__shipout_execute_cont:
+\cs_new_eq:NN \__platex_original_shipout_execute_cont: \__shipout_execute_cont:
+\box_new:N \l__platex_shipout_dummy_box
+\cs_set:Npn \__shipout_execute_cont:
+  {
+    % if \l_shipout_box is not a \yoko-box (= horizontal writing),
+    % then make it a \yoko-box behorehand.
+    \tex_ifybox:D \l_shipout_box
+    \else:
+      \vbox_set:Nn \l_shipout_box
+        {
+            \tex_yoko:D
+            \box_use:N \l_shipout_box
+        }
+    \fi:
+    % if the current direction is not \yoko,
+    % then enclose \__shipout_execute_cont: with
+    % a dummy \yoko-box named \l__platex_shipout_dummy_box.
+    \tex_ifydir:D
+      \__platex_original_shipout_execute_cont:
+    \else:
+      \vbox_set:Nn \l__platex_shipout_dummy_box
+        {
+          \tex_yoko:D
+          \__platex_original_shipout_execute_cont:
+        }
+      % [Limitation] the code above may discard some contents,
+      % so we'd like to put it back by \box\l__platex_shipout_dummy_box.
+      % however, an infinite loop occurs if we uncomment the line below
+      % so we can't.
+      %\box_use:N \l__platex_shipout_dummy_box
+    \fi:
+  }
+\fi:
+\ExplSyntaxOff
+\fi                     %--- expl3 available END
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\__shipout_execute_cont:}
+                   {LaTeX2e original}%
+% do nothing
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@makefnmark}
                    {Remove extra \xkanjiskip}%

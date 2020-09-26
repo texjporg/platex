@@ -124,13 +124,17 @@
 %    FAM256拡張ありの場合に限りレジスタ数が65536個のため。}
 % \changes{v1.3d}{2019/10/19}{コピー忘れ}
 % \changes{v1.3e}{2020/03/05}{合字処理を抑止しつつ\cs{xkanjiskip}は挿入}
+% \changes{v1.3f}{2020/09/26}{\cs{AtBeginDvi}を再定義しない
+%    (checked ltshipout.dtx 2020/09/21 v1.0c)}
+% \changes{v1.3f}{2020/09/26}{\cs{__shipout_execute_cont:}を再定義
+%    (checked ltshipout.dtx 2020/09/21 v1.0c)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2020/03/05 v1.3e pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2020/09/26 v1.3f pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -156,6 +160,7 @@
 % \item 改行
 % \item オブジェクトの出力順序
 % \item トンボ
+% \item 出力ルーチン
 % \item 脚注マクロ
 % \item 相互参照
 % \item 疑似タイプ入力
@@ -1139,7 +1144,7 @@
 % \end{macro}
 % \end{macro}
 %
-%  \begin{macro}{\@tombowreset@@paper}
+% \begin{macro}{\@tombowreset@@paper}
 % トンボ出力オプションが指定されている場合に
 % 用紙サイズを再設定する命令です。
 % |\@outputpage|へ加える変更を簡潔にするため、分離した上で
@@ -1169,17 +1174,21 @@
 %<platexrelease>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
-%  \end{macro}
+% \end{macro}
 %
-%  \begin{macro}{\@shipoutsetup}
+%
+% \subsection{出力ルーチン}
+% ここで実際にトンボを出力します。
+%
+% \begin{macro}{\@shipoutsetup}
 % \changes{v1.1i}{1998/02/03}{Command removed}
 % |\@outputpage|内に挿入したので削除しました。
-%  \end{macro}
+% \end{macro}
 %
 % \begin{macro}{\@outputpage}
 % |\textwidth|と|\textheight|の交換は、|\@shipoutsetup|内では行ないません。
 % なぜなら、|\@shipoutsetup|マクロが実行されるときは、
-% |\shipout|されるvboxの中であり、このときは横組モードですので、
+% |\shipout|される|\vbox|の中であり、このときは横組モードですので、
 % つねに|\iftdir|は偽と判断され、縦と横のサイズを交換できないからです。
 %
 % なお、この変更をローカルなものにするために、
@@ -1434,14 +1443,10 @@
 % \end{macro}
 %
 % \begin{macro}{\AtBeginDvi}
-% \LaTeXe{}のバージョンが2020-02-02までの場合は、
+% \LaTeXe{}のバージョンが2020-02-02までの場合：
 % |\AtBeginDvi|が「|\unvbox|してから再び|\vbox|する」という動作のため、
 % 再定義が必要です。
-% \LaTeXe~2020-10-01以降では、フックにどんどんコードを追加していくだけ
-% ですので、再定義は不要です。
-% \changes{v1.3f}{2020/09/13}{\cs{AtBeginDvi}を再定義しない
-%    (sync with ltshipout.dtx 2020/09/09 v1.0b)}
-%
+% \begin{quote}
 % p\LaTeX{}の出力ルーチンの|\@outputpage|では、|\shipout|するvboxの中身に
 % |\yoko|を指定しています。このため、|\AtBeginDocument{\AtBeginDvi{}}|という
 % コードを書くと\texttt{Incompatible direction list can't be unboxed.}という
@@ -1453,26 +1458,47 @@
 % |\@begindvibox|は（空でない限り）常に横組でなければならない
 % \end{center}
 % と仮定します。この仮定に従い、|\AtBeginDvi|を再定義します。
+% \end{quote}
 % \changes{v1.2f}{2016/06/30}{\cs{@begindvibox}を常に横組に}
 % \changes{v1.3c}{2019/09/16}{Make \cs{AtBeginDvi} robust
 %    (sync with ltoutput.dtx 2019/08/27 v1.4e)}
+%
+% \LaTeXe~2020-10-01以降：|\AtBeginDvi|はフックにどんどんコードを追加して
+% いくだけですので、再定義は不要です。一方、代わりに
+% |\__shipout_execute_cont:|を再定義する必要があります。
+% \changes{v1.3f}{2020/09/26}{\cs{AtBeginDvi}を再定義しない
+%    (checked ltshipout.dtx 2020/09/21 v1.0c)}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2019/10/01}{\AtBeginDvi}
-%<platexrelease>                   {Make robust}%
+%<platexrelease>\plIncludeInRelease{2020/10/01}{\AtBeginDvi}
+%<platexrelease>                   {Adapt to new shipout code}%
 %<*plcore|platexrelease>
-%<platexrelease>\ifx\ExplSyntaxOn\@undefined\else
-%<platexrelease>\ExplSyntaxOn
+\chardef\pltx@AtBeginDvi@untouched\z@
+% for LaTeX2e 2020-10-01 or later
+\ifdefined\ExplSyntaxOn %--- expl3 available BEGIN
+\ExplSyntaxOn
+\if_cs_exist:N \__shipout_add_firstpage_material:Nn
+  \chardef\pltx@AtBeginDvi@untouched\@ne
 %<platexrelease>\DeclareRobustCommand \AtBeginDvi
 %<platexrelease>  {\__shipout_add_firstpage_material:Nn \AtBeginDvi}
-%<platexrelease>\ExplSyntaxOff
-%<platexrelease>\fi
-\@ifl@t@r{\fmtversion}{2020/10/01}{}{%
+\fi:
+\ExplSyntaxOff
+\fi                     %--- expl3 available END
+% for LaTeX2e 2020-02-02 PL5 or older
+\ifnum\pltx@AtBeginDvi@untouched>\z@\else
 \DeclareRobustCommand \AtBeginDvi [1]{%
   \global \setbox \@begindvibox
     \vbox{\yoko \unvbox \@begindvibox #1}}%
-}
+\fi
+% done
+\let\pltx@AtBeginDvi@untouched\@undefined
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2019/10/01}{\AtBeginDvi}
+%<platexrelease>                   {Make robust}%
+%<platexrelease>\DeclareRobustCommand \AtBeginDvi [1]{%
+%<platexrelease>  \global \setbox \@begindvibox
+%<platexrelease>    \vbox{\yoko \unvbox \@begindvibox #1}}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/07/01}{\AtBeginDvi}
 %<platexrelease>                   {Fix for incompatible direction}%
@@ -1487,6 +1513,77 @@
 %<platexrelease>  \global \setbox \@begindvibox
 %<platexrelease>    \vbox{\unvbox \@begindvibox #1}}
 %<platexrelease>\expandafter \let \csname AtBeginDvi \endcsname \@undefined
+%<platexrelease>\plEndIncludeInRelease
+%<*plcore>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{shipout-execute-cont}
+% \LaTeXe~2020-10-01以降：\file{ltshipout.dtx}がベースです。
+% ただし、縦組クラスでも通るようにするため、以下の方法を採ります。
+% \begin{itemize}
+% \item |\shipout|実行時の組方向が横組なら、|\yoko|を実行せずそのまま。
+% \item 横組でない場合は|\__shipout_execute_cont:|を横組ボックス\\
+%       |\l__platex_shipout_dummy_box|で括って実行する（※）。
+% \item |\l_shipout_box|が横組でない場合は事前に横組化する。
+% \end{itemize}
+% 注意：上記※の実装により、縦組クラスでは
+% 「|\AtBeginShipout|の中身が外部垂直モードで実行されること」を
+% 想定した使用（例：platex-tools issue \#15）はサポートされません。
+% ^^A 従来の\file{pxatbegshi}パッケージにも同様の制約がありました。
+% ^^A 本当は、処理終了時に|\box\l__platex_shipout_dummy_box|して
+% ^^A メイン垂直リストに中身を戻したいのですが、
+% ^^A なぜか無限ループが起きるため実行していません。
+% \changes{v1.3f}{2020/09/26}{\cs{shipout-execute-cont}を再定義
+%    (checked ltshipout.dtx 2020/09/21 v1.0c)}
+%    \begin{macrocode}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2020/10/01}{\__shipout_execute_cont:}
+%<platexrelease>                   {Adapt to new shipout code}%
+%<*plcore|platexrelease>
+\ifdefined\ExplSyntaxOn %--- expl3 available BEGIN
+\ExplSyntaxOn
+\if_cs_exist:N \__shipout_execute_cont:
+\cs_new_eq:NN \__platex_original_shipout_execute_cont: \__shipout_execute_cont:
+\box_new:N \l__platex_shipout_dummy_box
+\cs_set:Npn \__shipout_execute_cont:
+  {
+    % if \l_shipout_box is not a \yoko-box (= horizontal writing),
+    % then make it a \yoko-box behorehand.
+    \tex_ifybox:D \l_shipout_box
+    \else:
+      \vbox_set:Nn \l_shipout_box
+        {
+            \tex_yoko:D
+            \box_use:N \l_shipout_box
+        }
+    \fi:
+    % if the current direction is not \yoko,
+    % then enclose \__shipout_execute_cont: with
+    % a dummy \yoko-box named \l__platex_shipout_dummy_box.
+    \tex_ifydir:D
+      \__platex_original_shipout_execute_cont:
+    \else:
+      \vbox_set:Nn \l__platex_shipout_dummy_box
+        {
+          \tex_yoko:D
+          \__platex_original_shipout_execute_cont:
+        }
+      % [Limitation] the code above may discard some contents,
+      % so we'd like to put it back by \box\l__platex_shipout_dummy_box.
+      % however, an infinite loop occurs if we uncomment the line below
+      % so we can't.
+      %\box_use:N \l__platex_shipout_dummy_box
+    \fi:
+  }
+\fi:
+\ExplSyntaxOff
+\fi                     %--- expl3 available END
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\__shipout_execute_cont:}
+%<platexrelease>                   {LaTeX2e original}%
+%<platexrelease>% do nothing
 %<platexrelease>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
