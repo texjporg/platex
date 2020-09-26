@@ -86,6 +86,7 @@
 % \changes{v1.0y}{2018/09/22}{最終更新日を\file{pldoc.pdf}に表示}
 % \changes{v1.0z}{2019/09/29}{タイポ修正}
 % \changes{v1.1}{2020/03/24}{ドキュメントを更新}
+% \changes{v1.1a}{2020/09/26}{\file{plexpl3.dtx}を追加}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -130,6 +131,7 @@
 % \changes{v1.0y}{2018/09/22}{Show last update info on \file{pldoc.pdf}}
 % \changes{v1.0z}{2019/09/29}{Fix typos in document.}
 % \changes{v1.1}{2020/03/24}{Update document.}
+% \changes{v1.1a}{2020/09/26}{Add \file{plexpl3.dtx}}
 %\fi
 % \fi
 %
@@ -1264,6 +1266,7 @@ all others indicate the places where it is used.}
    \let\ProvidesClass\ProvidesFile
    \let\ProvidesPackage\ProvidesFile
    \input{plvers.dtx}
+   \input{plexpl3.dtx}
    \input{plfonts.dtx}
    \input{plcore.dtx}
    \input{plext.dtx}
@@ -1279,8 +1282,10 @@ all others indicate the places where it is used.}
 %    \end{macrocode}
 %\ifJAPANESE
 % ここからが本文ページとなります。
+% \changes{v1.1a}{2020/09/26}{\file{plexpl3.dtx}を追加}
 %\else
 % Here starts the document body.
+% \changes{v1.1a}{2020/09/26}{Add \file{plexpl3.dtx}}
 %\fi
 %    \begin{macrocode}
 \begin{document}
@@ -1292,6 +1297,8 @@ all others indicate the places where it is used.}
 \pagenumbering{arabic}
 
 \DocInclude{plvers}   % pLaTeX version
+
+\DocInclude{plexpl3}  % additions to expl3
 
 \DocInclude{plfonts}  % NFSS2 commands
 

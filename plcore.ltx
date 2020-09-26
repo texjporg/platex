@@ -100,11 +100,11 @@
       {skipped \string\plIncludeInRelease\space for tag \string#2}{}%
   \fi}
 %% File: plexpl3.dtx
-\ifx\ExplSyntaxOn\@undefined\else
+\ifdefined\ExplSyntaxOn %--- expl3 available BEGIN
 \ExplSyntaxOn
 \input plexpl3.code.tex
 \ExplSyntaxOff
-\fi
+\fi                     %--- expl3 available END
 %% File: plfonts.dtx
 \let\k@encoding\@empty
 \let\ck@encoding\@empty

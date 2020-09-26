@@ -16,7 +16,7 @@
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
-\ProvidesFile{plexpl3.dtx}
+\ProvidesFile{plexpl3.dtx}[2020/09/26 v1.0 expl3 additions]
 \documentclass{jltxdoc}
 \GetFileInfo{plexpl3.dtx}
 \author{Japanese \TeX\ Development Community}
@@ -32,13 +32,17 @@
 %
 % \LaTeX3 (expl3)で用意されていない「p\TeX{}系列の独自機能」を
 % expl3の文法で使えるようにするコードです。
+% p\LaTeXe~2020-10-01で新設しました。
 %
 % \setcounter{StandardModuleDepth}{1}
 % \StopEventually{}
 %
 % \section{コード}
 %
-% パッケージを宣言します。
+% パッケージとして宣言します。
+% これで、p\LaTeXe~2020-04-12以前でも
+% \file{plexpl3.sty}と\file{plexpl3.code.tex}だけ
+% 入手すれば同等の機能が使えます。
 %    \begin{macrocode}
 %<*package>
 \NeedsTeXFormat{pLaTeX2e}
@@ -48,20 +52,20 @@
 %</package>
 %    \end{macrocode}
 %
+% \LaTeXe~2020-02-02以降では\file{expl3}が標準で
+% フォーマットに読み込まれています。この場合は
+% \file{plexpl3}の機能をフォーマットに取り込みます。
 %    \begin{macrocode}
-%<plcore>\ifx\ExplSyntaxOn\@undefined\else
+%<plcore>\ifdefined\ExplSyntaxOn %--- expl3 available BEGIN
 %<plcore>\ExplSyntaxOn
 %<*plcore|package>
 \input plexpl3.code.tex
 %</plcore|package>
 %<plcore>\ExplSyntaxOff
-%<plcore>\fi
+%<plcore>\fi                     %--- expl3 available END
 %    \end{macrocode}
 %
-% \section{pTeX{}系列の条件文}
-%
-% p\TeX{}系列の条件文を|\if-|トークンに見えるようにします。
-% \changes{v1.0}{2020/09/26}{初版：p\TeX{}の条件文を定義}
+% フォーマットとパッケージからの重複読み込みは禁止します。
 %    \begin{macrocode}
 %<*code>
 \if_cs_exist:N \__platex_explLoaded:
@@ -70,6 +74,13 @@
   \exp_after:wN \endinput
 \fi:
 \cs_new:Npn \__platex_explLoaded: {  }
+%    \end{macrocode}
+%
+% \section{p\TeX{}系列の条件文}
+%
+% p\TeX{}系列の条件文を|\if-|トークンに見えるようにします。
+% \changes{v1.0}{2020/09/26}{初版：p\TeX{}の条件文を定義}
+%    \begin{macrocode}
 % additions to l3box.dtx (pTeX/upTeX-specific)
 \cs_new_eq:NN \if_box_tate:N \tex_iftbox:D
 \cs_new_eq:NN \if_box_yoko:N \tex_ifybox:D
@@ -80,6 +91,10 @@
 \cs_new_eq:NN \if_direction_yoko: \tex_ifydir:D
 \cs_new_eq:NN \if_direction_dtou: \tex_ifddir:D
 \cs_new_eq:NN \if_direction_math: \tex_ifmdir:D
+%    \end{macrocode}
+%
+% 以上です。
+%    \begin{macrocode}
 %</code>
 %    \end{macrocode}
 %

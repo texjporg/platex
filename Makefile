@@ -40,8 +40,7 @@ INTRODOC_SRC = platex.dtx
 
 PLRELDOC_SRC = platexrelease.dtx
 
-PLDOC_SRC = platex.dtx plvers.dtx plfonts.dtx plcore.dtx plext.dtx \
-	pl209.dtx kinsoku.dtx jclasses.dtx jltxdoc.dtx
+PLDOC_SRC = $(PLFMT_SRC) $(PLCLS_SRC) $(PL209_SRC) jltxdoc.dtx
 
 platex.ltx: $(PLFMT_SRC)
 	rm -f $(PLFMT)
