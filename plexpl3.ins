@@ -1,0 +1,22 @@
+\input docstrip
+\keepsilent
+\ifToplevel{\askonceonly}
+\usedir{tex/platex/base}
+
+\Msg{*** Generating the pLaTeX files for supporting latexrelease ***}
+
+\preamble
+
+Copyright (c) 2020 Japanese TeX Development Community
+
+This file is part of the pLaTeX2e system (community edition).
+-------------------------------------------------------------
+
+\endpreamble
+
+\generate{
+  \file{plexpl3.sty}{\from{plexpl3.dtx}{package}}
+  \file{plexpl3.code.tex}{\from{plexpl3.dtx}{code}}
+}
+
+\endbatchfile

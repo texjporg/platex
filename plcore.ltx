@@ -5,12 +5,13 @@
 %% The original source files were:
 %%
 %% plvers.dtx  (with options: `plcore')
+%% plexpl3.dtx  (with options: `plcore')
 %% plfonts.dtx  (with options: `plcore')
 %% plcore.dtx  (with options: `plcore')
 %% plvers.dtx  (with options: `plfinal')
 %% 
 %% Copyright (c) 2010 ASCII MEDIA WORKS
-%% Copyright (c) 2016-2018 Japanese TeX Development Community
+%% Copyright (c) 2016-2020 Japanese TeX Development Community
 %% 
 %% This file is part of the pLaTeX2e system (community edition).
 %% -------------------------------------------------------------
@@ -34,7 +35,7 @@
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
    {2020-10-01}
-\def\ppatch@level{-2}
+\def\ppatch@level{-3}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
                    \noexpand\platexNILb}
@@ -98,6 +99,12 @@
     \PackageError{platexrelease}
       {skipped \string\plIncludeInRelease\space for tag \string#2}{}%
   \fi}
+%% File: plexpl3.dtx
+\ifx\ExplSyntaxOn\@undefined\else
+\ExplSyntaxOn
+\input plexpl3.code.tex
+\ExplSyntaxOff
+\fi
 %% File: plfonts.dtx
 \let\k@encoding\@empty
 \let\ck@encoding\@empty
@@ -1786,7 +1793,7 @@
   {
     % if \l_shipout_box is not a \yoko-box (= horizontal writing),
     % then make it a \yoko-box behorehand.
-    \tex_ifybox:D \l_shipout_box
+    \if_box_yoko:N \l_shipout_box
     \else:
       \vbox_set:Nn \l_shipout_box
         {
@@ -1797,7 +1804,7 @@
     % if the current direction is not \yoko,
     % then enclose \__shipout_execute_cont: with
     % a dummy \yoko-box named \l__platex_shipout_dummy_box.
-    \tex_ifydir:D
+    \if_direction_yoko:
       \__platex_original_shipout_execute_cont:
     \else:
       \vbox_set:Nn \l__platex_shipout_dummy_box

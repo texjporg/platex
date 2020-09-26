@@ -1,0 +1,86 @@
+% \iffalse meta-comment
+%% File: plexpl3.dtx
+%
+%  Copyright (c) 2020 Japanese TeX Development Community
+%
+%  This file is part of the pLaTeX2e system (community edition).
+%  -------------------------------------------------------------
+%
+% \fi
+%
+%
+% \iffalse
+% \changes{v1.0}{2020/09/26}{初版：p\TeX{}の条件文を定義}
+% \fi
+%
+% \iffalse
+%<*driver>
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesFile{plexpl3.dtx}
+\documentclass{jltxdoc}
+\GetFileInfo{plexpl3.dtx}
+\author{Japanese \TeX\ Development Community}
+\title{The \textsf{plexpl3} package}
+\date{作成日：\filedate}
+\begin{document}
+  \newcommand\Lpack[1]{\textsf{#1}}
+  \maketitle
+  \DocInput{\filename}
+\end{document}
+%</driver>
+% \fi
+%
+% \LaTeX3 (expl3)で用意されていない「\pTeX{}系列の独自機能」を
+% expl3の文法で使えるようにするコードです。
+%
+% \setcounter{StandardModuleDepth}{1}
+% \StopEventually{}
+%
+% \section{コード}
+%
+% パッケージを宣言します。
+%    \begin{macrocode}
+%<*package>
+\NeedsTeXFormat{pLaTeX2e}
+\RequirePackage{expl3}
+\ProvidesExplPackage{plexpl3}{2020-09-26}{1.0}
+  {pTeX/upTeX-specific additions to expl3}
+%</package>
+%    \end{macrocode}
+%
+%<plcore>\ifx\ExplSyntaxOn\@undefined\else
+%<plcore>\ExplSyntaxOn
+%<*plcore|package>
+\input plexpl3.code.tex
+%</plcore|package>
+%<plcore>\ExplSyntaxOff
+%<plcore>\fi
+%
+% \section{pTeX{}系列の条件文}
+%
+% \pTeX{}系列の条件文を|\if-|トークンに見えるようにします。
+% \changes{v1.0}{2020/09/26}{初版：p\TeX{}の条件文を定義}
+%    \begin{macrocode}
+%<*code>
+\if_cs_exist:N \__platex_explLoaded:
+  \GenericInfo{}
+    {Skipping:~ plexpl3~ code~ already~ part~ of~ the~ format}%
+  \exp_after:wN \endinput
+\fi:
+\cs_new:Npn \__platex_explLoaded: {  }
+% additions to l3box.dtx (pTeX/upTeX-specific)
+\cs_new_eq:NN \if_box_tate:N \tex_iftbox:D
+\cs_new_eq:NN \if_box_yoko:N \tex_ifybox:D
+\cs_new_eq:NN \if_box_dtou:N \tex_ifdbox:D
+\cs_new_eq:NN \if_box_math:N \tex_ifmbox:D
+% writing directions (pTeX/upTeX-specific)
+\cs_new_eq:NN \if_direction_tate: \tex_iftdir:D
+\cs_new_eq:NN \if_direction_yoko: \tex_ifydir:D
+\cs_new_eq:NN \if_direction_dtou: \tex_ifddir:D
+\cs_new_eq:NN \if_direction_math: \tex_ifmdir:D
+%</code>
+%    \end{macrocode}
+%
+% \Finale
+%
+\endinput

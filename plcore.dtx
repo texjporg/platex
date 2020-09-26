@@ -1550,7 +1550,7 @@
   {
     % if \l_shipout_box is not a \yoko-box (= horizontal writing),
     % then make it a \yoko-box behorehand.
-    \tex_ifybox:D \l_shipout_box
+    \if_box_yoko:N \l_shipout_box
     \else:
       \vbox_set:Nn \l_shipout_box
         {
@@ -1561,7 +1561,7 @@
     % if the current direction is not \yoko,
     % then enclose \__shipout_execute_cont: with
     % a dummy \yoko-box named \l__platex_shipout_dummy_box.
-    \tex_ifydir:D
+    \if_direction_yoko:
       \__platex_original_shipout_execute_cont:
     \else:
       \vbox_set:Nn \l__platex_shipout_dummy_box
