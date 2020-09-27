@@ -68,12 +68,12 @@
 % フォーマットとパッケージからの重複読み込みは禁止します。
 %    \begin{macrocode}
 %<*code>
-\if_cs_exist:N \__platex_explLoaded:
+\if_cs_exist:N \platex_explLoaded:
   \GenericInfo{}
     {Skipping:~ plexpl3~ code~ already~ part~ of~ the~ format}%
   \exp_after:wN \endinput
 \fi:
-\cs_new:Npn \__platex_explLoaded: {  }
+\cs_new:Npn \platex_explLoaded: {  }
 %    \end{macrocode}
 %
 % \section{p\TeX{}系列の条件文}
