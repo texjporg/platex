@@ -3075,7 +3075,7 @@
 %
 % \begin{macro}{\expand@font@defaults}
 % ファミリのデフォルトを完全展開します。
-% まず、オリジナルの\LaTeX{}の定義（ltfssini.dtx 2020/04/06 v3.1m以降）を
+% まず、オリジナルの\LaTeX{}の定義（ltfssini.dtx 2020/08/21 v3.2b以降）を
 % 載せておきます。
 %    \begin{macrocode}
 %\def\expand@font@defaults{%
@@ -3084,19 +3084,14 @@
 %  \edef\ttdef@ult{\ttdefault}%
 %  \series@maybe@drop@one@m\bfdefault\bfdef@ult % !! changed 2020/02/25 v3.1j
 %  \series@maybe@drop@one@m\mddefault\mddef@ult % !! changed 2020/02/25 v3.1j
-% %\edef\famdef@ult{\familydefault}%            % !! deleted 2020/04/13 v3.1n
-%  \@expandfontdefaultshook                     % !! added 2020/04/06 v3.1m
+% %\edef\famdef@ult{\familydefault}% !! deleted 2020/04/13 v3.1n
+% %\@expandfontdefaultshook        % !! only in 2020/04/06 v3.1m
+%  \UseHook{expand@font@defaults}%   !! new in 2020/08/21 v3.2b
 %}
 %    \end{macrocode}
 % p\LaTeX{}では、以下のコードを末尾に追加します。
-% ^^A  [TODO] Code still based on ltfssini.dtx 2020/03/19 v3.1l;
-% ^^A    Extra work needed to support both 'latex' and 'latex-dev'
-% ^^A    See changes in ltfssini.dtx:
-% ^^A    * 2020/04/06 v3.1m (latex3/latex2e@a3064ea)
+% ^^A  [TODO] See changes in ltfssini.dtx:
 % ^^A    * 2020/04/13 v3.1n (latex3/latex2e@3503b28)
-% ^^A  ===== v3.1m =====
-% ^^A  ltfssini.dtx 2020/04/06 v3.1m に基づけば |\@expandfontdefaultshook| を
-% ^^A  使うこともできるが、とりあえず |\g@addto@macro| で末尾追加で問題ない。
 % ^^A  ===== v3.1n =====
 % ^^A  ltfssini.dtx 2020/04/13 v3.1n で |latex3/latex2e#315| 対策が入ったが、
 % ^^A  従来は |\init@series@setup| から呼び出される
@@ -3108,18 +3103,27 @@
 % ^^A  =================
 % ^^A  現時点では安定版 latex に従っておくが、本来は
 % ^^A    |\init@series@setup| が |\reset@font| を実行するかどうか
-% ^^A  を判定して |\@expand@font@defaults| 及び |\init@series@setup| への
+% ^^A  を判定して |\expand@font@defaults| 及び |\init@series@setup| への
 % ^^A  フック内容を調整すべきである。
+% \changes{v1.7h}{2020/09/28}{New hook management interface
+%    (sync with ltfssini.dtx 2020/08/21 v3.2b)}
 %    \begin{macrocode}
-\ifx\expand@font@defaults\@undefined\else  % 2020-02-02
+\ifx\expand@font@defaults\@undefined\else %<*2020-02-02|2020-10-01>
+\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
 \g@addto@macro\expand@font@defaults{%
   \edef\mcdef@ult{\mcdefault}%
   \edef\gtdef@ult{\gtdefault}%
   \edef\kanjidef@ult{\kanjifamilydefault}%
 }
-\fi
+\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\AddToHook{expand@font@defaults}{%
+  \edef\mcdef@ult{\mcdefault}%
+  \edef\gtdef@ult{\gtdefault}%
+  \edef\kanjidef@ult{\kanjifamilydefault}%
+}
+\fi % --- for 2020-10-01 END
+\fi %</2020-02-02|2020-10-01>
 %    \end{macrocode}
-%
 % \end{macro}
 %
 % \begin{macro}{\bfseries}

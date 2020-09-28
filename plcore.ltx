@@ -1019,13 +1019,21 @@
 \edef\mdseries@mc{\mddefault}% m
 \edef\mdseries@gt{\mddefault}% m
 \fi
-\ifx\expand@font@defaults\@undefined\else  % 2020-02-02
+\ifx\expand@font@defaults\@undefined\else %<*2020-02-02|2020-10-01>
+\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
 \g@addto@macro\expand@font@defaults{%
   \edef\mcdef@ult{\mcdefault}%
   \edef\gtdef@ult{\gtdefault}%
   \edef\kanjidef@ult{\kanjifamilydefault}%
 }
-\fi
+\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\AddToHook{expand@font@defaults}{%
+  \edef\mcdef@ult{\mcdefault}%
+  \edef\gtdef@ult{\gtdefault}%
+  \edef\kanjidef@ult{\kanjifamilydefault}%
+}
+\fi % --- for 2020-10-01 END
+\fi %</2020-02-02|2020-10-01>
 \ifx\bfseries@rm\@undefined\else %<*2020-02-02|2020-10-01>
 \ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
 \DeclareRobustCommand\bfseries{%
