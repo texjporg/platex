@@ -6,10 +6,11 @@
 %%
 %% plvers.dtx  (with options: `platexrelease')
 %% platexrelease.dtx  (with options: `platexrelease')
+%% plexpl3.dtx  (with options: `platexrelease')
 %% plfonts.dtx  (with options: `platexrelease')
 %% plcore.dtx  (with options: `platexrelease')
 %% 
-%% Copyright (c) 2016-2018 Japanese TeX Development Community
+%% Copyright (c) 2016-2020 Japanese TeX Development Community
 %% 
 %% This file is part of the pLaTeX2e system (community edition).
 %% -------------------------------------------------------------
@@ -201,6 +202,15 @@ of this package available from CTAN}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\PackageWarning}{pLaTeX Info}%
   % * <2006/11/10>
+\plEndIncludeInRelease
+%% File: plexpl3.dtx
+\plIncludeInRelease{2020/10/01}%
+                   {plexpl3}{Pre-load plexpl3}%
+\RequirePackage{plexpl3}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}%
+                   {plexpl3}{Not loading plexpl3}%
+% Nothing to do
 \plEndIncludeInRelease
 %% File: plfonts.dtx
 \plIncludeInRelease{2020/04/12}{\inlist@}
@@ -2680,7 +2690,7 @@ of this package available from CTAN}
     \platex_if_box_yoko:NF \l_shipout_box {
       \vbox_set:Nn \l_shipout_box
         {
-            \tex_yoko:D
+            \platex_direction_yoko:
             \box_use:N \l_shipout_box
         }
     }
@@ -2692,7 +2702,7 @@ of this package available from CTAN}
     }{
       \vbox_set:Nn \l__platex_shipout_dummy_box
         {
-          \tex_yoko:D
+          \platex_direction_yoko:
           \__platex_original_shipout_execute_cont:
         }
       % [Limitation] the code above may discard some contents,

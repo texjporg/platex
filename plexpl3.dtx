@@ -65,6 +65,19 @@
 %<plcore>\fi                     %--- expl3 available END
 %    \end{macrocode}
 %
+% \file{platexrelease}のroll-forwardにも登録します。
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2020/10/01}%
+%<platexrelease>                   {plexpl3}{Pre-load plexpl3}%
+%<platexrelease>\RequirePackage{plexpl3}
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}%
+%<platexrelease>                   {plexpl3}{Not loading plexpl3}%
+%<platexrelease>% Nothing to do
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+%
+% 以下のコードは\file{plexpl3.code.tex}に書き出します。
 % フォーマットとパッケージからの重複読み込みは禁止します。
 %    \begin{macrocode}
 %<*code>

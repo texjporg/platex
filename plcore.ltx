@@ -1796,7 +1796,7 @@
     \platex_if_box_yoko:NF \l_shipout_box {
       \vbox_set:Nn \l_shipout_box
         {
-            \tex_yoko:D
+            \platex_direction_yoko:
             \box_use:N \l_shipout_box
         }
     }
@@ -1808,7 +1808,7 @@
     }{
       \vbox_set:Nn \l__platex_shipout_dummy_box
         {
-          \tex_yoko:D
+          \platex_direction_yoko:
           \__platex_original_shipout_execute_cont:
         }
       % [Limitation] the code above may discard some contents,
