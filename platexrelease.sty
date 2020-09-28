@@ -2241,6 +2241,36 @@ of this package available from CTAN}
    \global \maxdepth \@maxdepth
 }
 \plEndIncludeInRelease
+\plIncludeInRelease{2020/10/01}{\@vtryfc}
+                               {Empty float}%
+\def\@vtryfc #1{%
+  \global\setbox\@outputbox\vbox{\iftdir\hskip\z@\fi}%
+  \let\@elt\@wtryfc
+  \@flsucceed
+  \global\setbox\@outputbox \vbox to\@colht{%
+    \vskip \@fptop
+    \vskip -\@fpsep
+    \unvbox \@outputbox
+    \vskip \@fpbot}%
+  \let\@elt\relax
+  \xdef #1{\@failedlist\@flfail}%
+  \xdef\@freelist{\@freelist\@flsucceed}}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@vtryfc}
+                               {LaTeX2e original}%
+\def\@vtryfc #1{%
+  \global\setbox\@outputbox\vbox{}%
+  \let\@elt\@wtryfc
+  \@flsucceed
+  \global\setbox\@outputbox \vbox to\@colht{%
+    \vskip \@fptop
+    \vskip -\@fpsep
+    \unvbox \@outputbox
+    \vskip \@fpbot}%
+  \let\@elt\relax
+  \xdef #1{\@failedlist\@flfail}%
+  \xdef\@freelist{\@freelist\@flsucceed}}
+\plEndIncludeInRelease
 \plIncludeInRelease{2018/05/20}{\@tombowbleed}{Macro added}%
 \def\@tombowbleed{3mm}
 \plEndIncludeInRelease

@@ -128,6 +128,8 @@
 %    (checked ltshipout.dtx 2020/09/21 v1.0c)}
 % \changes{v1.3f}{2020/09/26}{\cs{__shipout_execute_cont:}を再定義
 %    (checked ltshipout.dtx 2020/09/21 v1.0c)}
+% \changes{v1.3g}{2020/09/28}{縦組で空のフロートだけのページの
+%    フッタ(Issue 78)}
 % \changes{v1.3g}{2020/09/28}{\file{plexpl3}で定義した命令を使用}
 % \fi
 %
@@ -792,6 +794,70 @@
     \unvbox\footins}\fi
   \ifvbox\@kludgeins\insert\@kludgeins{\unvbox\@kludgeins}\fi
 }
+%</plcore>
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\@vtryfc}
+% \LaTeXe\ 2017/01/01以降では、例えば
+%\begin{verbatim}
+% \documentclass{tarticle}
+% \begin{document}
+% \begin{figure}
+% \end{figure}
+% \clearpage
+% a
+% \end{document}
+%\end{verbatim}
+% のようにすると「空のフロート」だけの空白ページが発生します。
+% このとき、縦組クラスではフッタが持ち上がってしまうので、
+% 対策します。(Issue \#78)
+%
+% なお、\LaTeXe\ 2015/01/01--2016/03/31 patch level 3では
+%\begin{verbatim}
+%   ! Output loop---100 consecutive dead cycles.
+%\end{verbatim}
+% のエラーが出ていました。
+% それより昔の版では空白ページは発生しません。
+%
+% 対策方法は、\file{ltoutput.dtx}で定義されている|\@vtryfc|に
+% |\iftdir\hskip\z@\fi|の追加です（|\@makecol|と同様）。
+% \changes{v1.3g}{2020/09/28}{縦組で空のフロートだけのページの
+%    フッタ(Issue 78)}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2020/10/01}{\@vtryfc}
+%<platexrelease>                               {Empty float}%
+%<*plcore|platexrelease>
+\def\@vtryfc #1{%
+  \global\setbox\@outputbox\vbox{\iftdir\hskip\z@\fi}%
+  \let\@elt\@wtryfc
+  \@flsucceed
+  \global\setbox\@outputbox \vbox to\@colht{%
+    \vskip \@fptop
+    \vskip -\@fpsep
+    \unvbox \@outputbox
+    \vskip \@fpbot}%
+  \let\@elt\relax
+  \xdef #1{\@failedlist\@flfail}%
+  \xdef\@freelist{\@freelist\@flsucceed}}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@vtryfc}
+%<platexrelease>                               {LaTeX2e original}%
+%<platexrelease>\def\@vtryfc #1{%
+%<platexrelease>  \global\setbox\@outputbox\vbox{}%
+%<platexrelease>  \let\@elt\@wtryfc
+%<platexrelease>  \@flsucceed
+%<platexrelease>  \global\setbox\@outputbox \vbox to\@colht{%
+%<platexrelease>    \vskip \@fptop
+%<platexrelease>    \vskip -\@fpsep
+%<platexrelease>    \unvbox \@outputbox
+%<platexrelease>    \vskip \@fpbot}%
+%<platexrelease>  \let\@elt\relax
+%<platexrelease>  \xdef #1{\@failedlist\@flfail}%
+%<platexrelease>  \xdef\@freelist{\@freelist\@flsucceed}}
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 %
@@ -804,6 +870,7 @@
 % |\iftombow|はトンボを出力するかどうか、|\iftombowdate|はDVIを作成した
 % 日付をトンボの脇に出力するかどうかを示すために用います。
 %    \begin{macrocode}
+%<*plcore>
 \newif\iftombow \tombowfalse
 \newif\iftombowdate \tombowdatetrue
 %    \end{macrocode}

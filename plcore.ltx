@@ -1612,6 +1612,18 @@
     \unvbox\footins}\fi
   \ifvbox\@kludgeins\insert\@kludgeins{\unvbox\@kludgeins}\fi
 }
+\def\@vtryfc #1{%
+  \global\setbox\@outputbox\vbox{\iftdir\hskip\z@\fi}%
+  \let\@elt\@wtryfc
+  \@flsucceed
+  \global\setbox\@outputbox \vbox to\@colht{%
+    \vskip \@fptop
+    \vskip -\@fpsep
+    \unvbox \@outputbox
+    \vskip \@fpbot}%
+  \let\@elt\relax
+  \xdef #1{\@failedlist\@flfail}%
+  \xdef\@freelist{\@freelist\@flsucceed}}
 \newif\iftombow \tombowfalse
 \newif\iftombowdate \tombowdatetrue
 \newdimen\@tombowwidth

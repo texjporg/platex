@@ -34,7 +34,7 @@
 % case 1: This file must be a normal package
   \NeedsTeXFormat{pLaTeX2e}
   \ProvidesPackage{exppl2e}
-                [2020/02/10 v1.1g Experimental pLaTeX2e features]
+                [2020/09/28 v1.1h Experimental pLaTeX2e features]
   \PackageWarningNoLine{exppl2e}{%
       This is the unstable, experimental part of pLaTeX2e.\MessageBreak
       This package may contain:\MessageBreak
@@ -238,78 +238,6 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% \section{空のページ}
-%
-% 現時点では保留しています。
-% 参考：GitHub:texjporg/platex\#78
-%
-% \LaTeXe\ 2017/01/01以降では、例えば
-%\begin{verbatim}
-% \documentclass{tarticle}
-% \begin{document}
-% \begin{figure}
-% \end{figure}
-% \clearpage
-% a
-% \end{document}
-%\end{verbatim}
-% のようにすると「空のフロート」だけの空白ページを発生させることが
-% できます。この場合、縦組クラスを用いているとフッタが持ち上がります。
-%
-% なお、\LaTeXe\ 2015/01/01--2016/03/31 patch level 3では
-%\begin{verbatim}
-%   ! Output loop---100 consecutive dead cycles.
-%\end{verbatim}
-% のエラーが出て、それ以前では空白ページは発生しません。
-%
-% フロートでない空白ページでページフッタが持ち上がる問題へは、
-% |\@makecol|の|\iftdir\vbox{\hskip\z@}\fi|で対処してありますが、
-% フロートがある空白ページでは|\@makecol|が呼ばれないことから
-% 対策が効いていません。ただ、フロートが空である状況は
-% 元々不自然なので、現在はサポートしていません。
-%
-% もし対策することになれば、下記のコードを使用します。
-% \begin{macro}{\@vtryfc}
-% \file{ltoutput.dtx}で定義されている|\@vtryfc|に
-% |\iftdir\hskip\z@\fi|を追加してあります。
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{9999/99/99}{\@vtryfc}
-%<platexrelease>                               {Empty float}%
-%<*plcore|platexrelease>
-\def\@vtryfc #1{%
-  \global\setbox\@outputbox\vbox{\iftdir\hskip\z@\fi}%
-  \let\@elt\@wtryfc
-  \@flsucceed
-  \global\setbox\@outputbox \vbox to\@colht{%
-    \vskip \@fptop
-    \vskip -\@fpsep
-    \unvbox \@outputbox
-    \vskip \@fpbot}%
-  \let\@elt\relax
-  \xdef #1{\@failedlist\@flfail}%
-  \xdef\@freelist{\@freelist\@flsucceed}}
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\@vtryfc}
-%<platexrelease>                               {LaTeX2e original}%
-%<platexrelease>\def\@vtryfc #1{%
-%<platexrelease>  \global\setbox\@outputbox\vbox{}%
-%<platexrelease>  \let\@elt\@wtryfc
-%<platexrelease>  \@flsucceed
-%<platexrelease>  \global\setbox\@outputbox \vbox to\@colht{%
-%<platexrelease>    \vskip \@fptop
-%<platexrelease>    \vskip -\@fpsep
-%<platexrelease>    \unvbox \@outputbox
-%<platexrelease>    \vskip \@fpbot}%
-%<platexrelease>  \let\@elt\relax
-%<platexrelease>  \xdef #1{\@failedlist\@flfail}%
-%<platexrelease>  \xdef\@freelist{\@freelist\@flsucceed}}
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
-% \end{macro}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % \section{支柱}
 %
 % \begin{macro}{\strut}
@@ -377,6 +305,12 @@
 % \section{脚注とボトムフロートの順序および垂直位置}
 %
 % 2017/04/08に導入済み。
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \section{空のフロートだけのページ}
+%
+% 2020/10/01に導入済み。
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
