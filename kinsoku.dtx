@@ -3,7 +3,7 @@
 %
 %  Copyright 1995 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016-2017 Japanese TeX Development Community
+%  Copyright (c) 2016-2020 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -17,6 +17,7 @@
 %      のために128--256の文字を\texttt{\cs{xspcode}=3}に設定}
 % \changes{v1.0b}{2017/08/05}{％、＆、\%、\&の禁則ペナルティが
 %      誤っていたのを修正（post $\rightarrow$ pre）}
+% \changes{v1.0c}{2020/09/28}{！の\cs{inhibitxspcode}を設定}
 % \fi
 %
 % \setcounter{StandardModuleDepth}{1}
@@ -26,7 +27,8 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{kinsoku.dtx}[2017/08/05 v1.0b pLaTeX Kernel (community edition)]
+\ProvidesFile{kinsoku.dtx}
+  [2020/09/28 v1.0c pLaTeX Kernel (community edition)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{kinsoku.dtx}
@@ -348,6 +350,7 @@
 % \end{tabular}
 % \end{center}
 %
+% \changes{v1.0c}{2020/09/28}{！の\cs{inhibitxspcode}を設定}
 %    \begin{macrocode}
 \inhibitxspcode`、=1
 \inhibitxspcode`。=1
@@ -355,6 +358,7 @@
 \inhibitxspcode`．=1
 \inhibitxspcode`；=1
 \inhibitxspcode`？=1
+\inhibitxspcode`！=1
 \inhibitxspcode`）=1
 \inhibitxspcode`（=2
 \inhibitxspcode`］=1
