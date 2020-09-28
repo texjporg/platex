@@ -1026,61 +1026,65 @@
   \edef\kanjidef@ult{\kanjifamilydefault}%
 }
 \fi
-\ifx\bfseries@rm\@undefined  % old
-\let\pltx@fontseries@saved\@undefined
-\let\pltx@patch@bfseries\@undefined
-\let\pltx@patch@mdseries\@undefined
-\else                        % 2020-02-02
-\let\pltx@fontseries@saved\fontseries
-\def\pltx@patch@bfseries\not@math@alphabet#1#2#3\selectfont{%
- \long\expandafter\def\csname bfseries \endcsname{%
-  \not@math@alphabet#1#2% should be \bfseries\mathbf
-  % \fontseries of pLaTeX tries to change both Latin and Japanese;
-  % here we want only Latin, so use \romanseries
-  \let\fontseries\romanseries
-  #3% contains \fontseries and \@setbfseriesdefaultshook
-  \let\fontseries\pltx@fontseries@saved % recover
+\ifx\bfseries@rm\@undefined\else %<*2020-02-02|2020-10-01>
+\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
+\DeclareRobustCommand\bfseries{%
+  \not@math@alphabet\bfseries\mathbf
+  \expand@font@defaults
+  % changed \fontseries -> \romanseries
+    \ifx\f@family\rmdef@ult      \romanseries\bfseries@rm
+    \else\ifx\f@family\sfdef@ult \romanseries\bfseries@sf
+    \else\ifx\f@family\ttdef@ult \romanseries\bfseries@tt
+    \else                        \romanseries\bfdefault
+    \fi\fi\fi
   % changed \fontseries -> \kanjiseries
     \ifx\k@family\mcdef@ult      \kanjiseries\bfseries@mc
     \else\ifx\k@family\gtdef@ult \kanjiseries\bfseries@gt
     \else                        \kanjiseries\bfdefault
     \fi\fi
   \selectfont
- }%
 }
-\ifx\@setbfseriesdefaultshook\@undefined\else
-\g@addto@macro\@setbfseriesdefaultshook{%
-    \let\bfseries@mc\bfdef@ult
-    \let\bfseries@gt\bfdef@ult
-}
-\fi
-\expandafter\expandafter\expandafter
-  \pltx@patch@bfseries\csname bfseries \endcsname
-\def\pltx@patch@mdseries\not@math@alphabet#1#2#3\selectfont{%
- \long\expandafter\def\csname mdseries \endcsname{%
-  \not@math@alphabet#1#2% should be \mdseries\relax
-  % \fontseries of pLaTeX tries to change both Latin and Japanese;
-  % here we want only Latin, so use \romanseries
-  \let\fontseries\romanseries
-  #3% contains \fontseries and \@setmdseriesdefaultshook
-  \let\fontseries\pltx@fontseries@saved % recover
+\DeclareRobustCommand\mdseries{%
+  \not@math@alphabet\mdseries\relax
+  \expand@font@defaults
+  % changed \fontseries -> \romanseries
+    \ifx\f@family\rmdef@ult      \romanseries\mdseries@rm
+    \else\ifx\f@family\sfdef@ult \romanseries\mdseries@sf
+    \else\ifx\f@family\ttdef@ult \romanseries\mdseries@tt
+    \else                        \romanseries\mddefault
+    \fi\fi\fi
   % changed \fontseries -> \kanjiseries
     \ifx\k@family\mcdef@ult      \kanjiseries\mdseries@mc
     \else\ifx\k@family\gtdef@ult \kanjiseries\mdseries@gt
     \else                        \kanjiseries\mddefault
     \fi\fi
   \selectfont
- }%
 }
-\ifx\@setmdseriesdefaultshook\@undefined\else
-\g@addto@macro\@setmdseriesdefaultshook{%
+\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\AddToHook{bfseries/defaults}{%
+    \let\bfseries@mc\bfdef@ult
+    \let\bfseries@gt\bfdef@ult
+}
+\AddToHook{bfseries}{%
+  % changed \fontseries -> \kanjiseries
+    \ifx\k@family\mcdef@ult      \kanjiseries\bfseries@mc
+    \else\ifx\k@family\gtdef@ult \kanjiseries\bfseries@gt
+    \else                        \kanjiseries\bfdefault
+    \fi\fi
+}
+\AddToHook{mdseries/defaults}{%
     \let\mdseries@mc\mddef@ult
     \let\mdseries@gt\mddef@ult
 }
-\fi
-\expandafter\expandafter\expandafter
-  \pltx@patch@mdseries\csname mdseries \endcsname
-\fi
+\AddToHook{mdseries}{%
+  % changed \fontseries -> \kanjiseries
+    \ifx\k@family\mcdef@ult      \kanjiseries\mdseries@mc
+    \else\ifx\k@family\gtdef@ult \kanjiseries\mdseries@gt
+    \else                        \kanjiseries\mddefault
+    \fi\fi
+}
+\fi % --- for 2020-10-01 END
+\fi %</2020-02-02|2020-10-01>
 \ifx\prepare@family@series@update\@undefined  % old
 \let\prepare@family@series@update@kanji\@undefined
 \let\@meta@family@list@kanji\@undefined

@@ -162,13 +162,15 @@
 %    (sync with ltfssini.dtx 2020/03/19 v3.1k and 2020/04/06 v3.1m)}
 % \changes{v1.7g}{2020/04/14}{Small update for speed.
 %    (sync with ltfssdcl.dtx 2020/04/13 v3.0v)}
+% \changes{v1.7h}{2020/09/28}{New hook management interface
+%    (sync with ltfssini.dtx 2020/08/21 v3.2b)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/04/14 v1.7g pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/09/28 v1.7h pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -3129,43 +3131,48 @@
 %\DeclareRobustCommand\bfseries{%
 %  \not@math@alphabet\bfseries\mathbf
 %  \expand@font@defaults
-%  \ifx\bfdefault\bfdefault@previous\else
+%  \ifx\bfdefault\bfdefault@previous\else % new in 2020/03/19 v3.1k
 %    \expandafter\def\expandafter\bfdefault
 %                    \expandafter{\bfdefault\@empty}%
 %    \let\bfseries@previous\bfdefault
 %    \let\bfseries@rm\bfdef@ult
 %    \let\bfseries@sf\bfdef@ult
 %    \let\bfseries@tt\bfdef@ult
-%    \@setbfseriesdefaultshook % !! added 2020/04/06 v3.1m
+%    %\@setbfseriesdefaultshook % !! only in 2020/04/06 v3.1m
+%    \UseHook{bfseries/defaults}% !! new in 2020/08/21 v3.2b
 %  \fi
 %    \ifx\f@family\rmdef@ult      \fontseries\bfseries@rm
 %    \else\ifx\f@family\sfdef@ult \fontseries\bfseries@sf
 %    \else\ifx\f@family\ttdef@ult \fontseries\bfseries@tt
 %    \else                        \fontseries\bfdefault
 %    \fi\fi\fi
+%  \UseHook{bfseries}% !! new in 2020/08/21 v3.2b
 %  \selectfont
 %}
 %\DeclareRobustCommand\mdseries{%
 %  \not@math@alphabet\mdseries\relax
 %  \expand@font@defaults
-%  \ifx\mddefault\mddefault@previous\else
+%  \ifx\mddefault\mddefault@previous\else % new in 2020/03/19 v3.1k
 %    \expandafter\def\expandafter\mddefault
 %                    \expandafter{\mddefault\@empty}%
 %    \let\mdseries@previous\mddefault
 %    \let\mdseries@rm\mddef@ult
 %    \let\mdseries@sf\mddef@ult
 %    \let\mdseries@tt\mddef@ult
-%    \@setmdseriesdefaultshook % !! added 2020/04/06 v3.1m
+%    %\@setmdseriesdefaultshook % !! only in 2020/04/06 v3.1m
+%    \UseHook{mdseries/defaults}% !! new in 2020/08/21 v3.2b
 %  \fi
 %    \ifx\f@family\rmdef@ult      \fontseries\mdseries@rm
 %    \else\ifx\f@family\sfdef@ult \fontseries\mdseries@sf
 %    \else\ifx\f@family\ttdef@ult \fontseries\mdseries@tt
 %    \else                        \fontseries\mddefault
 %    \fi\fi\fi
+%  \UseHook{mdseries}% !! new in 2020/08/21 v3.2b
 %  \selectfont
 %}
 %    \end{macrocode}
 % 以下でp\LaTeX{}用に再定義します。
+% まず\LaTeXe~2020-02-02ベース。
 % \changes{v1.6y}{2020/02/24}{Make the \cs{ifx} selection outside of
 %    \cs{fontseries} argument so that it is not done several times
 %    (sync with ltfssini.dtx 2020/02/18 v3.1i)}
@@ -3173,61 +3180,82 @@
 %    and \cs{mddefault}, use \cs{@setYYseriesdefaultshook}
 %    (sync with ltfssini.dtx 2020/03/19 v3.1k and 2020/04/06 v3.1m)}
 %    \begin{macrocode}
-\ifx\bfseries@rm\@undefined  % old
-\let\pltx@fontseries@saved\@undefined
-\let\pltx@patch@bfseries\@undefined
-\let\pltx@patch@mdseries\@undefined
-\else                        % 2020-02-02
-\let\pltx@fontseries@saved\fontseries
-\def\pltx@patch@bfseries\not@math@alphabet#1#2#3\selectfont{%
- \long\expandafter\def\csname bfseries \endcsname{%
-  \not@math@alphabet#1#2% should be \bfseries\mathbf
-  % \fontseries of pLaTeX tries to change both Latin and Japanese;
-  % here we want only Latin, so use \romanseries
-  \let\fontseries\romanseries
-  #3% contains \fontseries and \@setbfseriesdefaultshook
-  \let\fontseries\pltx@fontseries@saved % recover
+\ifx\bfseries@rm\@undefined\else %<*2020-02-02|2020-10-01>
+\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
+\DeclareRobustCommand\bfseries{%
+  \not@math@alphabet\bfseries\mathbf
+  \expand@font@defaults
+  % changed \fontseries -> \romanseries
+    \ifx\f@family\rmdef@ult      \romanseries\bfseries@rm
+    \else\ifx\f@family\sfdef@ult \romanseries\bfseries@sf
+    \else\ifx\f@family\ttdef@ult \romanseries\bfseries@tt
+    \else                        \romanseries\bfdefault
+    \fi\fi\fi
+%    \end{macrocode}
+% ここからがp\LaTeX{}による追加コードです。
+%    \begin{macrocode}
   % changed \fontseries -> \kanjiseries
     \ifx\k@family\mcdef@ult      \kanjiseries\bfseries@mc
     \else\ifx\k@family\gtdef@ult \kanjiseries\bfseries@gt
     \else                        \kanjiseries\bfdefault
     \fi\fi
+%    \end{macrocode}
+% ここまで。
+%    \begin{macrocode}
   \selectfont
- }%
 }
-\ifx\@setbfseriesdefaultshook\@undefined\else
-\g@addto@macro\@setbfseriesdefaultshook{%
-    \let\bfseries@mc\bfdef@ult
-    \let\bfseries@gt\bfdef@ult
-}
-\fi
-\expandafter\expandafter\expandafter
-  \pltx@patch@bfseries\csname bfseries \endcsname
-\def\pltx@patch@mdseries\not@math@alphabet#1#2#3\selectfont{%
- \long\expandafter\def\csname mdseries \endcsname{%
-  \not@math@alphabet#1#2% should be \mdseries\relax
-  % \fontseries of pLaTeX tries to change both Latin and Japanese;
-  % here we want only Latin, so use \romanseries
-  \let\fontseries\romanseries
-  #3% contains \fontseries and \@setmdseriesdefaultshook
-  \let\fontseries\pltx@fontseries@saved % recover
+\DeclareRobustCommand\mdseries{%
+  \not@math@alphabet\mdseries\relax
+  \expand@font@defaults
+  % changed \fontseries -> \romanseries
+    \ifx\f@family\rmdef@ult      \romanseries\mdseries@rm
+    \else\ifx\f@family\sfdef@ult \romanseries\mdseries@sf
+    \else\ifx\f@family\ttdef@ult \romanseries\mdseries@tt
+    \else                        \romanseries\mddefault
+    \fi\fi\fi
+%    \end{macrocode}
+% ここからがp\LaTeX{}による追加コードです。
+%    \begin{macrocode}
   % changed \fontseries -> \kanjiseries
     \ifx\k@family\mcdef@ult      \kanjiseries\mdseries@mc
     \else\ifx\k@family\gtdef@ult \kanjiseries\mdseries@gt
     \else                        \kanjiseries\mddefault
     \fi\fi
+%    \end{macrocode}
+% ここまで。
+%    \begin{macrocode}
   \selectfont
- }%
 }
-\ifx\@setmdseriesdefaultshook\@undefined\else
-\g@addto@macro\@setmdseriesdefaultshook{%
+%    \end{macrocode}
+% 次に\LaTeXe~2020-10-01ベース。|\AddToHook|で十分です。
+% \changes{v1.7h}{2020/09/28}{New hook management interface
+%    (sync with ltfssini.dtx 2020/08/21 v3.2b)}
+%    \begin{macrocode}
+\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\AddToHook{bfseries/defaults}{%
+    \let\bfseries@mc\bfdef@ult
+    \let\bfseries@gt\bfdef@ult
+}
+\AddToHook{bfseries}{%
+  % changed \fontseries -> \kanjiseries
+    \ifx\k@family\mcdef@ult      \kanjiseries\bfseries@mc
+    \else\ifx\k@family\gtdef@ult \kanjiseries\bfseries@gt
+    \else                        \kanjiseries\bfdefault
+    \fi\fi
+}
+\AddToHook{mdseries/defaults}{%
     \let\mdseries@mc\mddef@ult
     \let\mdseries@gt\mddef@ult
 }
-\fi
-\expandafter\expandafter\expandafter
-  \pltx@patch@mdseries\csname mdseries \endcsname
-\fi
+\AddToHook{mdseries}{%
+  % changed \fontseries -> \kanjiseries
+    \ifx\k@family\mcdef@ult      \kanjiseries\mdseries@mc
+    \else\ifx\k@family\gtdef@ult \kanjiseries\mdseries@gt
+    \else                        \kanjiseries\mddefault
+    \fi\fi
+}
+\fi % --- for 2020-10-01 END
+\fi %</2020-02-02|2020-10-01>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
