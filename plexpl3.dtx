@@ -10,13 +10,13 @@
 %
 %
 % \iffalse
-% \changes{v1.0}{2020/09/26}{初版：p\TeX{}の条件文を定義}
+% \changes{v1.0}{2020/09/28}{初版：p\TeX{}の条件文を定義}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
-\ProvidesFile{plexpl3.dtx}[2020/09/26 v1.0 expl3 additions]
+\ProvidesFile{plexpl3.dtx}[2020/09/28 v1.0 expl3 additions]
 \documentclass{jltxdoc}
 \GetFileInfo{plexpl3.dtx}
 \author{Japanese \TeX\ Development Community}
@@ -47,7 +47,7 @@
 %<*package>
 \NeedsTeXFormat{pLaTeX2e}
 \RequirePackage{expl3}
-\ProvidesExplPackage{plexpl3}{2020-09-26}{1.0}
+\ProvidesExplPackage{plexpl3}{2020-09-28}{1.0}
   {pTeX/upTeX-specific additions to expl3}
 %</package>
 %    \end{macrocode}
@@ -68,18 +68,19 @@
 % フォーマットとパッケージからの重複読み込みは禁止します。
 %    \begin{macrocode}
 %<*code>
-\if_cs_exist:N \platex_explLoaded:
-  \GenericInfo{}
-    {Skipping:~ plexpl3~ code~ already~ part~ of~ the~ format}%
-  \exp_after:wN \endinput
-\fi:
-\cs_new:Npn \platex_explLoaded: {  }
+\cs_if_exist:NT \__platex_expl_loaded:
+  {
+    \GenericInfo{}
+      {Skipping:~ plexpl3~ code~ already~ part~ of~ the~ format}%
+    \exp_after:wN \endinput
+  }
+\cs_new:Npn \__platex_expl_loaded: {  }
 %    \end{macrocode}
 %
 % \section{p\TeX{}系列の条件文}
 %
-% p\TeX{}系列の条件文を|\if-|トークンに見えるようにします。
-% \changes{v1.0}{2020/09/26}{初版：p\TeX{}の条件文を定義}
+% p\TeX{}系列の条件文をexpl3の文法にします。
+% \changes{v1.0}{2020/09/28}{初版：p\TeX{}の条件文を定義}
 %    \begin{macrocode}
 %% additions to l3box.dtx: writing directions (pTeX/upTeX-specific)
 \cs_set_eq:NN \platex_direction_yoko: \tex_yoko:D
