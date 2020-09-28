@@ -987,6 +987,7 @@
   \ifin@ \usekanji{#1}{#2}{#3}{#4}%
   \else\useroman{#1}{#2}{#3}{#4}%
   \fi}
+\ifx\AddToHook\@undefined % --- for 2020-02-02 or older BEGIN
 \ifx\@defaultfamilyhook\@undefined  % old
 \DeclareRobustCommand\normalfont{%
     \kanjiencoding{\kanjiencodingdefault}%
@@ -1005,7 +1006,15 @@
     \edef\k@series{\kanjiseriesdefault}%
     \edef\k@shape{\kanjishapedefault}%
 }
-\fi
+\fi                                 % done
+\else % --- for 2020-02-02 or older END & for 2020-10-01 BEGIN
+\AddToHook{normalfont}{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
+}
+\fi % --- for 2020-10-01 END
 \adjustbaseline
 \let\reset@font\normalfont
 \ifx\bfseries@rm\@undefined  % old

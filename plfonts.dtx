@@ -2970,10 +2970,15 @@
 % なりました。ltfssini.dtx 1995/10/16 v3.0fの変更も参考。）
 % \changes{v1.7a}{2020/03/06}{\cs{@defaultfamilyhook}を活用
 %    (sync with ltfssini.dtx 2020/02/10 v3.1h)}
+%
+% \LaTeXe~2020-10-01では|\AddToHook|が使えます。
+% \changes{v1.7h}{2020/09/28}{New hook management interface
+%    (sync with ltfssini.dtx 2020/08/21 v3.2b)}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2020/04/12}{\normalfont}
 %<platexrelease>                   {Use \@defaultfamilyhook}%
 %<*plcore|platexrelease>
+\ifx\AddToHook\@undefined % --- for 2020-02-02 or older BEGIN
 \ifx\@defaultfamilyhook\@undefined  % old
 \DeclareRobustCommand\normalfont{%
     \kanjiencoding{\kanjiencodingdefault}%
@@ -2999,7 +3004,23 @@
     \edef\k@series{\kanjiseriesdefault}%
     \edef\k@shape{\kanjishapedefault}%
 }
-\fi
+\fi                                 % done
+\else % --- for 2020-02-02 or older END & for 2020-10-01 BEGIN
+%<platexrelease>\DeclareRobustCommand\normalfont{%
+%<platexrelease>   \fontencoding\encodingdefault
+%<platexrelease>   \edef\f@family{\familydefault}%
+%<platexrelease>   \edef\f@series{\seriesdefault}%
+%<platexrelease>   \edef\f@shape{\shapedefault}%
+%<platexrelease>   \UseHook{normalfont}%
+%<platexrelease>   \@defaultfamilyhook        % hookname from 2020/02 will vanish
+%<platexrelease>   \selectfont}
+\AddToHook{normalfont}{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
+}
+\fi % --- for 2020-10-01 END
 \adjustbaseline
 \let\reset@font\normalfont
 %</plcore|platexrelease>
