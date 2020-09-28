@@ -52,7 +52,27 @@
 
 
 \section{バグ修正}
-% [TODO] 準備中。
+\begin{itemize}
+ \item \LaTeXe~2017/01/01以降で空のフロートだけのページが
+  発生した場合、縦組クラスではフッタの位置が持ち上がっていたので
+  修正しました。(|#78|)
+ \item 禁則パラメータ設定ファイル(kinsoku.tex)に
+  |\inhibitxspcode`！=1|の設定が抜けていたので追加しました。
+  (ptex-base\#8)
+\end{itemize}
+
+
+\section{expl3文法の\pLaTeX{}版}
+\LaTeXe\ \texttt{<2020-02-02>}でexpl3がフォーマットに
+組み込まれたことを受け、
+\pLaTeX{}でも\pTeX{}系列の追加機能をexpl3文法に則って
+利用しやすくするため、本リリースで新設しました。
+\pLaTeXe\ \texttt{<2020-10-01>}では、この機能を
+フォーマットに組み込んであります。
+
+現時点では、組方向変更（|\tate|等）と組方向判定（|\iftdir|等）を
+ラップするコマンドを用意してあります。詳細は
+\file{pldoc.pdf}の``plexpl3.dtx''の節を参照してください。
 
 
 \section{開発版のテストのお願い}
