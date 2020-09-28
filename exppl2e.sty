@@ -256,7 +256,7 @@
 % のようにすると「空のフロート」だけの空白ページを発生させることが
 % できます。この場合、縦組クラスを用いているとフッタが持ち上がります。
 %
-% なお、\LaTeXe\ 2015/01/01〜2016/03/31 patch level 3では
+% なお、\LaTeXe\ 2015/01/01--2016/03/31 patch level 3では
 %\begin{verbatim}
 %   ! Output loop---100 consecutive dead cycles.
 %\end{verbatim}
@@ -273,6 +273,9 @@
 % \file{ltoutput.dtx}で定義されている|\@vtryfc|に
 % |\iftdir\hskip\z@\fi|を追加してあります。
 %    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{9999/99/99}{\@vtryfc}
+%<platexrelease>                               {Empty float}%
+%<*plcore|platexrelease>
 \def\@vtryfc #1{%
   \global\setbox\@outputbox\vbox{\iftdir\hskip\z@\fi}%
   \let\@elt\@wtryfc
@@ -285,6 +288,23 @@
   \let\@elt\relax
   \xdef #1{\@failedlist\@flfail}%
   \xdef\@freelist{\@freelist\@flsucceed}}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@vtryfc}
+%<platexrelease>                               {LaTeX2e original}%
+%<platexrelease>\def\@vtryfc #1{%
+%<platexrelease>  \global\setbox\@outputbox\vbox{}%
+%<platexrelease>  \let\@elt\@wtryfc
+%<platexrelease>  \@flsucceed
+%<platexrelease>  \global\setbox\@outputbox \vbox to\@colht{%
+%<platexrelease>    \vskip \@fptop
+%<platexrelease>    \vskip -\@fpsep
+%<platexrelease>    \unvbox \@outputbox
+%<platexrelease>    \vskip \@fpbot}%
+%<platexrelease>  \let\@elt\relax
+%<platexrelease>  \xdef #1{\@failedlist\@flfail}%
+%<platexrelease>  \xdef\@freelist{\@freelist\@flsucceed}}
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 %
