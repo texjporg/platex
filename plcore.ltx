@@ -1613,7 +1613,7 @@
   \ifvbox\@kludgeins\insert\@kludgeins{\unvbox\@kludgeins}\fi
 }
 \def\@vtryfc #1{%
-  \global\setbox\@outputbox\vbox{\iftdir\hskip\z@\fi}%
+  \global\setbox\@outputbox\vbox{\ifydir\else\hskip\z@\fi}%
   \let\@elt\@wtryfc
   \@flsucceed
   \global\setbox\@outputbox \vbox to\@colht{%

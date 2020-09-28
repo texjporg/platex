@@ -822,7 +822,7 @@
 % それより昔の版では空白ページは発生しません。
 %
 % 対策方法は、\file{ltoutput.dtx}で定義されている|\@vtryfc|に
-% |\iftdir\hskip\z@\fi|の追加です（|\@makecol|と同様）。
+% |\ifydir\else\hskip\z@\fi|の追加です（|\@makecol|と同様）。
 % \changes{v1.3g}{2020/09/28}{縦組で空のフロートだけのページの
 %    フッタ(Issue 78)}
 %    \begin{macrocode}
@@ -830,7 +830,7 @@
 %<platexrelease>                               {Empty float}%
 %<*plcore|platexrelease>
 \def\@vtryfc #1{%
-  \global\setbox\@outputbox\vbox{\iftdir\hskip\z@\fi}%
+  \global\setbox\@outputbox\vbox{\ifydir\else\hskip\z@\fi}%
   \let\@elt\@wtryfc
   \@flsucceed
   \global\setbox\@outputbox \vbox to\@colht{%
