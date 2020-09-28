@@ -2026,12 +2026,16 @@
   \let\document@default@language\m@ne
 \fi
 %% File: plvers.dtx
+\ifx\AddToHook\@undefined
 \expandafter\def\expandafter\process@table\expandafter{%
   \expandafter\p@warn@latexrelease\process@table}
 \begingroup
 \toks@\expandafter{\expandafter\p@warn@latexrelease\@begindocumenthook}
 \xdef\@begindocumenthook{\the\toks@}
 \endgroup
+\else
+\AddToHook{begindocument/before}{\p@warn@latexrelease}
+\fi
 \def\p@warn@latexrelease{%
   \ifx\latexreleaseversion\@undefined\else
     \ifx\platexreleaseversion\@undefined
