@@ -28,6 +28,7 @@
                      * Local config file pldefs.cfg used^^J%
                      *************************************}}%
            {\input{pldefs.ltx}}
+\ifx\code@after@pldefs\@undefined\else \code@after@pldefs \fi
 \everyjob\expandafter{%
   \the\everyjob
   \IfFileExists{platex.cfg}{%

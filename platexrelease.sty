@@ -1332,7 +1332,7 @@ of this package available from CTAN}
 \AddToHook{expand@font@defaults}{%
   \edef\mcdef@ult{\mcdefault}%
   \edef\gtdef@ult{\gtdefault}%
-  \edef\kanjidef@ult{\kanjifamilydefault}%
+ %\edef\kanjidef@ult{\kanjifamilydefault}% !! sync with 2020/04/13 v3.1n
 }
 \fi % --- for 2020-10-01 END
 \fi %</2020-02-02|2020-10-01>
@@ -1474,13 +1474,32 @@ of this package available from CTAN}
   \fi
 }
 \fi
-\expandafter\ifx\csname init@series@setup\endcsname\relax\else  % 2020-02-02
+\expandafter\ifx\csname init@series@setup\endcsname\relax
+\else   %<*2020-02-02|2020-10-01>
+\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
 \g@addto@macro\init@series@setup{%
   \ifx\kanjidef@ult\mcdef@ult      \mcfamily
   \else\ifx\kanjidef@ult\gtdef@ult \gtfamily
   \fi\fi
 }%
-\fi
+\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\g@addto@macro\init@series@setup{%
+  % !! sync with 2020/04/13 v3.1n BEGIN
+  \ifx\kanjiseriesdefault\kanjiseriesdefault@kernel
+    \mdseries
+    \let\kanjiseriesdefault\k@series
+  \fi
+  % !! sync with 2020/04/13 v3.1n END
+}%
+\fi % --- for 2020-10-01 END
+\fi     %</2020-02-02|2020-10-01>
+\ifx\AddToHook\@undefined
+\else % --- for LaTeX2e 2020-10-01 or later BEGIN
+\def\code@after@pldefs{%
+\expandafter\def\expandafter\kanjiseriesdefault
+  \expandafter{\kanjiseriesdefault\@empty}
+\let\kanjiseriesdefault@kernel\kanjiseriesdefault}
+\fi   % --- for LaTeX2e 2020-10-01 or later END
 \ifx\prepare@family@series@update@kanji\@undefined  % old
 \DeclareRobustCommand\mcfamily
         {\not@math@alphabet\mcfamily\mathmc

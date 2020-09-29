@@ -87,6 +87,7 @@
 % \changes{v1.0z}{2019/09/29}{タイポ修正}
 % \changes{v1.1}{2020/03/24}{ドキュメントを更新}
 % \changes{v1.1a}{2020/09/26}{\file{plexpl3.dtx}を追加}
+% \changes{v1.1b}{2020/09/28}{defs読込後にフック追加}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -132,6 +133,7 @@
 % \changes{v1.0z}{2019/09/29}{Fix typos in document.}
 % \changes{v1.1}{2020/03/24}{Update document.}
 % \changes{v1.1a}{2020/09/26}{Add \file{plexpl3.dtx}}
+% \changes{v1.1b}{2020/09/28}{Add hook after loading defs}
 %\fi
 % \fi
 %
@@ -139,7 +141,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2020/03/24 v1.1 pLaTeX document file]
+\ProvidesFile{platex.dtx}[2020/09/28 v1.1b pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -529,14 +531,18 @@
 % \TeX{}の入力ファイル検索パスに設定されている
 % ディレクトリに\file{pldefs.cfg}ファイルがある場合は、
 % そのファイルを使います。
+% 読み込み後にコードが実行されるかもしれません。
 % \changes{v1.0s}{2017/12/05}{デフォルト設定ファイルの読み込みを
 %    \file{plcore.ltx}から\file{platex.ltx}へ移動}
+% \changes{v1.1b}{2020/09/28}{defs読込後にフック追加}
 %\else
 % Load font-related default settings, \file{pldefs.ltx}.
 % If a file \file{pldefs.cfg} is found, then that file will be
 % used instead.
+% Some code may be executed after loading.
 % \changes{v1.0s}{2017/12/05}{Moved loading default settings
 %    from \file{plcore.ltx} to \file{platex.ltx}}
+% \changes{v1.1b}{2020/09/28}{Add hook after loading defs}
 %\fi
 %    \begin{macrocode}
 \InputIfFileExists{pldefs.cfg}
@@ -544,6 +550,7 @@
                      * Local config file pldefs.cfg used^^J%
                      *************************************}}%
            {\input{pldefs.ltx}}
+\ifx\code@after@pldefs\@undefined\else \code@after@pldefs \fi
 %    \end{macrocode}
 %
 %\ifJAPANESE

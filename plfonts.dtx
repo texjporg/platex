@@ -162,6 +162,8 @@
 %    (sync with ltfssini.dtx 2020/03/19 v3.1k and 2020/04/06 v3.1m)}
 % \changes{v1.7g}{2020/04/14}{Small update for speed.
 %    (sync with ltfssdcl.dtx 2020/04/13 v3.0v)}
+% \changes{v1.7h}{2020/09/28}{Handling \cs{seriesdefault} changes
+%    (sync with ltfssini.dtx 2020/04/13 v3.1n)}
 % \changes{v1.7h}{2020/09/28}{New hook management interface
 %    (sync with ltfssini.dtx 2020/08/21 v3.2b)}
 % \fi
@@ -3140,7 +3142,7 @@
 \AddToHook{expand@font@defaults}{%
   \edef\mcdef@ult{\mcdefault}%
   \edef\gtdef@ult{\gtdefault}%
-  \edef\kanjidef@ult{\kanjifamilydefault}%
+ %\edef\kanjidef@ult{\kanjifamilydefault}% !! sync with 2020/04/13 v3.1n
 }
 \fi % --- for 2020-10-01 END
 \fi %</2020-02-02|2020-10-01>
@@ -3407,23 +3409,32 @@
 %
 % \begin{macro}{\init@series@setup}
 % |\begin{document}|で実行される初期化です。
-% まず、オリジナルの\LaTeX{}の定義を載せておきます。
+% まず、オリジナルの\LaTeX{}の定義（ltfssini.dtx 2020/04/13 v3.1n以降）を
+% 載せておきます。
 %    \begin{macrocode}
 %\def\init@series@setup{%
 %  \ifx\bfseries@rm@kernel\bfseries@rm
-%    \expandafter\in@\expandafter{\rmdefault}{cmr,cmss,cmtt,lcmss,lcmtt,lmr,lmss,lmtt}%
+%    \expandafter\in@\expandafter{\rmdefault}%
+%                    {cmr,cmss,cmtt,lcmss,lcmtt,lmr,lmss,lmtt}%
 %    \ifin@ \else \def\bfseries@rm{b}\fi\fi
 %  \ifx\bfseries@sf@kernel\bfseries@sf
-%    \expandafter\in@\expandafter{\sfdefault}{cmr,cmss,cmtt,lcmss,lcmtt,lmr,lmss,lmtt}%
+%    \expandafter\in@\expandafter{\sfdefault}%
+%                    {cmr,cmss,cmtt,lcmss,lcmtt,lmr,lmss,lmtt}%
 %    \ifin@ \else \def\bfseries@sf{b}\fi\fi
 %  \ifx\bfseries@tt@kernel\bfseries@tt
-%    \expandafter\in@\expandafter{\ttdefault}{cmr,cmss,cmtt,lcmss,lcmtt,lmr,lmss,lmtt}%
+%    \expandafter\in@\expandafter{\ttdefault}%
+%                    {cmr,cmss,cmtt,lcmss,lcmtt,lmr,lmss,lmtt}%
 %    \ifin@ \else \def\bfseries@tt{b}\fi\fi
-%  \expand@font@defaults
-%  \ifx\famdef@ult\rmdef@ult      \rmfamily
-%  \else\ifx\famdef@ult\sfdef@ult \sffamily
-%  \else\ifx\famdef@ult\ttdef@ult \ttfamily
-%  \fi\fi\fi
+% %\expand@font@defaults  % !! deleted in 2020/04/13 v3.1n BEGIN
+% %\ifx\famdef@ult\rmdef@ult      \rmfamily           % !! CONT
+% %\else\ifx\famdef@ult\sfdef@ult \sffamily           % !! CONT
+% %\else\ifx\famdef@ult\ttdef@ult \ttfamily           % !! CONT
+% %\fi\fi\fi              % !! deleted in 2020/04/13 v3.1n END
+%  \reset@font     % !! added in 2020/04/13 v3.1n BEGIN
+%  \ifx\seriesdefault\seriesdefault@kernel   % !! CONT
+%    \mdseries                               % !! CONT
+%    \let\seriesdefault\f@series             % !! CONT
+%  \fi             % !! added in 2020/04/13 v3.1n END
 %}%
 %    \end{macrocode}
 % ここからがp\LaTeX{}による追加コードです。
@@ -3434,15 +3445,50 @@
 % \end{itemize}
 % になることに注意します。
 % \changes{v1.6w}{2020/02/03}{巻き戻しのバグ修正}
+% \changes{v1.7h}{2020/09/28}{Handling \cs{seriesdefault} changes
+%    (sync with ltfssini.dtx 2020/04/13 v3.1n)}
 %    \begin{macrocode}
-\expandafter\ifx\csname init@series@setup\endcsname\relax\else  % 2020-02-02
+\expandafter\ifx\csname init@series@setup\endcsname\relax
+\else   %<*2020-02-02|2020-10-01>
+\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
 \g@addto@macro\init@series@setup{%
   \ifx\kanjidef@ult\mcdef@ult      \mcfamily
   \else\ifx\kanjidef@ult\gtdef@ult \gtfamily
   \fi\fi
 }%
-\fi
+\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\g@addto@macro\init@series@setup{%
+  % !! sync with 2020/04/13 v3.1n BEGIN
+  \ifx\kanjiseriesdefault\kanjiseriesdefault@kernel
+    \mdseries
+    \let\kanjiseriesdefault\k@series
+  \fi
+  % !! sync with 2020/04/13 v3.1n END
+}%
+\fi % --- for 2020-10-01 END
+\fi     %</2020-02-02|2020-10-01>
 %    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\kanjiseriesdefault}
+% \begin{macro}{\kanjiseriesdefault@kernel}
+% |\kanjiseriesdefault|が\file{pldefs.ltx}または\file{pldefs.cfg}で
+% 定義された後に、その末尾に|\@empty|を追加します。
+% これは展開時に消滅しますが、文書のプリアンブルで別の値に
+% 変更されたかどうか検知できるようになります。
+% \changes{v1.7h}{2020/09/28}{Handling \cs{seriesdefault} changes
+%    (sync with ltfssini.dtx 2020/04/13 v3.1n)}
+%    \begin{macrocode}
+\ifx\AddToHook\@undefined
+\else % --- for LaTeX2e 2020-10-01 or later BEGIN
+\def\code@after@pldefs{%
+\expandafter\def\expandafter\kanjiseriesdefault
+  \expandafter{\kanjiseriesdefault\@empty}
+\let\kanjiseriesdefault@kernel\kanjiseriesdefault}
+\fi   % --- for LaTeX2e 2020-10-01 or later END
+%    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 %
