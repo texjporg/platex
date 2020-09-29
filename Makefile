@@ -15,7 +15,7 @@ all: $(STRIPTARGET) $(PDFTARGET)
 
 PLFMT = platex.ltx plcore.ltx kinsoku.tex pldefs.ltx \
 	jy1mc.fd jy1gt.fd jt1mc.fd jt1gt.fd plext.sty \
-	ptrace.sty pfltrace.sty plexpl3.sty plexpl3.code.tex
+	ptrace.sty pfltrace.sty plexpl3.sty plexpl3.ltx
 
 PLFMT_SRC = platex.dtx plvers.dtx plfonts.dtx plcore.dtx \
 	kinsoku.dtx plext.dtx plexpl3.dtx

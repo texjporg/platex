@@ -41,7 +41,7 @@
 %
 % パッケージとして宣言します。
 % これで、p\LaTeXe~2020-04-12以前でも
-% \file{plexpl3.sty}と\file{plexpl3.code.tex}だけ
+% \file{plexpl3.sty}と\file{plexpl3.ltx}だけ
 % 入手すれば同等の機能が使えます。
 %    \begin{macrocode}
 %<*package>
@@ -59,7 +59,7 @@
 %<plcore>\ifdefined\ExplSyntaxOn %--- expl3 available BEGIN
 %<plcore>\ExplSyntaxOn
 %<*plcore|package>
-\input plexpl3.code.tex
+\input plexpl3.ltx
 %</plcore|package>
 %<plcore>\ExplSyntaxOff
 %<plcore>\fi                     %--- expl3 available END
@@ -77,7 +77,7 @@
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 %
-% 以下のコードは\file{plexpl3.code.tex}に書き出します。
+% 以下のコードは\file{plexpl3.ltx}に書き出します。
 % フォーマットとパッケージからの重複読み込みは禁止します。
 %    \begin{macrocode}
 %<*code>
