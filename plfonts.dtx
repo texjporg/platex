@@ -3113,21 +3113,15 @@
 %}
 %    \end{macrocode}
 % p\LaTeX{}では、以下のコードを末尾に追加します。
-% ^^A  [TODO] See changes in ltfssini.dtx:
-% ^^A    * 2020/04/13 v3.1n (latex3/latex2e@3503b28)
-% ^^A  ===== v3.1n =====
-% ^^A  ltfssini.dtx 2020/04/13 v3.1n で |latex3/latex2e#315| 対策が入ったが、
+% \file{ltfssini.dtx} 2020/04/13 v3.1nで|latex3/latex2e#315|対策が
+% 入りましたので、その前後で|\expand@font@defaults|および
+% |\init@series@setup|への追加内容が変わります。
 % ^^A  従来は |\init@series@setup| から呼び出される
 % ^^A    |\expand@font@defaults| が |\famdef@ult| を設定していた。
 % ^^A  新版は |\init@series@setup| からもはや
 % ^^A    |\expand@font@defaults| は呼び出さず、代わりに
 % ^^A    |\init@series@setup| で一度 |\reset@font| を実行し、
-% ^^A    それに基づいて |\seriesdefault| 設定する。
-% ^^A  =================
-% ^^A  現時点では安定版 latex に従っておくが、本来は
-% ^^A    |\init@series@setup| が |\reset@font| を実行するかどうか
-% ^^A  を判定して |\expand@font@defaults| 及び |\init@series@setup| への
-% ^^A  フック内容を調整すべきである。
+% ^^A    それに基づいて |\seriesdefault| を設定する。
 % \changes{v1.7h}{2020/09/28}{New hook management interface
 %    (sync with ltfssini.dtx 2020/08/21 v3.2b)}
 %    \begin{macrocode}
