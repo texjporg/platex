@@ -1,0 +1,44 @@
+%#!platex
+
+% |\IfFontSeriesContextTF|: New in LaTeX2e 2020-10-01
+%    |\bfseries|や|\mdseries|が別のNFSS軸にマップされても
+%    コンテキストがbold typefaceかどうか判定する
+%    （|\f@series|がコンテキストと一致しないことに注意）
+
+% [TODO]
+% pLaTeX2e 2020-10-01 では特別なコードは書いていない。
+% つまり |\kanjiseries| は考慮していない。大丈夫か？
+\documentclass{article}
+\usepackage{bm} % (bold math)
+
+\newcommand\vbeta{\IfFontSeriesContextTF{bf}%
+  {\ensuremath{\bm{\beta}}}%
+  {\ensuremath{\beta}}}
+
+\newcommand\IfBold[2]{\IfFontSeriesContextTF{bf}{#1}{#2}}
+
+\begin{document}
+
+%% とりあえずテスト
+
+md: This is \IfBold{bold}{non-bold} text. \vbeta
+
+\textbf{bf: This is \IfBold{bold}{non-bold} text. \vbeta}
+
+%% 初期状態：\bfseries が太字にマップされている
+
+md: \IfBold{太}{中}字(\IfBold{bold}{non-bold})のコンテキスト
+
+\textbf{bf: \IfBold{太}{中}字(\IfBold{bold}{non-bold})のコンテキスト}
+
+%% \bfseries を中字にマップする
+\DeclareFontSeriesDefault[rm]{bf}{m}
+\DeclareFontSeriesDefault[mc]{bf}{m}
+
+%% それでもコンテキストとしては bf なので検知できる
+
+md: \IfBold{太}{中}字(\IfBold{bold}{non-bold})のコンテキスト
+
+\textbf{bf: \IfBold{太}{中}字(\IfBold{bold}{non-bold})のコンテキスト}
+
+\end{document}
