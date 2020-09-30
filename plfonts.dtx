@@ -3146,7 +3146,7 @@
 % \begin{macro}{\bfseries}
 % \begin{macro}{\mdseries}
 % ファミリごとの設定値を参照します。
-% まず、オリジナルの\LaTeX{}の定義（ltfssini.dtx 2020/04/06 v3.1m以降）を
+% まず、オリジナルの\LaTeX{}の定義（ltfssini.dtx 2020/09/30 v3.2d以降）を
 % 載せておきます。
 %    \begin{macrocode}
 %\DeclareRobustCommand\bfseries{%
@@ -3155,7 +3155,7 @@
 %  \ifx\bfdefault\bfdefault@previous\else % new in 2020/03/19 v3.1k
 %    \expandafter\def\expandafter\bfdefault
 %                    \expandafter{\bfdefault\@empty}%
-%    \let\bfseries@previous\bfdefault
+%    \let\bfdefault@previous\bfdefault % bugfix in 2020/09/30 v3.2d
 %    \let\bfseries@rm\bfdef@ult
 %    \let\bfseries@sf\bfdef@ult
 %    \let\bfseries@tt\bfdef@ult
@@ -3176,7 +3176,7 @@
 %  \ifx\mddefault\mddefault@previous\else % new in 2020/03/19 v3.1k
 %    \expandafter\def\expandafter\mddefault
 %                    \expandafter{\mddefault\@empty}%
-%    \let\mdseries@previous\mddefault
+%    \let\mddefault@previous\mddefault % bugfix in 2020/09/30 v3.2d
 %    \let\mdseries@rm\mddef@ult
 %    \let\mdseries@sf\mddef@ult
 %    \let\mdseries@tt\mddef@ult
