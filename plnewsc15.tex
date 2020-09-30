@@ -19,7 +19,8 @@
 \maketitle
 
 コミュニティ版\pLaTeXe\ \texttt{<2020-10-01>}について、
-\pLaTeXe\ \texttt{<2020-04-12>}からの更新箇所をまとめます。
+\pLaTeXe\ \texttt{<2020-04-12>}からの更新箇所を
+まとめました。u\pLaTeXe{}も同時に更新してください。
 
 
 \section{\LaTeXe\ \texttt{<2020-10-01>}対応}
@@ -32,7 +33,6 @@
 \LaTeXe\ \texttt{<2020-02-02>}で追加されたNFSSのフック
 （|\@defaultfamilyhook|, |\@sffamilyhook|等）も再構成されたため、
 対応を施しました。
-% [TODO] まだ plfonts.dtx は調整していない。
 
 さらに、ページ出力に関わるコマンドも一新されました
 （\file{ltnews32}, \file{ltshipout-doc}も参照）。特に
@@ -51,15 +51,37 @@
 （例：|aminophen/platex-tools#15|）
 
 
-\section{バグ修正}
-\begin{itemize}
- \item \LaTeXe~2017/01/01以降で空のフロートだけのページが
-  発生した場合、縦組クラスではフッタの位置が持ち上がっていたので
-  修正しました。(|#78|)
- \item 禁則パラメータ設定ファイル(kinsoku.tex)に
-  |\inhibitxspcode`！=1|の設定が抜けていたので追加しました。
-  (|ptex-base#8|)
-\end{itemize}
+\section{新NFSSの追加修正}
+前回の\LaTeXe\ \texttt{<2020-02-02>}で大幅に拡張された
+NFSS（フォント選択の仕組み）の新機能について、
+\LaTeXe\ \texttt{<2020-10-01>}で追加修正が入りましたので
+追随しました。（参考：|latex3/latex2e#315|）
+
+具体的には「|\DeclareFontSeriesDefault|の指定が
+|\normalfont|に反映されない問題」への修正です。
+再現例は以下を参照してください。
+\begin{verbatim}
+  % roman-default = roman-medium
+  % 明朝のデフォルト＝明朝の中字
+  \documentclass{article}
+  % roman-medium-default -> roman-bold
+  % 明朝の中字のデフォルト→明朝の太字へ
+  %   ※明朝の太字はゴシックの中字に置換される
+  \DeclareFontSeriesDefault[rm]{md}{b}
+  \DeclareFontSeriesDefault[mc]{md}{b}
+  \begin{document}
+  roman-default is bold
+  明朝のデフォルトは太字になった
+
+  \normalfont % 2020-02-02: 太字にならなかった
+  roman-default is bold?
+  明朝のデフォルトは太字になったか？
+
+  \mdseries
+  roman-medium is bold
+  明朝のミディアムは太字になった
+  \end{document}
+\end{verbatim}
 
 
 \section{expl3文法の\pLaTeX{}版}
@@ -73,6 +95,17 @@
 現時点では、組方向変更（|\tate|等）と組方向判定（|\iftdir|等）を
 ラップするコマンドを用意してあります。詳細は
 \file{pldoc.pdf}の``plexpl3.dtx''の節を参照してください。
+
+
+\section{バグ修正}
+\begin{itemize}
+ \item \LaTeXe~2017/01/01以降で空のフロートだけのページが
+  発生した場合、縦組クラスではフッタの位置が持ち上がっていたので
+  修正しました。(|#78|)
+ \item 禁則パラメータ設定ファイル(kinsoku.tex)に
+  |\inhibitxspcode`！=1|の設定が抜けていたので追加しました。
+  (|ptex-base#8|)
+\end{itemize}
 
 
 \section{開発版のテストのお願い}

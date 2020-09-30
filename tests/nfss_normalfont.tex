@@ -1,0 +1,27 @@
+% latex3/latex2e#315
+% fixed in (p)LaTeX2e 2020-10-01
+
+% roman-default = roman-medium
+% 明朝のデフォルト＝明朝の中字
+\documentclass{article}
+
+% roman-medium-default -> roman-bold
+% 明朝の中字のデフォルト→明朝の太字へ
+%   ※明朝の太字はゴシックの中字に置換される
+\DeclareFontSeriesDefault[rm]{md}{b}
+\DeclareFontSeriesDefault[mc]{md}{b}
+
+\begin{document}
+
+roman-default is bold
+明朝のデフォルトは太字になった
+
+\normalfont % 2020-02-02: 太字にならなかった
+roman-default is bold?
+明朝のデフォルトは太字になったか？
+
+\mdseries
+roman-medium is bold
+明朝のミディアムは太字になった
+
+\end{document}
