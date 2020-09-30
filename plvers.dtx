@@ -96,13 +96,14 @@
 % \changes{v1.1s}{2020/03/14}{\LaTeX\ \texttt{!<2020-02-02!> PL5}版対応確認}
 % \changes{v1.1t}{2020/03/25}{バナーの再構築を効率化}
 % \changes{v1.1u}{2020/03/28}{latexrelease利用時の警告を早めた}
-% \changes{v1.1v}{2020/09/28}{latexrelease利用時の警告を早めた}
+% \changes{v1.1v}{2020/09/28}{新しいフックを活用}
+% \changes{v1.1w}{2020/09/30}{\LaTeX\ \texttt{!<2020-10-01!>}版対応確認}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2020/09/28 v1.1v pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2020/09/30 v1.1w pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -142,6 +143,7 @@
 % \changes{v1.1q}{2019/10/01}{\LaTeX\ \texttt{!<2019-10-01!>}版対応確認}
 % \changes{v1.1r}{2020/02/01}{\LaTeX\ \texttt{!<2020-02-02!>}版対応確認}
 % \changes{v1.1s}{2020/03/14}{\LaTeX\ \texttt{!<2020-02-02!> PL5}版対応確認}
+% \changes{v1.1w}{2020/09/30}{\LaTeX\ \texttt{!<2020-10-01!>}版対応確認}
 %    \begin{macrocode}
 %<*2ekernel>
 %\def\fmtname{LaTeX2e}
@@ -150,7 +152,7 @@
 %<latexrelease>\edef\latexreleaseversion
 %<platexrelease>\edef\p@known@latexreleaseversion
 %<*2ekernel|latexrelease|platexrelease>
-   {2020-02-02}
+   {2020-10-01}
 %</2ekernel|latexrelease|platexrelease>
 %    \end{macrocode}
 %
@@ -194,7 +196,7 @@
    {2020-10-01}
 %</plcore|platexrelease>
 %<*plcore>
-\def\ppatch@level{-5}
+\def\ppatch@level{0}
 %</plcore>
 %    \end{macrocode}
 % \end{macro}
@@ -457,7 +459,7 @@
 %
 % \LaTeXe~2020-10-01以降では|\process@table|より早く実行される
 % フックが用意されたので、これを利用します。
-% \changes{v1.1v}{2020/09/28}{latexrelease利用時の警告を早めた}
+% \changes{v1.1v}{2020/09/28}{新しいフックを活用}
 %    \begin{macrocode}
 %<*plfinal>
 \ifx\AddToHook\@undefined
