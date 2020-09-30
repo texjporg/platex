@@ -15,7 +15,7 @@
 %% File: jclasses.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesFile{jbk12.clo}
-  [2020/01/03 v1.8e
+  [2020/09/30 v1.8f
   Standard pLaTeX file (size option)]
 \renewcommand{\normalsize}{%
     \@setfontsize\normalsize\@xiipt{16.5}%
