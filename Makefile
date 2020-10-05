@@ -118,9 +118,9 @@ exppl2e.dvi: exppl2e.sty
 platex-en.dvi: $(INTRODOC_SRC)
 	# built-in echo in shell is troublesome, so use perl instead
 	perl -e "print \"\\\\newif\\\\ifJAPANESE\\n"\" >platex.cfg
-	platex -jobname=platex-en $(KANJI) platex.dtx
+	$(LTX) -jobname=platex-en platex.dtx
 	$(MDX) -f -s gglo.ist -o platex-en.gls platex-en.glo
-	platex -jobname=platex-en $(KANJI) platex.dtx
+	$(LTX) -jobname=platex-en platex.dtx
 	rm platex-en.aux platex-en.log
 	rm platex-en.glo platex-en.gls platex-en.ilg
 	rm platex.cfg
