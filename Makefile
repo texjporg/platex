@@ -89,7 +89,7 @@ pldoc.dvi: $(PLDOC_SRC)
 	#rm -f mkpldoc*.sh dstcheck.pl
 	#platex $(KANJI) Xins.ins
 	#sh mkpldoc.sh
-	#mkpldoc*.sh dstcheck.pl
+	#rm mkpldoc*.sh dstcheck.pl
 	#
 	rm -f pldoc.toc pldoc.idx pldoc.glo
 	echo "" > ltxdoc.cfg
