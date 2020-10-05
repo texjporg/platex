@@ -4,10 +4,14 @@ DOCTARGET = platex platexrelease pldoc exppl2e \
 	platex-en #pldoc-en
 PDFTARGET = $(addsuffix .pdf,$(DOCTARGET))
 DVITARGET = $(addsuffix .dvi,$(DOCTARGET))
+TEXMF = $(shell kpsewhich -var-value=TEXMFHOME)
+
 KANJI = -kanji=jis
 #FONTMAP = -f ipaex.map -f ptex-ipaex.map
 FONTMAP = -f haranoaji.map -f ptex-haranoaji.map
-TEXMF = $(shell kpsewhich -var-value=TEXMFHOME)
+LTX = platex $(KANJI)
+DPX = dvipdfmx $(FONTMAP)
+MDX = mendex -J
 
 default: $(STRIPTARGET) $(DVITARGET)
 strip: $(STRIPTARGET)
@@ -44,62 +48,62 @@ PLDOC_SRC = $(PLFMT_SRC) $(PLCLS_SRC) $(PL209_SRC) jltxdoc.dtx
 
 platex.ltx: $(PLFMT_SRC)
 	rm -f $(PLFMT)
-	platex $(KANJI) plfmt.ins
+	$(LTX) plfmt.ins
 	rm plfmt.log
 
 jarticle.cls: $(PLCLS_SRC)
 	rm -f $(PLCLS)
-	platex $(KANJI) plcls.ins
+	$(LTX) plcls.ins
 	rm plcls.log
 
 pl209.def: $(PL209_SRC)
 	rm -f $(PL209)
-	platex $(KANJI) pl209.ins
+	$(LTX) pl209.ins
 	rm pl209.log
 
 platexrelease.sty: $(PLREL_SRC)
 	rm -f $(PLREL)
-	platex $(KANJI) platexrelease.ins
+	$(LTX) platexrelease.ins
 	rm platexrelease.log
 
 jltxdoc.cls: jltxdoc.dtx
 	rm -f jltxdoc.cls pldoc.tex Xins.ins
-	platex $(KANJI) pldocs.ins
+	$(LTX) pldocs.ins
 	rm pldocs.log pldoc.tex Xins.ins
 
 platex.dvi: $(INTRODOC_SRC)
 	rm -f platex.cfg
-	platex $(KANJI) platex.dtx
-	mendex -J -f -s gglo.ist -o platex.gls platex.glo
-	platex $(KANJI) platex.dtx
+	$(LTX) platex.dtx
+	$(MDX) -f -s gglo.ist -o platex.gls platex.glo
+	$(LTX) platex.dtx
 	rm platex.aux platex.log
 	rm platex.glo platex.gls platex.ilg
 
 platexrelease.dvi: $(PLRELDOC_SRC)
 	rm -f platex.cfg
-	platex $(KANJI) platexrelease.dtx
-	platex $(KANJI) platexrelease.dtx
+	$(LTX) platexrelease.dtx
+	$(LTX) platexrelease.dtx
 	rm platexrelease.aux platexrelease.log
 
 pldoc.dvi: $(PLDOC_SRC)
 	rm -f platex.cfg
 	rm -f jltxdoc.cls pldoc.tex Xins.ins
-	platex $(KANJI) pldocs.ins
+	$(LTX) pldocs.ins
 	#
 	#rm -f mkpldoc*.sh dstcheck.pl
-	#platex $(KANJI) Xins.ins
+	#$(LTX) Xins.ins
 	#sh mkpldoc.sh
 	#rm mkpldoc*.sh dstcheck.pl
 	#
 	rm -f pldoc.toc pldoc.idx pldoc.glo
 	echo "" > ltxdoc.cfg
-	platex $(KANJI) pldoc.tex
-	mendex -J -s gind.ist -d pldoc.dic -o pldoc.ind pldoc.idx
-	mendex -J -f -s gglo.ist -o pldoc.gls pldoc.glo
+	$(LTX) pldoc.tex
+	$(MDX) -s gind.ist -d pldoc.dic -o pldoc.ind pldoc.idx
+	$(MDX) -f -s gglo.ist -o pldoc.gls pldoc.glo
 	echo "\includeonly{}" > ltxdoc.cfg
-	platex $(KANJI) pldoc.tex
+	$(LTX) pldoc.tex
 	echo "" > ltxdoc.cfg
-	platex $(KANJI) pldoc.tex
+	$(LTX) pldoc.tex
 	#
 	rm *.aux *.log pldoc.toc pldoc.idx pldoc.ind pldoc.ilg
 	rm pldoc.glo pldoc.gls pldoc.tex Xins.ins
@@ -107,15 +111,15 @@ pldoc.dvi: $(PLDOC_SRC)
 
 exppl2e.dvi: exppl2e.sty
 	rm -f platex.cfg
-	platex $(KANJI) exppl2e.sty
-	platex $(KANJI) exppl2e.sty
+	$(LTX) exppl2e.sty
+	$(LTX) exppl2e.sty
 	rm exppl2e.aux exppl2e.log
 
 platex-en.dvi: $(INTRODOC_SRC)
 	# built-in echo in shell is troublesome, so use perl instead
 	perl -e "print \"\\\\newif\\\\ifJAPANESE\\n"\" >platex.cfg
 	platex -jobname=platex-en $(KANJI) platex.dtx
-	mendex -J -f -s gglo.ist -o platex-en.gls platex-en.glo
+	$(MDX) -f -s gglo.ist -o platex-en.gls platex-en.glo
 	platex -jobname=platex-en $(KANJI) platex.dtx
 	rm platex-en.aux platex-en.log
 	rm platex-en.glo platex-en.gls platex-en.ilg
@@ -125,22 +129,22 @@ pldoc-en.dvi: $(PLDOC_SRC)
 	# built-in echo in shell is troublesome, so use perl instead
 	perl -e "print \"\\\\newif\\\\ifJAPANESE\\n"\" >platex.cfg
 	rm -f jltxdoc.cls pldoc.tex Xins.ins
-	platex $(KANJI) pldocs.ins
+	$(LTX) pldocs.ins
 	#
 	#rm -f mkpldoc*.sh dstcheck.pl
-	#platex $(KANJI) Xins.ins
+	#$(LTX) Xins.ins
 	#sh mkpldoc-en.sh
 	#rm mkpldoc*.sh dstcheck.pl
 	#
 	rm -f pldoc-en.toc pldoc-en.idx pldoc-en.glo
 	echo "" > ltxdoc.cfg
-	platex $(KANJI) -jobname=pldoc-en pldoc.tex
-	mendex -J -s gind.ist -d pldoc.dic -o pldoc-en.ind pldoc-en.idx
-	mendex -J -f -s gglo.ist -o pldoc-en.gls pldoc-en.glo
+	$(LTX) -jobname=pldoc-en pldoc.tex
+	$(MDX) -s gind.ist -d pldoc.dic -o pldoc-en.ind pldoc-en.idx
+	$(MDX) -f -s gglo.ist -o pldoc-en.gls pldoc-en.glo
 	echo "\includeonly{}" > ltxdoc.cfg
-	platex $(KANJI) -jobname=pldoc-en pldoc.tex
+	$(LTX) -jobname=pldoc-en pldoc.tex
 	echo "" > ltxdoc.cfg
-	platex $(KANJI) -jobname=pldoc-en pldoc.tex
+	$(LTX) -jobname=pldoc-en pldoc.tex
 	#
 	rm *.aux *.log pldoc-en.toc pldoc-en.idx pldoc-en.ind pldoc-en.ilg
 	rm pldoc-en.glo pldoc-en.gls pldoc.tex Xins.ins
@@ -148,17 +152,17 @@ pldoc-en.dvi: $(PLDOC_SRC)
 	rm platex.cfg
 
 platex.pdf: platex.dvi
-	dvipdfmx $(FONTMAP) $<
+	$(DPX) $<
 platexrelease.pdf: platexrelease.dvi
-	dvipdfmx $(FONTMAP) $<
+	$(DPX) $<
 pldoc.pdf: pldoc.dvi
-	dvipdfmx $(FONTMAP) $<
+	$(DPX) $<
 exppl2e.pdf: exppl2e.dvi
-	dvipdfmx $(FONTMAP) $<
+	$(DPX) $<
 platex-en.pdf: platex-en.dvi
-	dvipdfmx $(FONTMAP) $<
+	$(DPX) $<
 pldoc-en.pdf: pldoc-en.dvi
-	dvipdfmx $(FONTMAP) $<
+	$(DPX) $<
 
 .PHONY: install clean cleanstrip cleanall cleandoc
 install:
