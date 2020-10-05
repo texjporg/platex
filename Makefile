@@ -85,12 +85,25 @@ pldoc.dvi: $(PLDOC_SRC)
 	rm -f platex.cfg
 	rm -f jltxdoc.cls pldoc.tex Xins.ins
 	platex $(KANJI) pldocs.ins
-	rm -f mkpldoc*.sh dstcheck.pl
-	platex $(KANJI) Xins.ins
-	sh mkpldoc.sh
+	#
+	#rm -f mkpldoc*.sh dstcheck.pl
+	#platex $(KANJI) Xins.ins
+	#sh mkpldoc.sh
+	#mkpldoc*.sh dstcheck.pl
+	#
+	rm -f pldoc.toc pldoc.idx pldoc.glo
+	echo "" > ltxdoc.cfg
+	platex $(KANJI) pldoc.tex
+	mendex -J -s gind.ist -d pldoc.dic -o pldoc.ind pldoc.idx
+	mendex -J -f -s gglo.ist -o pldoc.gls pldoc.glo
+	echo "\includeonly{}" > ltxdoc.cfg
+	platex $(KANJI) pldoc.tex
+	echo "" > ltxdoc.cfg
+	platex $(KANJI) pldoc.tex
+	#
 	rm *.aux *.log pldoc.toc pldoc.idx pldoc.ind pldoc.ilg
 	rm pldoc.glo pldoc.gls pldoc.tex Xins.ins
-	rm ltxdoc.cfg pldoc.dic mkpldoc*.sh dstcheck.pl
+	rm ltxdoc.cfg pldoc.dic
 
 exppl2e.dvi: exppl2e.sty
 	rm -f platex.cfg
@@ -113,12 +126,25 @@ pldoc-en.dvi: $(PLDOC_SRC)
 	perl -e "print \"\\\\newif\\\\ifJAPANESE\\n"\" >platex.cfg
 	rm -f jltxdoc.cls pldoc.tex Xins.ins
 	platex $(KANJI) pldocs.ins
-	rm -f mkpldoc*.sh dstcheck.pl
-	platex $(KANJI) Xins.ins
-	sh mkpldoc-en.sh
+	#
+	#rm -f mkpldoc*.sh dstcheck.pl
+	#platex $(KANJI) Xins.ins
+	#sh mkpldoc-en.sh
+	#rm mkpldoc*.sh dstcheck.pl
+	#
+	rm -f pldoc-en.toc pldoc-en.idx pldoc-en.glo
+	echo "" > ltxdoc.cfg
+	platex $(KANJI) -jobname=pldoc-en pldoc.tex
+	mendex -J -s gind.ist -d pldoc.dic -o pldoc-en.ind pldoc-en.idx
+	mendex -J -f -s gglo.ist -o pldoc-en.gls pldoc-en.glo
+	echo "\includeonly{}" > ltxdoc.cfg
+	platex $(KANJI) -jobname=pldoc-en pldoc.tex
+	echo "" > ltxdoc.cfg
+	platex $(KANJI) -jobname=pldoc-en pldoc.tex
+	#
 	rm *.aux *.log pldoc-en.toc pldoc-en.idx pldoc-en.ind pldoc-en.ilg
 	rm pldoc-en.glo pldoc-en.gls pldoc.tex Xins.ins
-	rm ltxdoc.cfg pldoc.dic mkpldoc*.sh dstcheck.pl
+	rm ltxdoc.cfg pldoc.dic
 	rm platex.cfg
 
 platex.pdf: platex.dvi
