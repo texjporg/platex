@@ -15,7 +15,7 @@
 %% File: plext.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{plext}
-   [2019/09/29 v1.2l pLaTeX package file (community edition)]
+   [2020/10/07 v1.2m pLaTeX package file (community edition)]
 \newif\if@rotsw
 \def\array{\let\@acol\@arrayacol \let\@classz\@arrayclassz
   \let\@classiv\@arrayclassiv
@@ -465,6 +465,7 @@
 \newdimen\save@ybaselineshift
 \newdimen\save@tbaselineshift
 \newdimen\@picwd
+\ifx\@defaultunitsset\@undefined     % old
 \def\@@picture<#1>(#2,#3)(#4,#5){%
   \save@ybaselineshift\ybaselineshift
   \save@tbaselineshift\tbaselineshift
@@ -485,10 +486,46 @@
       \@tempdima=#4\unitlength \@tempdimb=#5\unitlength
     \fi
   \fi
-  \setbox\@picbox\hbox to\@picwd\bgroup\box@dir
-  \hskip-\@tempdima\lower\@tempdimb\hbox\bgroup
-  \ybaselineshift\z@ \tbaselineshift\z@
-  \ignorespaces}
+  \setbox\@picbox\hb@xt@\@picwd\bgroup\box@dir
+    \hskip-\@tempdima
+    \lower\@tempdimb\hbox\bgroup
+      \ybaselineshift\z@ \tbaselineshift\z@
+      \ignorespaces}
+\else                                % 2020-10-01
+\def\@@picture<#1>(#2,#3)(#4,#5){%
+  \save@ybaselineshift\ybaselineshift
+  \save@tbaselineshift\tbaselineshift
+  \iftdir
+    \if#1y\let\box@dir\yoko
+      \@defaultunitsset\@picwd{#3}\unitlength
+      \@defaultunitsset\@picht{#2}\unitlength
+      \@defaultunitsset\@tempdima{#5}\unitlength
+      \@defaultunitsset\@tempdimb{#4}\unitlength
+    \else\let\box@dir\tate
+      \@defaultunitsset\@picwd{#2}\unitlength
+      \@defaultunitsset\@picht{#3}\unitlength
+      \@defaultunitsset\@tempdima{#4}\unitlength
+      \@defaultunitsset\@tempdimb{#5}\unitlength
+    \fi
+  \else
+    \if#1t\let\box@dir\tate
+      \@defaultunitsset\@picwd{#3}\unitlength
+      \@defaultunitsset\@picht{#2}\unitlength
+      \@defaultunitsset\@tempdima{#5}\unitlength
+      \@defaultunitsset\@tempdimb{#4}\unitlength
+    \else\let\box@dir\yoko
+      \@defaultunitsset\@picwd{#2}\unitlength
+      \@defaultunitsset\@picht{#3}\unitlength
+      \@defaultunitsset\@tempdima{#4}\unitlength
+      \@defaultunitsset\@tempdimb{#5}\unitlength
+    \fi
+  \fi
+  \setbox\@picbox\hb@xt@\@picwd\bgroup\box@dir
+    \hskip-\@tempdima
+    \lower\@tempdimb\hbox\bgroup
+      \ybaselineshift\z@ \tbaselineshift\z@
+      \ignorespaces}
+\fi
 \def\endpicture{%
   \egroup\hss\egroup
   \ht\@picbox\@picht \wd\@picbox\@picwd \dp\@picbox\z@
