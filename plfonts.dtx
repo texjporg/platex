@@ -166,13 +166,14 @@
 %    (sync with ltfssini.dtx 2020/04/13 v3.1n)}
 % \changes{v1.7h}{2020/09/28}{New hook management interface
 %    (sync with ltfssini.dtx 2020/08/21 v3.2b)}
+% \changes{v1.7i}{2020/10/07}{フックシステムの有無判定を改良}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/09/28 v1.7h pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2020/10/07 v1.7i pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -2976,6 +2977,7 @@
 % \LaTeXe~2020-10-01では|\AddToHook|が使えます。
 % \changes{v1.7h}{2020/09/28}{New hook management interface
 %    (sync with ltfssini.dtx 2020/08/21 v3.2b)}
+% \changes{v1.7i}{2020/10/07}{フックシステムの有無判定を改良}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2020/04/12}{\normalfont}
 %<platexrelease>                   {Use \@defaultfamilyhook}%
@@ -3124,6 +3126,7 @@
 % ^^A    それに基づいて |\seriesdefault| を設定する。
 % \changes{v1.7h}{2020/09/28}{New hook management interface
 %    (sync with ltfssini.dtx 2020/08/21 v3.2b)}
+% \changes{v1.7i}{2020/10/07}{フックシステムの有無判定を改良}
 %    \begin{macrocode}
 \ifx\expand@font@defaults\@undefined\else %<*2020-02-02|2020-10-01|.>
 \ifnum\pltx@newhook@avail=\z@ % --- for == 2020-02-02 BEGIN
@@ -3251,6 +3254,7 @@
 % 次に\LaTeXe~2020-10-01ベース。|\AddToHook|で十分です。
 % \changes{v1.7h}{2020/09/28}{New hook management interface
 %    (sync with ltfssini.dtx 2020/08/21 v3.2b)}
+% \changes{v1.7i}{2020/10/07}{フックシステムの有無判定を改良}
 %    \begin{macrocode}
 \else % --- for == 2020-02-02 END & for >= 2020-10-01 BEGIN
 \AddToHook{bfseries/defaults}{%
@@ -3441,6 +3445,7 @@
 % \changes{v1.6w}{2020/02/03}{巻き戻しのバグ修正}
 % \changes{v1.7h}{2020/09/28}{Handling \cs{seriesdefault} changes
 %    (sync with ltfssini.dtx 2020/04/13 v3.1n)}
+% \changes{v1.7i}{2020/10/07}{フックシステムの有無判定を改良}
 %    \begin{macrocode}
 \expandafter\ifx\csname init@series@setup\endcsname\relax
 \else   %<*2020-02-02|2020-10-01|.>
@@ -3473,6 +3478,7 @@
 % 変更されたかどうか検知できるようになります。
 % \changes{v1.7h}{2020/09/28}{Handling \cs{seriesdefault} changes
 %    (sync with ltfssini.dtx 2020/04/13 v3.1n)}
+% \changes{v1.7i}{2020/10/07}{フックシステムの有無判定を改良}
 %    \begin{macrocode}
 \ifnum\pltx@newhook@avail>\z@ % --- for >= 2020-10-01 BEGIN
 \def\code@after@pldefs{%
