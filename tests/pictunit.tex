@@ -1,0 +1,92 @@
+%\RequirePackage[2020/02/02]{platexrelease}
+% latex3/latex2e#372:
+% e-TeX length expressions in picture mode coordinate
+% based on tlb-picture-01.lvt
+\documentclass{article}
+\usepackage{plext}
+\begin{document}
+
+%%% old syntax
+
+\def\OLDSYNTAX#1{%
+%=====
+\def\zzza{0}%
+\begin{picture}#1(200,400)
+\loop
+\edef\zzza{\the\numexpr\zzza+40\relax}%
+\put(\numexpr\zzza+30,\numexpr\zzza+40){\line(1,0){150}}
+\put(\numexpr\zzza+30,\numexpr\zzza+40){\line(0,1){60}}
+\put(\numexpr\zzza+30,\numexpr\zzza+100){\line(1,0){20}}
+\put(\numexpr\zzza+50,\numexpr\zzza+100){\line(1,-4){10}}
+\put(\numexpr\zzza+60,\numexpr\zzza+60){\line(1,0){100}}
+\put(\numexpr\zzza+160,\numexpr\zzza+60){\line(1,-1){20}}
+\put(\numexpr\zzza+100,\numexpr\zzza+50){\line(0,-1){80}}
+\put(\numexpr\zzza+130,\numexpr\zzza+50){\line(0,-1){80}}
+\put(\numexpr\zzza+100,\numexpr\zzza-30){\line(1,0){30}}
+\put(\numexpr\zzza+100,\numexpr\zzza+61){\line(0,1){49}}
+\put(\numexpr\zzza+130,\numexpr\zzza+61){\line(0,1){49}}
+\put(\numexpr\zzza+100,\numexpr\zzza+110){\line(1,0){30}}
+\ifnum\zzza<200
+\repeat
+%=====
+\multiput(0,10)(14.22636,14.22636){5}{\circle{19.91692}}
+\put(56.9055,2){\oval(20,10)}
+\put(28.45274,227.62204){\dashbox{2}(56.9055,56.9055)}
+\put(113.81102,284.52756){\framebox(56.9055,56.9055){hello}}
+\end{picture}}
+
+%%% new syntax
+
+\newlength\zzz
+\newlength\zzzb
+\def\NEWSYNTAX#1{%
+%=====
+\setlength\zzz{100pt}
+\setlength\zzzb{0pt}
+\begin{picture}#1(200,4\zzz)
+\loop
+\addtolength\zzzb{40pt}%
+\put(\zzzb+30pt,\zzzb+40pt){\line(1,0){150pt}}
+\put(\zzzb+30pt,\zzzb+40pt){\line(0,1){60}}
+\put(\zzzb+30pt,\zzzb+\zzz){\line(1,0){20}}
+\put(\zzzb+50pt,\zzzb+\zzz){\line(1,-4){10}}
+\put(\zzzb+60pt,\zzzb+60pt){\line(1,0){50pt+50pt}}
+\put(\zzzb+160pt,\zzzb+60pt){\line(1,-1){20}}
+\put(\zzzb+\zzz,\zzzb+50pt){\line(0,-1){80}}
+\put(\zzzb+130pt,\zzzb+50pt){\line(0,-1){\zzz-20pt}}
+\put(\zzzb+\zzz,\zzzb+-30pt){\line(1,0){30}}
+\put(\zzzb+\zzz,\zzzb+61pt){\line(0,1){49}}
+\put(\zzzb+130pt,\zzzb+61pt){\line(0,1){49}}
+\put(\zzzb+\zzz,\zzzb+\zzz+10pt){\line(1,0){30}}
+\ifdim\zzzb<200pt
+\repeat
+%=====
+\multiput(0,10)(5mm,5mm){5}{\circle{7mm}}
+\put(2cm,2pt){\oval(20,10pt)}
+\put(1cm,8cm){\dashbox{2}(2cm,2cm)}
+\put(4cm,10cm){\framebox(2cm,2cm){hello}}
+\end{picture}}
+
+%= START =
+
+\OLDSYNTAX{}
+\newpage
+\makeatletter
+\ifx\@defaultunitsset\@undefined\else
+  \NEWSYNTAX{}
+  \newpage
+\fi
+\makeatother
+
+\OLDSYNTAX{<t>}
+\newpage
+\makeatletter
+\ifx\@defaultunitsset\@undefined\else
+  \NEWSYNTAX{<t>}
+  \newpage
+\fi
+\makeatother
+
+%= END =
+
+\end{document}
