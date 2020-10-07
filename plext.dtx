@@ -83,6 +83,7 @@
 %    直交する場合に、深さを忘れていたバグ修正 (forum:2506, issue~76)}
 % \changes{v1.2l}{2019/09/29}{Make \cs{bou} robust}
 % \changes{v1.2l}{2019/09/29}{Make \cs{kasen} robust}
+% \changes{v1.2m}{2020/10/07}{マクロ追加}
 % \changes{v1.2m}{2020/10/07}{Use \cs{@defaultunitsset} (gh/372)
 %    (sync with ltpictur.dtx 2020/08/14 v1.2a)}
 % \fi
@@ -1178,29 +1179,45 @@
 \newdimen\save@tbaselineshift
 \newdimen\@picwd
 %    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\X@picture@dimens}
+% 図形領域の寸法値を調整する命令を切り出しました。
+% 基本組の組み方向と直交する場合は、高さと幅を入れ替えます。
+% \changes{v1.2m}{2020/10/07}{マクロ追加}
+%    \begin{macrocode}
+\ifx\@defaultunitsset\@undefined     % old
+  \def\X@picture@dimens#1#2#3#4{%
+    \@picwd=#1\unitlength \@picht=#2\unitlength
+    \@tempdima=#3\unitlength \@tempdimb=#4\unitlength
+  }
+\else                                % 2020-10-01
+  \def\X@picture@dimens#1#2#3#4{%
+    \@defaultunitsset\@picwd{#1}\unitlength
+    \@defaultunitsset\@picht{#2}\unitlength
+    \@defaultunitsset\@tempdima{#3}\unitlength
+    \@defaultunitsset\@tempdimb{#4}\unitlength
+  }
+\fi
+%    \end{macrocode}
 % |\picture|の内部形式です。3組目の引数は、原点座標です。
 % \changes{v1.2m}{2020/10/07}{Use \cs{@defaultunitsset} (gh/372)
 %    (sync with ltpictur.dtx 2020/08/14 v1.2a)}
 %    \begin{macrocode}
-\ifx\@defaultunitsset\@undefined     % old
 \def\@@picture<#1>(#2,#3)(#4,#5){%
   \save@ybaselineshift\ybaselineshift
   \save@tbaselineshift\tbaselineshift
   \iftdir
     \if#1y\let\box@dir\yoko
-      \@picwd=#3\unitlength \@picht=#2\unitlength
-      \@tempdima=#5\unitlength \@tempdimb=#4\unitlength
+      \X@picture@dimens{#3}{#2}{#5}{#4}%
     \else\let\box@dir\tate
-      \@picwd=#2\unitlength \@picht=#3\unitlength
-      \@tempdima=#4\unitlength \@tempdimb=#5\unitlength
+      \X@picture@dimens{#2}{#3}{#4}{#5}%
     \fi
   \else
     \if#1t\let\box@dir\tate
-      \@picwd=#3\unitlength \@picht=#2\unitlength
-      \@tempdima=#5\unitlength \@tempdimb=#4\unitlength
+      \X@picture@dimens{#3}{#2}{#5}{#4}%
     \else\let\box@dir\yoko
-      \@picwd=#2\unitlength \@picht=#3\unitlength
-      \@tempdima=#4\unitlength \@tempdimb=#5\unitlength
+      \X@picture@dimens{#2}{#3}{#4}{#5}%
     \fi
   \fi
   \setbox\@picbox\hb@xt@\@picwd\bgroup\box@dir
@@ -1208,41 +1225,6 @@
     \lower\@tempdimb\hbox\bgroup
       \ybaselineshift\z@ \tbaselineshift\z@
       \ignorespaces}
-\else                                % 2020-10-01
-\def\@@picture<#1>(#2,#3)(#4,#5){%
-  \save@ybaselineshift\ybaselineshift
-  \save@tbaselineshift\tbaselineshift
-  \iftdir
-    \if#1y\let\box@dir\yoko
-      \@defaultunitsset\@picwd{#3}\unitlength
-      \@defaultunitsset\@picht{#2}\unitlength
-      \@defaultunitsset\@tempdima{#5}\unitlength
-      \@defaultunitsset\@tempdimb{#4}\unitlength
-    \else\let\box@dir\tate
-      \@defaultunitsset\@picwd{#2}\unitlength
-      \@defaultunitsset\@picht{#3}\unitlength
-      \@defaultunitsset\@tempdima{#4}\unitlength
-      \@defaultunitsset\@tempdimb{#5}\unitlength
-    \fi
-  \else
-    \if#1t\let\box@dir\tate
-      \@defaultunitsset\@picwd{#3}\unitlength
-      \@defaultunitsset\@picht{#2}\unitlength
-      \@defaultunitsset\@tempdima{#5}\unitlength
-      \@defaultunitsset\@tempdimb{#4}\unitlength
-    \else\let\box@dir\yoko
-      \@defaultunitsset\@picwd{#2}\unitlength
-      \@defaultunitsset\@picht{#3}\unitlength
-      \@defaultunitsset\@tempdima{#4}\unitlength
-      \@defaultunitsset\@tempdimb{#5}\unitlength
-    \fi
-  \fi
-  \setbox\@picbox\hb@xt@\@picwd\bgroup\box@dir
-    \hskip-\@tempdima
-    \lower\@tempdimb\hbox\bgroup
-      \ybaselineshift\z@ \tbaselineshift\z@
-      \ignorespaces}
-\fi
 %    \end{macrocode}
 % \end{macro}
 %
