@@ -6,6 +6,7 @@
 %%
 %% plvers.dtx  (with options: `platexrelease')
 %% platexrelease.dtx  (with options: `platexrelease')
+%% plvers.dtx  (with options: `plhookrelease')
 %% plexpl3.dtx  (with options: `platexrelease')
 %% plfonts.dtx  (with options: `platexrelease')
 %% plcore.dtx  (with options: `platexrelease')
@@ -143,6 +144,7 @@ of this package available from CTAN}
       some critical bugs. We advise you to\MessageBreak
       select another format date}
 \plIncludeInRelease{2017/10/28}{\PackageWarning}{pLaTeX Info}%
+  % * <2020-10-01>
   % * <2020-04-12>
   % * <2020-02-02>+3
   % * <2020-02-02>+2
@@ -203,6 +205,9 @@ of this package available from CTAN}
 \plIncludeInRelease{0000/00/00}{\PackageWarning}{pLaTeX Info}%
   % * <2006/11/10>
 \plEndIncludeInRelease
+%% File: plvers.dtx
+\chardef\pltx@newhook@avail=\z@
+\@ifl@t@r\fmtversion{2020/10/01}{\chardef\pltx@newhook@avail=\@ne}{}
 %% File: plexpl3.dtx
 \plIncludeInRelease{2020/10/01}%
                    {plexpl3}{Pre-load plexpl3}%
@@ -1234,7 +1239,7 @@ of this package available from CTAN}
 \plEndIncludeInRelease
 \plIncludeInRelease{2020/04/12}{\normalfont}
                    {Use \@defaultfamilyhook}%
-\ifx\AddToHook\@undefined % --- for 2020-02-02 or older BEGIN
+\ifnum\pltx@newhook@avail=\z@ % --- for <= 2020-02-02 BEGIN
 \ifx\@defaultfamilyhook\@undefined  % old
 \DeclareRobustCommand\normalfont{%
     \kanjiencoding{\kanjiencodingdefault}%
@@ -1261,14 +1266,14 @@ of this package available from CTAN}
     \edef\k@shape{\kanjishapedefault}%
 }
 \fi                                 % done
-\else % --- for 2020-02-02 or older END & for 2020-10-01 BEGIN
+\else % --- for <= 2020-02-02 END & for >= 2020-10-01 BEGIN
 \DeclareRobustCommand\normalfont{%
    \fontencoding\encodingdefault
    \edef\f@family{\familydefault}%
    \edef\f@series{\seriesdefault}%
    \edef\f@shape{\shapedefault}%
    \UseHook{normalfont}%
-   \@defaultfamilyhook        % hookname from 2020/02 will vanish
+   \@defaultfamilyhook % hookname from 2020/02 will vanish
    \selectfont}
 \AddToHook{normalfont}{%
     \kanjiencoding{\kanjiencodingdefault}%
@@ -1276,7 +1281,7 @@ of this package available from CTAN}
     \edef\k@series{\kanjiseriesdefault}%
     \edef\k@shape{\kanjishapedefault}%
 }
-\fi % --- for 2020-10-01 END
+\fi   % --- for >= 2020-10-01 END
 \adjustbaseline
 \let\reset@font\normalfont
 \plEndIncludeInRelease
@@ -1321,23 +1326,23 @@ of this package available from CTAN}
 \edef\mdseries@mc{\mddefault}% m
 \edef\mdseries@gt{\mddefault}% m
 \fi
-\ifx\expand@font@defaults\@undefined\else %<*2020-02-02|2020-10-01>
-\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
+\ifx\expand@font@defaults\@undefined\else %<*2020-02-02|2020-10-01|.>
+\ifnum\pltx@newhook@avail=\z@ % --- for == 2020-02-02 BEGIN
 \g@addto@macro\expand@font@defaults{%
   \edef\mcdef@ult{\mcdefault}%
   \edef\gtdef@ult{\gtdefault}%
   \edef\kanjidef@ult{\kanjifamilydefault}%
 }
-\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\else % --- for == 2020-02-02 END & for >= 2020-10-01 BEGIN
 \AddToHook{expand@font@defaults}{%
   \edef\mcdef@ult{\mcdefault}%
   \edef\gtdef@ult{\gtdefault}%
  %\edef\kanjidef@ult{\kanjifamilydefault}% !! sync with 2020/04/13 v3.1n
 }
-\fi % --- for 2020-10-01 END
-\fi %</2020-02-02|2020-10-01>
-\ifx\bfseries@rm\@undefined\else %<*2020-02-02|2020-10-01>
-\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
+\fi   % --- for >= 2020-10-01 END
+\fi %</2020-02-02|2020-10-01|.>
+\ifx\bfseries@rm\@undefined\else %<*2020-02-02|2020-10-01|.>
+\ifnum\pltx@newhook@avail=\z@ % --- for == 2020-02-02 BEGIN
 \DeclareRobustCommand\bfseries{%
   \not@math@alphabet\bfseries\mathbf
   \expand@font@defaults
@@ -1370,7 +1375,7 @@ of this package available from CTAN}
     \fi\fi
   \selectfont
 }
-\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\else % --- for == 2020-02-02 END & for >= 2020-10-01 BEGIN
 \AddToHook{bfseries/defaults}{%
     \let\bfseries@mc\bfdef@ult
     \let\bfseries@gt\bfdef@ult
@@ -1393,8 +1398,8 @@ of this package available from CTAN}
     \else                        \kanjiseries\mddefault
     \fi\fi
 }
-\fi % --- for 2020-10-01 END
-\fi %</2020-02-02|2020-10-01>
+\fi   % --- for >= 2020-10-01 END
+\fi %</2020-02-02|2020-10-01|.>
 \ifx\prepare@family@series@update\@undefined  % old
 \let\prepare@family@series@update@kanji\@undefined
 \let\@meta@family@list@kanji\@undefined
@@ -1475,14 +1480,14 @@ of this package available from CTAN}
 }
 \fi
 \expandafter\ifx\csname init@series@setup\endcsname\relax
-\else   %<*2020-02-02|2020-10-01>
-\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
+\else   %<*2020-02-02|2020-10-01|.>
+\ifnum\pltx@newhook@avail=\z@ % --- for == 2020-02-02 BEGIN
 \g@addto@macro\init@series@setup{%
   \ifx\kanjidef@ult\mcdef@ult      \mcfamily
   \else\ifx\kanjidef@ult\gtdef@ult \gtfamily
   \fi\fi
 }%
-\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\else % --- for == 2020-02-02 END & for >= 2020-10-01 BEGIN
 \g@addto@macro\init@series@setup{%
   % !! sync with 2020/04/13 v3.1n BEGIN
   \ifx\kanjiseriesdefault\kanjiseriesdefault@kernel
@@ -1491,15 +1496,14 @@ of this package available from CTAN}
   \fi
   % !! sync with 2020/04/13 v3.1n END
 }%
-\fi % --- for 2020-10-01 END
-\fi     %</2020-02-02|2020-10-01>
-\ifx\AddToHook\@undefined
-\else % --- for LaTeX2e 2020-10-01 or later BEGIN
+\fi   % --- for >= 2020-10-01 END
+\fi     %</2020-02-02|2020-10-01|.>
+\ifnum\pltx@newhook@avail>\z@ % --- for >= 2020-10-01 BEGIN
 \def\code@after@pldefs{%
 \expandafter\def\expandafter\kanjiseriesdefault
   \expandafter{\kanjiseriesdefault\@empty}
 \let\kanjiseriesdefault@kernel\kanjiseriesdefault}
-\fi   % --- for LaTeX2e 2020-10-01 or later END
+\fi                           % --- for >= 2020-10-01 END
 \ifx\prepare@family@series@update@kanji\@undefined  % old
 \DeclareRobustCommand\mcfamily
         {\not@math@alphabet\mcfamily\mathmc

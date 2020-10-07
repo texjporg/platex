@@ -98,12 +98,13 @@
 % \changes{v1.1u}{2020/03/28}{latexrelease利用時の警告を早めた}
 % \changes{v1.1v}{2020/09/28}{新しいフックを活用}
 % \changes{v1.1w}{2020/09/30}{\LaTeX\ \texttt{!<2020-10-01!>}版対応確認}
+% \changes{v1.1x}{2020/10/07}{フックシステムが利用可能かどうか判定}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2020/09/30 v1.1w pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2020/10/07 v1.1x pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -347,6 +348,28 @@
 % \changes{v1.1n}{2018/10/31}{\LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策を
 %    \file{plvers.dtx} (plfinal) から\file{plcore.dtx}へ移動}
 %
+% \subsection{フックシステムが利用可能かどうか}
+% \begin{macro}{\pltx@newhook@avail}
+% フォーマット作成時（\file{latex.ltx}の読込後すぐ）と、
+% platexreleaseパッケージ内（latexreleaseパッケージ読込後すぐ）で
+% それぞれ判定する必要があります。
+% ^^A 本当は「|\AddToHook| が定義済みかどうか」を使いたいが
+% ^^A \begin{itemize}
+% ^^A   \item Format date 2020-02-02 or older: undefined
+% ^^A   \item Format date 2020-10-01 or newer: available
+% ^^A   \item ... under \texttt{latexrelease} rollback: defined but no-op
+% ^^A \end{itemize}
+% ^^A という特殊なrollbackに対処するため、|\fmtversion|で判定する。
+% ^^A 単なるif-トークンは「読み飛ばし」の考慮が面倒なので使わない。
+% \changes{v1.1x}{2020/10/07}{フックシステムが利用可能かどうか判定}
+%    \begin{macrocode}
+%<*plcore|plhookrelease>
+\chardef\pltx@newhook@avail=\z@
+\@ifl@t@r\fmtversion{2020/10/01}{\chardef\pltx@newhook@avail=\@ne}{}
+%</plcore|plhookrelease>
+%    \end{macrocode}
+% \end{macro}
+%
 %
 % \section{latexreleaseパッケージへの対応}
 %
@@ -462,7 +485,7 @@
 % \changes{v1.1v}{2020/09/28}{新しいフックを活用}
 %    \begin{macrocode}
 %<*plfinal>
-\ifx\AddToHook\@undefined
+\ifnum\pltx@newhook@avail=\z@
 % for LaTeX2e 2020-02-02 PL5 or older
 \expandafter\def\expandafter\process@table\expandafter{%
   \expandafter\p@warn@latexrelease\process@table}

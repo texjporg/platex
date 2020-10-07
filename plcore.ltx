@@ -52,6 +52,8 @@
   \global\everyjob\expandafter\expandafter\expandafter{\platexBANNER}%
 \endgroup
 \let\platexBANNER=\@undefined
+\chardef\pltx@newhook@avail=\z@
+\@ifl@t@r\fmtversion{2020/10/01}{\chardef\pltx@newhook@avail=\@ne}{}
 \newif\if@plincludeinrelease
 \@plincludeinreleasefalse
 \def\plIncludeInRelease#1{%
@@ -987,7 +989,7 @@
   \ifin@ \usekanji{#1}{#2}{#3}{#4}%
   \else\useroman{#1}{#2}{#3}{#4}%
   \fi}
-\ifx\AddToHook\@undefined % --- for 2020-02-02 or older BEGIN
+\ifnum\pltx@newhook@avail=\z@ % --- for <= 2020-02-02 BEGIN
 \ifx\@defaultfamilyhook\@undefined  % old
 \DeclareRobustCommand\normalfont{%
     \kanjiencoding{\kanjiencodingdefault}%
@@ -1007,14 +1009,14 @@
     \edef\k@shape{\kanjishapedefault}%
 }
 \fi                                 % done
-\else % --- for 2020-02-02 or older END & for 2020-10-01 BEGIN
+\else % --- for <= 2020-02-02 END & for >= 2020-10-01 BEGIN
 \AddToHook{normalfont}{%
     \kanjiencoding{\kanjiencodingdefault}%
     \edef\k@family{\kanjifamilydefault}%
     \edef\k@series{\kanjiseriesdefault}%
     \edef\k@shape{\kanjishapedefault}%
 }
-\fi % --- for 2020-10-01 END
+\fi   % --- for >= 2020-10-01 END
 \adjustbaseline
 \let\reset@font\normalfont
 \ifx\bfseries@rm\@undefined  % old
@@ -1028,23 +1030,23 @@
 \edef\mdseries@mc{\mddefault}% m
 \edef\mdseries@gt{\mddefault}% m
 \fi
-\ifx\expand@font@defaults\@undefined\else %<*2020-02-02|2020-10-01>
-\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
+\ifx\expand@font@defaults\@undefined\else %<*2020-02-02|2020-10-01|.>
+\ifnum\pltx@newhook@avail=\z@ % --- for == 2020-02-02 BEGIN
 \g@addto@macro\expand@font@defaults{%
   \edef\mcdef@ult{\mcdefault}%
   \edef\gtdef@ult{\gtdefault}%
   \edef\kanjidef@ult{\kanjifamilydefault}%
 }
-\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\else % --- for == 2020-02-02 END & for >= 2020-10-01 BEGIN
 \AddToHook{expand@font@defaults}{%
   \edef\mcdef@ult{\mcdefault}%
   \edef\gtdef@ult{\gtdefault}%
  %\edef\kanjidef@ult{\kanjifamilydefault}% !! sync with 2020/04/13 v3.1n
 }
-\fi % --- for 2020-10-01 END
-\fi %</2020-02-02|2020-10-01>
-\ifx\bfseries@rm\@undefined\else %<*2020-02-02|2020-10-01>
-\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
+\fi   % --- for >= 2020-10-01 END
+\fi %</2020-02-02|2020-10-01|.>
+\ifx\bfseries@rm\@undefined\else %<*2020-02-02|2020-10-01|.>
+\ifnum\pltx@newhook@avail=\z@ % --- for == 2020-02-02 BEGIN
 \DeclareRobustCommand\bfseries{%
   \not@math@alphabet\bfseries\mathbf
   \expand@font@defaults
@@ -1077,7 +1079,7 @@
     \fi\fi
   \selectfont
 }
-\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\else % --- for == 2020-02-02 END & for >= 2020-10-01 BEGIN
 \AddToHook{bfseries/defaults}{%
     \let\bfseries@mc\bfdef@ult
     \let\bfseries@gt\bfdef@ult
@@ -1100,8 +1102,8 @@
     \else                        \kanjiseries\mddefault
     \fi\fi
 }
-\fi % --- for 2020-10-01 END
-\fi %</2020-02-02|2020-10-01>
+\fi   % --- for >= 2020-10-01 END
+\fi %</2020-02-02|2020-10-01|.>
 \ifx\prepare@family@series@update\@undefined  % old
 \let\prepare@family@series@update@kanji\@undefined
 \let\@meta@family@list@kanji\@undefined
@@ -1182,14 +1184,14 @@
 }
 \fi
 \expandafter\ifx\csname init@series@setup\endcsname\relax
-\else   %<*2020-02-02|2020-10-01>
-\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
+\else   %<*2020-02-02|2020-10-01|.>
+\ifnum\pltx@newhook@avail=\z@ % --- for == 2020-02-02 BEGIN
 \g@addto@macro\init@series@setup{%
   \ifx\kanjidef@ult\mcdef@ult      \mcfamily
   \else\ifx\kanjidef@ult\gtdef@ult \gtfamily
   \fi\fi
 }%
-\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\else % --- for == 2020-02-02 END & for >= 2020-10-01 BEGIN
 \g@addto@macro\init@series@setup{%
   % !! sync with 2020/04/13 v3.1n BEGIN
   \ifx\kanjiseriesdefault\kanjiseriesdefault@kernel
@@ -1198,15 +1200,14 @@
   \fi
   % !! sync with 2020/04/13 v3.1n END
 }%
-\fi % --- for 2020-10-01 END
-\fi     %</2020-02-02|2020-10-01>
-\ifx\AddToHook\@undefined
-\else % --- for LaTeX2e 2020-10-01 or later BEGIN
+\fi   % --- for >= 2020-10-01 END
+\fi     %</2020-02-02|2020-10-01|.>
+\ifnum\pltx@newhook@avail>\z@ % --- for >= 2020-10-01 BEGIN
 \def\code@after@pldefs{%
 \expandafter\def\expandafter\kanjiseriesdefault
   \expandafter{\kanjiseriesdefault\@empty}
 \let\kanjiseriesdefault@kernel\kanjiseriesdefault}
-\fi   % --- for LaTeX2e 2020-10-01 or later END
+\fi                           % --- for >= 2020-10-01 END
 \ifx\prepare@family@series@update@kanji\@undefined  % old
 \DeclareRobustCommand\mcfamily
         {\not@math@alphabet\mcfamily\mathmc
@@ -2066,7 +2067,7 @@
   \let\document@default@language\m@ne
 \fi
 %% File: plvers.dtx
-\ifx\AddToHook\@undefined
+\ifnum\pltx@newhook@avail=\z@
 \expandafter\def\expandafter\process@table\expandafter{%
   \expandafter\p@warn@latexrelease\process@table}
 \begingroup

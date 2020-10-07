@@ -2980,7 +2980,7 @@
 %<platexrelease>\plIncludeInRelease{2020/04/12}{\normalfont}
 %<platexrelease>                   {Use \@defaultfamilyhook}%
 %<*plcore|platexrelease>
-\ifx\AddToHook\@undefined % --- for 2020-02-02 or older BEGIN
+\ifnum\pltx@newhook@avail=\z@ % --- for <= 2020-02-02 BEGIN
 \ifx\@defaultfamilyhook\@undefined  % old
 \DeclareRobustCommand\normalfont{%
     \kanjiencoding{\kanjiencodingdefault}%
@@ -3007,14 +3007,14 @@
     \edef\k@shape{\kanjishapedefault}%
 }
 \fi                                 % done
-\else % --- for 2020-02-02 or older END & for 2020-10-01 BEGIN
+\else % --- for <= 2020-02-02 END & for >= 2020-10-01 BEGIN
 %<platexrelease>\DeclareRobustCommand\normalfont{%
 %<platexrelease>   \fontencoding\encodingdefault
 %<platexrelease>   \edef\f@family{\familydefault}%
 %<platexrelease>   \edef\f@series{\seriesdefault}%
 %<platexrelease>   \edef\f@shape{\shapedefault}%
 %<platexrelease>   \UseHook{normalfont}%
-%<platexrelease>   \@defaultfamilyhook        % hookname from 2020/02 will vanish
+%<platexrelease>   \@defaultfamilyhook % hookname from 2020/02 will vanish
 %<platexrelease>   \selectfont}
 \AddToHook{normalfont}{%
     \kanjiencoding{\kanjiencodingdefault}%
@@ -3022,7 +3022,7 @@
     \edef\k@series{\kanjiseriesdefault}%
     \edef\k@shape{\kanjishapedefault}%
 }
-\fi % --- for 2020-10-01 END
+\fi   % --- for >= 2020-10-01 END
 \adjustbaseline
 \let\reset@font\normalfont
 %</plcore|platexrelease>
@@ -3125,21 +3125,21 @@
 % \changes{v1.7h}{2020/09/28}{New hook management interface
 %    (sync with ltfssini.dtx 2020/08/21 v3.2b)}
 %    \begin{macrocode}
-\ifx\expand@font@defaults\@undefined\else %<*2020-02-02|2020-10-01>
-\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
+\ifx\expand@font@defaults\@undefined\else %<*2020-02-02|2020-10-01|.>
+\ifnum\pltx@newhook@avail=\z@ % --- for == 2020-02-02 BEGIN
 \g@addto@macro\expand@font@defaults{%
   \edef\mcdef@ult{\mcdefault}%
   \edef\gtdef@ult{\gtdefault}%
   \edef\kanjidef@ult{\kanjifamilydefault}%
 }
-\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\else % --- for == 2020-02-02 END & for >= 2020-10-01 BEGIN
 \AddToHook{expand@font@defaults}{%
   \edef\mcdef@ult{\mcdefault}%
   \edef\gtdef@ult{\gtdefault}%
  %\edef\kanjidef@ult{\kanjifamilydefault}% !! sync with 2020/04/13 v3.1n
 }
-\fi % --- for 2020-10-01 END
-\fi %</2020-02-02|2020-10-01>
+\fi   % --- for >= 2020-10-01 END
+\fi %</2020-02-02|2020-10-01|.>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -3201,8 +3201,8 @@
 %    and \cs{mddefault}, use \cs{@setYYseriesdefaultshook}
 %    (sync with ltfssini.dtx 2020/03/19 v3.1k and 2020/04/06 v3.1m)}
 %    \begin{macrocode}
-\ifx\bfseries@rm\@undefined\else %<*2020-02-02|2020-10-01>
-\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
+\ifx\bfseries@rm\@undefined\else %<*2020-02-02|2020-10-01|.>
+\ifnum\pltx@newhook@avail=\z@ % --- for == 2020-02-02 BEGIN
 \DeclareRobustCommand\bfseries{%
   \not@math@alphabet\bfseries\mathbf
   \expand@font@defaults
@@ -3252,7 +3252,7 @@
 % \changes{v1.7h}{2020/09/28}{New hook management interface
 %    (sync with ltfssini.dtx 2020/08/21 v3.2b)}
 %    \begin{macrocode}
-\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\else % --- for == 2020-02-02 END & for >= 2020-10-01 BEGIN
 \AddToHook{bfseries/defaults}{%
     \let\bfseries@mc\bfdef@ult
     \let\bfseries@gt\bfdef@ult
@@ -3275,8 +3275,8 @@
     \else                        \kanjiseries\mddefault
     \fi\fi
 }
-\fi % --- for 2020-10-01 END
-\fi %</2020-02-02|2020-10-01>
+\fi   % --- for >= 2020-10-01 END
+\fi %</2020-02-02|2020-10-01|.>
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -3443,14 +3443,14 @@
 %    (sync with ltfssini.dtx 2020/04/13 v3.1n)}
 %    \begin{macrocode}
 \expandafter\ifx\csname init@series@setup\endcsname\relax
-\else   %<*2020-02-02|2020-10-01>
-\ifx\AddToHook\@undefined % --- for 2020-02-02 BEGIN
+\else   %<*2020-02-02|2020-10-01|.>
+\ifnum\pltx@newhook@avail=\z@ % --- for == 2020-02-02 BEGIN
 \g@addto@macro\init@series@setup{%
   \ifx\kanjidef@ult\mcdef@ult      \mcfamily
   \else\ifx\kanjidef@ult\gtdef@ult \gtfamily
   \fi\fi
 }%
-\else % --- for 2020-02-02 END & for 2020-10-01 BEGIN
+\else % --- for == 2020-02-02 END & for >= 2020-10-01 BEGIN
 \g@addto@macro\init@series@setup{%
   % !! sync with 2020/04/13 v3.1n BEGIN
   \ifx\kanjiseriesdefault\kanjiseriesdefault@kernel
@@ -3459,8 +3459,8 @@
   \fi
   % !! sync with 2020/04/13 v3.1n END
 }%
-\fi % --- for 2020-10-01 END
-\fi     %</2020-02-02|2020-10-01>
+\fi   % --- for >= 2020-10-01 END
+\fi     %</2020-02-02|2020-10-01|.>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -3474,13 +3474,12 @@
 % \changes{v1.7h}{2020/09/28}{Handling \cs{seriesdefault} changes
 %    (sync with ltfssini.dtx 2020/04/13 v3.1n)}
 %    \begin{macrocode}
-\ifx\AddToHook\@undefined
-\else % --- for LaTeX2e 2020-10-01 or later BEGIN
+\ifnum\pltx@newhook@avail>\z@ % --- for >= 2020-10-01 BEGIN
 \def\code@after@pldefs{%
 \expandafter\def\expandafter\kanjiseriesdefault
   \expandafter{\kanjiseriesdefault\@empty}
 \let\kanjiseriesdefault@kernel\kanjiseriesdefault}
-\fi   % --- for LaTeX2e 2020-10-01 or later END
+\fi                           % --- for >= 2020-10-01 END
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
