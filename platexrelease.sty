@@ -1185,6 +1185,7 @@ of this package available from CTAN}
 \plEndIncludeInRelease
 \plIncludeInRelease{2020/02/02}{\usefont}
                    {Don't call \fontseries or \fontshape}%
+\ifx\set@target@series\@undefined
 \DeclareRobustCommand\usekanji[4]{\kanjiencoding{#1}%
     \edef\k@family{#2}%
     \edef\k@series{#3}%
@@ -1195,6 +1196,18 @@ of this package available from CTAN}
     \edef\f@series{#3}%
     \edef\f@shape{#4}\selectfont
     \ignorespaces}
+\else
+\DeclareRobustCommand\usekanji[4]{\kanjiencoding{#1}%
+    \edef\k@family{#2}%
+    \set@target@series@kanji{#3}%
+    \edef\k@shape{#4}\selectfont
+    \ignorespaces}
+\DeclareRobustCommand\useroman[4]{\romanencoding{#1}%
+    \edef\f@family{#2}%
+    \set@target@series{#3}%
+    \edef\f@shape{#4}\selectfont
+    \ignorespaces}
+\fi
 \DeclareRobustCommand\usefont[4]{%
   \edef\tmp@item{{#1}}%
   \expandafter\expandafter\expandafter
