@@ -3,7 +3,7 @@
 %
 %  Copyright 1994-2006 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016-2020 Japanese TeX Development Community
+%  Copyright (c) 2016-2021 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -169,13 +169,19 @@
 % \changes{v1.7i}{2020/10/07}{フックシステムの有無判定を改良}
 % \changes{v1.7j}{2020/12/29}{Drop ``m'' for latex2e issue 453
 %    (sync with ltfssbas.dtx 2020/12/10 v3.2h)}
+% \changes{v1.7k}{2021/01/10}{Distangle series and shape update (latex2e/444)
+%    (sync with ltfssaxes.dtx 2020/12/22 v1.0h)}
+% \changes{v1.7k}{2021/01/10}{Execute delayed series and shape updates (latex2e/444)
+%    (sync with ltfsstrc.dtx 2020/12/22 v3.0n)}
+% \changes{v1.7k}{2021/01/10}{Adjust start values for series and shape (latex2e/444)
+%    (sync with ltfssini.dtx 2020/12/06 v3.2f)}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2020/12/29 v1.7j pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2021/01/10 v1.7k pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -308,7 +314,7 @@
 %<*trace>
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{ptrace}
-     [2020/03/26 v1.7e Standard pLaTeX package (font tracing)]
+     [2021/01/10 v1.7k Standard pLaTeX package (font tracing)]
 \RequirePackageWithOptions{tracefnt}
 %</trace>
 %    \end{macrocode}
@@ -1781,7 +1787,7 @@
 %
 % \subsubsection{フォントの選択}
 % \begin{macro}{\selectfont}
-% |\selectfont|のオリジナルからの変更部分は、次の３点です。
+% |\selectfont|のオリジナルからの変更部分は、次の3点です。
 % \begin{itemize}
 % \item 和文書体を変更する部分
 % \item 従属書体に変更する部分
@@ -1792,13 +1798,121 @@
 % \changes{v1.2}{1995/11/22}{エラーフォントに対応した}
 % \changes{v1.3n}{2004/08/10}{和文エンコーディングの切り替えを有効化}
 % \changes{v1.7e}{2020/03/26}{縦横エンコーディングのセット化確認}
-% |\selectfont|コマンドは、まず、和文フォントを切り替えます。
 %    \begin{macrocode}
 %</plcore>
 %<platexrelease|trace>\plIncludeInRelease{2020/04/12}{\selectfont}
 %<platexrelease|trace>                   {Check \KanjiEncodingPair}%
 %<*plcore|platexrelease|trace>
+\ifx\delayed@f@adjustment\@undefined % --- for <= 2020-10-01 BEGIN
+%%
 \DeclareRobustCommand\selectfont{%
+  \let\tmp@error@fontshape\error@fontshape
+  \let\error@fontshape\error@kfontshape
+  \edef\tmp@item{{\k@encoding}}%
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\kyenc@list}%
+  \ifin@
+    \let\cy@encoding\k@encoding
+    \ensure@KanjiEncodingPair{t}%
+    \edef\ct@encoding{\csname t@enc@\k@encoding\endcsname}%
+  \else
+    \expandafter\expandafter\expandafter
+    \inlist@\expandafter\tmp@item\expandafter{\ktenc@list}%
+    \ifin@
+      \let\ct@encoding\k@encoding
+      \ensure@KanjiEncodingPair{y}%
+      \edef\cy@encoding{\csname y@enc@\k@encoding\endcsname}%
+    \else
+      \@latex@error{KANJI Encoding scheme `\k@encoding' unknown}\@eha
+    \fi
+  \fi
+  \let\font\tfont
+  \let\k@encoding\ct@encoding
+  \xdef\font@name{\csname\curr@kfontshape/\f@size\endcsname}%
+  \pickup@font
+  \font@name
+  \let\font\jfont
+  \let\k@encoding\cy@encoding
+  \xdef\font@name{\csname\curr@kfontshape/\f@size\endcsname}%
+  \pickup@font
+  \font@name
+  \expandafter\def\expandafter\k@encoding\tmp@item
+  \kenc@update
+  \let\error@fontshape\tmp@error@fontshape
+  \if@knjcmd \@knjcmdfalse
+    \expandafter\ifx
+    \csname rel@\k@encoding/\k@family/\k@series/\k@shape\endcsname\relax
+      \expandafter\ifx
+         \csname rel@\k@encoding/\k@family/\k@series/all\endcsname\relax
+      \else
+         \csname rel@\k@encoding/\k@family/\k@series/all\endcsname
+      \fi
+    \else
+       \csname rel@\k@encoding/\k@family/\k@series/\k@shape\endcsname
+    \fi
+  \fi
+  \let\font\afont
+  \xdef\font@name{\csname\curr@fontshape/\f@size\endcsname}%
+  \pickup@font
+  \font@name
+%<trace>  \ifnum \tracingfonts>\tw@
+%<trace>    \@font@info{Roman:Switching to \font@name}\fi
+  \enc@update
+  \ifx\f@linespread\baselinestretch \else
+    \set@fontsize\baselinestretch\f@size\f@baselineskip
+  \fi
+  \size@update}
+%%
+\else        % --- for <= 2020-10-01 END & for >= 2021-05-01 BEGIN
+%%
+\DeclareRobustCommand\selectfont{%
+%    \end{macrocode}
+% 最初に、遅らせていたシリーズ・シェイプの値更新を行います。
+% \changes{v1.7k}{2021/01/10}{Execute delayed series and shape updates (latex2e/444)
+%    (sync with ltfsstrc.dtx 2020/12/22 v3.0n)}
+%    \begin{macrocode}
+  % !! sync with ltfsstrc.dtx 2020/12/22 v3.0n BEGIN
+  \ifx\delayed@k@adjustment\@empty
+  \else
+    \let\k@shape@saved\k@shape
+    \let\k@series@saved\k@series
+    \delayed@k@adjustment
+    \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+      \maybe@load@fontshape\endgroup
+    \ifcsname \k@encoding/\k@family/\k@series/\k@shape \endcsname
+    \else
+      \let\k@shape\k@shape@saved
+      \let\k@series\k@series@saved
+      \let\delayed@merge@kanji@shape\merge@kanji@shape
+      \let\delayed@merge@kanji@series\merge@kanji@series
+      \delayed@k@adjustment
+      \let\delayed@merge@kanji@shape\merge@kanji@shape@without@substitution
+      \let\delayed@merge@kanji@series\merge@kanji@series@without@substitution
+    \fi
+    \let\delayed@k@adjustment\@empty
+  \fi
+  \ifx\delayed@f@adjustment\@empty
+  \else
+    \let\f@shape@saved\f@shape
+    \let\f@series@saved\f@series
+    \delayed@f@adjustment
+    \maybe@load@fontshape
+    \ifcsname \f@encoding/\f@family/\f@series/\f@shape \endcsname
+    \else
+      \let\f@shape\f@shape@saved
+      \let\f@series\f@series@saved
+      \let\delayed@merge@font@shape\merge@font@shape
+      \let\delayed@merge@font@series\merge@font@series
+      \delayed@f@adjustment
+      \let\delayed@merge@font@shape\merge@font@shape@without@substitution
+      \let\delayed@merge@font@series\merge@font@series@without@substitution
+    \fi
+    \let\delayed@f@adjustment\@empty
+  \fi
+  % !! sync with ltfsstrc.dtx 2020/12/22 v3.0n END
+%    \end{macrocode}
+% p\LaTeXe{}の|\selectfont|コマンドは、まず、和文フォントを切り替えます。
+%    \begin{macrocode}
   \let\tmp@error@fontshape\error@fontshape
   \let\error@fontshape\error@kfontshape
   \edef\tmp@item{{\k@encoding}}%
@@ -1857,15 +1971,13 @@
   \xdef\font@name{\csname\curr@fontshape/\f@size\endcsname}%
   \pickup@font
   \font@name
-%<trace>  \ifnum \tracingfonts>\tw@
-%<trace>    \@font@info{Roman:Switching to \font@name}\fi
+  \UseHook{selectfont}% since LaTeX2e 2021-05-01
   \enc@update
 %    \end{macrocode}
 % 最後に、サイズが変更されていれば、ベースラインの調整などを行ないます。
 % 英語版の|\selectfont|では最初に行なっていますが、
 % p\LaTeXe{}ではベースラインシフトの調整をするために、
 % 書体を確定しなければならないため、一番最後に行ないます
-%
 % \changes{v1.1b}{1995/04/26}{ベースラインの調整をサイズ変更時に
 %       行なうようにした}
 %    \begin{macrocode}
@@ -1873,6 +1985,8 @@
     \set@fontsize\baselinestretch\f@size\f@baselineskip
   \fi
   \size@update}
+%%
+\fi          % --- for >= 2021-05-01 END
 %</plcore|platexrelease|trace>
 %<platexrelease|trace>\plEndIncludeInRelease
 %<platexrelease|trace>\plIncludeInRelease{0000/00/00}{\selectfont}
@@ -2512,6 +2626,21 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\delayed@k@adjustment}
+% \LaTeXe~2021-05-01で追加された|\delayed@f@adjustment|の和文版です。
+% \changes{v1.7k}{2021/01/10}{Distangle series and shape update (latex2e/444)
+%    (sync with ltfssaxes.dtx 2020/12/22 v1.0h)}
+%    \begin{macrocode}
+%<*plcore|platexrelease>
+\ifx\delayed@f@adjustment\@undefined   % old
+  \let\delayed@k@adjustment\@undefined
+\else                                  % 2021-05-01
+  \let\delayed@k@adjustment\@empty
+\fi
+%</plcore|platexrelease>
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\romanseries}
 % \begin{macro}{\kanjiseries}
 % \begin{macro}{\fontseries}
@@ -2521,6 +2650,10 @@
 % 2019年までは無条件に指定されたとおりのシリーズを選択していましたが、
 % \LaTeXe~2020-02-02以降では、|\DeclareFontSeriesChangeRule|によって
 % 宣言された「シリーズ更新規則」に基づきシリーズを選択します。
+%
+% \LaTeXe~2021-05-01以降では、シリーズの更新を|\selectfont|まで遅らせます。
+% \changes{v1.7k}{2021/01/10}{Distangle series and shape update (latex2e/444)
+%    (sync with ltfssaxes.dtx 2020/12/22 v1.0h)}
 %    \begin{macrocode}
 %<*plcore|platexrelease>
 \ifx\fontseriesforce\@undefined  % old
@@ -2528,9 +2661,19 @@
 \DeclareRobustCommand\kanjiseries[1]{\edef\k@series{#1}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
 \else                            % 2020-02-02
+\ifx\delayed@f@adjustment\@undefined % --- for <= 2020-10-01 BEGIN
 \DeclareRobustCommand\romanseries[1]{\@forced@seriesfalse\merge@font@series{#1}}
 \DeclareRobustCommand\kanjiseries[1]{\@forced@seriesfalse\merge@kanji@series{#1}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
+\else        % --- for <= 2020-10-01 END & for >= 2021-05-01 BEGIN
+\DeclareRobustCommand\romanseries[1]{\@forced@seriesfalse
+    \expandafter\def\expandafter\delayed@f@adjustment\expandafter
+        {\delayed@f@adjustment\delayed@merge@font@series{#1}}}
+\DeclareRobustCommand\kanjiseries[1]{\@forced@seriesfalse
+    \expandafter\def\expandafter\delayed@k@adjustment\expandafter
+        {\delayed@k@adjustment\delayed@merge@kanji@series{#1}}}
+\DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
+\fi          % --- for >= 2021-05-01 END
 \fi
 %    \end{macrocode}
 % \end{macro}
@@ -2550,9 +2693,19 @@
 \let\romanseriesforce\@undefined
 \let\kanjiseriesforce\@undefined
 \else                            % 2020-02-02
+\ifx\delayed@f@adjustment\@undefined % --- for <= 2020-10-01 BEGIN
 \DeclareRobustCommand\romanseriesforce[1]{\@forced@seriestrue\edef\f@series{#1}}
 \DeclareRobustCommand\kanjiseriesforce[1]{\@forced@seriestrue\edef\k@series{#1}}
 \DeclareRobustCommand\fontseriesforce[1]{\kanjiseriesforce{#1}\romanseriesforce{#1}}
+\else        % --- for <= 2020-10-01 END & for >= 2021-05-01 BEGIN
+\DeclareRobustCommand\romanseriesforce[1]{\@forced@seriestrue
+    \expandafter\def\expandafter\delayed@f@adjustment\expandafter
+      {\delayed@f@adjustment\edef\f@series{#1}}}
+\DeclareRobustCommand\kanjiseriesforce[1]{\@forced@seriestrue
+    \expandafter\def\expandafter\delayed@k@adjustment\expandafter
+      {\delayed@k@adjustment\edef\k@series{#1}}}
+\DeclareRobustCommand\fontseriesforce[1]{\kanjiseriesforce{#1}\romanseriesforce{#1}}
+\fi          % --- for >= 2021-05-01 END
 \fi
 %    \end{macrocode}
 % \end{macro}
@@ -2586,8 +2739,13 @@
 %    \begin{macrocode}
     \set@target@series@kanji{#2}%
   \else
+%^^A [TODO] BEGIN
+%^^A   LaTeX2e 2021-05-01 では |\maybe@load@fontshape| は削除される。
+%^^A     理由：処理が |\selectfont| まで遅れるので不要とのこと。
+%^^A   しかし、なぜか ltfssaxes.dtx で rollback の対処が無いような？
     \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
       \maybe@load@fontshape\endgroup
+%^^A [TODO] END
     \edef\reserved@a{\k@encoding /\k@family /#1/\k@shape}%
      \ifcsname \reserved@a \endcsname
 %    \end{macrocode}
@@ -2615,6 +2773,40 @@
     \edef\k@series{#1}%
     \series@maybe@drop@one@m\k@series\k@series
 }
+\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\merge@kanji@series@without@substitution}
+% \begin{macro}{\merge@kanji@series@without@substitution@}
+% \begin{macro}{\delayed@merge@kanji@series}
+% \cs{merge@font@series@without@substitution}の和文版です。
+% \changes{v1.7k}{2021/01/10}{Distangle series and shape update (latex2e/444)
+%    (sync with ltfssaxes.dtx 2020/12/22 v1.0h)}
+%    \begin{macrocode}
+\ifx\merge@font@series@without@substitution\@undefined % old
+\let\merge@kanji@series@without@substitution\@undefined
+\let\merge@kanji@series@without@substitution@\@undefined
+\let\delayed@merge@kanji@series\@undefined
+\else                                                  % 2021-05-01
+\def\merge@kanji@series@without@substitution#1{%
+  \expandafter\expandafter\expandafter
+  \merge@kanji@series@without@substitution@
+    \csname series@\k@series @#1\endcsname
+    {#1}%
+    \@nil
+}
+\def\merge@kanji@series@without@substitution@#1#2#3\@nil{%
+  \def\reserved@a{#3}%
+  \ifx\reserved@a\@empty
+    \set@target@series@kanji{#2}%
+  \else
+    \set@target@series@kanji{#1}%
+  \fi
+}
+\let\delayed@merge@kanji@series\merge@kanji@series@without@substitution
 \fi
 %</plcore|platexrelease>
 %    \end{macrocode}
@@ -2669,6 +2861,10 @@
 % 2019年までは無条件に指定されたとおりのシェイプを選択していましたが、
 % \LaTeXe~2020-02-02以降では、|\DeclareFontShapeChangeRule|によって
 % 宣言された「シェイプ更新規則」に基づきシェイプを選択します。
+%
+% \LaTeXe~2021-05-01以降では、シェイプの更新を|\selectfont|まで遅らせます。
+% \changes{v1.7k}{2021/01/10}{Distangle series and shape update (latex2e/444)
+%    (sync with ltfssaxes.dtx 2020/12/22 v1.0h)}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2020/04/12}{\fontshape}
 %<platexrelease>                   {No \k@shape update if unavailable}%
@@ -2681,12 +2877,25 @@
   \edef\f@shape{#1}%
 }
 \else                            % 2020-02-02
+\ifx\delayed@f@adjustment\@undefined % --- for <= 2020-10-01 BEGIN
 \DeclareRobustCommand\romanshape[1]{\merge@font@shape{#1}}
 \DeclareRobustCommand\kanjishape[1]{\merge@kanji@shape{#1}}
 \DeclareRobustCommand\fontshape[1]{%
   \@shape@roman@kanjitrue
   \kanjishape{#1}\romanshape{#1}%
   \@shape@roman@kanjifalse}
+\else        % --- for <= 2020-10-01 END & for >= 2021-05-01 BEGIN
+\DeclareRobustCommand\romanshape[1]{%
+    \expandafter\def\expandafter\delayed@f@adjustment\expandafter
+        {\delayed@f@adjustment\delayed@merge@font@shape{#1}}}
+\DeclareRobustCommand\kanjishape[1]{%
+    \expandafter\def\expandafter\delayed@k@adjustment\expandafter
+        {\delayed@k@adjustment\delayed@merge@kanji@shape{#1}}}
+\DeclareRobustCommand\fontshape[1]{%
+  \@shape@roman@kanjitrue
+  \kanjishape{#1}\romanshape{#1}%
+  \@shape@roman@kanjifalse}
+\fi          % --- for >= 2021-05-01 END
 \fi
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
@@ -2721,12 +2930,27 @@
 \let\romanshapeforce\@undefined
 \let\kanjishapeforce\@undefined
 \else                            % 2020-02-02
+\ifx\delayed@f@adjustment\@undefined % --- for <= 2020-10-01 BEGIN
 \DeclareRobustCommand\romanshapeforce[1]{\edef\f@shape{#1}}
 \DeclareRobustCommand\kanjishapeforce[1]{\edef\k@shape{#1}}
 \DeclareRobustCommand\fontshapeforce[1]{%
   \set@safe@kanji@shape{#1}{}%
   \edef\f@shape{#1}%
 }
+\else        % --- for <= 2020-10-01 END & for >= 2021-05-01 BEGIN
+\DeclareRobustCommand\romanshapeforce[1]{%
+    \expandafter\def\expandafter\delayed@f@adjustment\expandafter
+        {\delayed@f@adjustment\edef\f@shape{#1}}}
+\DeclareRobustCommand\kanjishapeforce[1]{%
+    \expandafter\def\expandafter\delayed@k@adjustment\expandafter
+        {\delayed@k@adjustment\edef\k@shape{#1}}}
+\DeclareRobustCommand\fontshapeforce[1]{%
+    \expandafter\def\expandafter\delayed@k@adjustment\expandafter
+        {\delayed@k@adjustment\set@safe@kanji@shape{#1}{}}%
+    \expandafter\def\expandafter\delayed@f@adjustment\expandafter
+        {\delayed@f@adjustment\edef\f@shape{#1}}%
+}
+\fi          % --- for >= 2021-05-01 END
 \fi
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
@@ -2778,8 +3002,13 @@
     \edef\k@shape{#2}%
    \fi
   \else
+%^^A [TODO] BEGIN
+%^^A   LaTeX2e 2021-05-01 では |\maybe@load@fontshape| は削除される。
+%^^A     理由：処理が |\selectfont| まで遅れるので不要とのこと。
+%^^A   しかし、なぜか ltfssaxes.dtx で rollback の対処が無いような？
     \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
       \maybe@load@fontshape\endgroup
+%^^A [TODO] END
     \edef\reserved@a{\k@encoding /\k@family /\k@series/#1}%
      \ifcsname \reserved@a\endcsname
 %    \end{macrocode}
@@ -2850,6 +3079,42 @@
 %<platexrelease>\fi
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\merge@kanji@shape@without@substitution}
+% \begin{macro}{\merge@kanji@shape@without@substitution@}
+% \begin{macro}{\delayed@merge@kanji@shape}
+% \cs{merge@font@shape@without@substitution}の和文版です。
+% \changes{v1.7k}{2021/01/10}{Distangle series and shape update (latex2e/444)
+%    (sync with ltfssaxes.dtx 2020/12/22 v1.0h)}
+%    \begin{macrocode}
+%<*plcore|platexrelease>
+\ifx\merge@font@shape@without@substitution\@undefined  % old
+\let\merge@kanji@shape@without@substitution\@undefined
+\let\merge@kanji@shape@without@substitution@\@undefined
+\let\delayed@merge@kanji@shape\@undefined
+\else                                                  % 2021-05-01
+\def\merge@kanji@shape@without@substitution#1{%
+  \expandafter\expandafter\expandafter
+  \merge@kanji@shape@without@substitution@
+    \csname shape@\k@shape @#1\endcsname
+    {#1}%
+    \@nil
+}
+\def\merge@kanji@shape@without@substitution@#1#2#3\@nil{%
+  \def\reserved@a{#3}%
+  \ifx\reserved@a\@empty
+    \edef\k@shape{#2}%
+  \else
+    \edef\k@shape{#1}%
+  \fi
+}
+\let\delayed@merge@kanji@shape\merge@kanji@shape@without@substitution
+\fi
+%</plcore|platexrelease>
+%    \end{macrocode}
+% \end{macro}
 % \end{macro}
 % \end{macro}
 %
@@ -4441,17 +4706,18 @@
 %    \begin{macrocode}
 %<*pldefs>
 \ProvidesFile{pldefs.ltx}
-      [2020/02/01 v1.6v pLaTeX Kernel (Default settings)]
+      [2021/01/10 v1.7k pLaTeX Kernel (Default settings)]
 %</pldefs>
 %    \end{macrocode}
 %
 % \subsection{テキストフォント}
 % テキストフォントのための属性やエラー書体などの宣言です。
 % p\LaTeX{}のデフォルトの横組エンコードはJY1、縦組エンコードはJT1とします。
-%
 % \changes{v1.6s}{2019/08/13}{Explicitly set some defaults
 %    after \cs{DeclareErrorKanjiFont} change
 %    (sync with ltfssini.dtx 2019/07/09 v3.1c)}
+% \changes{v1.7k}{2021/01/10}{Adjust start values for series and shape (latex2e/444)
+%    (sync with ltfssini.dtx 2020/12/06 v3.2f)}
 % \noindent
 % 縦横エンコード共通：
 %    \begin{macrocode}
@@ -4459,8 +4725,8 @@
 \DeclareKanjiEncodingDefaults{}{}
 \DeclareErrorKanjiFont{JY1}{mc}{m}{n}{10}
 \kanjifamily{mc}
-\kanjiseries{m}
-\kanjishape{n}
+\def\k@series{m}    % \kanjiseries{m}
+\def\k@shape{n}     % \kanjishape{n}
 \fontsize{10}{10}
 %    \end{macrocode}
 % 横組エンコード：

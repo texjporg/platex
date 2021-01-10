@@ -14,12 +14,12 @@
 %% 
 %% File: plfonts.dtx
 \ProvidesFile{pldefs.ltx}
-      [2020/02/01 v1.6v pLaTeX Kernel (Default settings)]
+      [2021/01/10 v1.7k pLaTeX Kernel (Default settings)]
 \DeclareKanjiEncodingDefaults{}{}
 \DeclareErrorKanjiFont{JY1}{mc}{m}{n}{10}
 \kanjifamily{mc}
-\kanjiseries{m}
-\kanjishape{n}
+\def\k@series{m}    % \kanjiseries{m}
+\def\k@shape{n}     % \kanjishape{n}
 \fontsize{10}{10}
 \DeclareYokoKanjiEncoding{JY1}{}{}
 \DeclareKanjiSubstitution{JY1}{mc}{m}{n}
