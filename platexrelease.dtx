@@ -1,7 +1,7 @@
 % \iffalse meta-comment
 %% File: platexrelease.dtx
 %
-%  Copyright (c) 2016-2020 Japanese TeX Development Community
+%  Copyright (c) 2016-2021 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -28,10 +28,12 @@
 %      (sync with latexrelease.dtx 2017/12/17 v1.0i)}
 % \changes{v1.0l}{2018/04/06}{Drop an extra period in warning message
 %      (sync with latexrelease.dtx 2018/02/18 v1.0j)}
-% \changes{v1.0m}{2018/05/22}{reset \cs{\requestedLaTeXdate} for
+% \changes{v1.0m}{2018/05/22}{reset \cs{\requestedpLaTeXdate} for
 %      current and latest options
 %      (sync with latexrelease.dtx 2018/05/08 v1.0k)}
 % \changes{v1.0n}{2020/03/28}{先にlatexreleaseが読み込まれていたら警告}
+% \changes{v1.0o}{2021/02/13}{\cs{sourcepLaTeXdate} added
+%      (sync with latexrelease.dtx 2021/01/23 v1.0l)}
 % \fi
 %
 % \iffalse
@@ -41,7 +43,7 @@
 \ProvidesFile{platexrelease.dtx}
 %</driver>
 %<platexrelease>\ProvidesPackage{platexrelease}
-          [2020/03/28 v1.0n latexrelease support for pLaTeX Kernel
+          [2021/02/13 v1.0o latexrelease support for pLaTeX Kernel
               (including releases up to \platexreleaseversion)]
 %<*driver>
 \documentclass{jltxdoc}
@@ -200,7 +202,7 @@
 % \section{コード}
 %
 % \Lpack{platexrelease}パッケージが読み込まれましたので、
-% 効率化のため|\begin{document|での確認コードを無効化します。
+% 効率化のため|\begin{document}|での確認コードを無効化します。
 % （\file{plvers.dtx}の2020/03/28 v1.1u以降）。
 %    \begin{macrocode}
 %<*platexrelease>
@@ -233,9 +235,19 @@
 \fi
 %    \end{macrocode}
 %
+% \begin{macro}{\sourcepLaTeXdate}
+% 元々のフォーマットの日付を保存します。
+% \changes{v1.0o}{2021/02/13}{\cs{sourcepLaTeXdate} added
+%      (sync with latexrelease.dtx 2021/01/23 v1.0l)}
+%    \begin{macrocode}
+\edef\sourcepLaTeXdate{%
+  \expandafter\@parse@version\pfmtversion//00\@nil}
+%    \end{macrocode}
+% \end{macro}
+%
 % \Lpack{platexrelease}パッケージのオプションを定義します。コードは
 % \Lpack{latexrelease}のものをp\LaTeXe{}用に書き換えたものです。
-% \changes{v1.0m}{2018/05/22}{reset \cs{\requestedLaTeXdate} for
+% \changes{v1.0m}{2018/05/22}{reset \cs{\requestedpLaTeXdate} for
 %      current and latest options
 %      (sync with latexrelease.dtx 2018/05/08 v1.0k)}
 %    \begin{macrocode}

@@ -71,7 +71,7 @@
 %% File: platexrelease.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{platexrelease}
-          [2020/03/28 v1.0n latexrelease support for pLaTeX Kernel
+          [2021/02/13 v1.0o latexrelease support for pLaTeX Kernel
               (including releases up to \platexreleaseversion)]
 \ifx\p@warn@latexrelease\@undefined\else
 \let\p@warn@latexrelease\relax
@@ -88,6 +88,8 @@
     Version of `latexrelease' is newer than\MessageBreak
     what `platexrelease' knows}
 \fi
+\edef\sourcepLaTeXdate{%
+  \expandafter\@parse@version\pfmtversion//00\@nil}
 \DeclareOption*{%
   \def\@plIncludeInRelease#1[#2]{\@plIncludeInRele@se{#1}}%
   \let\requestedplpatchdate\CurrentOption}
