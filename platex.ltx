@@ -16,6 +16,11 @@
 \let\orgdump\dump
 \let\dump\relax
 \input latex.ltx
+\ifx\typeout\undefined
+  \errhelp{Please reinstall LaTeX, or check e-TeX availability.}%
+  \errmessage{Failed to load `latex.ltx' properly}%
+  \expandafter\end
+\fi
 \typeout{**************************^^J%
          *^^J%
          * making pLaTeX format^^J%

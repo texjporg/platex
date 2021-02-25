@@ -3,7 +3,7 @@
 %
 %  Copyright 1995,1996 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016-2020 Japanese TeX Development Community
+%  Copyright (c) 2016-2021 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -88,6 +88,7 @@
 % \changes{v1.1}{2020/03/24}{ドキュメントを更新}
 % \changes{v1.1a}{2020/09/26}{\file{plexpl3.dtx}を追加}
 % \changes{v1.1b}{2020/09/28}{defs読込後にフック追加}
+% \changes{v1.1c}{2021/02/25}{\file{latex.ltx}の読込チェック}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -134,6 +135,7 @@
 % \changes{v1.1}{2020/03/24}{Update document.}
 % \changes{v1.1a}{2020/09/26}{Add \file{plexpl3.dtx}}
 % \changes{v1.1b}{2020/09/28}{Add hook after loading defs}
+% \changes{v1.1c}{2021/02/25}{Check for \file{latex.ltx} status}
 %\fi
 % \fi
 %
@@ -141,7 +143,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2020/09/28 v1.1b pLaTeX document file]
+\ProvidesFile{platex.dtx}[2021/02/25 v1.1c pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -491,8 +493,8 @@
 %
 %\ifJAPANESE
 % \file{latex.ltx}を読み込みます。
-% \TeX\ Liveの標準的インストールでは、この中でBabel由来のハイフネーション・
-% パターン\file{hyphen.cfg}が読み込まれるはずです。
+% \TeX\ Liveの標準的インストールでは、この中でBabel由来の
+% ハイフネーション・パターン\file{hyphen.cfg}が読み込まれるはずです。
 % \changes{v1.0g}{2016/05/07}{フォーマット作成時に\LaTeX{}のバナーを一旦保存}
 % \changes{v1.0n}{2016/09/14}{\LaTeX{}のバナーの保存しかたを改良}
 % \changes{v1.0p}{2017/11/11}{\LaTeX{}のバナーを保存するコードを
@@ -508,6 +510,24 @@
 %\fi
 %    \begin{macrocode}
 \input latex.ltx
+%    \end{macrocode}
+%
+%\ifJAPANESE
+% この時点で|\typeout|が未定義なら、\LaTeX{}カーネルの読み込みに
+% 失敗していますので、強制終了します（\LaTeXe\ 2017/01/01以降を
+% 非\eTeX{}拡張でフォーマット作成しようとした場合など）。
+% \changes{v1.1c}{2021/02/25}{\file{latex.ltx}の読込チェック}
+%\else
+% If |\typeout| is still undefined, the input of \LaTeX~kernel
+% should have failed; abort now.
+% \changes{v1.1c}{2021/02/25}{Check for \file{latex.ltx} status}
+%\fi
+%    \begin{macrocode}
+\ifx\typeout\undefined
+  \errhelp{Please reinstall LaTeX, or check e-TeX availability.}%
+  \errmessage{Failed to load `latex.ltx' properly}%
+  \expandafter\end
+\fi
 %    \end{macrocode}
 %
 %\ifJAPANESE
