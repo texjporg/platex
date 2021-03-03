@@ -18,6 +18,7 @@
 % \changes{v1.0b}{2017/08/05}{％、＆、\%、\&の禁則ペナルティが
 %      誤っていたのを修正（post $\rightarrow$ pre）}
 % \changes{v1.0c}{2020/09/28}{！の\cs{inhibitxspcode}を設定}
+% \changes{v1.0d}{2021/03/04}{：の\cs{inhibitxspcode}と:の\cs{xspcode}を設定}
 % \fi
 %
 % \setcounter{StandardModuleDepth}{1}
@@ -28,7 +29,7 @@
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
 \ProvidesFile{kinsoku.dtx}
-  [2020/09/28 v1.0c pLaTeX Kernel (community edition)]
+  [2021/03/04 v1.0d pLaTeX Kernel (community edition)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{kinsoku.dtx}
@@ -186,6 +187,7 @@
 % \end{tabular}
 % \end{center}
 %
+% \changes{v1.0d}{2021/03/04}{:の\cs{xspcode}を設定}
 %    \begin{macrocode}
 \xspcode`(=1
 \xspcode`)=2
@@ -193,6 +195,7 @@
 \xspcode`]=2
 \xspcode``=1
 \xspcode`'=2
+\xspcode`:=2
 \xspcode`;=2
 \xspcode`,=2
 \xspcode`.=2
@@ -351,11 +354,13 @@
 % \end{center}
 %
 % \changes{v1.0c}{2020/09/28}{！の\cs{inhibitxspcode}を設定}
+% \changes{v1.0d}{2021/03/04}{：の\cs{inhibitxspcode}を設定}
 %    \begin{macrocode}
 \inhibitxspcode`、=1
 \inhibitxspcode`。=1
 \inhibitxspcode`，=1
 \inhibitxspcode`．=1
+\inhibitxspcode`：=1
 \inhibitxspcode`；=1
 \inhibitxspcode`？=1
 \inhibitxspcode`！=1
