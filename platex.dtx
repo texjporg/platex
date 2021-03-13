@@ -143,7 +143,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2021/02/25 v1.1c pLaTeX document file]
+\ProvidesFile{platex.dtx}[2021/03/14 v1.1d pLaTeX document file]
 % \iffalse
 \documentclass{jltxdoc}
 \usepackage{plext}
@@ -1117,6 +1117,11 @@
 %\fi
 %    \begin{macrocode}
 \documentclass{jltxdoc}
+\makeatletter
+\def\macro{\begingroup
+   \catcode`\\12 \catcode`\_12
+   \MakePrivateLetters \m@cro@ \iftrue}
+\makeatother
 \usepackage{plext}
 \listfiles
 

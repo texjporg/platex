@@ -1586,7 +1586,7 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{shipout-execute-cont}
+% \begin{macro}{\__shipout_execute_cont:}
 % \LaTeXe~2020-10-01以降：\file{ltshipout.dtx}がベースです。
 % ただし、縦組クラスでも通るようにするため、以下の方法を採ります。
 % \begin{itemize}
@@ -1642,6 +1642,35 @@
       % however, an infinite loop occurs if we uncomment the line below
       % so we can't.
       %\box_use:N \l__platex_shipout_dummy_box
+    }
+  }
+\fi:
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\__shipout_execute_nohooks_cont:}
+% \LaTeXe~2021-05-01では，同様の処理が|\__shipout_execute_nohooks_cont:|にも
+% 必要です．
+%    \begin{macrocode}
+\if_cs_exist:N \__shipout_execute_nohooks_cont:
+\cs_new_eq:NN \__platex_original_shipout_execute_nohooks_cont:
+              \__shipout_execute_nohooks_cont:
+\cs_set:Npn \__shipout_execute_nohooks_cont:
+  {
+    \platex_if_box_yoko:NF \l__shipout_raw_box {
+      \vbox_set:Nn \l__shipout_raw_box
+        {
+            \platex_direction_yoko:
+            \box_use:N \l__shipout_raw_box
+        }
+    }
+    \platex_if_direction_yoko:TF {
+      \__platex_original_shipout_execute_nohooks_cont:
+    }{
+      \vbox_set:Nn \l__platex_shipout_dummy_box
+        {
+          \platex_direction_yoko:
+          \__platex_original_shipout_execute_nohooks_cont:
+        }
     }
   }
 \fi:

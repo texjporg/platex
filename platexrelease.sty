@@ -3011,6 +3011,29 @@ of this package available from CTAN}
     }
   }
 \fi:
+\if_cs_exist:N \__shipout_execute_nohooks_cont:
+\cs_new_eq:NN \__platex_original_shipout_execute_nohooks_cont:
+              \__shipout_execute_nohooks_cont:
+\cs_set:Npn \__shipout_execute_nohooks_cont:
+  {
+    \platex_if_box_yoko:NF \l__shipout_raw_box {
+      \vbox_set:Nn \l__shipout_raw_box
+        {
+            \platex_direction_yoko:
+            \box_use:N \l__shipout_raw_box
+        }
+    }
+    \platex_if_direction_yoko:TF {
+      \__platex_original_shipout_execute_nohooks_cont:
+    }{
+      \vbox_set:Nn \l__platex_shipout_dummy_box
+        {
+          \platex_direction_yoko:
+          \__platex_original_shipout_execute_nohooks_cont:
+        }
+    }
+  }
+\fi:
 \ExplSyntaxOff
 \fi                     %--- expl3 available END
 \plEndIncludeInRelease
