@@ -126,11 +126,12 @@
 % \changes{v1.3e}{2020/03/05}{合字処理を抑止しつつ\cs{xkanjiskip}は挿入}
 % \changes{v1.3f}{2020/09/26}{\cs{AtBeginDvi}を再定義しない
 %    (checked ltshipout.dtx 2020/09/21 v1.0c)}
-% \changes{v1.3f}{2020/09/26}{\cs{__shipout_execute_cont:}を再定義
+% \changes{v1.3f}{2020/09/26}{\cs{\_\_shipout_execute_cont:}を再定義
 %    (checked ltshipout.dtx 2020/09/21 v1.0c)}
 % \changes{v1.3g}{2020/09/28}{縦組で空のフロートだけのページの
 %    フッタ(Issue 78)}
 % \changes{v1.3g}{2020/09/28}{\file{plexpl3}で定義した命令を使用}
+% \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-05-01に伴う修正}
 % \fi
 %
 % \iffalse
@@ -1647,9 +1648,12 @@
 \fi:
 %    \end{macrocode}
 % \end{macro}
+%
 % \begin{macro}{\__shipout_execute_nohooks_cont:}
 % \LaTeXe~2021-05-01では，同様の処理が|\__shipout_execute_nohooks_cont:|にも
-% 必要です．
+% 必要なので，それを行います．
+% \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-05-01では
+%                 \cs{\_\_shipout\_execute\_nohooks\_cont:}が追加された}
 %    \begin{macrocode}
 \if_cs_exist:N \__shipout_execute_nohooks_cont:
 \cs_new_eq:NN \__platex_original_shipout_execute_nohooks_cont:
@@ -1840,9 +1844,10 @@
 % 使えるように再定義されます。
 %
 % \changes{v1.0a}{1995/04/07}{組方向の判定をボックスの外でするようにした}
+% \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-05-01では\cs{par}が入る}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2016/09/08}{\@footnotetext}
-%<platexrelease>                   {Allow break after \footnote (more fix)}%
+%<platexrelease>\plIncludeInRelease{2021/03/14}{\@footnotetext}
+%<platexrelease>                   {Adapt to ltfloat.dtx (2021-03-03 v1.2f)}%
 %<*plcore|platexrelease>
 %    \end{macrocode}
 %    \begin{macrocode}
@@ -1860,6 +1865,7 @@
     \color@begingroup
       \@makefntext{%
         \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
+    \par
 %    \end{macrocode}
 %
 % p\TeX{}では|\insert|の直後に和文文字が来た場合、そこでの改行は許されない
@@ -1881,6 +1887,28 @@
 %    \end{macrocode}
 %    \begin{macrocode}
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/09/08}{\@footnotetext}
+%<platexrelease>                   {Allow break after \footnote (more fix)}%
+%<platexrelease>\long\def\@footnotetext#1{%
+%<platexrelease>  \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
+%<platexrelease>  \insert\footins{\@tempa%
+%<platexrelease>    \reset@font\footnotesize
+%<platexrelease>    \interlinepenalty\interfootnotelinepenalty
+%<platexrelease>    \splittopskip\footnotesep
+%<platexrelease>    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+%<platexrelease>    \hsize\columnwidth \@parboxrestore
+%<platexrelease>    \protected@edef\@currentlabel{%
+%<platexrelease>       \csname p@footnote\endcsname\@thefnmark
+%<platexrelease>    }%
+%<platexrelease>    \color@begingroup
+%<platexrelease>      \@makefntext{%
+%<platexrelease>        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
+%<platexrelease>    \color@endgroup}\ifhmode\null\fi
+%<platexrelease>    \ifnum\pltx@foot@penalty=\z@\else
+%<platexrelease>      \penalty\pltx@foot@penalty
+%<platexrelease>      \pltx@foot@penalty\z@
+%<platexrelease>    \fi}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/09/03}{\@footnotetext}
 %<platexrelease>                   {Allow break after \footnote}%
