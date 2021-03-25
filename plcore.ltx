@@ -1780,6 +1780,10 @@
     \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \null
     \ignorespaces
   \fi}
+\def\pltx@adjust@wd@outputbox{%
+  \ifydir\else\vbox{\pdfprimitive\everypar{}\hskip\z@}\fi}
+\def\pltx@adjust@wd@outputbox@vtryfc{%
+  \ifydir\else\pdfprimitive\everypar{}\hskip\z@\fi}
 \gdef\@makecol{%
    \setbox\@outputbox\box\@cclv%
    \let\@elt\relax % added on LaTeX (ltoutput.dtx 2003/12/16 v1.2k)
@@ -1809,7 +1813,7 @@
        \@texttop
        \dimen@ \dp\@outputbox
        \unvbox \@outputbox
-       \iftdir\vbox{\hskip\z@}\fi
+       \pltx@adjust@wd@outputbox
        \vskip -\dimen@
        \@textbottom
        }%
@@ -1866,7 +1870,7 @@
   \ifvbox\@kludgeins\insert\@kludgeins{\unvbox\@kludgeins}\fi
 }
 \def\@vtryfc #1{%
-  \global\setbox\@outputbox\vbox{\ifydir\else\hskip\z@\fi}%
+  \global\setbox\@outputbox\vbox{\pltx@adjust@wd@outputbox@vtryfc}%
   \let\@elt\@wtryfc
   \@flsucceed
   \global\setbox\@outputbox \vbox to\@colht{%

@@ -132,6 +132,8 @@
 %    フッタ(Issue 78)}
 % \changes{v1.3g}{2020/09/28}{\file{plexpl3}で定義した命令を使用}
 % \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-05-01に伴う修正}
+% \changes{v1.3i}{2021/03/25}{\cs{@outputpage}, \cs{@vtryfc}での、非横組時における
+%    \cs{@outputbox}の寸法補正のコードを別命令として切り出した}
 % \fi
 %
 % \iffalse
@@ -502,6 +504,40 @@
 %</fltrace>
 %    \end{macrocode}
 %
+% \begin{macro}{\pltx@adjust@wd@outputbox}
+% |\@outputpage|内で実行されていた
+% \begin{quote}
+% 縦組の際に|\@outputbox|の内容が空のボックスだけの場合に、|\wd\@outputbox|が
+% 0ptになってしまい、結果としてフッタの位置がくるってしまっていた。
+% 0の|\hskip|を発生させると|\wd\@outputbox|の値が期待したものとなるので、
+% 縦組の場合はその方法で対処する。
+%
+% ただし、0の|\hskip|を発生させるとき、水平モードに入ってしまうと、たとえば
+% longtableパッケージを使用して表組途中で改ページするときに|\par -> {\vskip}|の
+% 無限ループが起きてしまいます。そこで、|\vbox|の中で発生させます。
+% \end{quote}
+% という処理を取り出したものです。
+%
+% \LaTeXe~2021-05-01では段落開始時の``para/*''フックが実装されますが、
+% それを一時的に無効化するために「プリミティブとしての」|\everypar|を
+% |\pdfprimitive\everypar|として呼び出しています。
+%    \begin{macrocode}
+%<*plcore|platexrelease>
+\def\pltx@adjust@wd@outputbox{%
+  \ifydir\else\vbox{\pdfprimitive\everypar{}\hskip\z@}\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pltx@adjust@wd@outputbox@vtryfc}
+% |\pltx@adjust@wd@outputbox|と同様の処理ですが、|\@vtryfc|では
+% |\vbox|の位置が異なります。
+%    \begin{macrocode}
+\def\pltx@adjust@wd@outputbox@vtryfc{%
+  \ifydir\else\pdfprimitive\everypar{}\hskip\z@\fi}
+%</plcore|platexrelease>
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\@makecol}
 % このマクロが組み立てる部分の中心となります。
 % \file{ltoutput.dtx}で定義されているものです。
@@ -552,14 +588,11 @@
        \dimen@ \dp\@outputbox
        \unvbox \@outputbox
 %    \end{macrocode}
-% 縦組の際に|\@outputbox|の内容が空のボックスだけの場合に、|\wd\@outputbox|が
-% 0ptになってしまい、結果としてフッタの位置がくるってしまっていた。
-% 0の|\hskip|を発生させると|\wd\@outputbox|の値が期待したものとなるので、
-% 縦組の場合はその方法で対処する。
-%
-% ただし、0の|\hskip|を発生させるとき、水平モードに入ってしまうと、たとえば
-% longtableパッケージを使用して表組途中で改ページするときに|\par -> {\vskip}|の
-% 無限ループが起きてしまいます。そこで、|\vbox|の中で発生させます。
+% 次の行は以前は
+%\begin{verbatim}
+%\iftdir\vbox{\hskip\z@}\fi
+%\end{verbatim}
+% でしたが、|\pltx@adjust@wd@outputbox|として切り出しました。
 % \changes{v1.1j}{2001/05/10}{\cs{@makecol}で組み立てられる
 %    \cs{@outputbox}の大きさが、縦組で中身が空のボックスだけの場合も適正になる
 %    ように修正}
@@ -567,8 +600,10 @@
 %    ようにする\texttt{\cs{vskip}~-\cs{dimen@}}が縦組モードでは無効になっていたので修正}
 % \changes{v1.2h}{2016/09/01}{縦組でlongtableパッケージを使って表組の途中で改ページ
 %    するとき無限ループが起こる問題に対処(Issue 21)}
+% \changes{v1.3i}{2021/03/25}{非横組時における
+%    \cs{@outputbox}の寸法補正のコードを\cs{pltx@adjust@wd@outputbox}として切り出した}
 %    \begin{macrocode}
-       \iftdir\vbox{\hskip\z@}\fi
+       \pltx@adjust@wd@outputbox
        \vskip -\dimen@
        \@textbottom
        }%
@@ -823,15 +858,18 @@
 % それより昔の版では空白ページは発生しません。
 %
 % 対策方法は、\file{ltoutput.dtx}で定義されている|\@vtryfc|に
-% |\ifydir\else\hskip\z@\fi|の追加です（|\@makecol|と同様）。
+% |\ifydir\else\hskip\z@\fi|の追加です（|\@makecol|と同様）が、
+% 別命令|\pltx@adjust@wd@outputbox@vtryfc|として切り出しました。
 % \changes{v1.3g}{2020/09/28}{縦組で空のフロートだけのページの
 %    フッタ(Issue 78)}
+% \changes{v1.3i}{2021/03/25}{非横組時における
+%    \cs{@outputbox}の寸法補正のコードを\cs{pltx@adjust@wd@outputbox@vtryfc}として切り出した}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2020/10/01}{\@vtryfc}
 %<platexrelease>                               {Empty float}%
 %<*plcore|platexrelease>
 \def\@vtryfc #1{%
-  \global\setbox\@outputbox\vbox{\ifydir\else\hskip\z@\fi}%
+  \global\setbox\@outputbox\vbox{\pltx@adjust@wd@outputbox@vtryfc}%
   \let\@elt\@wtryfc
   \@flsucceed
   \global\setbox\@outputbox \vbox to\@colht{%
@@ -1650,8 +1688,8 @@
 % \end{macro}
 %
 % \begin{macro}{\__shipout_execute_nohooks_cont:}
-% \LaTeXe~2021-05-01では，同様の処理が|\__shipout_execute_nohooks_cont:|にも
-% 必要なので，それを行います．
+% \LaTeXe~2021-05-01では、同様の処理が|\__shipout_execute_nohooks_cont:|にも
+% 必要なので、それを行います。
 % \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-05-01では
 %                 \cs{\_\_shipout\_execute\_nohooks\_cont:}が追加された}
 %    \begin{macrocode}

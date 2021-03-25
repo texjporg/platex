@@ -2376,6 +2376,10 @@ of this package available from CTAN}
     \fi
   \fi}
 \plEndIncludeInRelease
+\def\pltx@adjust@wd@outputbox{%
+  \ifydir\else\vbox{\pdfprimitive\everypar{}\hskip\z@}\fi}
+\def\pltx@adjust@wd@outputbox@vtryfc{%
+  \ifydir\else\pdfprimitive\everypar{}\hskip\z@\fi}
 \plIncludeInRelease{2017/04/08}{\@makecol}
                    {Take into account depth of footnote}%
 \gdef\@makecol{%
@@ -2407,7 +2411,7 @@ of this package available from CTAN}
        \@texttop
        \dimen@ \dp\@outputbox
        \unvbox \@outputbox
-       \iftdir\vbox{\hskip\z@}\fi
+       \pltx@adjust@wd@outputbox
        \vskip -\dimen@
        \@textbottom
        }%
@@ -2512,7 +2516,7 @@ of this package available from CTAN}
 \plIncludeInRelease{2020/10/01}{\@vtryfc}
                                {Empty float}%
 \def\@vtryfc #1{%
-  \global\setbox\@outputbox\vbox{\ifydir\else\hskip\z@\fi}%
+  \global\setbox\@outputbox\vbox{\pltx@adjust@wd@outputbox@vtryfc}%
   \let\@elt\@wtryfc
   \@flsucceed
   \global\setbox\@outputbox \vbox to\@colht{%
