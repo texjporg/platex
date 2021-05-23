@@ -3,7 +3,7 @@
 %
 %  Copyright 1994-2001 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016-2020 Japanese TeX Development Community
+%  Copyright (c) 2016-2021 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -131,7 +131,7 @@
 % \changes{v1.3g}{2020/09/28}{縦組で空のフロートだけのページの
 %    フッタ(Issue 78)}
 % \changes{v1.3g}{2020/09/28}{\file{plexpl3}で定義した命令を使用}
-% \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-05-01に伴う修正}
+% \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-06-01に伴う修正}
 % \changes{v1.3i}{2021/03/25}{\cs{@outputpage}, \cs{@vtryfc}での、非横組時における
 %    \cs{@outputbox}の寸法補正のコードを別命令として切り出した}
 % \fi
@@ -518,7 +518,7 @@
 % \end{quote}
 % という処理を取り出したものです。
 %
-% \LaTeXe~2021-05-01では段落開始時の``para/*''フックが実装されますが、
+% \LaTeXe~2021-06-01では段落開始時の``para/*''フックが実装されますが、
 % それを一時的に無効化するために「プリミティブとしての」|\everypar|を
 % |\pdfprimitive\everypar|として呼び出しています。
 %    \begin{macrocode}
@@ -1688,9 +1688,9 @@
 % \end{macro}
 %
 % \begin{macro}{\__shipout_execute_nohooks_cont:}
-% \LaTeXe~2021-05-01では、同様の処理が|\__shipout_execute_nohooks_cont:|にも
+% \LaTeXe~2021-06-01では、同様の処理が|\__shipout_execute_nohooks_cont:|にも
 % 必要なので、それを行います。
-% \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-05-01では
+% \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-06-01では
 %                 \cs{\_\_shipout\_execute\_nohooks\_cont:}が追加された}
 %    \begin{macrocode}
 \if_cs_exist:N \__shipout_execute_nohooks_cont:
@@ -1882,9 +1882,9 @@
 % 使えるように再定義されます。
 %
 % \changes{v1.0a}{1995/04/07}{組方向の判定をボックスの外でするようにした}
-% \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-05-01では\cs{par}が入る}
+% \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-06-01では\cs{par}が入る}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2021/03/14}{\@footnotetext}
+%<platexrelease>\plIncludeInRelease{2021/06/01}{\@footnotetext}
 %<platexrelease>                   {Adapt to ltfloat.dtx (2021-03-03 v1.2f)}%
 %<*plcore|platexrelease>
 %    \end{macrocode}
