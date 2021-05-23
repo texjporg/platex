@@ -639,10 +639,10 @@
   \fi
   \size@update}
 %%
-\else        % --- for <= 2020-10-01 END & for >= 2021-05-01 BEGIN
+\else        % --- for <= 2020-10-01 END & for >= 2021-06-01 BEGIN
 %%
 \DeclareRobustCommand\selectfont{%
-  % !! sync with ltfsstrc.dtx 2020/12/22 v3.0n BEGIN
+  % !! sync with ltfsstrc.dtx 2021/04/26 v3.0o BEGIN
   \ifx\delayed@k@adjustment\@empty
   \else
     \let\k@shape@saved\k@shape
@@ -680,7 +680,8 @@
     \fi
     \let\delayed@f@adjustment\@empty
   \fi
-  % !! sync with ltfsstrc.dtx 2020/12/22 v3.0n END
+  \@forced@seriesfalse
+  % !! sync with ltfsstrc.dtx 2021/04/26 v3.0o END
   \let\tmp@error@fontshape\error@fontshape
   \let\error@fontshape\error@kfontshape
   \edef\tmp@item{{\k@encoding}}%
@@ -730,14 +731,14 @@
   \xdef\font@name{\csname\curr@fontshape/\f@size\endcsname}%
   \pickup@font
   \font@name
-  \UseHook{selectfont}% since LaTeX2e 2021-05-01
+  \UseHook{selectfont}% since LaTeX2e 2021-06-01
   \enc@update
   \ifx\f@linespread\baselinestretch \else
     \set@fontsize\baselinestretch\f@size\f@baselineskip
   \fi
   \size@update}
 %%
-\fi          % --- for >= 2021-05-01 END
+\fi          % --- for >= 2021-06-01 END
 \def\set@fontsize#1#2#3{%
     \@defaultunits\@tempdimb#2pt\relax\@nnil
     \edef\f@size{\strip@pt\@tempdimb}%
@@ -939,7 +940,7 @@
 \fi
 \ifx\delayed@f@adjustment\@undefined   % old
   \let\delayed@k@adjustment\@undefined
-\else                                  % 2021-05-01
+\else                                  % 2021-06-01
   \let\delayed@k@adjustment\@empty
 \fi
 \ifx\fontseriesforce\@undefined  % old
@@ -951,7 +952,7 @@
 \DeclareRobustCommand\romanseries[1]{\@forced@seriesfalse\merge@font@series{#1}}
 \DeclareRobustCommand\kanjiseries[1]{\@forced@seriesfalse\merge@kanji@series{#1}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
-\else        % --- for <= 2020-10-01 END & for >= 2021-05-01 BEGIN
+\else        % --- for <= 2020-10-01 END & for >= 2021-06-01 BEGIN
 \DeclareRobustCommand\romanseries[1]{\@forced@seriesfalse
     \expandafter\def\expandafter\delayed@f@adjustment\expandafter
         {\delayed@f@adjustment\delayed@merge@font@series{#1}}}
@@ -959,7 +960,7 @@
     \expandafter\def\expandafter\delayed@k@adjustment\expandafter
         {\delayed@k@adjustment\delayed@merge@kanji@series{#1}}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
-\fi          % --- for >= 2021-05-01 END
+\fi          % --- for >= 2021-06-01 END
 \fi
 \ifx\fontseriesforce\@undefined  % old
 \let\romanseriesforce\@undefined
@@ -969,7 +970,7 @@
 \DeclareRobustCommand\romanseriesforce[1]{\@forced@seriestrue\edef\f@series{#1}}
 \DeclareRobustCommand\kanjiseriesforce[1]{\@forced@seriestrue\edef\k@series{#1}}
 \DeclareRobustCommand\fontseriesforce[1]{\kanjiseriesforce{#1}\romanseriesforce{#1}}
-\else        % --- for <= 2020-10-01 END & for >= 2021-05-01 BEGIN
+\else        % --- for <= 2020-10-01 END & for >= 2021-06-01 BEGIN
 \DeclareRobustCommand\romanseriesforce[1]{\@forced@seriestrue
     \expandafter\def\expandafter\delayed@f@adjustment\expandafter
       {\delayed@f@adjustment\edef\f@series{#1}}}
@@ -977,7 +978,7 @@
     \expandafter\def\expandafter\delayed@k@adjustment\expandafter
       {\delayed@k@adjustment\edef\k@series{#1}}}
 \DeclareRobustCommand\fontseriesforce[1]{\kanjiseriesforce{#1}\romanseriesforce{#1}}
-\fi          % --- for >= 2021-05-01 END
+\fi          % --- for >= 2021-06-01 END
 \fi
 \ifx\fontseriesforce\@undefined  % old
 \let\merge@kanji@series\@undefined
@@ -1021,7 +1022,7 @@
 \let\merge@kanji@series@without@substitution\@undefined
 \let\merge@kanji@series@without@substitution@\@undefined
 \let\delayed@merge@kanji@series\@undefined
-\else                                                  % 2021-05-01
+\else                                                  % 2021-06-01
 \def\merge@kanji@series@without@substitution#1{%
   \expandafter\expandafter\expandafter
   \merge@kanji@series@without@substitution@
@@ -1055,7 +1056,7 @@
   \@shape@roman@kanjitrue
   \kanjishape{#1}\romanshape{#1}%
   \@shape@roman@kanjifalse}
-\else        % --- for <= 2020-10-01 END & for >= 2021-05-01 BEGIN
+\else        % --- for <= 2020-10-01 END & for >= 2021-06-01 BEGIN
 \DeclareRobustCommand\romanshape[1]{%
     \expandafter\def\expandafter\delayed@f@adjustment\expandafter
         {\delayed@f@adjustment\delayed@merge@font@shape{#1}}}
@@ -1066,7 +1067,7 @@
   \@shape@roman@kanjitrue
   \kanjishape{#1}\romanshape{#1}%
   \@shape@roman@kanjifalse}
-\fi          % --- for >= 2021-05-01 END
+\fi          % --- for >= 2021-06-01 END
 \fi
 \ifx\fontshapeforce\@undefined   % old
 \let\romanshapeforce\@undefined
@@ -1079,7 +1080,7 @@
   \set@safe@kanji@shape{#1}{}%
   \edef\f@shape{#1}%
 }
-\else        % --- for <= 2020-10-01 END & for >= 2021-05-01 BEGIN
+\else        % --- for <= 2020-10-01 END & for >= 2021-06-01 BEGIN
 \DeclareRobustCommand\romanshapeforce[1]{%
     \expandafter\def\expandafter\delayed@f@adjustment\expandafter
         {\delayed@f@adjustment\edef\f@shape{#1}}}
@@ -1092,7 +1093,7 @@
     \expandafter\def\expandafter\delayed@f@adjustment\expandafter
         {\delayed@f@adjustment\edef\f@shape{#1}}%
 }
-\fi          % --- for >= 2021-05-01 END
+\fi          % --- for >= 2021-06-01 END
 \fi
 \ifx\fontseriesforce\@undefined  % old
 \let\merge@kanji@shape\@undefined
@@ -1140,7 +1141,7 @@
 \let\merge@kanji@shape@without@substitution\@undefined
 \let\merge@kanji@shape@without@substitution@\@undefined
 \let\delayed@merge@kanji@shape\@undefined
-\else                                                  % 2021-05-01
+\else                                                  % 2021-06-01
 \def\merge@kanji@shape@without@substitution#1{%
   \expandafter\expandafter\expandafter
   \merge@kanji@shape@without@substitution@
@@ -1171,7 +1172,7 @@
     \@font@info{Kanji font shape `#1' undefined\MessageBreak
                 No change}%
 }
-\ifx\set@target@series\@undefined
+\ifx\set@target@series\@undefined    % old
 \DeclareRobustCommand\usekanji[4]{\kanjiencoding{#1}%
     \edef\k@family{#2}%
     \edef\k@series{#3}%
@@ -1182,7 +1183,8 @@
     \edef\f@series{#3}%
     \edef\f@shape{#4}\selectfont
     \ignorespaces}
-\else
+\else                                % 2020-02-02
+\ifx\delayed@f@adjustment\@undefined % --- for <= 2020-10-01 BEGIN
 \DeclareRobustCommand\usekanji[4]{\kanjiencoding{#1}%
     \edef\k@family{#2}%
     \set@target@series@kanji{#3}%
@@ -1193,7 +1195,23 @@
     \set@target@series{#3}%
     \edef\f@shape{#4}\selectfont
     \ignorespaces}
-\fi
+\else        % --- for <= 2020-10-01 END & for >= 2021-06-01 BEGIN
+\DeclareRobustCommand\usekanji[4]{\kanjiencoding{#1}%
+    \edef\k@family{#2}%
+    \set@target@series@kanji{#3}%
+    \edef\k@shape{#4}%
+    \let\delayed@k@adjustment\@empty
+    \selectfont
+    \ignorespaces}
+\DeclareRobustCommand\useroman[4]{\romanencoding{#1}%
+    \edef\f@family{#2}%
+    \set@target@series{#3}%
+    \edef\f@shape{#4}%
+    \let\delayed@f@adjustment\@empty
+    \selectfont
+    \ignorespaces}
+\fi          % --- for >= 2021-06-01 END
+\fi                                  % done
 \DeclareRobustCommand\usefont[4]{%
   \edef\tmp@item{{#1}}%
   \expandafter\expandafter\expandafter
@@ -1222,12 +1240,22 @@
 }
 \fi                                 % done
 \else % --- for <= 2020-02-02 END & for >= 2020-10-01 BEGIN
+\ifx\delayed@f@adjustment\@undefined % --- for == 2020-10-01 BEGIN
 \AddToHook{normalfont}{%
     \kanjiencoding{\kanjiencodingdefault}%
     \edef\k@family{\kanjifamilydefault}%
     \edef\k@series{\kanjiseriesdefault}%
     \edef\k@shape{\kanjishapedefault}%
 }
+\else        % --- for == 2020-10-01 END & for >= 2021-06-01 BEGIN
+\AddToHook{normalfont}{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
+    \let\delayed@k@adjustment\@empty
+}
+\fi          % --- for >= 2021-06-01 END
 \fi   % --- for >= 2020-10-01 END
 \adjustbaseline
 \let\reset@font\normalfont
