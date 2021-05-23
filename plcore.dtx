@@ -113,9 +113,9 @@
 % \changes{v1.3}{2018/09/02}{\file{platexrelease}バグ修正}
 % \changes{v1.3a}{2018/10/31}{\LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策を
 %    \file{plvers.dtx} (plfinal) から\file{plcore.dtx}へ移動、latexrelease対策
-%    (sync with ltfinal 2018/08/24 v2.1f)}
+%    (sync with ltfinal.dtx 2018/08/24 v2.1f)}
 % \changes{v1.3b}{2019/02/08}{中央揃えのセルでの\cs{unskip}対策
-%    (sync with lttab 2018/12/30 v1.1p)}
+%    (sync with lttab.dtx 2018/12/30 v1.1p)}
 % \changes{v1.3c}{2019/09/16}{Make \cs{AtBeginDvi} robust
 %    (sync with ltoutput.dtx 2019/08/27 v1.4e)}
 % \changes{v1.3c}{2019/09/16}{Make \cs{underline} robust
@@ -140,7 +140,7 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2020/09/28 v1.3g pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2021/03/25 v1.3i pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1882,7 +1882,8 @@
 % 使えるように再定義されます。
 %
 % \changes{v1.0a}{1995/04/07}{組方向の判定をボックスの外でするようにした}
-% \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-06-01では\cs{par}が入る}
+% \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-06-01では\cs{par}が入る
+%    (sync with ltfloat.dtx 2021/02/10 v1.2e)}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2021/06/01}{\@footnotetext}
 %<platexrelease>                   {Adapt to ltfloat.dtx (2021-03-03 v1.2f)}%
@@ -2289,7 +2290,7 @@
 %    なっていたバグを修正}
 % \changes{v1.2x}{2018/03/01}{\cs{removejfmglue}があれば利用するようにした}
 % \changes{v1.3b}{2019/02/08}{中央揃えのセルでの\cs{unskip}対策
-%    (sync with lttab 2018/12/30 v1.1p)}
+%    (sync with lttab.dtx 2018/12/30 v1.1p)}
 % ^^A なぜか v1.3b の変更は本家 latexrelease に含まれないのでそれに合わせた
 %    \begin{macrocode}
 %</plcore>
@@ -2793,7 +2794,7 @@
 % \section{\LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策}
 % \changes{v1.3a}{2018/10/31}{\LaTeXe{}とp\LaTeXe{}の更新タイミングずれ対策を
 %    \file{plvers.dtx} (plfinal) から\file{plcore.dtx}へ移動、latexrelease対策
-%    (sync with ltfinal 2018/08/24 v2.1f)}
+%    (sync with ltfinal.dtx 2018/08/24 v2.1f)}
 %
 % \begin{macro}{\l@nohyphenation}
 % 通常はBabelのハイフネーション定義により提供されるパラメータです。
