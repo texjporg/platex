@@ -89,6 +89,7 @@
 % \changes{v1.1a}{2020/09/26}{\file{plexpl3.dtx}を追加}
 % \changes{v1.1b}{2020/09/28}{defs読込後にフック追加}
 % \changes{v1.1c}{2021/02/25}{\file{latex.ltx}の読込チェック}
+% \changes{v1.1d}{2021/03/14}{expl3コマンドを印字できるように}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -136,6 +137,7 @@
 % \changes{v1.1a}{2020/09/26}{Add \file{plexpl3.dtx}}
 % \changes{v1.1b}{2020/09/28}{Add hook after loading defs}
 % \changes{v1.1c}{2021/02/25}{Check for \file{latex.ltx} status}
+% \changes{v1.1d}{2021/03/14}{Print expl3 commands correctly}
 %\fi
 % \fi
 %
@@ -1110,10 +1112,12 @@
 % 文書クラスには、\file{jltxdoc}クラスを用います。
 % \file{plext.dtx}の中でサンプルを組み立てていますので、
 % \file{plext}パッケージが必要です。
+% \changes{v1.1d}{2021/03/14}{expl3コマンドを印字できるように}
 %\else
 % We use \file{jltxdoc} class; we also require \file{plext} package,
 % since \file{plext.dtx} contains several examples of partial
 % vertical writing.
+% \changes{v1.1d}{2021/03/14}{Print expl3 commands correctly}
 %\fi
 %    \begin{macrocode}
 \documentclass{jltxdoc}
