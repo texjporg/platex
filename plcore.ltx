@@ -35,7 +35,7 @@
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
    {2021-06-01}
-\def\ppatch@level{0}
+\def\ppatch@level{1}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
                    \noexpand\platexNILb}
@@ -2145,7 +2145,7 @@
         }
     }
   }
-}                                          %--- IF LEVEL 1 END
+}                                                  %--- IF LEVEL 1 END
 \ExplSyntaxOff
 \fi                     %--- expl3 available END
 \renewcommand\@makefnmark{%
@@ -2351,6 +2351,10 @@
 \endgroup
 \else
 \AddToHook{begindocument/before}{\p@warn@latexrelease}
+%%% temporary workaround: see latex3/latex2e#577
+\AddToHook{package/before/latexrelease}{\let\saved@pathstack\@kernel@currpathstack}
+\AddToHook{package/after/latexrelease}{\let\@kernel@currpathstack\saved@pathstack}
+%%% [TODO] remove the above when fixed!
 \fi
 \def\p@warn@latexrelease{%
   \ifx\latexreleaseversion\@undefined\else

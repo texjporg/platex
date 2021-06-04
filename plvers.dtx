@@ -197,7 +197,7 @@
    {2021-06-01}
 %</plcore|platexrelease>
 %<*plcore>
-\def\ppatch@level{0}
+\def\ppatch@level{1}
 %</plcore>
 %    \end{macrocode}
 % \end{macro}
@@ -496,6 +496,10 @@
 \else
 % for LaTeX2e 2020-10-01 or later
 \AddToHook{begindocument/before}{\p@warn@latexrelease}
+%%% temporary workaround: see latex3/latex2e#577
+\AddToHook{package/before/latexrelease}{\let\saved@pathstack\@kernel@currpathstack}
+\AddToHook{package/after/latexrelease}{\let\@kernel@currpathstack\saved@pathstack}
+%%% [TODO] remove the above when fixed!
 \fi
 %
 \def\p@warn@latexrelease{%
