@@ -1,0 +1,31 @@
+%#!pdflatex
+\documentclass{article}
+\makeatletter
+\DeclareFontFamily{OT1}{hoge}{}
+\DeclareFontShape {OT1}{hoge}{m} {n}{<-> s*cmff10}{}
+\DeclareFontShape {OT1}{hoge}{ub}{n}{<-> s*cmsl10}{}
+\DeclareFontFamily{OT1}{fuga}{}
+\DeclareFontShape {OT1}{fuga}{m} {n}{<-> s*cmbxti10}{}
+\DeclareFontShape {OT1}{fuga}{sb}{n}{<-> s*cmbxsl10}{}
+
+\def\rmdefault{hoge}\def\sfdefault{fuga}
+\def\bfseries@rm{ub}\def\bfseries@sf{sb}
+\def\test#1{%
+  \par\begingroup#1%
+    \xdef\status@af{\f@family/\f@series/\f@shape}\endgroup%
+  (\texttt{\status@af})
+}
+\begin{document}
+
+\test{}
+% => hoge/m/n
+
+\test{\fontseries{ub}\selectfont\sffamily}
+% => fuga/sb/n
+
+\test{\fontseriesforce{ub}\selectfont\sffamily}
+% => changed!
+%  * 2020-10-01: fuga/ub/n (fallback -> fuga/m/n)
+%  * 2021-06-01: fuga/sb/n
+
+\end{document}

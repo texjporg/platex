@@ -1,0 +1,38 @@
+%#!platex
+\documentclass{jarticle}
+\makeatletter
+\DeclareKanjiFamily{JY1}{hoge}{}
+\DeclareFontShape  {JY1}{hoge}{m} {n}{<-> s*nmlminr-h}{}
+\DeclareFontShape  {JY1}{hoge}{ub}{n}{<-> s*nmlminb-h}{}
+\DeclareKanjiFamily{JY1}{fuga}{}
+\DeclareFontShape  {JY1}{fuga}{m} {n}{<-> s*nmlgothr-h}{}
+\DeclareFontShape  {JY1}{fuga}{sb}{n}{<-> s*nmlgothb-h}{}
+
+\def\mcdefault{hoge}\def\gtdefault{fuga}
+\def\bfseries@mc{ub}\def\bfseries@gt{sb}
+\def\test#1{%
+  \par\begingroup#1%
+    \xdef\status@af{\f@family/\f@series/\f@shape}%
+    \xdef\status@jf{\k@family/\k@series/\k@shape}\endgroup%
+  (\texttt{\status@af}, \texttt{\status@jf})
+}
+\begin{document}
+
+\test{}
+% => hoge/m/n
+
+\test{\kanjiseries{ub}\selectfont\gtfamily}
+% => fuga/sb/n
+
+\test{\kanjiseriesforce{ub}\selectfont\gtfamily}
+% => changed!
+%  * 2020-10-01: fuga/ub/n (fallback -> fuga/m/n)
+%  * 2021-06-01: fuga/sb/n
+
+\test{\romanseries{l}\kanjiseries{ub}\selectfont\gtfamily}
+% => fuga/sb/n
+
+\test{\romanseriesforce{l}\kanjiseries{ub}\selectfont\gtfamily}
+% => fuga/sb/n
+
+\end{document}
