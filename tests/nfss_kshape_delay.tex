@@ -1,0 +1,29 @@
+% https://github.com/texjporg/platex/issues/96
+\documentclass{jarticle}
+
+\DeclareFontFamily{JY1}{test}{}
+\DeclareFontShape{JY1}{test}{m}{n}{<-> s*[0.5]nmlminr-h}{}
+\DeclareFontShape{JY1}{test}{m}{it}{<-> s*[0.5]nmlminb-h}{}
+\DeclareFontShape{JY1}{test}{b}{it}{<-> s*[1]nmlminb-h}{}
+\DeclareFontShape{JY1}{test}{b}{sw}{<-> s*[1]nmlminr-h}{}
+\DeclareFontShape{JY1}{test}{l}{sw}{<-> s*[1]nmlgothr-h}{}
+\DeclareFontShape{JY1}{test}{l}{n}{ <-> s*[1]nmlgothb-h}{}
+\DeclareFontFamily{OT1}{test}{}
+\DeclareFontShape{OT1}{test}{m}{n}{<-> s*[0.5]cmr10}{}
+\DeclareFontShape{OT1}{test}{m}{it}{<-> s*[0.5]cmti10}{}
+\DeclareFontShape{OT1}{test}{b}{it}{<-> s*[1]cmbxti10}{}
+\DeclareFontShape{OT1}{test}{b}{sw}{<-> s*[1]cmbxsl10}{}
+\DeclareFontShape{OT1}{test}{l}{sw}{<-> s*[1]cmsl10}{}
+\DeclareFontShape{OT1}{test}{l}{n}{ <-> s*[1]cmff10}{}
+
+\makeatletter
+\def\T{[R:\f@series/\f@shape][K:\k@series/\k@shape]あ\null A}
+\begin{document}
+% 最初は 欧文: m/n 和文: m/n
+\kanjifamily{test}\romanfamily{test}\selectfont\T
+% 2回目は 欧文: l/sw 和文: l/sw (2021-06-01)
+% 注意：pLaTeX2e 2020-04-12 では「和文シェープの存在判定」を
+% \fontshape の都度実行したため n -> sw の更新できず l/n だった。
+% pLaTeX2e 2020-06-01+1 で \selectfont に遅らせて l/sw に正常化。
+\fontshape{sw}\fontseries{b}\fontseries{l}\selectfont\T
+\end{document}
