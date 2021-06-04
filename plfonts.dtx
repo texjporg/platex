@@ -2905,9 +2905,10 @@
     \expandafter\def\expandafter\delayed@k@adjustment\expandafter
         {\delayed@k@adjustment\delayed@merge@kanji@shape{#1}}}
 \DeclareRobustCommand\fontshape[1]{%
-  \@shape@roman@kanjitrue
-  \kanjishape{#1}\romanshape{#1}%
-  \@shape@roman@kanjifalse}
+    \romanshape{#1}%
+    \expandafter\def\expandafter\delayed@k@adjustment\expandafter
+        {\delayed@k@adjustment\@shape@roman@kanjitrue
+         \delayed@merge@kanji@shape{#1}\@shape@roman@kanjifalse}}
 \fi          % --- for >= 2021-06-01 END
 \fi
 %</plcore|platexrelease>
