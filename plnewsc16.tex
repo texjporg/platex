@@ -1,0 +1,94 @@
+%% <2021-06-01>
+\documentclass{plnews}
+\usepackage{minijs}
+
+\publicationyear{2021}% 発行年
+\publicationmonth{06}% 発行月
+\publicationissue{c16}% 番号
+\author{日本語\TeX{}開発コミュニティ（\texttt{https://texjp.org/}）}
+
+\def\cs#1{\texttt{\char92\nobreak #1}}
+\def\pTeX{p\kern-.15em\TeX}
+\def\eTeX{$\varepsilon$-\TeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\pLaTeX{p\kern-.05em\LaTeX}
+\def\pLaTeXe{p\kern-.05em\LaTeXe}
+\xspcode`\\=1
+
+\begin{document}
+
+\maketitle
+
+コミュニティ版\pLaTeXe\ \texttt{<2021-06-01>}について、
+\pLaTeXe\ \texttt{<2020-10-01>}からの更新箇所を
+まとめました。u\pLaTeXe{}も同時に更新してください。
+
+
+\section{\LaTeXe\ \texttt{<2021-06-01>}対応}
+→参考：|texjporg/platex#96|
+
+新しい\LaTeXe\ \texttt{<2021-06-01>}で修正・追加された
+機能（\file{ltnews33}, \file{ltpara-doc}も参照）のうち、
+\pLaTeXe{}の日本語拡張部分に影響するものに対応を施しました。
+具体的には、以下が該当します。
+\begin{itemize}
+\item 段落へのフック機能
+  (Extending the hook concept to paragraphs)
+\item 書体選択命令 |\selectfont| へのフック機能
+  (A new hook in |\selectfont|)
+  （これは従来の |everysel| パッケージに相当）
+\item 新NFSSへの追加修正：シリーズ・シェイプの変更を
+  |\selectfont| まで遅らせる
+  (Change of font series/shape delayed until |\selectfont|)
+\end{itemize}
+
+
+\section{開発版のテストのお願い}
+特に2020年以降、オリジナルの\LaTeX{}が活発に開発されており、
+その変更点が\pLaTeX{}に波及するケースが増えてきました。
+そのようなケースの見落としを避け、かつ、今後\pLaTeX{}に
+導入するかもしれない修正や仕様変更を事前にテストしていただく
+ことは、予期しないバグの防止につながります。
+ぜひ開発版のテストにご協力ください。いくつかの方法があります。
+
+最も簡単な方法は「通常のコマンド名 |platex| の代わりに
+|platex-dev| というコマンドを起動する」というものです。
+通常のコマンドは
+「\LaTeXe{}の\emph{安定版}に\pLaTeXe{}を載せたもの」
+ですが、|-dev| 付きコマンドは
+「\LaTeXe{}の\emph{開発版}に\pLaTeXe{}を載せたもの」
+になります。
+コマンドラインで直接実行するほか、以下の方法でも利用可能です。
+\begin{itemize}
+ \item ローカルインストール不要で、すぐにWeb上で\pLaTeX{}を
+  実行できるサービス
+  Cloud LaTeX (https://cloudlatex.io/ja)
+  には、2021/05/09以降、
+  プロジェクト設定に「開発版を試す」という機能が用意されています。
+  これは |platex| の代わりに |platex-dev| を起動するものです。
+  これで、一般のユーザの方々にも開発版のテストに参加していただき
+  やすくなりました。
+ \item \TeX Shopや\TeX worksなどの支援環境を使用する場合、
+  起動コマンド名に |ptex2pdf -l ...| とある箇所を
+  |ptex2pdf -ld ...| に変更すれば、開発版が起動します。
+\end{itemize}
+この方法によって、\pLaTeXe{}が開発版\LaTeXe{}に非対応の箇所を
+あぶり出すことができます。
+
+さらに、\pLaTeXe{}特有の試験的コードを配布する場合もあります。
+\TeX{}ファイルの冒頭（|\documentclass|より前）で
+\begin{verbatim}
+  \RequirePackage{exppl2e}
+\end{verbatim}
+と書くことで、\pLaTeXe{}の開発版コードも上乗せできます。
+詳細は\file{exppl2e.pdf}を参照してください。ここには、
+その他の\pLaTeXe{}の既知の制約事項も記載しています。
+
+開発版をお試しいただき、\TeX\ ForumやGitHubのIssueでの
+バグ報告やご意見を歓迎します。
+\begin{itemize}
+\item \texttt{https://github.com/texjporg/platex}
+\item \texttt{https://github.com/texjporg/uplatex}
+\end{itemize}
+
+\end{document}
