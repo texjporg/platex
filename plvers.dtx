@@ -99,12 +99,13 @@
 % \changes{v1.1v}{2020/09/28}{新しいフックを活用}
 % \changes{v1.1w}{2020/09/30}{\LaTeX\ \texttt{!<2020-10-01!>}版対応確認}
 % \changes{v1.1x}{2020/10/07}{フックシステムが利用可能かどうか判定}
+% \changes{v1.1y}{2021/06/27}{\LaTeX\ \texttt{!<2021-06-01!>}版ほぼ対応}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2020/10/07 v1.1x pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2021/06/27 v1.1y pLaTeX Kernel (Version Info)]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plvers.dtx}
@@ -145,6 +146,7 @@
 % \changes{v1.1r}{2020/02/01}{\LaTeX\ \texttt{!<2020-02-02!>}版対応確認}
 % \changes{v1.1s}{2020/03/14}{\LaTeX\ \texttt{!<2020-02-02!> PL5}版対応確認}
 % \changes{v1.1w}{2020/09/30}{\LaTeX\ \texttt{!<2020-10-01!>}版対応確認}
+% \changes{v1.1y}{2021/06/27}{\LaTeX\ \texttt{!<2021-06-01!>}版ほぼ対応}
 %    \begin{macrocode}
 %<*2ekernel>
 %\def\fmtname{LaTeX2e}
@@ -153,7 +155,7 @@
 %<latexrelease>\edef\latexreleaseversion
 %<platexrelease>\edef\p@known@latexreleaseversion
 %<*2ekernel|latexrelease|platexrelease>
-   {2020-10-01}
+   {2021-06-01}
 %</2ekernel|latexrelease|platexrelease>
 %    \end{macrocode}
 %
@@ -197,7 +199,7 @@
    {2021-06-01}
 %</plcore|platexrelease>
 %<*plcore>
-\def\ppatch@level{1}
+\def\ppatch@level{2}
 %</plcore>
 %    \end{macrocode}
 % \end{macro}
@@ -496,10 +498,6 @@
 \else
 % for LaTeX2e 2020-10-01 or later
 \AddToHook{begindocument/before}{\p@warn@latexrelease}
-%%% temporary workaround: see latex3/latex2e#577
-\AddToHook{package/before/latexrelease}{\let\saved@pathstack\@kernel@currpathstack}
-\AddToHook{package/after/latexrelease}{\let\@kernel@currpathstack\saved@pathstack}
-%%% [TODO] remove the above when fixed!
 \fi
 %
 \def\p@warn@latexrelease{%

@@ -186,13 +186,15 @@
 %    (sync with ltfsstrc.dtx 2021/04/26 v3.0o)}
 % \changes{v1.7m}{2021/06/04}{latex2e/444対応：\cs{@shape@roman@kanji}フラグ
 %    を\cs{delayed@k@adjustment}の中で変更/復帰する}
+% \changes{v1.7n}{2021/06/27}{従属欧文のシリーズとシェープ更新を
+%    反映するように修正}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2021/06/04 v1.7m pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2021/06/27 v1.7n pLaTeX New Font Selection Scheme]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plfonts.dtx}
@@ -325,7 +327,7 @@
 %<*trace>
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{ptrace}
-     [2021/06/04 v1.7m Standard pLaTeX package (font tracing)]
+     [2021/06/27 v1.7n Standard pLaTeX package (font tracing)]
 \RequirePackageWithOptions{tracefnt}
 %</trace>
 %    \end{macrocode}
@@ -1878,12 +1880,16 @@
 %%
 \DeclareRobustCommand\selectfont{%
 %    \end{macrocode}
-% 最初に、遅らせていたシリーズ・シェイプの値更新を行います。
+% 最初に和文の処理を完了させてから、欧文（従属欧文かもしれません）の
+% 処理に入る必要があります。それぞれで「遅らせていたシリーズ・シェイプの
+% 値更新→フォントの切り替え」を行います。
 % \changes{v1.7k}{2021/01/10}{Execute delayed series and shape updates (latex2e/444)
 %    (sync with ltfsstrc.dtx 2020/12/22 v3.0n)}
 % \changes{v1.7l}{2021/05/23}{Unset the forced series boolean when reaching
 %    \cs{selectfont} (latex2e/444)
 %    (sync with ltfsstrc.dtx 2021/04/26 v3.0o)}
+%
+% 和文：遅らせていたシリーズ・シェイプの値更新。
 %    \begin{macrocode}
   % !! sync with ltfsstrc.dtx 2021/04/26 v3.0o BEGIN
   \ifx\delayed@k@adjustment\@empty
@@ -1905,28 +1911,10 @@
     \fi
     \let\delayed@k@adjustment\@empty
   \fi
-  \ifx\delayed@f@adjustment\@empty
-  \else
-    \let\f@shape@saved\f@shape
-    \let\f@series@saved\f@series
-    \delayed@f@adjustment
-    \maybe@load@fontshape
-    \ifcsname \f@encoding/\f@family/\f@series/\f@shape \endcsname
-    \else
-      \let\f@shape\f@shape@saved
-      \let\f@series\f@series@saved
-      \let\delayed@merge@font@shape\merge@font@shape
-      \let\delayed@merge@font@series\merge@font@series
-      \delayed@f@adjustment
-      \let\delayed@merge@font@shape\merge@font@shape@without@substitution
-      \let\delayed@merge@font@series\merge@font@series@without@substitution
-    \fi
-    \let\delayed@f@adjustment\@empty
-  \fi
   \@forced@seriesfalse
   % !! sync with ltfsstrc.dtx 2021/04/26 v3.0o END
 %    \end{macrocode}
-% p\LaTeXe{}の|\selectfont|コマンドは、まず、和文フォントを切り替えます。
+% 和文：フォントの切り替え。
 %    \begin{macrocode}
   \let\tmp@error@fontshape\error@fontshape
   \let\error@fontshape\error@kfontshape
@@ -1962,10 +1950,17 @@
   \kenc@update
   \let\error@fontshape\tmp@error@fontshape
 %    \end{macrocode}
-% 次に、|\if@knjcmd|が真の場合、
-% 欧文書体を現在の和文書体に関連付けされたフォントに変えます。
-% このフラグは|\userelfont|コマンドによって\emph{真}となります。
-% このフラグはここで再び、\emph{偽}に設定されます。
+% 以上で、和文の処理が完了。
+%
+% 従属欧文を使う（|\if@knjcmd|が真の）場合は、和文書体が確定した
+% この段階で「関連付けされた欧文書体」に値を更新します。
+% |\rel@../../../..| で |\romanseries| と |\romanshape| が実行
+% される（すなわち |\delayed@f@adjustment| に追加が入る）ことに
+% 注意してください。
+% なお、|\if@knjcmd|フラグは|\userelfont|コマンドによって
+% \emph{真}となり、以下で再び\emph{偽}にリセットされます。
+% \changes{v1.7n}{2021/06/27}{従属欧文のシリーズとシェープ更新を
+%    反映するように修正}
 %    \begin{macrocode}
   \if@knjcmd \@knjcmdfalse
     \expandafter\ifx
@@ -1980,7 +1975,31 @@
     \fi
   \fi
 %    \end{macrocode}
-% そして、欧文フォントを切り替えます。
+% 欧文：遅らせていたシリーズ・シェイプの値更新。
+%    \begin{macrocode}
+  % !! sync with ltfsstrc.dtx 2021/04/26 v3.0o BEGIN
+  \ifx\delayed@f@adjustment\@empty
+  \else
+    \let\f@shape@saved\f@shape
+    \let\f@series@saved\f@series
+    \delayed@f@adjustment
+    \maybe@load@fontshape
+    \ifcsname \f@encoding/\f@family/\f@series/\f@shape \endcsname
+    \else
+      \let\f@shape\f@shape@saved
+      \let\f@series\f@series@saved
+      \let\delayed@merge@font@shape\merge@font@shape
+      \let\delayed@merge@font@series\merge@font@series
+      \delayed@f@adjustment
+      \let\delayed@merge@font@shape\merge@font@shape@without@substitution
+      \let\delayed@merge@font@series\merge@font@series@without@substitution
+    \fi
+    \let\delayed@f@adjustment\@empty
+  \fi
+  \@forced@seriesfalse
+  % !! sync with ltfsstrc.dtx 2021/04/26 v3.0o END
+%    \end{macrocode}
+% 欧文：フォントの切り替え。
 %    \begin{macrocode}
   \let\font\afont
   \xdef\font@name{\csname\curr@fontshape/\f@size\endcsname}%

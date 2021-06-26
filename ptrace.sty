@@ -15,7 +15,7 @@
 %% File: plfonts.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{ptrace}
-     [2021/06/04 v1.7m Standard pLaTeX package (font tracing)]
+     [2021/06/27 v1.7n Standard pLaTeX package (font tracing)]
 \RequirePackageWithOptions{tracefnt}
 \plIncludeInRelease{2020/04/12}{\selectfont}
                    {Check \KanjiEncodingPair}%
@@ -102,24 +102,6 @@
     \fi
     \let\delayed@k@adjustment\@empty
   \fi
-  \ifx\delayed@f@adjustment\@empty
-  \else
-    \let\f@shape@saved\f@shape
-    \let\f@series@saved\f@series
-    \delayed@f@adjustment
-    \maybe@load@fontshape
-    \ifcsname \f@encoding/\f@family/\f@series/\f@shape \endcsname
-    \else
-      \let\f@shape\f@shape@saved
-      \let\f@series\f@series@saved
-      \let\delayed@merge@font@shape\merge@font@shape
-      \let\delayed@merge@font@series\merge@font@series
-      \delayed@f@adjustment
-      \let\delayed@merge@font@shape\merge@font@shape@without@substitution
-      \let\delayed@merge@font@series\merge@font@series@without@substitution
-    \fi
-    \let\delayed@f@adjustment\@empty
-  \fi
   \@forced@seriesfalse
   % !! sync with ltfsstrc.dtx 2021/04/26 v3.0o END
   \let\tmp@error@fontshape\error@fontshape
@@ -167,6 +149,27 @@
        \csname rel@\k@encoding/\k@family/\k@series/\k@shape\endcsname
     \fi
   \fi
+  % !! sync with ltfsstrc.dtx 2021/04/26 v3.0o BEGIN
+  \ifx\delayed@f@adjustment\@empty
+  \else
+    \let\f@shape@saved\f@shape
+    \let\f@series@saved\f@series
+    \delayed@f@adjustment
+    \maybe@load@fontshape
+    \ifcsname \f@encoding/\f@family/\f@series/\f@shape \endcsname
+    \else
+      \let\f@shape\f@shape@saved
+      \let\f@series\f@series@saved
+      \let\delayed@merge@font@shape\merge@font@shape
+      \let\delayed@merge@font@series\merge@font@series
+      \delayed@f@adjustment
+      \let\delayed@merge@font@shape\merge@font@shape@without@substitution
+      \let\delayed@merge@font@series\merge@font@series@without@substitution
+    \fi
+    \let\delayed@f@adjustment\@empty
+  \fi
+  \@forced@seriesfalse
+  % !! sync with ltfsstrc.dtx 2021/04/26 v3.0o END
   \let\font\afont
   \xdef\font@name{\csname\curr@fontshape/\f@size\endcsname}%
   \pickup@font
