@@ -794,7 +794,7 @@ of this package available from CTAN}
     \fi
     \let\delayed@k@adjustment\@empty
   \fi
-  \@forced@seriesfalse
+  \@forced@series@kanjifalse
   % !! sync with ltfsstrc.dtx 2021/04/26 v3.0o END
   \let\tmp@error@fontshape\error@fontshape
   \let\error@fontshape\error@kfontshape
@@ -1085,6 +1085,12 @@ of this package available from CTAN}
 \else                                  % 2021-06-01
   \let\delayed@k@adjustment\@empty
 \fi
+\ifx\@forced@seriestrue\@undefined % old
+  \let\@forced@series@kanjifalse\@undefined
+  \let\@forced@series@kanjitrue\@undefined
+\else                              % 2020-02-02 PL3 or later
+  \expandafter\newif\csname if@forced@series@kanji\endcsname
+\fi
 \ifx\fontseriesforce\@undefined  % old
 \DeclareRobustCommand\romanseries[1]{\edef\f@series{#1}}
 \DeclareRobustCommand\kanjiseries[1]{\edef\k@series{#1}}
@@ -1092,13 +1098,13 @@ of this package available from CTAN}
 \else                            % 2020-02-02
 \ifx\delayed@f@adjustment\@undefined % --- for <= 2020-10-01 BEGIN
 \DeclareRobustCommand\romanseries[1]{\@forced@seriesfalse\merge@font@series{#1}}
-\DeclareRobustCommand\kanjiseries[1]{\@forced@seriesfalse\merge@kanji@series{#1}}
+\DeclareRobustCommand\kanjiseries[1]{\@forced@series@kanjifalse\merge@kanji@series{#1}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
 \else        % --- for <= 2020-10-01 END & for >= 2021-06-01 BEGIN
 \DeclareRobustCommand\romanseries[1]{\@forced@seriesfalse
     \expandafter\def\expandafter\delayed@f@adjustment\expandafter
         {\delayed@f@adjustment\delayed@merge@font@series{#1}}}
-\DeclareRobustCommand\kanjiseries[1]{\@forced@seriesfalse
+\DeclareRobustCommand\kanjiseries[1]{\@forced@series@kanjifalse
     \expandafter\def\expandafter\delayed@k@adjustment\expandafter
         {\delayed@k@adjustment\delayed@merge@kanji@series{#1}}}
 \DeclareRobustCommand\fontseries[1]{\kanjiseries{#1}\romanseries{#1}}
@@ -1110,13 +1116,13 @@ of this package available from CTAN}
 \else                            % 2020-02-02
 \ifx\delayed@f@adjustment\@undefined % --- for <= 2020-10-01 BEGIN
 \DeclareRobustCommand\romanseriesforce[1]{\@forced@seriestrue\edef\f@series{#1}}
-\DeclareRobustCommand\kanjiseriesforce[1]{\@forced@seriestrue\edef\k@series{#1}}
+\DeclareRobustCommand\kanjiseriesforce[1]{\@forced@series@kanjitrue\edef\k@series{#1}}
 \DeclareRobustCommand\fontseriesforce[1]{\kanjiseriesforce{#1}\romanseriesforce{#1}}
 \else        % --- for <= 2020-10-01 END & for >= 2021-06-01 BEGIN
 \DeclareRobustCommand\romanseriesforce[1]{\@forced@seriestrue
     \expandafter\def\expandafter\delayed@f@adjustment\expandafter
       {\delayed@f@adjustment\edef\f@series{#1}}}
-\DeclareRobustCommand\kanjiseriesforce[1]{\@forced@seriestrue
+\DeclareRobustCommand\kanjiseriesforce[1]{\@forced@series@kanjitrue
     \expandafter\def\expandafter\delayed@k@adjustment\expandafter
       {\delayed@k@adjustment\edef\k@series{#1}}}
 \DeclareRobustCommand\fontseriesforce[1]{\kanjiseriesforce{#1}\romanseriesforce{#1}}
@@ -1182,7 +1188,9 @@ of this package available from CTAN}
 }
 \let\delayed@merge@kanji@series\merge@kanji@series@without@substitution
 \fi
-\newif\if@shape@roman@kanji
+\ifx\@shape@roman@kanjitrue\@undefined % just in case
+  \expandafter\newif\csname if@shape@roman@kanji\endcsname
+\fi
 \plIncludeInRelease{2020/04/12}{\fontshape}
                    {No \k@shape update if unavailable}%
 \ifx\fontshapeforce\@undefined   % old
@@ -1687,7 +1695,7 @@ of this package available from CTAN}
 ~\fi
 }
 \def\prepare@family@series@update@kanji#1#2{%
-~\if@forced@series
+~\if@forced@series@kanji
 ~  \kanjifamily#2%
 ~\else
    \expand@font@defaults
@@ -1867,7 +1875,7 @@ of this package available from CTAN}
 ~\fi
 }
 \def\prepare@family@series@update@kanji#1#2{%
-~\if@forced@series
+~\if@forced@series@kanji
 ~  \kanjifamily#2%
 ~\else
    \expand@font@defaults
