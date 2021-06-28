@@ -135,13 +135,14 @@
 % \changes{v1.3i}{2021/03/25}{\cs{@outputpage}, \cs{@vtryfc}での、非横組時における
 %    \cs{@outputbox}の寸法補正のコードを別命令として切り出した}
 % \changes{v1.3j}{2021/06/03}{巻戻しコードのエラー修正}
+% \changes{v1.3k}{2021/06/28}{内部コード\upTeX{}の時のみを検出}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2021/06/03 v1.3j pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2021/06/28 v1.3k pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -268,6 +269,7 @@
 % が得られます（最初の\verb+\removejfmglue+は結果的に何もしていません）。
 % \changes{v1.2x}{2018/03/01}{JFMグルーノードを削除するマクロ追加}
 % \changes{v1.3}{2018/09/02}{\cs{removejfmglue}の挙動を明文化}
+% \changes{v1.3k}{2021/06/28}{内部コード\upTeX{}の時のみを検出}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2018/03/09}%
 %<platexrelease>                   {\removejfmglue}{Macro added}%
@@ -278,7 +280,7 @@
   \let\removejfmglue\@undefined
 \else
   \setbox0\hbox{%
-    \ifdefined\ucs %% upTeX check
+    \ifnum\jis"2121="3000 %% upTeX check
       \jfont\tenmin=upjisr-h at 9.62216pt
     \else
       \jfont\tenmin=min10

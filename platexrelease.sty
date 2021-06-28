@@ -146,6 +146,8 @@ of this package available from CTAN}
       some critical bugs. We advise you to\MessageBreak
       select another format date}
 \plIncludeInRelease{2017/10/28}{\PackageWarning}{pLaTeX Info}%
+  % * <2021-06-01>+2
+  % * <2021-06-01>+1
   % * <2021-06-01>
   % * <2020-10-01>+2
   % * <2020-10-01>+1
@@ -2342,7 +2344,7 @@ of this package available from CTAN}
   \let\removejfmglue\@undefined
 \else
   \setbox0\hbox{%
-    \ifdefined\ucs %% upTeX check
+    \ifnum\jis"2121="3000 %% upTeX check
       \jfont\tenmin=upjisr-h at 9.62216pt
     \else
       \jfont\tenmin=min10

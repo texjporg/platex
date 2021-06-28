@@ -1784,7 +1784,7 @@
   \let\removejfmglue\@undefined
 \else
   \setbox0\hbox{%
-    \ifdefined\ucs %% upTeX check
+    \ifnum\jis"2121="3000 %% upTeX check
       \jfont\tenmin=upjisr-h at 9.62216pt
     \else
       \jfont\tenmin=min10
