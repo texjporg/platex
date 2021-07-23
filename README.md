@@ -1,27 +1,34 @@
 # platex
 
-The bundle provides pLaTeX2e format and miscellaneous macros
-for pTeX and e-pTeX.
-This is a community edition maintained by
+pLaTeX is a Japanese version of LaTeX, which runs on pTeX
+(a TeX engine with extensions for Japanese typesetting).
+This bundle provides the macros and settings needed to generate
+the pLaTeX format (named "pLaTeX2e") and some classes.
+
+Note: This is a community edition maintained by
 [Japanese TeX Development Community](http://texjp.org),
-which forked from the original ASCII edition (ptex-texmf-2.5).
+which forked from the original ASCII edition; see below.
 
 ## Repository
 
-The bundle is maintained on GitHub:
+This bundle is maintained on GitHub:
 https://github.com/texjporg/platex
 
-If you have issues, please let us know from the above page.
-
-The original ASCII edition can be obtained from:
-
-- https://asciidwango.github.io/ptex/base/sources.html#platex
+If you have issues, please let us know from the page above.
 
 ## Changes from the original ASCII edition
 
-The original ASCII edition (pLaTeX2e 2006/11/10) was based on
-pTeX-3.1.10 and LaTeX2e 2005/12/01.
-The community edition (this package) has the following advantages:
+The macros were originally developed by ASCII Corporation
+(a publishing company in Japan).
+We, Japanese TeX Development Community, have created a fork
+to work with the latest version of TeX Live.
+
+The original ASCII edition, pLaTeX2e 2006/11/10,
+was based on pTeX-3.1.10 and LaTeX2e 2005/12/01.
+It can be obtained from the link below:
+- https://asciidwango.github.io/ptex/base/sources.html#platex
+
+The community edition (this bundle) has the following advantages:
 
 - Fix several bugs in pLaTeX2e format and packages.
 - Fix macros which are inconsistent with the latest pTeX
