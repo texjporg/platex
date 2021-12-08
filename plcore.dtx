@@ -136,13 +136,14 @@
 %    \cs{@outputbox}の寸法補正のコードを別命令として切り出した}
 % \changes{v1.3j}{2021/06/03}{巻戻しコードのエラー修正}
 % \changes{v1.3k}{2021/06/28}{内部Unicodeの時のみを検出}
+% \changes{v1.3l}{2021/12/08}{\LaTeXe~2021-11-15に伴う修正}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2021/06/28 v1.3k pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2021/12/08 v1.3l pLaTeX core file]
 % \iffalse
 \documentclass{jltxdoc}
 \GetFileInfo{plcore.dtx}
@@ -1896,9 +1897,11 @@
 % \changes{v1.0a}{1995/04/07}{組方向の判定をボックスの外でするようにした}
 % \changes{v1.3h}{2021/03/14}{\LaTeXe~2021-06-01では\cs{par}が入る
 %    (sync with ltfloat.dtx 2021/02/10 v1.2e)}
+% \changes{v1.3l}{2021/12/08}{\LaTeXe~2021-11-15では\cs{@currentcounter}を
+%    明示的に設定する(sync with ltfloat.dtx 2021/10/14 v1.2g)}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2021/06/01}{\@footnotetext}
-%<platexrelease>                   {Adapt to ltfloat.dtx (2021-03-03 v1.2f)}%
+%<platexrelease>\plIncludeInRelease{2021/11/15}{\@footnotetext}
+%<platexrelease>                   {Adapt to ltfloat.dtx (2021-10-14 v1.2g)}%
 %<*plcore|platexrelease>
 %    \end{macrocode}
 %    \begin{macrocode}
@@ -1910,6 +1913,7 @@
     \splittopskip\footnotesep
     \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
     \hsize\columnwidth \@parboxrestore
+    \def\@currentcounter{footnote}%
     \protected@edef\@currentlabel{%
        \csname p@footnote\endcsname\@thefnmark
     }%
@@ -1938,6 +1942,29 @@
 %    \end{macrocode}
 %    \begin{macrocode}
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2021/06/01}{\@footnotetext}
+%<platexrelease>                   {Adapt to ltfloat.dtx (2021-03-03 v1.2f)}%
+%<platexrelease>\long\def\@footnotetext#1{%
+%<platexrelease>  \ifydir\def\@tempa{\yoko}\else\def\@tempa{\tate}\fi
+%<platexrelease>  \insert\footins{\@tempa%
+%<platexrelease>    \reset@font\footnotesize
+%<platexrelease>    \interlinepenalty\interfootnotelinepenalty
+%<platexrelease>    \splittopskip\footnotesep
+%<platexrelease>    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+%<platexrelease>    \hsize\columnwidth \@parboxrestore
+%<platexrelease>    \protected@edef\@currentlabel{%
+%<platexrelease>       \csname p@footnote\endcsname\@thefnmark
+%<platexrelease>    }%
+%<platexrelease>    \color@begingroup
+%<platexrelease>      \@makefntext{%
+%<platexrelease>        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}%
+%<platexrelease>    \par
+%<platexrelease>    \color@endgroup}\ifhmode\null\fi
+%<platexrelease>    \ifnum\pltx@foot@penalty=\z@\else
+%<platexrelease>      \penalty\pltx@foot@penalty
+%<platexrelease>      \pltx@foot@penalty\z@
+%<platexrelease>    \fi}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2016/09/08}{\@footnotetext}
 %<platexrelease>                   {Allow break after \footnote (more fix)}%

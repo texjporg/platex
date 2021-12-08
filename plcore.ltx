@@ -34,8 +34,8 @@
 \fi
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2021-06-01}
-\def\ppatch@level{2}
+   {2021-11-15}
+\def\ppatch@level{0}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
                    \noexpand\platexNILb}
@@ -2187,6 +2187,7 @@
     \splittopskip\footnotesep
     \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
     \hsize\columnwidth \@parboxrestore
+    \def\@currentcounter{footnote}%
     \protected@edef\@currentlabel{%
        \csname p@footnote\endcsname\@thefnmark
     }%
