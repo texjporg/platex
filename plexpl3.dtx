@@ -1,7 +1,7 @@
 % \iffalse meta-comment
 %% File: plexpl3.dtx
 %
-%  Copyright (c) 2020 Japanese TeX Development Community
+%  Copyright (c) 2020-2022 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -17,7 +17,8 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesFile{plexpl3.dtx}[2020/09/28 v1.0 expl3 additions]
-\documentclass{jltxdoc}
+\RequirePackage{plautopatch}
+\documentclass[dvipdfmx]{jltxdoc}
 \GetFileInfo{plexpl3.dtx}
 \author{Japanese \TeX\ Development Community}
 \title{The \textsf{plexpl3} package}

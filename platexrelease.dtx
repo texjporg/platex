@@ -1,7 +1,7 @@
 % \iffalse meta-comment
 %% File: platexrelease.dtx
 %
-%  Copyright (c) 2016-2021 Japanese TeX Development Community
+%  Copyright (c) 2016-2022 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -46,7 +46,8 @@
           [2021/02/13 v1.0o latexrelease support for pLaTeX Kernel
               (including releases up to \platexreleaseversion)]
 %<*driver>
-\documentclass{jltxdoc}
+\RequirePackage{plautopatch}
+\documentclass[dvipdfmx]{jltxdoc}
 \GetFileInfo{platexrelease.dtx}
 \author{Japanese \TeX\ Development Community}
 \title{The \textsf{platexrelease} package}

@@ -3,7 +3,7 @@
 %
 %  Copyright 1995,1996 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016-2021 Japanese TeX Development Community
+%  Copyright (c) 2016-2022 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -90,6 +90,7 @@
 % \changes{v1.1b}{2020/09/28}{defs読込後にフック追加}
 % \changes{v1.1c}{2021/02/25}{\file{latex.ltx}の読込チェック}
 % \changes{v1.1d}{2021/03/14}{expl3コマンドを印字できるように}
+% \changes{v1.1e}{2022/03/06}{新\file{ltxdoc.cls}に対応}
 %\else
 % \changes{v1.0}{1995/05/08}{first edition}
 % \changes{v1.0a}{1995/08/25}{Added 'Compatibility', `Usage of \dst{}'
@@ -138,6 +139,7 @@
 % \changes{v1.1b}{2020/09/28}{Add hook after loading defs}
 % \changes{v1.1c}{2021/02/25}{Check for \file{latex.ltx} status}
 % \changes{v1.1d}{2021/03/14}{Print expl3 commands correctly}
+% \changes{v1.1e}{2022/03/06}{Adapt to new \file{ltxdoc.cls}}
 %\fi
 % \fi
 %
@@ -145,9 +147,10 @@
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{platex.dtx}[2021/03/14 v1.1d pLaTeX document file]
+\ProvidesFile{platex.dtx}[2022/03/06 v1.1e pLaTeX document file]
 % \iffalse
-\documentclass{jltxdoc}
+\RequirePackage{plautopatch}
+\documentclass[dvipdfmx]{jltxdoc}
 \usepackage{plext}
 \GetFileInfo{platex.dtx}
 \ifJAPANESE
@@ -1112,15 +1115,25 @@
 % 文書クラスには、\file{jltxdoc}クラスを用います。
 % \file{plext.dtx}の中でサンプルを組み立てていますので、
 % \file{plext}パッケージが必要です。
+% また、2022年の\file{doc}パッケージv3.0は\file{hyperref}依存に
+% なったため、ドライバオプション|dvipdfmx|を追加して
+% \file{plautopatch}経由で\file{pxjahyper}パッケージも読み込みます。
 % \changes{v1.1d}{2021/03/14}{expl3コマンドを印字できるように}
+% \changes{v1.1e}{2022/03/06}{新\file{ltxdoc.cls}に対応}
 %\else
 % We use \file{jltxdoc} class; we also require \file{plext} package,
 % since \file{plext.dtx} contains several examples of partial
 % vertical writing.
+% Also, as of 2022 \file{doc} package v3.0 depends on \file{hyperref},
+% so we add a driver option |dvipdfmx| and load |pxjahyper| using
+% |plautopatch| scheme.
+% \file{plautopatch}経由で\file{pxjahyper}パッケージも読み込みます。
 % \changes{v1.1d}{2021/03/14}{Print expl3 commands correctly}
+% \changes{v1.1e}{2022/03/06}{Adapt to new \file{ltxdoc.cls}}
 %\fi
 %    \begin{macrocode}
-\documentclass{jltxdoc}
+\RequirePackage{plautopatch}
+\documentclass[dvipdfmx]{jltxdoc}
 \makeatletter
 \def\macro{\begingroup
    \catcode`\\12 \catcode`\_12
