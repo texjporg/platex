@@ -120,7 +120,7 @@
 % \changes{v1.0o}{2017/09/24}{Allow negative patch level for pre-release}
 % \changes{v1.0p}{2017/11/11}{Moved banner saving code from
 %    \file{platex.ltx} to \file{plcore.ltx}}
-% \changes{v1.0q}{2017/11/29}{New English documentation added!}
+% \changes{v1.0q}{2017/11/29}{New English documentation added.}
 % \changes{v1.0r}{2017/12/02}{English references added}
 % \changes{v1.0s}{2017/12/05}{Moved loading default settings
 %    from \file{plcore.ltx} to \file{platex.ltx}}
@@ -217,7 +217,7 @@
 %\else
 % \changes{v1.0f}{2016/04/12}{Update document.}
 % \changes{v1.0k}{2016/05/21}{Print also changes.}
-% \changes{v1.0q}{2017/11/29}{New English documentation added!}
+% \changes{v1.0q}{2017/11/29}{New English documentation added.}
 % \changes{v1.0x}{2018/09/03}{Update document.}
 % \changes{v1.0z}{2019/09/29}{Fix typos in document.}
 % \changes{v1.1}{2020/03/24}{Update document.}
@@ -1134,11 +1134,8 @@
 %    \begin{macrocode}
 \RequirePackage{plautopatch}
 \documentclass[dvipdfmx]{jltxdoc}
-\makeatletter
-\def\macro{\begingroup
-   \catcode`\\12 \catcode`\_12
-   \MakePrivateLetters \m@cro@ \iftrue}
-\makeatother
+\AddToHook{env/macro/before}{\catcode`\_=12\relax}
+\AddToHook{env/macro/after}{\catcode`\_=8\relax}
 \usepackage{plext}
 \listfiles
 

@@ -2,7 +2,7 @@
 %
 % This is file `exppl2e.sty', for experimental pLaTeX2e.
 %
-% Copyright (c) 2016-2020 Japanese TeX Development Community
+% Copyright (c) 2016-2022 Japanese TeX Development Community
 %
 % This file is part of the pLaTeX2e system (community edition).
 % -------------------------------------------------------------
@@ -47,7 +47,8 @@
   \RequirePackage[latest]{platexrelease}
 \else
 % case 2: This file pretends to be a document
-  \documentclass{jltxdoc}
+  \RequirePackage{plautopatch}
+  \documentclass[dvipdfmx]{jltxdoc}
   \title{Experimental p\LaTeXe}
   \author{Japanese \TeX\ Development Community}
   \begin{document}
