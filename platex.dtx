@@ -150,7 +150,7 @@
 \ProvidesFile{platex.dtx}[2022/03/06 v1.1e pLaTeX document file]
 % \iffalse
 \RequirePackage{plautopatch}
-\documentclass[dvipdfmx]{jltxdoc}
+\documentclass[dvipdfmx,a4paper]{jltxdoc}
 \usepackage{plext}
 \GetFileInfo{platex.dtx}
 \ifJAPANESE
@@ -1133,7 +1133,7 @@
 %\fi
 %    \begin{macrocode}
 \RequirePackage{plautopatch}
-\documentclass[dvipdfmx]{jltxdoc}
+\documentclass[dvipdfmx,a4paper]{jltxdoc}
 \AddToHook{env/macro/before}{\catcode`\_=12\relax}
 \AddToHook{env/macro/after}{\catcode`\_=8\relax}
 \usepackage{plext}
