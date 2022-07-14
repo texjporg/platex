@@ -81,14 +81,14 @@
 %    ように\cs{language}を設定(sync with ltmiscen.dtx 2017/03/09 v1.1m)}
 % \changes{v1.2n}{2017/04/23}{ドキュメントの追加}
 % \changes{v1.2o}{2017/05/03}{行頭禁則文字の直前でも改行するようにした}
-% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
+% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグルーを削除}
 % \changes{v1.2q}{2017/08/25}{\cs{nolinebreak}の場合に\cs{(x)kanjiskip}が
 %    入らなくなっていたのを修正}
 % \changes{v1.2r}{2017/09/26}{tabular環境の右揃え(r)で罫線がずれるように
 %    なっていたバグを修正}
 % \changes{v1.2s}{2017/09/27}{相互参照のスペースファクターを補正}
 % \changes{v1.2s}{2017/09/27}{\cs{verb}の冒頭の半角空白を保持}
-% \changes{v1.2s}{2017/09/27}{tabbing環境の行冒頭のJFMグル―を削除}
+% \changes{v1.2s}{2017/09/27}{tabbing環境の行冒頭のJFMグルーを削除}
 % \changes{v1.2t}{2017/10/31}{v1.2sの変更に伴い、\cs{ref}が数式モードで
 %    エラーになっていたのを修正}
 % \changes{v1.2u}{2017/11/04}{emathの\cs{marusuuref}対策}
@@ -376,7 +376,7 @@
 % もし|\null|の代わりに|\hskip\z@|を挿入すれば、\LaTeX{}と同様に
 % Underfull警告を出すことができます。
 % ただし、|\null|を挿入した場合と異なり、強制改行後の行頭に
-% JFMグル―が入らなくなります。これはむしろ、奥村さんのjsclassesで
+% JFMグルーが入らなくなります。これはむしろ、奥村さんのjsclassesで
 % 行頭を天ツキに直しているのと同じですが、p\LaTeX{}としては挙動が
 % 変化してしまいますので、現時点では|\null|→|\hskip\z@|への変更を
 % 見送っています。
@@ -400,7 +400,7 @@
 % \LaTeX{}の定義のままではマクロによるペナルティ$-10000$と
 % 行頭文字のペナルティ$10000$が加算されてしまうため、
 % |\hskip\z@\relax|を入れておきます。なお、|\linebreak|を発行して
-% 行分割が起きた場合、新しい行頭のJFMグル―は消えるという従来の
+% 行分割が起きた場合、新しい行頭のJFMグルーは消えるという従来の
 % p\LaTeX{}の挙動も維持しています。
 % \changes{v1.2o}{2017/05/03}{行頭禁則文字の直前でも改行するようにした}
 %
@@ -2231,7 +2231,7 @@
 % \begin{macro}{\@startline}
 % tabbing環境の行で、中身が始め括弧類などで始まる場合、
 % 最初の項目だけJFMグルーが消えない現象に対処します。
-% \changes{v1.2s}{2017/09/27}{tabbing環境の行冒頭のJFMグル―を削除}
+% \changes{v1.2s}{2017/09/27}{tabbing環境の行冒頭のJFMグルーを削除}
 %    \begin{macrocode}
 %</plcore>
 %<platexrelease>\plIncludeInRelease{2017/10/28}{\@startline}
@@ -2325,7 +2325,7 @@
 % 2018/03/09の修正では「|\removejfmglue|マクロが定義されている場合は
 % 最初に|\inhibitglue|を発行し、最後に|\removejfmglue|を発行する」という
 % 方針にします。こうすれば少々\LaTeX{}との互換性が向上します。
-% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
+% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグルーを削除}
 % \changes{v1.2r}{2017/09/26}{tabular環境の右揃え(r)で罫線がずれるように
 %    なっていたバグを修正}
 % \changes{v1.2x}{2018/03/01}{\cs{removejfmglue}があれば利用するようにした}
@@ -2492,7 +2492,7 @@
 %\end{verbatim}
 % ここでは、2017/07/29の修正から方針を改め、|\everypar|内に|\inhibitglue|を
 % 仕込むという方針で対応します。
-% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグル―を削除}
+% \changes{v1.2p}{2017/07/21}{tabular環境のセル内のJFMグルーを削除}
 % \changes{v1.2x}{2018/03/01}{セル最初の\cs{par}で空行が入らないようにした}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2018/03/09}{\@classv}
