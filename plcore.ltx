@@ -41,15 +41,22 @@
                    \noexpand\platexNILb}
 \begingroup
   \ifnum\ppatch@level=0
-    \toks2={\pfmtname\space<\pfmtversion>\space}%
+    \toks2={\pfmtname\space<\pfmtversion>}%
   \else\ifnum\ppatch@level>0
-    \toks2={\pfmtname\space<\pfmtversion>+\ppatch@level\space}%
+    \toks2={\pfmtname\space<\pfmtversion>+\ppatch@level}%
   \else
-    \toks2={\pfmtname\space<\pfmtversion>-pre\ppatch@level\space}%
+    \toks2={\pfmtname\space<\pfmtversion>-pre\ppatch@level}%
   \fi\fi
-  \edef\platexNILa#1\typeout#2#3\platexNILb{%
-    #1\noexpand\typeout{\the\toks2 (based on #2)}#3}
-  \global\everyjob\expandafter\expandafter\expandafter{\platexBANNER}%
+  \ifdefined\LaTeXReleaseInfo
+    \global\LaTeXReleaseInfo\expandafter{\expanded{%
+      \noexpand\show@release@info{\the\toks2, based on}%
+      \unexpanded\expandafter{\the\LaTeXReleaseInfo}%
+    }}%
+  \else
+    \edef\platexNILa#1\typeout#2#3\platexNILb{%
+      #1\noexpand\typeout{\the\toks2\space(based on #2)}#3}
+    \global\everyjob\expandafter\expandafter\expandafter{\platexBANNER}%
+  \fi
 \endgroup
 \let\platexBANNER=\@undefined
 \chardef\pltx@newhook@avail=\z@

@@ -101,6 +101,8 @@
 % \changes{v1.1x}{2020/10/07}{フックシステムが利用可能かどうか判定}
 % \changes{v1.1y}{2021/06/27}{\LaTeX\ \texttt{!<2021-06-01!>}版ほぼ対応}
 % \changes{v1.1z}{2021/12/08}{\LaTeX\ \texttt{!<2021-11-15!>}版ほぼ対応}
+% \changes{v1.1aa}{2021/12/08}{\LaTeX\ \texttt{!<2023-06-01!>}版における
+%    バナーの出力方法に追従}
 % \fi
 %
 % \iffalse
@@ -268,6 +270,8 @@
 % いくつかのコードが|\everyjob|で遅延実行されるようになっています。
 % それらのコードを抽出するため、最初と最後に区切りトークン
 % （それぞれ|\platexNILa|と|\platexNILb|）を付けておきます。
+%
+% なお、\LaTeXe\ 2023-06-01以降ではこのコードは使用されません。
 % \changes{v1.1f}{2017/11/11}{\LaTeX{}のバナーを保存するコードを
 %    \file{platex.ltx}から\file{plcore.ltx}へ移動}
 % \changes{v1.1l}{2018/04/09}{バナーの保存しかたを改良}
@@ -296,21 +300,51 @@
 % \changes{v1.1l}{2018/04/09}{バナーの再構築のしかたを改良}
 % \changes{v1.1m}{2018/09/24}{バナーの再構築を簡略化}
 % \changes{v1.1t}{2020/03/25}{バナーの再構築を効率化}
+% \changes{v1.1aa}{2022-12-05}{バナーの再構築の方法を2023-06-01版に追従}
 %    \begin{macrocode}
 \begingroup
 %    \end{macrocode}
 %
 % \pLaTeXe{}のバージョン表示を作ります。
+% \changes{v1.1aa}{2022-12-05}{|\space|をこの段階で入れるのは止めた。}
 %    \begin{macrocode}
   \ifnum\ppatch@level=0
-    \toks2={\pfmtname\space<\pfmtversion>\space}%
+    \toks2={\pfmtname\space<\pfmtversion>}%
   \else\ifnum\ppatch@level>0
-    \toks2={\pfmtname\space<\pfmtversion>+\ppatch@level\space}%
+    \toks2={\pfmtname\space<\pfmtversion>+\ppatch@level}%
   \else
-    \toks2={\pfmtname\space<\pfmtversion>-pre\ppatch@level\space}%
+    \toks2={\pfmtname\space<\pfmtversion>-pre\ppatch@level}%
   \fi\fi
 %    \end{macrocode}
 %
+% \subsubsection{\LaTeXe\ 2023-06-01以降の処理}
+% \LaTeXe\ 2023-06-01以降では、\LaTeXe のバージョン情報はトークンリスト
+% |\LaTeXReleaseInfo|に格納されており、\pLaTeXe のバージョン情報をまとめて表示するためには
+% このトークンリストを調整するだけで良くなりました。
+%
+% 以前と同じ
+%\begin{verbatim}
+%   pLaTeX2e <xxxx-yy-zz> (based on LaTeX2e ...)
+%\end{verbatim}
+% という形式のでも良かったのですが、それでは|\LaTeXreleaseInfo|の中身を
+% パースする必要が出てくるため
+%\begin{verbatim}
+%   pLaTeX2e <xxxx-yy-zz>, based on
+%   LaTeX2e ...
+%\end{verbatim}
+% と、単純に前置する形にしています。
+%
+% なお、このコードでは|\expanded|プリミティブを使っています。
+% \changes{v1.1aa}{2022-12-05}{新規追加}
+%    \begin{macrocode}
+  \ifdefined\LaTeXReleaseInfo
+    \global\LaTeXReleaseInfo\expandafter{\expanded{%
+      \noexpand\show@release@info{\the\toks2, based on}%
+      \unexpanded\expandafter{\the\LaTeXReleaseInfo}%
+    }}%
+%    \end{macrocode}
+%
+% \subsubsection{\LaTeXe\ 2022-11-15以前の処理}
 % |\everyjob|の内容をパースして
 % \begin{itemize}
 % \item \LaTeXe{}のバージョン表示の中身（|\typeout{}|の引数）を |#2|
@@ -324,13 +358,15 @@
 % そして、\LaTeXe{}のバージョンと\pLaTeXe{}のバージョンを
 % まとめて表示するように整形します。
 %    \begin{macrocode}
-  \edef\platexNILa#1\typeout#2#3\platexNILb{%
-    #1\noexpand\typeout{\the\toks2 (based on #2)}#3}
-  \global\everyjob\expandafter\expandafter\expandafter{\platexBANNER}%
+  \else
+    \edef\platexNILa#1\typeout#2#3\platexNILb{%
+      #1\noexpand\typeout{\the\toks2\space(based on #2)}#3}
+    \global\everyjob\expandafter\expandafter\expandafter{\platexBANNER}%
 %    \end{macrocode}
 %
 % 不要になったマクロ定義は削除しておきます。
 %    \begin{macrocode}
+  \fi
 \endgroup
 \let\platexBANNER=\@undefined
 %</plcore>
