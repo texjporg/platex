@@ -101,14 +101,14 @@
 % \changes{v1.1x}{2020/10/07}{フックシステムが利用可能かどうか判定}
 % \changes{v1.1y}{2021/06/27}{\LaTeX\ \texttt{!<2021-06-01!>}版ほぼ対応}
 % \changes{v1.1z}{2021/12/08}{\LaTeX\ \texttt{!<2021-11-15!>}版ほぼ対応}
-% \changes{v1.1aa}{2021/12/08}{\LaTeX\ \texttt{!<2023-06-01!>}版における
+% \changes{v1.2a}{2022-12-05}{\LaTeX\ \texttt{!<2023-06-01!>}版における
 %    バナーの出力方法に追従}
 % \fi
 %
 % \iffalse
 %<*driver>
 % \fi
-\ProvidesFile{plvers.dtx}[2021/12/08 v1.1z pLaTeX Kernel (Version Info)]
+\ProvidesFile{plvers.dtx}[2022-12-05 v1.2a pLaTeX Kernel (Version Info)]
 % \iffalse
 \RequirePackage{plautopatch}
 \documentclass[dvipdfmx,a4paper]{jltxdoc}
@@ -204,7 +204,7 @@
    {2021-11-15}
 %</plcore|platexrelease>
 %<*plcore>
-\def\ppatch@level{0}
+\def\ppatch@level{1}
 %</plcore>
 %    \end{macrocode}
 % \end{macro}
@@ -300,13 +300,13 @@
 % \changes{v1.1l}{2018/04/09}{バナーの再構築のしかたを改良}
 % \changes{v1.1m}{2018/09/24}{バナーの再構築を簡略化}
 % \changes{v1.1t}{2020/03/25}{バナーの再構築を効率化}
-% \changes{v1.1aa}{2022-12-05}{バナーの再構築の方法を2023-06-01版に追従}
+% \changes{v1.2a}{2022-12-05}{バナーの再構築の方法を2023-06-01版に追従}
 %    \begin{macrocode}
 \begingroup
 %    \end{macrocode}
 %
 % \pLaTeXe{}のバージョン表示を作ります。
-% \changes{v1.1aa}{2022-12-05}{|\space|をこの段階で入れるのは止めた。}
+% \changes{v1.2a}{2022-12-05}{|\space|をこの段階で入れるのは止めた。}
 %    \begin{macrocode}
   \ifnum\ppatch@level=0
     \toks2={\pfmtname\space<\pfmtversion>}%
@@ -335,7 +335,7 @@
 % と、単純に前置する形にしています。
 %
 % なお、このコードでは|\expanded|プリミティブを使っています。
-% \changes{v1.1aa}{2022-12-05}{新規追加}
+% \changes{v1.2a}{2022-12-05}{新規追加}
 %    \begin{macrocode}
   \ifdefined\LaTeXReleaseInfo
     \global\LaTeXReleaseInfo\expandafter{\expanded{%
@@ -360,7 +360,7 @@
 %    \begin{macrocode}
   \else
     \edef\platexNILa#1\typeout#2#3\platexNILb{%
-      #1\noexpand\typeout{\the\toks2\space(based on #2)}#3}
+      #1\noexpand\typeout{\the\toks2 \space(based on #2)}#3}
     \global\everyjob\expandafter\expandafter\expandafter{\platexBANNER}%
 %    \end{macrocode}
 %

@@ -35,7 +35,7 @@
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
    {2021-11-15}
-\def\ppatch@level{0}
+\def\ppatch@level{1}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
                    \noexpand\platexNILb}
@@ -54,7 +54,7 @@
     }}%
   \else
     \edef\platexNILa#1\typeout#2#3\platexNILb{%
-      #1\noexpand\typeout{\the\toks2\space(based on #2)}#3}
+      #1\noexpand\typeout{\the\toks2 \space(based on #2)}#3}
     \global\everyjob\expandafter\expandafter\expandafter{\platexBANNER}%
   \fi
 \endgroup
