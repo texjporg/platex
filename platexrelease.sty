@@ -71,7 +71,7 @@
 %% File: platexrelease.dtx
 \NeedsTeXFormat{pLaTeX2e}
 \ProvidesPackage{platexrelease}
-          [2021/02/13 v1.0o latexrelease support for pLaTeX Kernel
+          [2023/01/08 v1.0p latexrelease support for pLaTeX Kernel
               (including releases up to \platexreleaseversion)]
 \ifx\p@warn@latexrelease\@undefined\else
 \let\p@warn@latexrelease\relax
@@ -87,6 +87,9 @@
   \PackageWarningNoLine{platexrelease}{%
     Version of `latexrelease' is newer than\MessageBreak
     what `platexrelease' knows}
+  \let\pltx@maybe@gobble\@gobble
+\else
+  \let\pltx@maybe@gobble\@firstofone
 \fi
 \edef\sourcepLaTeXdate{%
   \expandafter\@parse@version\pfmtversion//00\@nil}
@@ -119,7 +122,7 @@
 \ifnum\requestedpLaTeXdate=\currentpLaTeXdate
 \PackageWarningNoLine{platexrelease}{%
   Current format date selected, no patches applied}
-\expandafter\endinput
+\pltx@maybe@gobble{\expandafter\endinput}
 \fi
 \ifnum\currentpLaTeXdate
   >\expandafter\@parse@version\platexreleaseversion//00\@nil
@@ -127,7 +130,7 @@
 The current package is for an older pLaTeX format:\MessageBreak
 pLaTeX \platexreleaseversion\space\MessageBreak
 Obtain a newer version of this package!}
-\expandafter\endinput
+\pltx@maybe@gobble{\expandafter\endinput}
 \fi
 \ifnum\requestedpLaTeXdate
   >\expandafter\@parse@version\platexreleaseversion//00\@nil
@@ -136,7 +139,7 @@ The current package is for pLaTeX \platexreleaseversion:\MessageBreak
 It has no patches beyond that date\MessageBreak
 There may be an updated version\MessageBreak
 of this package available from CTAN}
-\expandafter\endinput
+\pltx@maybe@gobble{\expandafter\endinput}
 \fi
 \let\pfmtversion\requestedplpatchdate
 \let\currentpLaTeXdate\requestedpLaTeXdate
@@ -146,6 +149,7 @@ of this package available from CTAN}
       some critical bugs. We advise you to\MessageBreak
       select another format date}
 \plIncludeInRelease{2017/10/28}{\PackageWarning}{pLaTeX Info}%
+  % * <2021-11-15>+1
   % * <2021-11-15>
   % * <2021-06-01>+2
   % * <2021-06-01>+1

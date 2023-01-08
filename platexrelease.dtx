@@ -1,7 +1,7 @@
 % \iffalse meta-comment
 %% File: platexrelease.dtx
 %
-%  Copyright (c) 2016-2022 Japanese TeX Development Community
+%  Copyright (c) 2016-2023 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -34,6 +34,7 @@
 % \changes{v1.0n}{2020/03/28}{先にlatexreleaseが読み込まれていたら警告}
 % \changes{v1.0o}{2021/02/13}{\cs{sourcepLaTeXdate} added
 %      (sync with latexrelease.dtx 2021/01/23 v1.0l)}
+% \changes{v1.0p}{2023/01/08}{latexreleaseが新しい場合は常に上書き}
 % \fi
 %
 % \iffalse
@@ -43,7 +44,7 @@
 \ProvidesFile{platexrelease.dtx}
 %</driver>
 %<platexrelease>\ProvidesPackage{platexrelease}
-          [2021/02/13 v1.0o latexrelease support for pLaTeX Kernel
+          [2023/01/08 v1.0p latexrelease support for pLaTeX Kernel
               (including releases up to \platexreleaseversion)]
 %<*driver>
 \RequirePackage{plautopatch}
@@ -226,13 +227,19 @@
 %
 % 読み込んだ\Lpack{latexrelease}パッケージのバージョンを確認し、
 % \Lpack{platexrelease}が未対応の新しいものであった場合に警告します。
+% この場合は、\Lpack{latexrelease}によってp\LaTeX{}が上書きされて
+% 壊れるのを防ぐため、問答無用でp\LaTeX{}で再度上書きします。
 % \changes{v1.0b}{2016/02/16}{latexreleaseのバージョン確認を導入}
+% \changes{v1.0p}{2023/01/08}{latexreleaseが新しい場合は常に上書き}
 %    \begin{macrocode}
 \ifnum\expandafter\@parse@version\latexreleaseversion//00\@nil
   >\expandafter\@parse@version\p@known@latexreleaseversion//00\@nil
   \PackageWarningNoLine{platexrelease}{%
     Version of `latexrelease' is newer than\MessageBreak
     what `platexrelease' knows}
+  \let\pltx@maybe@gobble\@gobble
+\else
+  \let\pltx@maybe@gobble\@firstofone
 \fi
 %    \end{macrocode}
 %
@@ -293,7 +300,7 @@
 \ifnum\requestedpLaTeXdate=\currentpLaTeXdate
 \PackageWarningNoLine{platexrelease}{%
   Current format date selected, no patches applied}
-\expandafter\endinput
+\pltx@maybe@gobble{\expandafter\endinput}
 \fi
 %    \end{macrocode}
 %
@@ -308,7 +315,7 @@
 The current package is for an older pLaTeX format:\MessageBreak
 pLaTeX \platexreleaseversion\space\MessageBreak
 Obtain a newer version of this package!}
-\expandafter\endinput
+\pltx@maybe@gobble{\expandafter\endinput}
 \fi
 %    \end{macrocode}
 %
@@ -322,7 +329,7 @@ The current package is for pLaTeX \platexreleaseversion:\MessageBreak
 It has no patches beyond that date\MessageBreak
 There may be an updated version\MessageBreak
 of this package available from CTAN}
-\expandafter\endinput
+\pltx@maybe@gobble{\expandafter\endinput}
 \fi
 %    \end{macrocode}
 %
