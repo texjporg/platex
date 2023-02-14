@@ -34,8 +34,8 @@
 \fi
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2021-11-15}
-\def\ppatch@level{1}
+   {2023-02-14}
+\def\ppatch@level{0}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
                    \noexpand\platexNILb}
@@ -2167,6 +2167,32 @@
 }                                                  %--- IF LEVEL 1 END
 \ExplSyntaxOff
 \fi                     %--- expl3 available END
+\def\@floatboxreset{%
+      \pltx@save@float@dir  % pLaTeX
+      \reset@font
+      \normalsize
+      \@setminipage
+}
+\def\@endfloatbox{%
+      \par\vskip\z@skip      %% \par\vskip\z@ added 15 Dec 87
+      \@minipagefalse
+      \outer@nobreak
+      \pltx@check@float@dir  % pLaTeX
+    \egroup                  %% end of vbox
+  \color@endbox
+}
+\def\pltx@save@float@dir{%
+  \edef\pltx@float@dir@first{\iftdir\tate\else\yoko\fi}}
+\def\pltx@check@float@dir{%
+  \edef\pltx@float@dir@last{\iftdir\tate\else\yoko\fi}%
+  \ifx\pltx@float@dir@last\pltx@float@dir@first\else
+    \pltx@err@float@dir
+  \fi}
+\def\pltx@err@float@dir{%
+  \@latex@error{Direction change inside float!?\MessageBreak
+    Use \noexpand\layoutcaption provided in
+    \string\usepackage{plext}}\@ehc
+}
 \renewcommand\@makefnmark{%
   \ifydir \hbox{}\hbox{\@textsuperscript{\normalfont\@thefnmark}}\hbox{}%
   \else\hbox{\yoko\@textsuperscript{\normalfont\@thefnmark}}\fi}

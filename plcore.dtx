@@ -3,7 +3,7 @@
 %
 %  Copyright 1994-2001 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016-2022 Japanese TeX Development Community
+%  Copyright (c) 2016-2023 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -137,13 +137,14 @@
 % \changes{v1.3j}{2021/06/03}{巻戻しコードのエラー修正}
 % \changes{v1.3k}{2021/06/28}{内部Unicodeの時のみを検出}
 % \changes{v1.3l}{2021/12/08}{\LaTeXe~2021-11-15に伴う修正}
+% \changes{v1.3m}{2023/02/14}{フロート環境内での組方向変更をplextに誘導}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2021/12/08 v1.3l pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2023/02/14 v1.3m pLaTeX core file]
 % \iffalse
 \RequirePackage{plautopatch}
 \documentclass[dvipdfmx,a4paper]{jltxdoc}
@@ -484,6 +485,7 @@
 % なお、\LaTeX{}用の命令である|\\|と|\linebreak|には上記のような
 % 禁則文字への対策を入れていますが、plain \TeX{}互換のシンプルな
 % 命令である|\break|や|\nobreak|には、対策を行いません。
+%
 %
 % \subsection{オブジェクトの出力順序}
 % オリジナルの\LaTeX{}は、トップフロート、本文、脚注、ボトムフロート
@@ -1738,8 +1740,101 @@
 %<platexrelease>                   {LaTeX2e original}%
 %<platexrelease>% do nothing
 %<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{フロート環境}
+% 図(figure)や表(table)といったフロート環境内では
+% 組方向変更を|\tate|や|\yoko|によって直接変更しないでください。
+% 代わりに\file{plext}パッケージが提供する
+% |\layoutcaption| / |\layoutfloat| / |\pcaption|といった命令を
+% 使うと、例えば「縦書き中に横書きで図表キャプションを挿入」のような
+% 自由な指定ができるようになります。(Issue \#95)
+% \begin{macro}{\@floatboxreset}
+% 元はltfloat.dtxで定義されています。
+% \changes{v1.3m}{2023/02/14}{フロート環境内での組方向変更をplextに誘導}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2023/02/14}{\@floatboxreset}
+%<*plcore|platexrelease>
+\def\@floatboxreset{%
+      \pltx@save@float@dir  % pLaTeX
+      \reset@font
+      \normalsize
+      \@setminipage
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@floatboxreset}
+%<platexrelease>                   {Mention \layoutcaption}%
+%<platexrelease>\def\@floatboxreset{%
+%<platexrelease>      \reset@font
+%<platexrelease>      \normalsize
+%<platexrelease>      \@setminipage
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+%  \end{macro}
+%
+% \begin{macro}{\@endfloatbox}
+% 元はltfloat.dtxで定義されています。
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2023/02/14}{\@endfloatbox}
+%<platexrelease>                   {Mention \layoutcaption}%
+%<*plcore|platexrelease>
+\def\@endfloatbox{%
+      \par\vskip\z@skip      %% \par\vskip\z@ added 15 Dec 87
+      \@minipagefalse
+      \outer@nobreak
+      \pltx@check@float@dir  % pLaTeX
+    \egroup                  %% end of vbox
+  \color@endbox
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@endfloatbox}
+%<platexrelease>                   {Mention \layoutcaption}%
+%<platexrelease>\def\@endfloatbox{%
+%<platexrelease>      \par\vskip\z@skip      %% \par\vskip\z@ added 15 Dec 87
+%<platexrelease>      \@minipagefalse
+%<platexrelease>      \outer@nobreak
+%<platexrelease>    \egroup                  %% end of vbox
+%<platexrelease>  \color@endbox
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pltx@save@float@dir}
+% \begin{macro}{\pltx@check@float@dir}
+% \pLaTeX{}による追加命令です。
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2023/02/14}{\pltx@check@float@dir}
+%<platexrelease>                   {Mention \layoutcaption}%
+%<*plcore|platexrelease>
+\def\pltx@save@float@dir{%
+  \edef\pltx@float@dir@first{\iftdir\tate\else\yoko\fi}}
+\def\pltx@check@float@dir{%
+  \edef\pltx@float@dir@last{\iftdir\tate\else\yoko\fi}%
+  \ifx\pltx@float@dir@last\pltx@float@dir@first\else
+    \pltx@err@float@dir
+  \fi}
+\def\pltx@err@float@dir{%
+  \@latex@error{Direction change inside float!?\MessageBreak
+    Use \noexpand\layoutcaption provided in
+    \string\usepackage{plext}}\@ehc
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\pltx@check@float@dir}
+%<platexrelease>                   {Mention \layoutcaption}%
+%<platexrelease>\let\pltx@save@float@dir\@undefined
+%<platexrelease>\let\pltx@check@float@dir\@undefined
+%<platexrelease>\let\pltx@err@float@dir\@undefined
+%<platexrelease>\plEndIncludeInRelease
 %<*plcore>
 %    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 %
@@ -2277,6 +2372,7 @@
 %    \end{macrocode}
 % \end{macro}
 %
+%
 % \subsection{用語集の出力}
 % \LaTeX{}には、なぜか用語集を出力するためのコマンドがありませんので、
 % 追加をします。
@@ -2309,6 +2405,7 @@
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
+%
 %
 % \subsection{tabular環境}
 % \LaTeX{}カーネル(lttab.dtx)の命令群を修正します。

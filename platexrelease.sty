@@ -20,7 +20,7 @@
 \edef\p@known@latexreleaseversion
    {2021-11-15}
 \edef\platexreleaseversion
-   {2021-11-15}
+   {2023-02-14}
 \newif\if@plincludeinrelease
 \@plincludeinreleasefalse
 \def\plIncludeInRelease#1{%
@@ -3108,6 +3108,64 @@ of this package available from CTAN}
 \plIncludeInRelease{0000/00/00}{\__shipout_execute_cont:}
                    {LaTeX2e original}%
 % do nothing
+\plEndIncludeInRelease
+\plIncludeInRelease{2023/02/14}{\@floatboxreset}
+\def\@floatboxreset{%
+      \pltx@save@float@dir  % pLaTeX
+      \reset@font
+      \normalsize
+      \@setminipage
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@floatboxreset}
+                   {Mention \layoutcaption}%
+\def\@floatboxreset{%
+      \reset@font
+      \normalsize
+      \@setminipage
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{2023/02/14}{\@endfloatbox}
+                   {Mention \layoutcaption}%
+\def\@endfloatbox{%
+      \par\vskip\z@skip      %% \par\vskip\z@ added 15 Dec 87
+      \@minipagefalse
+      \outer@nobreak
+      \pltx@check@float@dir  % pLaTeX
+    \egroup                  %% end of vbox
+  \color@endbox
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@endfloatbox}
+                   {Mention \layoutcaption}%
+\def\@endfloatbox{%
+      \par\vskip\z@skip      %% \par\vskip\z@ added 15 Dec 87
+      \@minipagefalse
+      \outer@nobreak
+    \egroup                  %% end of vbox
+  \color@endbox
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{2023/02/14}{\pltx@check@float@dir}
+                   {Mention \layoutcaption}%
+\def\pltx@save@float@dir{%
+  \edef\pltx@float@dir@first{\iftdir\tate\else\yoko\fi}}
+\def\pltx@check@float@dir{%
+  \edef\pltx@float@dir@last{\iftdir\tate\else\yoko\fi}%
+  \ifx\pltx@float@dir@last\pltx@float@dir@first\else
+    \pltx@err@float@dir
+  \fi}
+\def\pltx@err@float@dir{%
+  \@latex@error{Direction change inside float!?\MessageBreak
+    Use \noexpand\layoutcaption provided in
+    \string\usepackage{plext}}\@ehc
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\pltx@check@float@dir}
+                   {Mention \layoutcaption}%
+\let\pltx@save@float@dir\@undefined
+\let\pltx@check@float@dir\@undefined
+\let\pltx@err@float@dir\@undefined
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@makefnmark}
                    {Remove extra \xkanjiskip}%
