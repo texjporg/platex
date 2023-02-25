@@ -138,13 +138,14 @@
 % \changes{v1.3k}{2021/06/28}{内部Unicodeの時のみを検出}
 % \changes{v1.3l}{2021/12/08}{\LaTeXe~2021-11-15に伴う修正}
 % \changes{v1.3m}{2023/02/14}{フロート環境内での組方向変更をplextに誘導}
+% \changes{v1.3n}{2023/02/24}{\cs{marginpar}でエラーが出るバグ修正}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2023/02/14 v1.3m pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2023/02/24 v1.3n pLaTeX core file]
 % \iffalse
 \RequirePackage{plautopatch}
 \documentclass[dvipdfmx,a4paper]{jltxdoc}
@@ -1754,6 +1755,7 @@
 % \begin{macro}{\@floatboxreset}
 % 元はltfloat.dtxで定義されています。
 % \changes{v1.3m}{2023/02/14}{フロート環境内での組方向変更をplextに誘導}
+% \changes{v1.3n}{2023/02/24}{\cs{marginpar}でエラーが出るバグ修正}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2023/02/14}{\@floatboxreset}
 %<*plcore|platexrelease>
@@ -1815,15 +1817,16 @@
 \def\pltx@save@float@dir{%
   \edef\pltx@float@dir@first{\iftdir\tate\else\yoko\fi}}
 \def\pltx@check@float@dir{%
-  \edef\pltx@float@dir@last{\iftdir\tate\else\yoko\fi}%
-  \ifx\pltx@float@dir@last\pltx@float@dir@first\else
-    \pltx@err@float@dir
+  \ifx\pltx@float@dir@first\@undefined\else
+    \edef\pltx@float@dir@last{\iftdir\tate\else\yoko\fi}%
+    \ifx\pltx@float@dir@last\pltx@float@dir@first\else
+      \pltx@err@float@dir
+    \fi
   \fi}
 \def\pltx@err@float@dir{%
   \@latex@error{Direction change inside float!?\MessageBreak
     Use \noexpand\layoutcaption provided in
-    \string\usepackage{plext}}\@ehc
-}
+    \string\usepackage{plext}}\@ehc}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\pltx@check@float@dir}

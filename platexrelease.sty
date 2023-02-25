@@ -149,6 +149,7 @@ of this package available from CTAN}
       some critical bugs. We advise you to\MessageBreak
       select another format date}
 \plIncludeInRelease{2017/10/28}{\PackageWarning}{pLaTeX Info}%
+  % * <2023-02-14>+1
   % * <2023-02-14>
   % * <2021-11-15>+1
   % * <2021-11-15>
@@ -3152,15 +3153,16 @@ of this package available from CTAN}
 \def\pltx@save@float@dir{%
   \edef\pltx@float@dir@first{\iftdir\tate\else\yoko\fi}}
 \def\pltx@check@float@dir{%
-  \edef\pltx@float@dir@last{\iftdir\tate\else\yoko\fi}%
-  \ifx\pltx@float@dir@last\pltx@float@dir@first\else
-    \pltx@err@float@dir
+  \ifx\pltx@float@dir@first\@undefined\else
+    \edef\pltx@float@dir@last{\iftdir\tate\else\yoko\fi}%
+    \ifx\pltx@float@dir@last\pltx@float@dir@first\else
+      \pltx@err@float@dir
+    \fi
   \fi}
 \def\pltx@err@float@dir{%
   \@latex@error{Direction change inside float!?\MessageBreak
     Use \noexpand\layoutcaption provided in
-    \string\usepackage{plext}}\@ehc
-}
+    \string\usepackage{plext}}\@ehc}
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\pltx@check@float@dir}
                    {Mention \layoutcaption}%
