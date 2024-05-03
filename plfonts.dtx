@@ -3405,7 +3405,9 @@
 }
 \fi          % --- for >= 2021-06-01 END
 \fi   % --- for >= 2020-10-01 END
-\adjustbaseline
+\edef\@@@temp{\detokenize{nullfont}}\edef\@@@tempa{\fontname\jfont}
+\unless\ifx\@@@temp\@@@tempa\adjustbaseline\fi
+\let\@@@temp\undefined\let\@@@tempa\undefined
 \let\reset@font\normalfont
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
