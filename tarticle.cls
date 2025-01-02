@@ -667,18 +667,9 @@
      {#4}\nobreak
      \leaders\hbox{$\m@th \mkern \@dotsep mu.\mkern \@dotsep mu$}%
      \hfill\nobreak
-     \hb@xt@\@pnumwidth{\hss\normalfont \normalcolor #5}%
+     \hb@xt@\@pnumwidth{\hss\normalfont \normalcolor\rensuji{#5}}%
      \par}%
   \fi}
-\providecommand*\protected@file@percent{}
-\def\addcontentsline#1#2#3{%
-  \protected@write\@auxout
-    {\let\label\@gobble \let\index\@gobble \let\glossary\@gobble
-     \@temptokena{\rensuji{\thepage}}%
-    }{\string\@writefile{#1}%
-       {\protect\contentsline{#2}{#3}{\the\@temptokena}{}%
-        \protected@file@percent}}%
-}
 \newcommand{\tableofcontents}{%
   \section*{\contentsname
     \@mkboth{\contentsname}{\contentsname}%
@@ -694,7 +685,7 @@
     {\leavevmode\large\bfseries
      \setlength\@lnumwidth{4zw}%
      #1\hfil\nobreak
-     \hb@xt@\@pnumwidth{\hss#2}}\par
+     \hb@xt@\@pnumwidth{\hss\rensuji{#2}}}\par
     \nobreak
     \if@compatibility
     \global\@nobreaktrue
@@ -711,7 +702,7 @@
       \leavevmode\bfseries
       \setlength\@lnumwidth{1.5em}%
       \advance\leftskip\@lnumwidth \hskip-\leftskip
-      #1\nobreak\hfil\nobreak\hb@xt@\@pnumwidth{\hss#2}\par
+      #1\nobreak\hfil\nobreak\hb@xt@\@pnumwidth{\hss\rensuji{#2}}\par
     \endgroup
   \fi}
 \newcommand*{\l@subsection}   {\@dottedtocline{2}{1zw}{4zw}}

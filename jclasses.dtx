@@ -108,6 +108,9 @@
 % \changes{v1.8f}{2020/09/30}{add a fourth argument for better
 %    hyperref compability
 %    (sync with ltsect.dtx 2020/07/27 v1.1e)}
+% \changes{v1.8g}{2025/01/02}{Don't use \cs{rensuji} in \file{.toc} files
+%    if vertical classes
+%    (sync with ltjclasses.dtx 2024-12-13 v1.8-ltj-24)}
 % \fi
 %
 % \iffalse
@@ -145,6 +148,7 @@
 \RequirePackage{plautopatch}
 \documentclass[dvipdfmx,a4paper]{jltxdoc}
 \GetFileInfo{jclasses.dtx}
+\ifdefined\pLaTeX\else\def\pLaTeX{p\kern-.05em\LaTeX}\fi
 \title{p\LaTeXe{}の標準クラス\space\fileversion}
 \author{Ken Nakano}
 \date{作成日：\filedate}
@@ -3980,6 +3984,9 @@
 % \changes{v1.3}{2001/10/04}{第５引数の書体を\cs{rmfamily}から\cs{normalfont}に変更}
 % \changes{v1.7a}{2016/11/16}{Added \cs{nobreak} for
 %    latex/2343 (sync with ltsect.dtx v1.0z)}
+% \changes{v1.8g}{2025/01/02}{Don't use \cs{rensuji} in \file{.toc} files
+%    if vertical classes
+%    (sync with ltjclasses.dtx 2024-12-13 v1.8-ltj-24)}
 %    \begin{macrocode}
 \def\@dottedtocline#1#2#3#4#5{%
   \ifnum #1>\c@tocdepth \else
@@ -3993,34 +4000,41 @@
      {#4}\nobreak
      \leaders\hbox{$\m@th \mkern \@dotsep mu.\mkern \@dotsep mu$}%
      \hfill\nobreak
-     \hb@xt@\@pnumwidth{\hss\normalfont \normalcolor #5}%
+%<yoko>     \hb@xt@\@pnumwidth{\hss\normalfont \normalcolor #5}%
+%<tate>     \hb@xt@\@pnumwidth{\hss\normalfont \normalcolor\rensuji{#5}}%
      \par}%
   \fi}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\addcontentsline}
-% 縦組の場合にページ番号を|\rensuji|で囲むように変更します。
+% 以前のバージョンでは縦組の場合にページ番号を|\rensuji|で囲むように再定義
+% していました．これでは|hyperref|パッケージと干渉してしまうので、
+% \cs{rensuji}は\cs{l@chapter}など実際の出力命令のほうに押し込めることにし、
+% \cs{addcontentsline}の再定義は削除します。
 %
-% このマクロは\file{ltsect.dtx}で定義されています。
+% ^^A このマクロは\file{ltsect.dtx}で定義されています。
 % ^^A 命令 |\addcontentsline| と |\addtocontents| を組み合わせ
 % \changes{v1.8a}{2018/10/25}{ファイル書き出し時の行末文字対策
 %    (sync with ltsect.dtx 2018/09/26 v1.1c)}
 % \changes{v1.8f}{2020/09/30}{add a fourth argument for better
 %    hyperref compability
 %    (sync with ltsect.dtx 2020/07/27 v1.1e)}
-%    \begin{macrocode}
-\providecommand*\protected@file@percent{}
-\def\addcontentsline#1#2#3{%
-  \protected@write\@auxout
-    {\let\label\@gobble \let\index\@gobble \let\glossary\@gobble
-%<tate>     \@temptokena{\rensuji{\thepage}}%
-%<yoko>     \@temptokena{\thepage}%
-    }{\string\@writefile{#1}%
-       {\protect\contentsline{#2}{#3}{\the\@temptokena}{}%
-        \protected@file@percent}}%
-}
-%    \end{macrocode}
+% \changes{v1.8g}{2025/01/02}{Don't use \cs{rensuji} in \file{.toc} files
+%    if vertical classes
+%    (sync with ltjclasses.dtx 2024-12-13 v1.8-ltj-24)}
+% ^^A    \begin{macrocode}
+% ^^A \providecommand*\protected@file@percent{}
+% ^^A \def\addcontentsline#1#2#3{%
+% ^^A   \protected@write\@auxout
+% ^^A     {\let\label\@gobble \let\index\@gobble \let\glossary\@gobble
+% ^^A %<tate>     \@temptokena{\rensuji{\thepage}}%
+% ^^A %<yoko>     \@temptokena{\thepage}%
+% ^^A     }{\string\@writefile{#1}%
+% ^^A        {\protect\contentsline{#2}{#3}{\the\@temptokena}{}%
+% ^^A         \protected@file@percent}}%
+% ^^A }
+% ^^A    \end{macrocode}
 % \end{macro}
 %
 %
@@ -4050,6 +4064,9 @@
 %
 % \begin{macro}{\l@part}
 % partレベルの目次です。
+% \changes{v1.8g}{2025/01/02}{Don't use \cs{rensuji} in \file{.toc} files
+%    if vertical classes
+%    (sync with ltjclasses.dtx 2024-12-13 v1.8-ltj-24)}
 %    \begin{macrocode}
 \newcommand*{\l@part}[2]{%
   \ifnum \c@tocdepth >-2\relax
@@ -4062,7 +4079,8 @@
     {\leavevmode\large\bfseries
      \setlength\@lnumwidth{4zw}%
      #1\hfil\nobreak
-     \hb@xt@\@pnumwidth{\hss#2}}\par
+%<yoko>     \hb@xt@\@pnumwidth{\hss#2}}\par
+%<tate>     \hb@xt@\@pnumwidth{\hss\rensuji{#2}}}\par
     \nobreak
 %<article>    \if@compatibility
     \global\@nobreaktrue
@@ -4075,6 +4093,9 @@
 %
 % \begin{macro}{\l@chapter}
 % chapterレベルの目次です。
+% \changes{v1.8g}{2025/01/02}{Don't use \cs{rensuji} in \file{.toc} files
+%    if vertical classes
+%    (sync with ltjclasses.dtx 2024-12-13 v1.8-ltj-24)}
 %    \begin{macrocode}
 %<*report|book>
 \newcommand*{\l@chapter}[2]{%
@@ -4086,7 +4107,8 @@
       \leavevmode\bfseries
       \setlength\@lnumwidth{4zw}%
       \advance\leftskip\@lnumwidth \hskip-\leftskip
-      #1\nobreak\hfil\nobreak\hb@xt@\@pnumwidth{\hss#2}\par
+%<yoko>      #1\nobreak\hfil\nobreak\hb@xt@\@pnumwidth{\hss#2}\par
+%<tate>      #1\nobreak\hfil\nobreak\hb@xt@\@pnumwidth{\hss\rensuji{#2}}\par
       \penalty\@highpenalty
     \endgroup
   \fi}
@@ -4096,6 +4118,9 @@
 %
 % \begin{macro}{\l@section}
 % sectionレベルの目次です。
+% \changes{v1.8g}{2025/01/02}{Don't use \cs{rensuji} in \file{.toc} files
+%    if vertical classes
+%    (sync with ltjclasses.dtx 2024-12-13 v1.8-ltj-24)}
 %    \begin{macrocode}
 %<*article>
 \newcommand*{\l@section}[2]{%
@@ -4107,7 +4132,8 @@
       \leavevmode\bfseries
       \setlength\@lnumwidth{1.5em}%
       \advance\leftskip\@lnumwidth \hskip-\leftskip
-      #1\nobreak\hfil\nobreak\hb@xt@\@pnumwidth{\hss#2}\par
+%<yoko>      #1\nobreak\hfil\nobreak\hb@xt@\@pnumwidth{\hss#2}\par
+%<tate>      #1\nobreak\hfil\nobreak\hb@xt@\@pnumwidth{\hss\rensuji{#2}}\par
     \endgroup
   \fi}
 %</article>
