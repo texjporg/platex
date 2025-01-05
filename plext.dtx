@@ -40,9 +40,9 @@
 % \changes{v1.2c}{2016/11/19}{Use \cs{setlength}, so that
 %           calc extensions apply (sync with lttab.dtx v1.1j)}
 % \changes{v1.2c}{2016/11/19}{Use \cs{@setminpage}
-%                             (sync with ltboxes v1.1a)}
+%                             (sync with ltboxes.dtx v1.1a)}
 % \changes{v1.2c}{2016/11/19}{put \cs{global} into definition
-%    of \cs{@minipagefalse} (sync with ltboxes v1.0z)}
+%    of \cs{@minipagefalse} (sync with ltboxes.dtx v1.0z)}
 % \changes{v1.2c}{2016/11/19}{Changed \cs{endgraf} to
 %    \cs{@@par} (sync with ltboxes.dtx v1.0y)}
 % \changes{v1.2c}{2016/11/19}{Changed \cs{@empty} to \cs{relax} as
@@ -53,7 +53,7 @@
 % \changes{v1.2d}{2017/02/04}{\cs{Kanji}の引数だけでなく後に連続する
 %    数字も漢数字になってしまうバグを修正}
 % \changes{v1.2e}{2017/03/02}{Make \cs{parbox} Robust
-%    (sync with ltboxes 2015/01/08 v1.1h)}
+%    (sync with ltboxes.dtx 2015/01/08 v1.1h)}
 % \changes{v1.2f}{2017/03/28}{表と周囲との揃え位置を修正}
 % \changes{v1.2f}{2017/03/28}{段落の箱と周囲との揃え位置を修正}
 % \changes{v1.2g}{2017/05/04}{Make \cs{pbox} Robust}
@@ -851,9 +851,12 @@
   \setbox\@tempboxa\vbox\bgroup\box@dir
     \if@rotsw \hsize\@tempdima\hbox\bgroup$\vbox\bgroup\fi
 %    \end{macrocode}
+% なお、オリジナルのltboxes.dtx 2022/09/07 v1.4dでは
+% 入れ子(nested minipages)で脚注が正しく表示されない時に
+% 警告するコードが追加されていますが、plextでは追加していません。
 % \changes{v1.1c}{1995/09/11}{Add \cs{adjustbaseline}.}
-% \changes{v1.2c}{2016/11/19}{Use \cs{@setminpage}
-%                             (sync with ltboxes v1.1a)}
+% \changes{v1.2c}{2016/11/19}{Use \cs{@setminipage}
+%                             (sync with ltboxes.dtx v1.1a)}
 %    \begin{macrocode}
     \adjustbaseline
     \color@begingroup
@@ -872,7 +875,7 @@
 % \begin{macro}{\endminipage}
 % minipage環境の終了コマンドです。
 % \changes{v1.2c}{2016/11/19}{put \cs{global} into definition
-%    of \cs{@minipagefalse} (sync with ltboxes v1.0z)}
+%    of \cs{@minipagefalse} (sync with ltboxes.dtx v1.0z)}
 %    \begin{macrocode}
 \def\endminipage{%
     \par
@@ -899,7 +902,7 @@
 % \begin{macro}{\parbox}
 % 組方向オプションを調べます。
 % \changes{v1.2e}{2017/03/02}{Make \cs{parbox} Robust
-%    (sync with ltboxes 2015/01/08 v1.1h)}
+%    (sync with ltboxes.dtx 2015/01/08 v1.1h)}
 %    \begin{macrocode}
 \DeclareRobustCommand\parbox{\@ifnextchar<%>
    {\X@parbox}{\X@parbox<Z>}}
