@@ -122,7 +122,7 @@
 \ifnum\requestedpLaTeXdate=\currentpLaTeXdate
 \PackageWarningNoLine{platexrelease}{%
   Current format date selected, no patches applied}
-\pltx@maybe@gobble{\expandafter\endinput}
+\pltx@maybe@gobble{\expandafter\endinput}%
 \fi
 \ifnum\currentpLaTeXdate
   >\expandafter\@parse@version\platexreleaseversion//00\@nil
@@ -130,7 +130,7 @@
 The current package is for an older pLaTeX format:\MessageBreak
 pLaTeX \platexreleaseversion\space\MessageBreak
 Obtain a newer version of this package!}
-\pltx@maybe@gobble{\expandafter\endinput}
+\pltx@maybe@gobble{\expandafter\endinput}%
 \fi
 \ifnum\requestedpLaTeXdate
   >\expandafter\@parse@version\platexreleaseversion//00\@nil
@@ -139,7 +139,7 @@ The current package is for pLaTeX \platexreleaseversion:\MessageBreak
 It has no patches beyond that date\MessageBreak
 There may be an updated version\MessageBreak
 of this package available from CTAN}
-\pltx@maybe@gobble{\expandafter\endinput}
+\pltx@maybe@gobble{\expandafter\endinput}%
 \fi
 \let\pfmtversion\requestedplpatchdate
 \let\currentpLaTeXdate\requestedpLaTeXdate
