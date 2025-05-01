@@ -1829,54 +1829,31 @@
     \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \null
     \ignorespaces
   \fi}
+\NewSocketPlug {build/column/outputbox}{floats-footnotes-platex} {%
+  \@outputbox@reinsertbskip
+  \@outputbox@attachfloats
+  \@if@footnotes@TF
+    {\@outputbox@append{\@textbottom}\let\@textbottom\relax}%
+    {}%
+  \@outputbox@appendfootnotes
+}
+\AssignSocketPlug{build/column/outputbox}{floats-footnotes-platex}
 \def\pltx@adjust@wd@outputbox{%
   \ifydir\else\vbox{\pdfprimitive\everypar{}\hskip\z@}\fi}
 \def\pltx@adjust@wd@outputbox@vtryfc{%
   \ifydir\else\pdfprimitive\everypar{}\hskip\z@\fi}
-\gdef\@makecol{%
-   \setbox\@outputbox\box\@cclv%
-   \let\@elt\relax % added on LaTeX (ltoutput.dtx 2003/12/16 v1.2k)
-   \xdef\@freelist{\@freelist\@midlist}%
-   \global \let \@midlist \@empty
-   \@combinefloats
-   \let\pltx@textbottom\@textbottom % save (pLaTeX 2017/02/25)
-   \ifvoid\footins\else % changed (pLaTeX 2017/02/25)
-     \setbox\@outputbox \vbox {%
-       \boxmaxdepth \@maxdepth
-       \unvbox \@outputbox
-       \@textbottom % inserted here (pLaTeX 2017/02/25)
-       \vskip \skip\footins
-       \color@begingroup
-         \normalcolor
-         \footnoterule
-         \unvbox \footins
-       \color@endgroup
-       }%
-       \let\@textbottom\relax % disable temporarily (pLaTeX 2017/02/25)
-   \fi
-   \ifvbox\@kludgeins
-     \@makespecialcolbox
-   \else
-     \setbox\@outputbox \vbox to\@colht {%
-       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+\def \@make@normalcolbox {%
+   \setbox\@outputbox \vbox to\@colht {%
        \@texttop
-       \dimen@ \dp\@outputbox
+       \@outputbox@depth \dp\@outputbox
        \unvbox \@outputbox
-       \pltx@adjust@wd@outputbox
-       \vskip -\dimen@
+       \pltx@adjust@wd@outputbox % <== pLaTeX
+       \vskip -\@outputbox@depth
        \@textbottom
-       }%
-   \fi
-   \let\@textbottom\pltx@textbottom % restore (pLaTeX 2017/02/25)
-   \global \maxdepth \@maxdepth
+      }%
 }
 \gdef\@makespecialcolbox{%
-   \setbox\@outputbox \vbox {%
-     \@texttop
-     \dimen@ \dp\@outputbox
-     \unvbox\@outputbox
-     \vskip-\dimen@
-     }%
+   \@outputbox@append {\vskip-\@outputbox@depth}%
    \@tempdima \@colht
    \ifdim \wd\@kludgeins>\z@
      \advance \@tempdima -\ht\@outputbox
@@ -2026,67 +2003,87 @@
        \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
      \fi
 }
-\def\@outputpage{%
-\begingroup % the \endgroup is put in by \aftergroup
+\AddToHook{build/page/reset}[platex]{%
   \iftdir
     \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
+    \let\@themargin\evensidemargin
+    \let\evensidemargin\oddsidemargin
+    \let\oddsidemargin\@themargin
   \fi
+}
+\def \@outputpage {%
+  \UseHook {build/page/before}%
+\begingroup
   \let \protect \noexpand
   \language\document@default@language
   \@resetactivechars
   \global\let\@@if@newlist\if@newlist
   \global\@newlistfalse
   \@parboxrestore
-  \shipout\vbox{\yoko
-    \set@typeset@protect
-    \aftergroup\endgroup
-    \aftergroup\set@typeset@protect
-     \if@specialpage
-       \global\@specialpagefalse\@nameuse{ps@\@specialstyle}%
-     \fi
-     \if@twoside
-       \ifodd\count\z@ \let\@thehead\@oddhead \let\@thefoot\@oddfoot
-          \iftdir\let\@themargin\evensidemargin
-          \else\let\@themargin\oddsidemargin\fi
-       \else \let\@thehead\@evenhead
-          \let\@thefoot\@evenfoot
-           \iftdir\let\@themargin\oddsidemargin
-           \else\let\@themargin\evensidemargin\fi
-     \fi\fi
-     \@tombowreset@@paper
-     \reset@font
-     \normalsize
-     \normalsfcodes
-     \let\label\@gobble
-     \let\index\@gobble
-     \let\glossary\@gobble
-     \baselineskip\z@skip \lineskip\z@skip \lineskiplimit\z@
-    \@begindvi
-    \@outputtombow
-    \vskip \@@topmargin
-    \moveright\@themargin\vbox{%
-      \setbox\@tempboxa \vbox to\headheight{%
+    \UseHook {build/page/reset}%
+  \shipout \vbox{%
+    \yoko \set@typeset@protect %<== pLaTeX
+    \aftergroup \endgroup
+    \aftergroup \set@typeset@protect
+  \if@specialpage
+    \global \@specialpagefalse
+    \@nameuse {ps@\@specialstyle}%
+  \fi
+  \if@twoside
+    \ifodd\count\z@
+      \let \@thehead \@oddhead
+      \let \@thefoot \@oddfoot
+      \let \@themargin \oddsidemargin
+    \else
+      \let \@thehead \@evenhead
+      \let \@thefoot \@evenfoot
+      \let \@themargin \evensidemargin
+    \fi
+  \fi
+  \@tombowreset@@paper\reset@font %<== pLaTeX tombow
+  \normalsize
+  \normalsfcodes
+  \let \label \@gobble@with@sphack@om
+  \let \index \@gobble@with@sphack@som
+  \let \glossary \@gobble@with@sphack@om
+  \baselineskip \z@skip
+  \lineskip \z@skip
+  \lineskiplimit \z@
+    \@begindvi \@outputtombow %<== pLaTeX tombow
+    \vskip \@@topmargin %<== pLaTeX tombow
+    \moveright\@themargin \vbox {%
+      \setbox\@tempboxa \vbox to\headheight {%
         \vfil
-        \color@hbox
-          \normalcolor
-          \hb@xt@\textwidth{\@thehead}%
-        \color@endbox
-      }%                        %% 22 Feb 87
-      \dp\@tempboxa \z@
-      \box\@tempboxa
+        \pdfannot@link@off@@
+        \UseTaggingSocket{build/page/header}{}%
+          {
+            \color@hbox
+              \normalcolor
+              \hb@xt@ \textwidth {\@thehead }%
+            \color@endbox
+          }
+        \pdfannot@link@on@@
+      }
+      \dp \@tempboxa \z@
+      \box \@tempboxa
       \vskip \headsep
-      \box\@outputbox
+      \box \@outputbox
       \baselineskip \footskip
-      \color@hbox
-        \normalcolor
-        \hb@xt@\textwidth{\@thefoot}%
-      \color@endbox
-    }%
-  }%
-  \global\let\if@newlist\@@if@newlist
+      \pdfannot@link@off@@
+      \UseTaggingSocket{build/page/footer}{}%
+         {
+            \color@hbox
+               \normalcolor
+               \hb@xt@ \textwidth {\@thefoot }%
+             \color@endbox
+         }
+      \pdfannot@link@on@@
+      }
+    }
+  \global \let \if@newlist \@@if@newlist
   \global \@colht \textheight
   \stepcounter{page}%
-  \let\firstmark\botmark
+   \UseHook {build/page/after}%
 }
 \chardef\pltx@AtBeginDvi@untouched\z@
 \ifdefined\ExplSyntaxOn %--- expl3 available BEGIN

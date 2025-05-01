@@ -21,12 +21,7 @@
    \fl@trace{Krudgeins ht \the\ht\@kludgeins\space
                        dp \the\dp\@kludgeins\space
                        wd \the\wd\@kludgeins}%
-   \setbox\@outputbox \vbox {%
-     \@texttop
-     \dimen@ \dp\@outputbox
-     \unvbox\@outputbox
-     \vskip-\dimen@
-     }%
+   \@outputbox@append {\vskip-\@outputbox@depth}%
    \@tempdima \@colht
    \ifdim \wd\@kludgeins>\z@
      \advance \@tempdima -\ht\@outputbox
