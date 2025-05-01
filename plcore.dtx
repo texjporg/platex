@@ -546,175 +546,17 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\@makecol}
-% このマクロが組み立てる部分の中心となります。
-% \file{ltoutput.dtx}で定義されているものです。
-%    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2017/04/08}{\@makecol}
-%<platexrelease>                   {Take into account depth of footnote}%
-%<*plcore|platexrelease>
-\gdef\@makecol{%
-   \setbox\@outputbox\box\@cclv%
-   \let\@elt\relax % added on LaTeX (ltoutput.dtx 2003/12/16 v1.2k)
-   \xdef\@freelist{\@freelist\@midlist}%
-   \global \let \@midlist \@empty
-   \@combinefloats
-%    \end{macrocode}
-% オリジナルの\LaTeX{}は、トップフロート、本文、脚注、ボトムフロートの順番で
-% 出力します。一方p\LaTeX{}は、トップフロート、本文、ボトムフロート、脚注の
-% 順番で出力します。
-% ところが、アスキー版のコードは順番を入れ替えるだけでなく、脚注のあるページの
-% 版面全体の垂直位置が（特に縦組で顕著に）ずれてしまっていました。
-% これは補正量|\dp\@outputbox|の取得を\emph{脚注挿入より前}に行っていたためで、
-% コミュニティ版p\LaTeX{}ではこの問題に対処してあります。
-% 結果的に、fnposパッケージ(yafoot)の
-% |\makeFNbottom|かつ|\makeFNbelow|な状態と完全に等価になりました。
-% \changes{v1.2l}{2017/02/25}{脚注とボトムフロートの順序を入れ替えたことで
-%    版面全体の垂直位置がずれていたのを修正(Issue 32)}
-%    \begin{macrocode}
-   \let\pltx@textbottom\@textbottom % save (pLaTeX 2017/02/25)
-   \ifvoid\footins\else % changed (pLaTeX 2017/02/25)
-     \setbox\@outputbox \vbox {%
-       \boxmaxdepth \@maxdepth
-       \unvbox \@outputbox
-       \@textbottom % inserted here (pLaTeX 2017/02/25)
-       \vskip \skip\footins
-       \color@begingroup
-         \normalcolor
-         \footnoterule
-         \unvbox \footins
-       \color@endgroup
-       }%
-       \let\@textbottom\relax % disable temporarily (pLaTeX 2017/02/25)
-   \fi
-   \ifvbox\@kludgeins
-     \@makespecialcolbox
-   \else
-     \setbox\@outputbox \vbox to\@colht {%
-       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+% \begin{macro}{\@make@normalcolbox}
+\def \@make@normalcolbox {%
+   \setbox\@outputbox \vbox to\@colht {%
        \@texttop
-       \dimen@ \dp\@outputbox
+       \@outputbox@depth \dp\@outputbox
        \unvbox \@outputbox
-%    \end{macrocode}
-% 次の行は以前は
-%\begin{verbatim}
-%\iftdir\vbox{\hskip\z@}\fi
-%\end{verbatim}
-% でしたが、|\pltx@adjust@wd@outputbox|として切り出しました。
-% \changes{v1.1j}{2001/05/10}{\cs{@makecol}で組み立てられる
-%    \cs{@outputbox}の大きさが、縦組で中身が空のボックスだけの場合も適正になる
-%    ように修正}
-% \changes{v1.2b}{2016/01/26}{\cs{@outputbox}の深さが他のものの位置に影響を与えない
-%    ようにする\texttt{\cs{vskip}~-\cs{dimen@}}が縦組モードでは無効になっていたので修正}
-% \changes{v1.2h}{2016/09/01}{縦組でlongtableパッケージを使って表組の途中で改ページ
-%    するとき無限ループが起こる問題に対処(Issue 21)}
-% \changes{v1.3i}{2021/03/25}{非横組時における
-%    \cs{@outputbox}の寸法補正のコードを\cs{pltx@adjust@wd@outputbox}として切り出した}
-%    \begin{macrocode}
-       \pltx@adjust@wd@outputbox
-       \vskip -\dimen@
+       \pltx@adjust@wd@outputbox % <== pLaTeX
+       \vskip -\@outputbox@depth
        \@textbottom
-       }%
-   \fi
-   \let\@textbottom\pltx@textbottom % restore (pLaTeX 2017/02/25)
-   \global \maxdepth \@maxdepth
+      }%
 }
-%</plcore|platexrelease>
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2016/09/03}{\@makecol}
-%<platexrelease>                   {Avoid infinite loop}%
-%<platexrelease>\gdef\@makecol{%
-%<platexrelease>   \setbox\@outputbox\box\@cclv%
-%<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
-%<platexrelease>   \global \let \@midlist \@empty
-%<platexrelease>   \@combinefloats
-%<platexrelease>   \ifvbox\@kludgeins
-%<platexrelease>     \@makespecialcolbox
-%<platexrelease>   \else
-%<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
-%<platexrelease>       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
-%<platexrelease>       \@texttop
-%<platexrelease>       \dimen@ \dp\@outputbox
-%<platexrelease>       \unvbox \@outputbox
-%<platexrelease>       \iftdir\vbox{\hskip\z@}\fi
-%<platexrelease>       \vskip -\dimen@
-%<platexrelease>       \@textbottom
-%<platexrelease>       \ifvoid\footins\else % for pLaTeX
-%<platexrelease>         \vskip \skip\footins
-%<platexrelease>         \color@begingroup
-%<platexrelease>            \normalcolor
-%<platexrelease>            \footnoterule
-%<platexrelease>            \unvbox \footins
-%<platexrelease>         \color@endgroup
-%<platexrelease>       \fi
-%<platexrelease>       }%
-%<platexrelease>   \fi
-%<platexrelease>   \global \maxdepth \@maxdepth
-%<platexrelease>}
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{2016/04/17}{\@makecol}
-%<platexrelease>                   {Adjust for \dp\@outputbox in tate mode}%
-%<platexrelease>\gdef\@makecol{%
-%<platexrelease>   \setbox\@outputbox\box\@cclv%
-%<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
-%<platexrelease>   \global \let \@midlist \@empty
-%<platexrelease>   \@combinefloats
-%<platexrelease>   \ifvbox\@kludgeins
-%<platexrelease>     \@makespecialcolbox
-%<platexrelease>   \else
-%<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
-%<platexrelease>       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
-%<platexrelease>       \@texttop
-%<platexrelease>       \dimen@ \dp\@outputbox
-%<platexrelease>       \unvbox \@outputbox
-%<platexrelease>       \iftdir\hskip\z@\fi
-%<platexrelease>       \vskip -\dimen@
-%<platexrelease>       \@textbottom
-%<platexrelease>       \ifvoid\footins\else % for pLaTeX
-%<platexrelease>         \vskip \skip\footins
-%<platexrelease>         \color@begingroup
-%<platexrelease>            \normalcolor
-%<platexrelease>            \footnoterule
-%<platexrelease>            \unvbox \footins
-%<platexrelease>         \color@endgroup
-%<platexrelease>       \fi
-%<platexrelease>       }%
-%<platexrelease>   \fi
-%<platexrelease>   \global \maxdepth \@maxdepth
-%<platexrelease>}
-%<platexrelease>\plEndIncludeInRelease
-%<platexrelease>\plIncludeInRelease{0000/00/00}{\@makecol}
-%<platexrelease>                   {ASCII Corporation original}%
-%<platexrelease>\gdef\@makecol{%
-%<platexrelease>   \setbox\@outputbox\box\@cclv%
-%<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
-%<platexrelease>   \global \let \@midlist \@empty
-%<platexrelease>   \@combinefloats
-%<platexrelease>   \ifvbox\@kludgeins
-%<platexrelease>     \@makespecialcolbox
-%<platexrelease>   \else
-%<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
-%<platexrelease>       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
-%<platexrelease>       \@texttop
-%<platexrelease>       \dimen@ \dp\@outputbox
-%<platexrelease>       \unvbox \@outputbox
-%<platexrelease>       \iftdir\hskip\z@
-%<platexrelease>       \else\vskip -\dimen@\fi
-%<platexrelease>       \@textbottom
-%<platexrelease>       \ifvoid\footins\else % for pLaTeX
-%<platexrelease>         \vskip \skip\footins
-%<platexrelease>         \color@begingroup
-%<platexrelease>            \normalcolor
-%<platexrelease>            \footnoterule
-%<platexrelease>            \unvbox \footins
-%<platexrelease>         \color@endgroup
-%<platexrelease>       \fi
-%<platexrelease>       }%
-%<platexrelease>   \fi
-%<platexrelease>   \global \maxdepth \@maxdepth
-%<platexrelease>}
-%<platexrelease>\plEndIncludeInRelease
-%    \end{macrocode}
 % \end{macro}
 %
 %
@@ -754,12 +596,7 @@
                        dp \the\dp\@kludgeins\space
                        wd \the\wd\@kludgeins}%
 %</trace>
-   \setbox\@outputbox \vbox {%
-     \@texttop
-     \dimen@ \dp\@outputbox
-     \unvbox\@outputbox
-     \vskip-\dimen@
-     }%
+   \@outputbox@append {\vskip-\@outputbox@depth}%
    \@tempdima \@colht
    \ifdim \wd\@kludgeins>\z@
      \advance \@tempdima -\ht\@outputbox
@@ -771,7 +608,6 @@
      \fl@trace {Hence, space added: \the\@tempdima}%
 %</trace>
      \setbox\@outputbox \vbox to \@colht {%
-%       \boxmaxdepth \maxdepth
        \unvbox\@outputbox
        \vskip \@tempdima
        \@textbottom
@@ -1287,7 +1123,6 @@
 %<platexrelease>                   {Macro separated}%
 %<platexrelease>\let\@tombowreset@@paper\@undefined
 %<platexrelease>\plEndIncludeInRelease
-%<*plcore>
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1295,122 +1130,114 @@
 % \subsection{出力ルーチン}
 % ここで実際にトンボを出力します。
 %
-% \begin{macro}{\@shipoutsetup}
-% \changes{v1.1i}{1998/02/03}{Command removed}
-% |\@outputpage|内に挿入したので削除しました。
-% \end{macro}
-%
-% \begin{macro}{\@outputpage}
-% |\textwidth|と|\textheight|の交換は、|\@shipoutsetup|内では行ないません。
-% なぜなら、|\@shipoutsetup|マクロが実行されるときは、
-% |\shipout|される|\vbox|の中であり、このときは横組モードですので、
-% つねに|\iftdir|は偽と判断され、縦と横のサイズを交換できないからです。
-%
-% なお、この変更をローカルなものにするために、
-% |\begingroup|と|\endgroup|で囲みます。
-% \changes{v1.2a}{2001/09/26}{\LaTeX\ \texttt{!<2001/06/01!>}に対応}
+% |\textwidth|と|\textheight|の交換は、新設された|build/page/reset|フック内で
+% 行います。
 %    \begin{macrocode}
-%</plcore>
-%<platexrelease>\plIncludeInRelease{2018/05/20}{\@outputpage}
-%<platexrelease>                   {Use \@tombowreset@@paper}%
+%<platexrelease>\plIncludeInRelease{2025/05/01}%
+%<platexrelease>                   {build/page/reset hook}{}%
 %<*plcore|platexrelease>
-\def\@outputpage{%
-\begingroup % the \endgroup is put in by \aftergroup
+\AddToHook{build/page/reset}[lltjcore]{%
   \iftdir
     \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
+    \let\@themargin\evensidemargin
+    \let\evensidemargin\oddsidemargin
+    \let\oddsidemargin\@themargin
   \fi
-  \let \protect \noexpand
+}
+\NewSocketPlug {build/column/outputbox}{floats-footnotes-platex} {%
+  \@outputbox@reinsertbskip
+  \@outputbox@attachfloats
+  \@if@footnotes@TF
+    {\@outputbox@append{\@textbottom}\let\@textbottom\relax}%
+    {}%
+  \@outputbox@appendfootnotes
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
-% \LaTeXe\ 2017-04-15ではverbatim環境内でハイフネーションが起きないように
-% 修正されましたが、verbatim環境の途中で改ページが起きた場合にヘッダで
-% ハイフネーションが抑制されるのは正しくないので、|\language|を
-% |\begin{document}|での値にリセットします（参考：latex2e svn r1407）。
-% プリアンブルで特別に設定されればその値、設定されなければ0です（万が一
-% |\document|の定義が古い場合\footnote{\LaTeXe\ 2017/01/01以前を使って
-% p\LaTeXe{}のフォーマットを作成した場合や、dinbrief.clsのように独自の
-% 再定義を行うクラスやパッケージを使った場合に起こるかもしれません。}は
-% $-1$になりますが、これは0と同じはたらきをするので問題は起きません）。
-% \changes{v1.2m}{2017/03/19}{\cs{language}をリセット
-%    (sync with ltoutput.dtx 2017/03/10 v1.3c)}
+%
+% \begin{macro}{\@outputpage}
+% \changes{v1.2a}{2001/09/26}{\LaTeX\ \texttt{!<2001/06/01!>}に対応}
 %    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2025/05/01}%
+%<platexrelease>                   {\@outputpage}{}%
+%<*plcore|platexrelease>
+\def \@outputpage {%
+  \UseHook {build/page/before}%
+\begingroup
+  \let \protect \noexpand
   \language\document@default@language
   \@resetactivechars
   \global\let\@@if@newlist\if@newlist
   \global\@newlistfalse
   \@parboxrestore
-  \shipout\vbox{\yoko
-    \set@typeset@protect
-    \aftergroup\endgroup
-    \aftergroup\set@typeset@protect
-%    \end{macrocode}
-% \changes{v1.1g}{1998/02/03}{\cs{@shipoutsetup}を\cs{@outputpage}内に入れた}
-% ここから|\@shipoutsetup|の内容。
-%    \begin{macrocode}
-     \if@specialpage
-       \global\@specialpagefalse\@nameuse{ps@\@specialstyle}%
-     \fi
-%    \end{macrocode}
-% \changes{v1.1c}{1995/02/05}{\cs{oddsidemargin}と\cs{evensidemargin}が
-%    逆だったのを修正}
-%    \begin{macrocode}
-     \if@twoside
-       \ifodd\count\z@ \let\@thehead\@oddhead \let\@thefoot\@oddfoot
-          \iftdir\let\@themargin\evensidemargin
-          \else\let\@themargin\oddsidemargin\fi
-       \else \let\@thehead\@evenhead
-          \let\@thefoot\@evenfoot
-           \iftdir\let\@themargin\oddsidemargin
-           \else\let\@themargin\evensidemargin\fi
-     \fi\fi
-%    \end{macrocode}
-% トンボ出力オプションが指定されている場合、ここで用紙サイズを再設定します。
-% \TeX の加える左と上部の1インチは、トンボの内側に入ります。
-% \changes{v1.1a}{1995/11/10}{\cs{topmargin}が反映されないバグを修正}
-% \changes{v1.2z}{2018/05/13}{\cs{@tombowreset@@paper}コマンドに分離}
-%    \begin{macrocode}
-     \@tombowreset@@paper
-%    \end{macrocode}
-%    \begin{macrocode}
-     \reset@font
-     \normalsize
-     \normalsfcodes
-     \let\label\@gobble
-     \let\index\@gobble
-     \let\glossary\@gobble
-     \baselineskip\z@skip \lineskip\z@skip \lineskiplimit\z@
-%    \end{macrocode}
-% ここまでが|\@shipoutsetup|の内容。
-%    \begin{macrocode}
-    \@begindvi
-    \@outputtombow
-    \vskip \@@topmargin
-    \moveright\@themargin\vbox{%
-      \setbox\@tempboxa \vbox to\headheight{%
+    \UseHook {build/page/reset}%
+  \shipout \vbox{%
+    \yoko \set@typeset@protect %<== pLaTeX
+    \aftergroup \endgroup
+    \aftergroup \set@typeset@protect
+  \if@specialpage
+    \global \@specialpagefalse
+    \@nameuse {ps@\@specialstyle}%
+  \fi
+  \if@twoside
+    \ifodd\count\z@
+      \let \@thehead \@oddhead
+      \let \@thefoot \@oddfoot
+      \let \@themargin \oddsidemargin
+    \else
+      \let \@thehead \@evenhead
+      \let \@thefoot \@evenfoot
+      \let \@themargin \evensidemargin
+    \fi
+  \fi
+  \@tombowreset@@paper\reset@font %<== pLaTeX tombow
+  \normalsize
+  \normalsfcodes
+  \let \label \@gobble@with@sphack@om
+  \let \index \@gobble@with@sphack@som
+  \let \glossary \@gobble@with@sphack@om
+  \baselineskip \z@skip
+  \lineskip \z@skip
+  \lineskiplimit \z@
+    \@begindvi \@outputtombow %<== pLaTeX tombow
+    \vskip \@@topmargin %<== pLaTeX tombow
+    \moveright\@themargin \vbox {%
+      \setbox\@tempboxa \vbox to\headheight {%
         \vfil
-        \color@hbox
-          \normalcolor
-          \hb@xt@\textwidth{\@thehead}%
-        \color@endbox
-      }%                        %% 22 Feb 87
-      \dp\@tempboxa \z@
-      \box\@tempboxa
+        \pdfannot@link@off@@
+        \UseTaggingSocket{build/page/header}{}%
+          {
+            \color@hbox
+              \normalcolor
+              \hb@xt@ \textwidth {\@thehead }%
+            \color@endbox
+          }
+        \pdfannot@link@on@@
+      }
+      \dp \@tempboxa \z@
+      \box \@tempboxa
       \vskip \headsep
-      \box\@outputbox
+      \box \@outputbox
       \baselineskip \footskip
-      \color@hbox
-        \normalcolor
-        \hb@xt@\textwidth{\@thefoot}%
-      \color@endbox
-    }%
-  }%
-%  \endgroup now inserted by \aftergroup
+      \pdfannot@link@off@@
+      \UseTaggingSocket{build/page/footer}{}%
+         {
+            \color@hbox
+               \normalcolor
+               \hb@xt@ \textwidth {\@thefoot }%
+             \color@endbox
+         }
+      \pdfannot@link@on@@
+      }
+    }
 %    \end{macrocode}
 % |\if@newlist|を初期化。
 %    \begin{macrocode}
-  \global\let\if@newlist\@@if@newlist
+  \global \let \if@newlist \@@if@newlist
   \global \@colht \textheight
   \stepcounter{page}%
-  \let\firstmark\botmark
+   \UseHook {build/page/after}%
 }
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
