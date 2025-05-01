@@ -547,6 +547,7 @@
 % \end{macro}
 %
 % \begin{macro}{\@make@normalcolbox}
+%    \begin{macrocode}
 \def \@make@normalcolbox {%
    \setbox\@outputbox \vbox to\@colht {%
        \@texttop
@@ -557,6 +558,7 @@
        \@textbottom
       }%
 }
+%    \end{macrocode}
 % \end{macro}
 %
 %
@@ -1152,6 +1154,7 @@
     {}%
   \@outputbox@appendfootnotes
 }
+\AssignSocketPlug{build/column/outputbox}{floats-footnotes-platex}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
