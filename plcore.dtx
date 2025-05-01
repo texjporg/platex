@@ -497,6 +497,30 @@
 % したがって、文書ファイルによっては\LaTeX{}の組版結果と異なる場合が
 % ありますので、注意をしてください。
 %
+% \begin{plugdecl}{floats-footnotes-platex}
+% \LaTeXe~2025-06-01より前では|\@makecol|を直接上書きするしか方法がなかったのですが、
+% \LaTeXe~2025-06-01では出力ルーチンに全面的に手が加えられ、
+% |build/column/outputbox|ソケットに適切なプラグを差し込めば良くなりました。
+% 従来からの\pLaTeX の挙動は、\LaTeXe~2025-06-01で標準で定義されているプラグの
+% どれとも一致しないようなので，新たにプラグを作成することにしました。
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2025/06/01}%
+%<platexrelease>                   {floats-footnotes-platex plug}{}%
+%<*plcore|platexrelease>
+\NewSocketPlug {build/column/outputbox}{floats-footnotes-platex} {%
+  \@outputbox@reinsertbskip
+  \@outputbox@attachfloats
+  \@if@footnotes@TF
+    {\@outputbox@append{\@textbottom}\let\@textbottom\relax}%
+    {}%
+  \@outputbox@appendfootnotes
+}
+\AssignSocketPlug{build/column/outputbox}{floats-footnotes-platex}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{plugdecl}
+%
 % 2014年に\LaTeX{}に\file{fltrace}パッケージが追加されましたので、
 % そのp\LaTeX{}版として\file{pfltrace}パッケージを追加します。
 % この\file{pfltrace}パッケージは\LaTeX{}の\file{fltrace}パッケージに
@@ -1135,10 +1159,10 @@
 % |\textwidth|と|\textheight|の交換は、新設された|build/page/reset|フック内で
 % 行います。
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2025/05/01}%
+%<platexrelease>\plIncludeInRelease{2025/06/01}%
 %<platexrelease>                   {build/page/reset hook}{}%
 %<*plcore|platexrelease>
-\AddToHook{build/page/reset}[lltjcore]{%
+\AddToHook{build/page/reset}[platex]{%
   \iftdir
     \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
     \let\@themargin\evensidemargin
@@ -1146,15 +1170,6 @@
     \let\oddsidemargin\@themargin
   \fi
 }
-\NewSocketPlug {build/column/outputbox}{floats-footnotes-platex} {%
-  \@outputbox@reinsertbskip
-  \@outputbox@attachfloats
-  \@if@footnotes@TF
-    {\@outputbox@append{\@textbottom}\let\@textbottom\relax}%
-    {}%
-  \@outputbox@appendfootnotes
-}
-\AssignSocketPlug{build/column/outputbox}{floats-footnotes-platex}
 %</plcore|platexrelease>
 %<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
@@ -1162,7 +1177,7 @@
 % \begin{macro}{\@outputpage}
 % \changes{v1.2a}{2001/09/26}{\LaTeX\ \texttt{!<2001/06/01!>}に対応}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2025/05/01}%
+%<platexrelease>\plIncludeInRelease{2025/06/01}%
 %<platexrelease>                   {\@outputpage}{}%
 %<*plcore|platexrelease>
 \def \@outputpage {%
@@ -1194,6 +1209,12 @@
       \let \@themargin \evensidemargin
     \fi
   \fi
+%    \end{macrocode}
+% トンボ出力オプションが指定されている場合、ここで用紙サイズを再設定します。
+% \TeX の加える左と上部の1インチは、トンボの内側に入ります。
+% \changes{v1.1a}{1995/11/10}{\cs{topmargin}が反映されないバグを修正}
+% \changes{v1.2z}{2018/05/13}{\cs{@tombowreset@@paper}コマンドに分離}
+%    \begin{macrocode}
   \@tombowreset@@paper\reset@font %<== pLaTeX tombow
   \normalsize
   \normalsfcodes
@@ -1203,6 +1224,9 @@
   \baselineskip \z@skip
   \lineskip \z@skip
   \lineskiplimit \z@
+%    \end{macrocode}
+% 実際にトンボを出力します。
+%    \begin{macrocode}
     \@begindvi \@outputtombow %<== pLaTeX tombow
     \vskip \@@topmargin %<== pLaTeX tombow
     \moveright\@themargin \vbox {%
