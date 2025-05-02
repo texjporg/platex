@@ -1,0 +1,27 @@
+\documentclass[a4paper]{jarticle}
+\usepackage{float}
+\def\bottomnumber{10}
+\def\bottomfraction{0.999}
+\begin{document}
+\def\A{ああああああああああああああああ}
+\def\B{\A\A\A\A\A\footnote{「ほげ\thefootnote}}
+\def\C{\B\B
+  \begin{figure}[b]
+    \gtfamily\large あいうえおかきくけこ！
+    あいうえおかきくけこ！あいうえおかきくけこ！あいうえおかきくけこ！
+    あいうえおかきくけこ！あいうえおかきくけこ．
+    \caption{a}
+  \end{figure}}
+\def\D{\C}
+
+\textfloatsep=0pt
+\floatsep=0pt
+\ \the\textwidth, \the\textheight, \the\topmargin, \the\baselineskip, \the\oddsidemargin\par
+
+\D\D\D\D\D\D\D
+
+\newpage
+\D\D\D\D\D\D\D\D\D\D\D\D
+\D\D\D\D\D\D\D\D\D\D\D\D
+\end{document}
+
