@@ -1,14 +1,14 @@
 #!/bin/bash
-make platex.ltx
+make platex.ltx plcore.ltx platexrelease.sty
 platex-dev -ini -etex platex.ini
 yes | platex pldocs.ins
-platex -fmt=./platex pldoc
-dvipdfmx pldoc
+#platex -fmt=./platex pldoc
+#dvipdfmx pldoc
 
 cd tests
-platex --progname=platex-dev -fmt=../platex -jobname=float-footnote-2506 float-footnote.tex \
+TEXINPUTS=.:..: platex --progname=platex-dev -fmt=../platex -jobname=float-footnote-2506 float-footnote.tex \
   && dvipdfmx float-footnote-2506
 platex -jobname=float-footnote-2411 float-footnote \
   && dvipdfmx float-footnote-2411
-platex  float-footnote-compare && dvipdfmx float-footnote-compare
+pdflatex  float-footnote-compare
 cd ..

@@ -1,6 +1,6 @@
-\documentclass[dvipdfmx]{article}
+\documentclass[]{article}
 \usepackage{graphicx}
-\usepackage[cmyk]{xcolor}
+\usepackage{color}
 \topmargin-1in
 \oddsidemargin=-1in
 \headheight0pt
@@ -10,11 +10,11 @@
 \parindent0pt\unitlength=1mm
 \def\AX{\par\noindent
   \begin{picture}(0,0)
-    \put(0,0){\makebox(0,0)[lt]{\textcolor{red}{\includegraphics[page=\the\count0]{float-footnote-2411.pdf}}}}
-    \put(0,0){\makebox(0,0)[lt]{\textcolor{blue}{\includegraphics[page=\the\count0]{float-footnote-2506.pdf}}}}
+    \put(0,0){\makebox(0,0)[lt]{\color{red}{\includegraphics[page=\the\count0]{float-footnote-2411.pdf}}}}
+    \put(0,0){\makebox(0,0)[lt]{\color{blue}{\includegraphics[page=\the\count0]{float-footnote-2506.pdf}}}}
   \end{picture}\par\newpage}
 
 \setcounter{page}{1}
-\AX\AX\AX
-\AX\AX\AX
+\AX\AX\AX\AX\AX\AX\AX\AX
+\AX\AX\AX\AX\AX\AX
 \end{document}

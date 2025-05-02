@@ -1,7 +1,11 @@
-\documentclass[a4paper]{jarticle}
+\documentclass[dvipdfmx,a4paper]{jarticle}
 \usepackage{float}
 \def\bottomnumber{10}
 \def\bottomfraction{0.999}
+\makeatletter
+%\@ifl@t@r\fmtversion{2025-06-01}{%
+%  \AssignSocketPlug{build/column/outputbox}{space-floats-footnotes}
+%}{}
 \begin{document}
 \def\A{ああああああああああああああああ}
 \def\B{\A\A\A\A\A\footnote{「ほげ\thefootnote}}
@@ -14,14 +18,21 @@
   \end{figure}}
 \def\D{\C}
 
-\textfloatsep=0pt
-\floatsep=0pt
-\ \the\textwidth, \the\textheight, \the\topmargin, \the\baselineskip, \the\oddsidemargin\par
+\textfloatsep=10pt
+\floatsep=10pt
+\ \the\textwidth, \the\textheight, \the\topmargin, \the\baselineskip, \the\oddsidemargin. \fmtversion\par
 
-\D\D\D\D\D\D\D
+\flushbottom
+\D\D\D\D\D\D
+\newpage
+\D\D\D\D\D\D
 
 \newpage
-\D\D\D\D\D\D\D\D\D\D\D\D
+\raggedbottom
+\D\D\D\D\D\D
+\newpage
+\D\D\D\D\D\D
+
 \D\D\D\D\D\D\D\D\D\D\D\D
 \end{document}
 
