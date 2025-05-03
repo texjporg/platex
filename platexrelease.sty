@@ -2678,7 +2678,7 @@ of this package available from CTAN}
 \RemoveFromHook{build/page/reset}[platex.tombow]
 \AddToHook{build/page/reset}[platex.tombow]{%
    \@@topmargin\topmargin
-   \iftombow\typeout{AAA! \the\oddsidemargin}
+   \iftombow
      \@@paperwidth\paperwidth
      \advance\@@paperwidth 2\dimexpr\@tombowbleed\relax
      \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
@@ -2690,7 +2690,7 @@ of this package available from CTAN}
 }
 \let\@tombowreset@@paper\@undefined
 \AddToHook{shipout/background}[platex.tombow]{%
-  \put(72.27,-72.27){\typeout{AAA}\lineskip\z@skip\lineskiplimit\z@\@outputtombow}%
+  \put(72.27,-72.27){\lineskip\z@skip\lineskiplimit\z@\@outputtombow}%
 }
 \plEndIncludeInRelease
 \plIncludeInRelease{2018/05/20}{\@tombowreset@@paper}

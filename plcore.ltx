@@ -1998,7 +1998,7 @@
 \RemoveFromHook{build/page/reset}[platex.tombow]
 \AddToHook{build/page/reset}[platex.tombow]{%
    \@@topmargin\topmargin
-   \iftombow\typeout{AAA! \the\oddsidemargin}
+   \iftombow
      \@@paperwidth\paperwidth
      \advance\@@paperwidth 2\dimexpr\@tombowbleed\relax
      \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
@@ -2010,7 +2010,7 @@
 }
 \let\@tombowreset@@paper\@undefined
 \AddToHook{shipout/background}[platex.tombow]{%
-  \put(72.27,-72.27){\typeout{AAA}\lineskip\z@skip\lineskiplimit\z@\@outputtombow}%
+  \put(72.27,-72.27){\lineskip\z@skip\lineskiplimit\z@\@outputtombow}%
 }
 \AddToHook{build/page/reset}[platex]{%
   \iftdir
