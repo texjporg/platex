@@ -1,6 +1,6 @@
 #!/bin/bash
 make platex.ltx plcore.ltx platexrelease.sty
-platex-dev -ini -etex platex.ini
+platex-dev --progname=platex-dev  -ini -etex platex.ini
 yes | platex pldocs.ins
 #platex -fmt=./platex pldoc
 #dvipdfmx pldoc

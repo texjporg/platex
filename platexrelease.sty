@@ -20,7 +20,7 @@
 \edef\p@known@latexreleaseversion
    {2022-11-01}
 \edef\platexreleaseversion
-   {2023-02-14}
+   {2025-05-03}
 \newif\if@plincludeinrelease
 \@plincludeinreleasefalse
 \def\plIncludeInRelease#1{%
@@ -2437,15 +2437,17 @@ of this package available from CTAN}
     \fi
   \fi}
 \plEndIncludeInRelease
-\plIncludeInRelease{2025/06/01}%
+\plIncludeInRelease{2025/05/03}%
                    {floats-footnotes-platex plug}{}%
-\NewSocketPlug {build/column/outputbox}{floats-footnotes-platex} {%
-  \@outputbox@reinsertbskip
-  \@outputbox@attachfloats
-  \@if@footnotes@TF
-    {\@outputbox@append{\@textbottom}\let\@textbottom\relax}%
-    {}%
-  \@outputbox@appendfootnotes
+\IfSocketPlugExistsTF{build/column/outputbox}{floats-footnotes-platex} {}{%
+  \NewSocketPlug {build/column/outputbox}{floats-footnotes-platex} {%
+    \@outputbox@reinsertbskip
+    \@outputbox@attachfloats
+    \@if@footnotes@TF
+      {\@outputbox@append{\@textbottom}\let\@textbottom\relax}%
+      {}%
+    \@outputbox@appendfootnotes
+  }
 }
 \AssignSocketPlug{build/column/outputbox}{floats-footnotes-platex}
 \plEndIncludeInRelease
@@ -2453,7 +2455,7 @@ of this package available from CTAN}
   \ifydir\else\vbox{\pdfprimitive\everypar{}\hskip\z@}\fi}
 \def\pltx@adjust@wd@outputbox@vtryfc{%
   \ifydir\else\pdfprimitive\everypar{}\hskip\z@\fi}
-\plIncludeInRelease{2025/06/01}%
+\plIncludeInRelease{2025/05/03}%
                    {build/page/reset hook}{}%
 \def \@make@normalcolbox {%
    \setbox\@outputbox \vbox to\@colht {%
@@ -2671,6 +2673,26 @@ of this package available from CTAN}
   \fi
 }
 \plEndIncludeInRelease
+\plIncludeInRelease{2025/05/03}{\@tombowreset@@paper}
+                   {Macro separated}%
+\RemoveFromHook{build/page/reset}[platex.tombow]
+\AddToHook{build/page/reset}[platex.tombow]{%
+   \@@topmargin\topmargin
+   \iftombow\typeout{AAA! \the\oddsidemargin}
+     \@@paperwidth\paperwidth
+     \advance\@@paperwidth 2\dimexpr\@tombowbleed\relax
+     \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
+     \advance\@@paperheight 2\dimexpr\@tombowbleed\relax
+     \advance\@@topmargin 1in\relax\advance\topmargin 1in\relax
+     \advance\oddsidemargin 1in\relax
+     \advance\evensidemargin 1in\relax
+   \fi
+}
+\let\@tombowreset@@paper\@undefined
+\AddToHook{shipout/background}[platex.tombow]{%
+  \put(72.27,-72.27){\typeout{AAA}\lineskip\z@skip\lineskiplimit\z@\@outputtombow}%
+}
+\plEndIncludeInRelease
 \plIncludeInRelease{2018/05/20}{\@tombowreset@@paper}
                    {Macro separated}%
 \def\@tombowreset@@paper{%
@@ -2688,7 +2710,7 @@ of this package available from CTAN}
                    {Macro separated}%
 \let\@tombowreset@@paper\@undefined
 \plEndIncludeInRelease
-\plIncludeInRelease{2025/06/01}%
+\plIncludeInRelease{2025/05/03}%
                    {build/page/reset hook}{}%
 \AddToHook{build/page/reset}[platex]{%
   \iftdir
@@ -2699,7 +2721,7 @@ of this package available from CTAN}
   \fi
 }
 \plEndIncludeInRelease
-\plIncludeInRelease{2025/06/01}%
+\plIncludeInRelease{2025/05/03}%
                    {\@outputpage}{}%
 \def \@outputpage {%
   \UseHook {build/page/before}%
@@ -2710,7 +2732,7 @@ of this package available from CTAN}
   \global\let\@@if@newlist\if@newlist
   \global\@newlistfalse
   \@parboxrestore
-    \UseHook {build/page/reset}%
+  \UseHook {build/page/reset}%
   \shipout \vbox{%
     \yoko \set@typeset@protect %<== pLaTeX
     \aftergroup \endgroup
@@ -2730,7 +2752,7 @@ of this package available from CTAN}
       \let \@themargin \evensidemargin
     \fi
   \fi
-  \@tombowreset@@paper\reset@font %<== pLaTeX tombow
+  \reset@font
   \normalsize
   \normalsfcodes
   \let \label \@gobble@with@sphack@om
@@ -2739,8 +2761,8 @@ of this package available from CTAN}
   \baselineskip \z@skip
   \lineskip \z@skip
   \lineskiplimit \z@
-    \@begindvi \@outputtombow %<== pLaTeX tombow
-    \vskip \@@topmargin %<== pLaTeX tombow
+    \@begindvi
+    \vskip \topmargin
     \moveright\@themargin \vbox {%
       \setbox\@tempboxa \vbox to\headheight {%
         \vfil

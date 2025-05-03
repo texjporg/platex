@@ -504,16 +504,18 @@
 % 従来からの\pLaTeX の挙動は、\LaTeXe~2025-06-01で標準で定義されているプラグの
 % どれとも一致しないようなので，新たにプラグを作成することにしました。
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2025/06/01}%
+%<platexrelease>\plIncludeInRelease{2025/05/03}%
 %<platexrelease>                   {floats-footnotes-platex plug}{}%
 %<*plcore|platexrelease>
-\NewSocketPlug {build/column/outputbox}{floats-footnotes-platex} {%
-  \@outputbox@reinsertbskip
-  \@outputbox@attachfloats
-  \@if@footnotes@TF
-    {\@outputbox@append{\@textbottom}\let\@textbottom\relax}%
-    {}%
-  \@outputbox@appendfootnotes
+\IfSocketPlugExistsTF{build/column/outputbox}{floats-footnotes-platex} {}{%
+  \NewSocketPlug {build/column/outputbox}{floats-footnotes-platex} {%
+    \@outputbox@reinsertbskip
+    \@outputbox@attachfloats
+    \@if@footnotes@TF
+      {\@outputbox@append{\@textbottom}\let\@textbottom\relax}%
+      {}%
+    \@outputbox@appendfootnotes
+  }
 }
 \AssignSocketPlug{build/column/outputbox}{floats-footnotes-platex}
 %</plcore|platexrelease>
@@ -572,7 +574,7 @@
 %
 % \begin{macro}{\@make@normalcolbox}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2025/06/01}%
+%<platexrelease>\plIncludeInRelease{2025/05/03}%
 %<platexrelease>                   {build/page/reset hook}{}%
 %<*plcore|platexrelease>
 \def \@make@normalcolbox {%
@@ -1128,27 +1130,45 @@
 %
 % \begin{macro}{\@tombowreset@@paper}
 % トンボ出力オプションが指定されている場合に
-% 用紙サイズを再設定する命令です。
-% |\@outputpage|へ加える変更を簡潔にするため、分離した上で
-% |\@tombowbleed|を使うようにしました。
+% 用紙サイズを再設定する命令でしたが、|build/page/reset|フックに統合しました。
 % \changes{v1.2z}{2018/05/13}{コマンドに分離、さらに
 %    bleed幅を\cs{@tombowbleed}に切り出し}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2018/05/20}{\@tombowreset@@paper}
+%<platexrelease>\plIncludeInRelease{2025/05/03}{\@tombowreset@@paper}
 %<platexrelease>                   {Macro separated}%
 %<*plcore|platexrelease>
-\def\@tombowreset@@paper{%
-     \@@topmargin\topmargin
-     \iftombow
-       \@@paperwidth\paperwidth
-       \advance\@@paperwidth 2\dimexpr\@tombowbleed\relax
-       \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
-       \advance\@@paperheight 2\dimexpr\@tombowbleed\relax
-       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
-     \fi
+\RemoveFromHook{build/page/reset}[platex.tombow]
+\AddToHook{build/page/reset}[platex.tombow]{%
+   \@@topmargin\topmargin
+   \iftombow\typeout{AAA! \the\oddsidemargin}
+     \@@paperwidth\paperwidth
+     \advance\@@paperwidth 2\dimexpr\@tombowbleed\relax
+     \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
+     \advance\@@paperheight 2\dimexpr\@tombowbleed\relax
+     \advance\@@topmargin 1in\relax\advance\topmargin 1in\relax 
+     \advance\oddsidemargin 1in\relax
+     \advance\evensidemargin 1in\relax
+   \fi
+}
+\let\@tombowreset@@paper\@undefined
+\AddToHook{shipout/background}[platex.tombow]{%
+  \put(72.27,-72.27){\typeout{AAA}\lineskip\z@skip\lineskiplimit\z@\@outputtombow}%
 }
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2018/05/20}{\@tombowreset@@paper}
+%<platexrelease>                   {Macro separated}%
+%<platexrelease>\def\@tombowreset@@paper{%
+%<platexrelease>     \@@topmargin\topmargin
+%<platexrelease>     \iftombow
+%<platexrelease>       \@@paperwidth\paperwidth
+%<platexrelease>       \advance\@@paperwidth 2\dimexpr\@tombowbleed\relax
+%<platexrelease>       \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
+%<platexrelease>       \advance\@@paperheight 2\dimexpr\@tombowbleed\relax
+%<platexrelease>       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
+%<platexrelease>     \fi
+%<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@tombowreset@@paper}
 %<platexrelease>                   {Macro separated}%
@@ -1159,12 +1179,11 @@
 %
 %
 % \subsection{出力ルーチン}
-% ここで実際にトンボを出力します。
 %
 % |\textwidth|と|\textheight|の交換は、新設された|build/page/reset|フック内で
 % 行います。
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2025/06/01}%
+%<platexrelease>\plIncludeInRelease{2025/05/03}%
 %<platexrelease>                   {build/page/reset hook}{}%
 %<*plcore|platexrelease>
 \AddToHook{build/page/reset}[platex]{%
@@ -1182,7 +1201,7 @@
 % \begin{macro}{\@outputpage}
 % \changes{v1.2a}{2001/09/26}{\LaTeX\ \texttt{!<2001/06/01!>}に対応}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2025/06/01}%
+%<platexrelease>\plIncludeInRelease{2025/05/03}%
 %<platexrelease>                   {\@outputpage}{}%
 %<*plcore|platexrelease>
 \def \@outputpage {%
@@ -1194,7 +1213,7 @@
   \global\let\@@if@newlist\if@newlist
   \global\@newlistfalse
   \@parboxrestore
-    \UseHook {build/page/reset}%
+  \UseHook {build/page/reset}%
   \shipout \vbox{%
     \yoko \set@typeset@protect %<== pLaTeX
     \aftergroup \endgroup
@@ -1214,13 +1233,7 @@
       \let \@themargin \evensidemargin
     \fi
   \fi
-%    \end{macrocode}
-% トンボ出力オプションが指定されている場合、ここで用紙サイズを再設定します。
-% \TeX の加える左と上部の1インチは、トンボの内側に入ります。
-% \changes{v1.1a}{1995/11/10}{\cs{topmargin}が反映されないバグを修正}
-% \changes{v1.2z}{2018/05/13}{\cs{@tombowreset@@paper}コマンドに分離}
-%    \begin{macrocode}
-  \@tombowreset@@paper\reset@font %<== pLaTeX tombow
+  \reset@font
   \normalsize
   \normalsfcodes
   \let \label \@gobble@with@sphack@om
@@ -1229,11 +1242,8 @@
   \baselineskip \z@skip
   \lineskip \z@skip
   \lineskiplimit \z@
-%    \end{macrocode}
-% 実際にトンボを出力します。
-%    \begin{macrocode}
-    \@begindvi \@outputtombow %<== pLaTeX tombow
-    \vskip \@@topmargin %<== pLaTeX tombow
+    \@begindvi
+    \vskip \topmargin
     \moveright\@themargin \vbox {%
       \setbox\@tempboxa \vbox to\headheight {%
         \vfil

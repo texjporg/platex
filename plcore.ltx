@@ -34,7 +34,7 @@
 \fi
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2023-02-14}
+   {2025-05-03}
 \def\ppatch@level{1}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
@@ -1829,13 +1829,15 @@
     \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \null
     \ignorespaces
   \fi}
-\NewSocketPlug {build/column/outputbox}{floats-footnotes-platex} {%
-  \@outputbox@reinsertbskip
-  \@outputbox@attachfloats
-  \@if@footnotes@TF
-    {\@outputbox@append{\@textbottom}\let\@textbottom\relax}%
-    {}%
-  \@outputbox@appendfootnotes
+\IfSocketPlugExistsTF{build/column/outputbox}{floats-footnotes-platex} {}{%
+  \NewSocketPlug {build/column/outputbox}{floats-footnotes-platex} {%
+    \@outputbox@reinsertbskip
+    \@outputbox@attachfloats
+    \@if@footnotes@TF
+      {\@outputbox@append{\@textbottom}\let\@textbottom\relax}%
+      {}%
+    \@outputbox@appendfootnotes
+  }
 }
 \AssignSocketPlug{build/column/outputbox}{floats-footnotes-platex}
 \def\pltx@adjust@wd@outputbox{%
@@ -1993,15 +1995,22 @@
 \newdimen\@@paperheight
 \newdimen\@@paperwidth
 \newdimen\@@topmargin
-\def\@tombowreset@@paper{%
-     \@@topmargin\topmargin
-     \iftombow
-       \@@paperwidth\paperwidth
-       \advance\@@paperwidth 2\dimexpr\@tombowbleed\relax
-       \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
-       \advance\@@paperheight 2\dimexpr\@tombowbleed\relax
-       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
-     \fi
+\RemoveFromHook{build/page/reset}[platex.tombow]
+\AddToHook{build/page/reset}[platex.tombow]{%
+   \@@topmargin\topmargin
+   \iftombow\typeout{AAA! \the\oddsidemargin}
+     \@@paperwidth\paperwidth
+     \advance\@@paperwidth 2\dimexpr\@tombowbleed\relax
+     \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
+     \advance\@@paperheight 2\dimexpr\@tombowbleed\relax
+     \advance\@@topmargin 1in\relax\advance\topmargin 1in\relax
+     \advance\oddsidemargin 1in\relax
+     \advance\evensidemargin 1in\relax
+   \fi
+}
+\let\@tombowreset@@paper\@undefined
+\AddToHook{shipout/background}[platex.tombow]{%
+  \put(72.27,-72.27){\typeout{AAA}\lineskip\z@skip\lineskiplimit\z@\@outputtombow}%
 }
 \AddToHook{build/page/reset}[platex]{%
   \iftdir
@@ -2020,7 +2029,7 @@
   \global\let\@@if@newlist\if@newlist
   \global\@newlistfalse
   \@parboxrestore
-    \UseHook {build/page/reset}%
+  \UseHook {build/page/reset}%
   \shipout \vbox{%
     \yoko \set@typeset@protect %<== pLaTeX
     \aftergroup \endgroup
@@ -2040,7 +2049,7 @@
       \let \@themargin \evensidemargin
     \fi
   \fi
-  \@tombowreset@@paper\reset@font %<== pLaTeX tombow
+  \reset@font
   \normalsize
   \normalsfcodes
   \let \label \@gobble@with@sphack@om
@@ -2049,8 +2058,8 @@
   \baselineskip \z@skip
   \lineskip \z@skip
   \lineskiplimit \z@
-    \@begindvi \@outputtombow %<== pLaTeX tombow
-    \vskip \@@topmargin %<== pLaTeX tombow
+    \@begindvi
+    \vskip \topmargin
     \moveright\@themargin \vbox {%
       \setbox\@tempboxa \vbox to\headheight {%
         \vfil
