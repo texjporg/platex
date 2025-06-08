@@ -504,7 +504,7 @@
 % 従来からの\pLaTeX の挙動は、\LaTeXe~2025-06-01で標準で定義されているプラグの
 % どれとも一致しないようなので，新たにプラグを作成することにしました。
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2025/05/03}%
+%<platexrelease>\plIncludeInRelease{2025/06/01}%
 %<platexrelease>                   {floats-footnotes-platex plug}{}%
 %<*plcore|platexrelease>
 \IfSocketPlugExistsTF{build/column/outputbox}{floats-footnotes-platex} {}{%
@@ -572,9 +572,150 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\@make}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2025/06/01}{\@makecol}
+%<platexrelease>                   {No more redefining}%
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2017/04/08}{\@makecol}
+%<platexrelease>                   {Take into account depth of footnote}%
+%<platexrelease>\gdef\@makecol{%
+%<platexrelease>   \setbox\@outputbox\box\@cclv%
+%<platexrelease>   \let\@elt\relax % added on LaTeX (ltoutput.dtx 2003/12/16 v1.2k)
+%<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
+%<platexrelease>   \global \let \@midlist \@empty
+%<platexrelease>   \@combinefloats
+%<platexrelease>   \let\pltx@textbottom\@textbottom % save (pLaTeX 2017/02/25)
+%<platexrelease>   \ifvoid\footins\else % changed (pLaTeX 2017/02/25)
+%<platexrelease>     \setbox\@outputbox \vbox {%
+%<platexrelease>       \boxmaxdepth \@maxdepth
+%<platexrelease>       \unvbox \@outputbox
+%<platexrelease>       \@textbottom % inserted here (pLaTeX 2017/02/25)
+%<platexrelease>       \vskip \skip\footins
+%<platexrelease>       \color@begingroup
+%<platexrelease>         \normalcolor
+%<platexrelease>         \footnoterule
+%<platexrelease>         \unvbox \footins
+%<platexrelease>       \color@endgroup
+%<platexrelease>       }%
+%<platexrelease>       \let\@textbottom\relax % disable temporarily (pLaTeX 2017/02/25)
+%<platexrelease>   \fi
+%<platexrelease>   \ifvbox\@kludgeins
+%<platexrelease>     \@makespecialcolbox
+%<platexrelease>   \else
+%<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
+%<platexrelease>       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+%<platexrelease>       \@texttop
+%<platexrelease>       \dimen@ \dp\@outputbox
+%<platexrelease>       \unvbox \@outputbox
+%<platexrelease>       \pltx@adjust@wd@outputbox
+%<platexrelease>       \vskip -\dimen@
+%<platexrelease>       \@textbottom
+%<platexrelease>       }%
+%<platexrelease>   \fi
+%<platexrelease>   \let\@textbottom\pltx@textbottom % restore (pLaTeX 2017/02/25)
+%<platexrelease>   \global \maxdepth \@maxdepth
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/09/03}{\@makecol}
+%<platexrelease>                   {Avoid infinite loop}%
+%<platexrelease>\gdef\@makecol{%
+%<platexrelease>   \setbox\@outputbox\box\@cclv%
+%<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
+%<platexrelease>   \global \let \@midlist \@empty
+%<platexrelease>   \@combinefloats
+%<platexrelease>   \ifvbox\@kludgeins
+%<platexrelease>     \@makespecialcolbox
+%<platexrelease>   \else
+%<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
+%<platexrelease>       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+%<platexrelease>       \@texttop
+%<platexrelease>       \dimen@ \dp\@outputbox
+%<platexrelease>       \unvbox \@outputbox
+%<platexrelease>       \iftdir\vbox{\hskip\z@}\fi
+%<platexrelease>       \vskip -\dimen@
+%<platexrelease>       \@textbottom
+%<platexrelease>       \ifvoid\footins\else % for pLaTeX
+%<platexrelease>         \vskip \skip\footins
+%<platexrelease>         \color@begingroup
+%<platexrelease>            \normalcolor
+%<platexrelease>            \footnoterule
+%<platexrelease>            \unvbox \footins
+%<platexrelease>         \color@endgroup
+%<platexrelease>       \fi
+%<platexrelease>       }%
+%<platexrelease>   \fi
+%<platexrelease>   \global \maxdepth \@maxdepth
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2016/04/17}{\@makecol}
+%<platexrelease>                   {Adjust for \dp\@outputbox in tate mode}%
+%<platexrelease>\gdef\@makecol{%
+%<platexrelease>   \setbox\@outputbox\box\@cclv%
+%<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
+%<platexrelease>   \global \let \@midlist \@empty
+%<platexrelease>   \@combinefloats
+%<platexrelease>   \ifvbox\@kludgeins
+%<platexrelease>     \@makespecialcolbox
+%<platexrelease>   \else
+%<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
+%<platexrelease>       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+%<platexrelease>       \@texttop
+%<platexrelease>       \dimen@ \dp\@outputbox
+%<platexrelease>       \unvbox \@outputbox
+%<platexrelease>       \iftdir\hskip\z@\fi
+%<platexrelease>       \vskip -\dimen@
+%<platexrelease>       \@textbottom
+%<platexrelease>       \ifvoid\footins\else % for pLaTeX
+%<platexrelease>         \vskip \skip\footins
+%<platexrelease>         \color@begingroup
+%<platexrelease>            \normalcolor
+%<platexrelease>            \footnoterule
+%<platexrelease>            \unvbox \footins
+%<platexrelease>         \color@endgroup
+%<platexrelease>       \fi
+%<platexrelease>       }%
+%<platexrelease>   \fi
+%<platexrelease>   \global \maxdepth \@maxdepth
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}{\@makecol}
+%<platexrelease>                   {ASCII Corporation original}%
+%<platexrelease>\gdef\@makecol{%
+%<platexrelease>   \setbox\@outputbox\box\@cclv%
+%<platexrelease>   \xdef\@freelist{\@freelist\@midlist}%
+%<platexrelease>   \global \let \@midlist \@empty
+%<platexrelease>   \@combinefloats
+%<platexrelease>   \ifvbox\@kludgeins
+%<platexrelease>     \@makespecialcolbox
+%<platexrelease>   \else
+%<platexrelease>     \setbox\@outputbox \vbox to\@colht {%
+%<platexrelease>       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+%<platexrelease>       \@texttop
+%<platexrelease>       \dimen@ \dp\@outputbox
+%<platexrelease>       \unvbox \@outputbox
+%<platexrelease>       \iftdir\hskip\z@
+%<platexrelease>       \else\vskip -\dimen@\fi
+%<platexrelease>       \@textbottom
+%<platexrelease>       \ifvoid\footins\else % for pLaTeX
+%<platexrelease>         \vskip \skip\footins
+%<platexrelease>         \color@begingroup
+%<platexrelease>            \normalcolor
+%<platexrelease>            \footnoterule
+%<platexrelease>            \unvbox \footins
+%<platexrelease>         \color@endgroup
+%<platexrelease>       \fi
+%<platexrelease>       }%
+%<platexrelease>   \fi
+%<platexrelease>   \global \maxdepth \@maxdepth
+%<platexrelease>}
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\@make@normalcolbox}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2025/05/03}%
+%<platexrelease>\plIncludeInRelease{2025/06/01}%
 %<platexrelease>                   {build/page/reset hook}{}%
 %<*plcore|platexrelease>
 \def \@make@normalcolbox {%
@@ -1135,7 +1276,7 @@
 %    bleed幅を\cs{@tombowbleed}に切り出し}
 %    \begin{macrocode}
 %</plcore>
-%<platexrelease>\plIncludeInRelease{2025/05/03}{\@tombowreset@@paper}
+%<platexrelease>\plIncludeInRelease{2025/06/01}{\@tombowreset@@paper}
 %<platexrelease>                   {Macro separated}%
 %<*plcore|platexrelease>
 \RemoveFromHook{build/page/reset}[platex.tombow]
@@ -1183,7 +1324,7 @@
 % |\textwidth|と|\textheight|の交換は、新設された|build/page/reset|フック内で
 % 行います。
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2025/05/03}%
+%<platexrelease>\plIncludeInRelease{2025/06/01}%
 %<platexrelease>                   {build/page/reset hook}{}%
 %<*plcore|platexrelease>
 \AddToHook{build/page/reset}[platex]{%
@@ -1201,7 +1342,7 @@
 % \begin{macro}{\@outputpage}
 % \changes{v1.2a}{2001/09/26}{\LaTeX\ \texttt{!<2001/06/01!>}に対応}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2025/05/03}%
+%<platexrelease>\plIncludeInRelease{2025/06/01}%
 %<platexrelease>                   {\@outputpage}{}%
 %<*plcore|platexrelease>
 \def \@outputpage {%
@@ -1282,6 +1423,71 @@
    \UseHook {build/page/after}%
 }
 %</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2018/05/20}{\@outputpage}
+%<platexrelease>                   {Use \@tombowreset@@paper}%
+%<platexrelease>\def\@outputpage{%
+%<platexrelease>\begingroup % the \endgroup is put in by \aftergroup
+%<platexrelease>  \iftdir
+%<platexrelease>    \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
+%<platexrelease>  \fi
+%<platexrelease>  \let \protect \noexpand
+%<platexrelease>  \language\document@default@language
+%<platexrelease>  \@resetactivechars
+%<platexrelease>  \global\let\@@if@newlist\if@newlist
+%<platexrelease>  \global\@newlistfalse
+%<platexrelease>  \@parboxrestore
+%<platexrelease>  \shipout\vbox{\yoko
+%<platexrelease>    \set@typeset@protect
+%<platexrelease>    \aftergroup\endgroup
+%<platexrelease>    \aftergroup\set@typeset@protect
+%<platexrelease>     \if@specialpage
+%<platexrelease>       \global\@specialpagefalse\@nameuse{ps@\@specialstyle}%
+%<platexrelease>     \fi
+%<platexrelease>     \if@twoside
+%<platexrelease>       \ifodd\count\z@ \let\@thehead\@oddhead \let\@thefoot\@oddfoot
+%<platexrelease>          \iftdir\let\@themargin\evensidemargin
+%<platexrelease>          \else\let\@themargin\oddsidemargin\fi
+%<platexrelease>       \else \let\@thehead\@evenhead
+%<platexrelease>          \let\@thefoot\@evenfoot
+%<platexrelease>           \iftdir\let\@themargin\oddsidemargin
+%<platexrelease>           \else\let\@themargin\evensidemargin\fi
+%<platexrelease>     \fi\fi
+%<platexrelease>     \@tombowreset@@paper
+%<platexrelease>     \reset@font
+%<platexrelease>     \normalsize
+%<platexrelease>     \normalsfcodes
+%<platexrelease>     \let\label\@gobble
+%<platexrelease>     \let\index\@gobble
+%<platexrelease>     \let\glossary\@gobble
+%<platexrelease>     \baselineskip\z@skip \lineskip\z@skip \lineskiplimit\z@
+%<platexrelease>    \@begindvi
+%<platexrelease>    \@outputtombow
+%<platexrelease>    \vskip \@@topmargin
+%<platexrelease>    \moveright\@themargin\vbox{%
+%<platexrelease>      \setbox\@tempboxa \vbox to\headheight{%
+%<platexrelease>        \vfil
+%<platexrelease>        \color@hbox
+%<platexrelease>          \normalcolor
+%<platexrelease>          \hb@xt@\textwidth{\@thehead}%
+%<platexrelease>        \color@endbox
+%<platexrelease>      }%                        %% 22 Feb 87
+%<platexrelease>      \dp\@tempboxa \z@
+%<platexrelease>      \box\@tempboxa
+%<platexrelease>      \vskip \headsep
+%<platexrelease>      \box\@outputbox
+%<platexrelease>      \baselineskip \footskip
+%<platexrelease>      \color@hbox
+%<platexrelease>        \normalcolor
+%<platexrelease>        \hb@xt@\textwidth{\@thefoot}%
+%<platexrelease>      \color@endbox
+%<platexrelease>    }%
+%<platexrelease>  }%
+%<platexrelease>  \global\let\if@newlist\@@if@newlist
+%<platexrelease>  \global \@colht \textheight
+%<platexrelease>  \stepcounter{page}%
+%<platexrelease>  \let\firstmark\botmark
+%<platexrelease>}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2017/04/08}{\@outputpage}
 %<platexrelease>                   {Reset language for hyphenation}%
