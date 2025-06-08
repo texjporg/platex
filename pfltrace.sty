@@ -17,6 +17,8 @@
 \ProvidesPackage{pfltrace}
      [2016/05/20 v1.2e Standard pLaTeX package (float tracing)]
 \RequirePackageWithOptions{fltrace}
+\plIncludeInRelease{2025/06/01}{\@makespecialcolbox}
+                   {}%
 \gdef\@makespecialcolbox{%
    \fl@trace{Krudgeins ht \the\ht\@kludgeins\space
                        dp \the\dp\@kludgeins\space
@@ -67,6 +69,65 @@
    {\setbox \@tempboxa \box \@kludgeins}%
      \fl@trace {kludgeins box made void}%
 }
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@makespecialcolbox}
+                   {Original}%
+\gdef\@makespecialcolbox{%
+   \fl@trace{Krudgeins ht \the\ht\@kludgeins\space
+                       dp \the\dp\@kludgeins\space
+                       wd \the\wd\@kludgeins}%
+   \setbox\@outputbox \vbox {%
+     \@texttop
+     \dimen@ \dp\@outputbox
+     \unvbox\@outputbox
+     \vskip-\dimen@
+     }%
+   \@tempdima \@colht
+   \ifdim \wd\@kludgeins>\z@
+     \advance \@tempdima -\ht\@outputbox
+     \advance \@tempdima \pageshrink
+     \fl@trace {Natural ht of col: \the\ht\@outputbox}%
+     \fl@trace {\string \@colht: \the\@colht}%
+     \fl@trace {Pageshrink added: \the\pageshrink}%
+     \fl@trace {Hence, space added: \the\@tempdima}%
+     \setbox\@outputbox \vbox to \@colht {%
+       \unvbox\@outputbox
+       \vskip \@tempdima
+       \@textbottom
+       \ifvoid\footins\else % for pLaTeX
+         \vskip\skip\footins
+         \color@begingroup
+            \normalcolor
+            \footnoterule
+            \unvbox \footins
+         \color@endgroup
+       \fi
+     }%
+   \else
+     \advance \@tempdima -\ht\@kludgeins
+     \fl@trace {Natural ht of col: \the\ht\@outputbox}%
+     \fl@trace {\string \@colht: \the\@colht}%
+     \fl@trace {Extra size added: -\the \ht \@kludgeins}%
+     \fl@trace {Hence, height of inner box: \the\@tempdima}%
+     \fl@trace {Max? pageshrink available: \the\pageshrink}%
+     \setbox \@outputbox \vbox to \@colht {%
+       \vbox to \@tempdima {%
+         \unvbox\@outputbox
+         \@textbottom
+         \ifvoid\footins\else % for pLaTeX
+           \vskip\skip\footins
+           \color@begingroup
+              \normalcolor
+              \footnoterule
+              \unvbox \footins
+           \color@endgroup
+         \fi
+       }\vss}%
+   \fi
+   {\setbox \@tempboxa \box \@kludgeins}%
+     \fl@trace {kludgeins box made void}%
+}
+\plEndIncludeInRelease
 \endinput
 %%
 %% End of file `pfltrace.sty'.

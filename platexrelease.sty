@@ -2604,6 +2604,91 @@ of this package available from CTAN}
       }%
 }
 \plEndIncludeInRelease
+\plIncludeInRelease{2025/06/01}{\@makespecialcolbox}
+                   {}%
+\gdef\@makespecialcolbox{%
+   \@outputbox@append {\vskip-\@outputbox@depth}%
+   \@tempdima \@colht
+   \ifdim \wd\@kludgeins>\z@
+     \advance \@tempdima -\ht\@outputbox
+     \advance \@tempdima \pageshrink
+     \setbox\@outputbox \vbox to \@colht {%
+       \unvbox\@outputbox
+       \vskip \@tempdima
+       \@textbottom
+       \ifvoid\footins\else % for pLaTeX
+         \vskip\skip\footins
+         \color@begingroup
+            \normalcolor
+            \footnoterule
+            \unvbox \footins
+         \color@endgroup
+       \fi
+     }%
+   \else
+     \advance \@tempdima -\ht\@kludgeins
+     \setbox \@outputbox \vbox to \@colht {%
+       \vbox to \@tempdima {%
+         \unvbox\@outputbox
+         \@textbottom
+         \ifvoid\footins\else % for pLaTeX
+           \vskip\skip\footins
+           \color@begingroup
+              \normalcolor
+              \footnoterule
+              \unvbox \footins
+           \color@endgroup
+         \fi
+       }\vss}%
+   \fi
+   {\setbox \@tempboxa \box \@kludgeins}%
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}{\@makespecialcolbox}
+                   {Original}%
+\gdef\@makespecialcolbox{%
+   \setbox\@outputbox \vbox {%
+     \@texttop
+     \dimen@ \dp\@outputbox
+     \unvbox\@outputbox
+     \vskip-\dimen@
+     }%
+   \@tempdima \@colht
+   \ifdim \wd\@kludgeins>\z@
+     \advance \@tempdima -\ht\@outputbox
+     \advance \@tempdima \pageshrink
+     \setbox\@outputbox \vbox to \@colht {%
+       \unvbox\@outputbox
+       \vskip \@tempdima
+       \@textbottom
+       \ifvoid\footins\else % for pLaTeX
+         \vskip\skip\footins
+         \color@begingroup
+            \normalcolor
+            \footnoterule
+            \unvbox \footins
+         \color@endgroup
+       \fi
+     }%
+   \else
+     \advance \@tempdima -\ht\@kludgeins
+     \setbox \@outputbox \vbox to \@colht {%
+       \vbox to \@tempdima {%
+         \unvbox\@outputbox
+         \@textbottom
+         \ifvoid\footins\else % for pLaTeX
+           \vskip\skip\footins
+           \color@begingroup
+              \normalcolor
+              \footnoterule
+              \unvbox \footins
+           \color@endgroup
+         \fi
+       }\vss}%
+   \fi
+   {\setbox \@tempboxa \box \@kludgeins}%
+}
+\plEndIncludeInRelease
 \plIncludeInRelease{2020/10/01}{\@vtryfc}
                                {Empty float}%
 \def\@vtryfc #1{%

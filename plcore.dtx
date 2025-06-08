@@ -760,10 +760,15 @@
 % ベースに作られた外部パッケージから|\@makespecialcolbox|が呼び出される
 % 場合に脚注が消滅するおそれがあります。このため、|\@makespecialcolbox|は
 % 従来のコードのまま維持してあります（害はありません）。
+%
+% \LaTeXe~2025-06-01からマクロの名前が|\@make@specialcolbox|に変更されていますが、
+% 上記の古い外部パッケージのために古い名前で再定義しておくことにします。
 % \changes{v1.2l}{2017/02/25}{\cs{@makecol}を変更したのに
 %    \cs{@makespecialcolbox}を変更しない、という判断について明文化}
 %    \begin{macrocode}
-%<*plcore|fltrace>
+%<platexrelease|fltrace>\plIncludeInRelease{2025/06/01}{\@makespecialcolbox}
+%<platexrelease|fltrace>                   {}%
+%<*plcore|platexrelease|fltrace>
 \gdef\@makespecialcolbox{%
 %<*trace>
    \fl@trace{Krudgeins ht \the\ht\@kludgeins\space
@@ -831,7 +836,74 @@
      \fl@trace {kludgeins box made void}%
 %</trace>
 }
-%</plcore|fltrace>
+%</plcore|platexrelease|fltrace>
+%<platexrelease|fltrace>\plEndIncludeInRelease
+%<platexrelease|fltrace>\plIncludeInRelease{0000/00/00}{\@makespecialcolbox}
+%<platexrelease|fltrace>                   {Original}%
+%<platexrelease|fltrace>\gdef\@makespecialcolbox{%
+%<*trace>
+%<platexrelease|fltrace>   \fl@trace{Krudgeins ht \the\ht\@kludgeins\space
+%<platexrelease|fltrace>                       dp \the\dp\@kludgeins\space
+%<platexrelease|fltrace>                       wd \the\wd\@kludgeins}%
+%</trace>
+%<platexrelease|fltrace>   \setbox\@outputbox \vbox {%
+%<platexrelease|fltrace>     \@texttop
+%<platexrelease|fltrace>     \dimen@ \dp\@outputbox
+%<platexrelease|fltrace>     \unvbox\@outputbox
+%<platexrelease|fltrace>     \vskip-\dimen@
+%<platexrelease|fltrace>     }%
+%<platexrelease|fltrace>   \@tempdima \@colht
+%<platexrelease|fltrace>   \ifdim \wd\@kludgeins>\z@
+%<platexrelease|fltrace>     \advance \@tempdima -\ht\@outputbox
+%<platexrelease|fltrace>     \advance \@tempdima \pageshrink
+%<*trace>
+%<platexrelease|fltrace>     \fl@trace {Natural ht of col: \the\ht\@outputbox}%
+%<platexrelease|fltrace>     \fl@trace {\string \@colht: \the\@colht}%
+%<platexrelease|fltrace>     \fl@trace {Pageshrink added: \the\pageshrink}%
+%<platexrelease|fltrace>     \fl@trace {Hence, space added: \the\@tempdima}%
+%</trace>
+%<platexrelease|fltrace>     \setbox\@outputbox \vbox to \@colht {%
+%<platexrelease|fltrace>       \unvbox\@outputbox
+%<platexrelease|fltrace>       \vskip \@tempdima
+%<platexrelease|fltrace>       \@textbottom
+%<platexrelease|fltrace>       \ifvoid\footins\else % for pLaTeX
+%<platexrelease|fltrace>         \vskip\skip\footins
+%<platexrelease|fltrace>         \color@begingroup
+%<platexrelease|fltrace>            \normalcolor
+%<platexrelease|fltrace>            \footnoterule
+%<platexrelease|fltrace>            \unvbox \footins
+%<platexrelease|fltrace>         \color@endgroup
+%<platexrelease|fltrace>       \fi
+%<platexrelease|fltrace>     }%
+%<platexrelease|fltrace>   \else
+%<platexrelease|fltrace>     \advance \@tempdima -\ht\@kludgeins
+%<*trace>
+%<platexrelease|fltrace>     \fl@trace {Natural ht of col: \the\ht\@outputbox}%
+%<platexrelease|fltrace>     \fl@trace {\string \@colht: \the\@colht}%
+%<platexrelease|fltrace>     \fl@trace {Extra size added: -\the \ht \@kludgeins}%
+%<platexrelease|fltrace>     \fl@trace {Hence, height of inner box: \the\@tempdima}%
+%<platexrelease|fltrace>     \fl@trace {Max? pageshrink available: \the\pageshrink}%
+%</trace>
+%<platexrelease|fltrace>     \setbox \@outputbox \vbox to \@colht {%
+%<platexrelease|fltrace>       \vbox to \@tempdima {%
+%<platexrelease|fltrace>         \unvbox\@outputbox
+%<platexrelease|fltrace>         \@textbottom
+%<platexrelease|fltrace>         \ifvoid\footins\else % for pLaTeX
+%<platexrelease|fltrace>           \vskip\skip\footins
+%<platexrelease|fltrace>           \color@begingroup
+%<platexrelease|fltrace>              \normalcolor
+%<platexrelease|fltrace>              \footnoterule
+%<platexrelease|fltrace>              \unvbox \footins
+%<platexrelease|fltrace>           \color@endgroup
+%<platexrelease|fltrace>         \fi
+%<platexrelease|fltrace>       }\vss}%
+%<platexrelease|fltrace>   \fi
+%<platexrelease|fltrace>   {\setbox \@tempboxa \box \@kludgeins}%
+%<*trace>
+%<platexrelease|fltrace>     \fl@trace {kludgeins box made void}%
+%</trace>
+%<platexrelease|fltrace>}
+%<platexrelease|fltrace>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 %
