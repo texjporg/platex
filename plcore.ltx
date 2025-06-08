@@ -1995,8 +1995,8 @@
 \newdimen\@@paperheight
 \newdimen\@@paperwidth
 \newdimen\@@topmargin
-\RemoveFromHook{build/page/reset}[platex.tombow]
-\AddToHook{build/page/reset}[platex.tombow]{%
+\RemoveFromHook{build/page/reset}[platex/tombow]
+\AddToHook{build/page/reset}[platex/tombow]{%
    \@@topmargin\topmargin
    \iftombow
      \@@paperwidth\paperwidth
@@ -2009,7 +2009,7 @@
    \fi
 }
 \let\@tombowreset@@paper\@undefined
-\AddToHook{shipout/background}[platex.tombow]{%
+\AddToHook{shipout/background}[platex/tombow]{%
   \put(72.27,-72.27){\lineskip\z@skip\lineskiplimit\z@\@outputtombow}%
 }
 \AddToHook{build/page/reset}[platex]{%

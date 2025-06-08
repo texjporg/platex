@@ -2896,8 +2896,8 @@ of this package available from CTAN}
 \plEndIncludeInRelease
 \plIncludeInRelease{2025/06/01}{\@tombowreset@@paper}
                    {Macro separated}%
-\RemoveFromHook{build/page/reset}[platex.tombow]
-\AddToHook{build/page/reset}[platex.tombow]{%
+\RemoveFromHook{build/page/reset}[platex/tombow]
+\AddToHook{build/page/reset}[platex/tombow]{%
    \@@topmargin\topmargin
    \iftombow
      \@@paperwidth\paperwidth
@@ -2910,7 +2910,7 @@ of this package available from CTAN}
    \fi
 }
 \let\@tombowreset@@paper\@undefined
-\AddToHook{shipout/background}[platex.tombow]{%
+\AddToHook{shipout/background}[platex/tombow]{%
   \put(72.27,-72.27){\lineskip\z@skip\lineskiplimit\z@\@outputtombow}%
 }
 \plEndIncludeInRelease
@@ -2926,7 +2926,7 @@ of this package available from CTAN}
        \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
      \fi
 }
-\RemoveFromHook{shipout/background}[platex.tombow]
+\RemoveFromHook{shipout/background}[platex/tombow]
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}{\@tombowreset@@paper}
                    {Macro separated}%

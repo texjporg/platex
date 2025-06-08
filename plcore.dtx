@@ -1351,8 +1351,8 @@
 %<platexrelease>\plIncludeInRelease{2025/06/01}{\@tombowreset@@paper}
 %<platexrelease>                   {Macro separated}%
 %<*plcore|platexrelease>
-\RemoveFromHook{build/page/reset}[platex.tombow]
-\AddToHook{build/page/reset}[platex.tombow]{%
+\RemoveFromHook{build/page/reset}[platex/tombow]
+\AddToHook{build/page/reset}[platex/tombow]{%
    \@@topmargin\topmargin
    \iftombow
      \@@paperwidth\paperwidth
@@ -1365,7 +1365,7 @@
    \fi
 }
 \let\@tombowreset@@paper\@undefined
-\AddToHook{shipout/background}[platex.tombow]{%
+\AddToHook{shipout/background}[platex/tombow]{%
   \put(72.27,-72.27){\lineskip\z@skip\lineskiplimit\z@\@outputtombow}%
 }
 %</plcore|platexrelease>
@@ -1382,7 +1382,7 @@
 %<platexrelease>       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
 %<platexrelease>     \fi
 %<platexrelease>}
-%<platexrelease>\RemoveFromHook{shipout/background}[platex.tombow]
+%<platexrelease>\RemoveFromHook{shipout/background}[platex/tombow]
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}{\@tombowreset@@paper}
 %<platexrelease>                   {Macro separated}%
