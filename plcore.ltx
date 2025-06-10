@@ -2026,10 +2026,17 @@
   \let \protect \noexpand
   \language\document@default@language
   \@resetactivechars
+  \nfss@catcodes
+  \catcode`\$\thr@@
+  \catcode`\_8\relax
+  \catcode`\ 10\relax
+  \catcode`\^^I10\relax
+  \catcode`\~13\relax
+  \catcode`\^^M5\relax
   \global\let\@@if@newlist\if@newlist
   \global\@newlistfalse
   \@parboxrestore
-  \UseHook {build/page/reset}%
+    \UseHook {build/page/reset}%
   \shipout \vbox{%
     \yoko \set@typeset@protect %<== pLaTeX
     \aftergroup \endgroup
