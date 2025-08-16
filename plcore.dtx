@@ -1403,9 +1403,6 @@
 \AddToHook{build/page/reset}[platex]{%
   \iftdir
     \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
-    \let\@themargin\evensidemargin
-    \let\evensidemargin\oddsidemargin
-    \let\oddsidemargin\@themargin
   \fi
 }
 %</plcore|platexrelease>
