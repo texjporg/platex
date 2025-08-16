@@ -35,7 +35,7 @@
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
    {2025-06-01}
-\def\ppatch@level{1}
+\def\ppatch@level{0}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
                    \noexpand\platexNILb}
@@ -2015,9 +2015,6 @@
 \AddToHook{build/page/reset}[platex]{%
   \iftdir
     \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
-    \let\@themargin\evensidemargin
-    \let\evensidemargin\oddsidemargin
-    \let\oddsidemargin\@themargin
   \fi
 }
 \def \@outputpage {%
