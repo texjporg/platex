@@ -2275,7 +2275,9 @@
      \@startfield
      \strut\inhibitglue}
 \gdef\@stopfield{\null\color@endgroup\egroup}
-\newcommand\printglossary{\@input@{\jobname.gls}}
+\AtBeginDocument{%
+  \ifdefined\printglossary\else\newcommand\printglossary{\@input@{\jobname.gls}}\fi
+}
 \newcount\hour
 \newcount\minute
 \ifx\removejfmglue\@undefined

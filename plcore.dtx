@@ -3,7 +3,7 @@
 %
 %  Copyright 1994-2001 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016-2023 Japanese TeX Development Community
+%  Copyright (c) 2016-2025 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -139,6 +139,7 @@
 % \changes{v1.3l}{2021/12/08}{\LaTeXe~2021-11-15に伴う修正}
 % \changes{v1.3m}{2023/02/14}{フロート環境内での組方向変更をplextに誘導}
 % \changes{v1.3n}{2023/02/24}{\cs{marginpar}でエラーが出るバグ修正}
+% \changes{v1.3o}{2025/09/21}{\cs{printglossary}の定義を\cs{AtBeginDocument}内で行うように}
 % \fi
 %
 % \iffalse
@@ -2386,12 +2387,18 @@
 % \LaTeX{}には、なぜか用語集を出力するためのコマンドがありませんので、
 % 追加をします。
 % \changes{v1.1e}{1996/02/17}{\cs{printglossary}を追加}
+% \changes{v1.3o}{2025/09/21}{\cs{printglossary}の定義を\cs{AtBeginDocument}内で行うように}
 %
 % \begin{macro}{\printglossary}
 % \cs{printglossary}コマンドは、単に拡張子が\texttt{gls}のファイルを
 % 読み込むだけです。このファイルの生成には、mendexなどを用います。
+%
+% \cs{printglossary}を独自に定義するクラス・パッケージもあるため、
+% \cs{AtBeginDocument}内で「未定義ならば新たに定義」とするようにしました。
 %    \begin{macrocode}
-\newcommand\printglossary{\@input@{\jobname.gls}}
+\AtBeginDocument{%
+  \ifdefined\printglossary\else\newcommand\printglossary{\@input@{\jobname.gls}}\fi
+}
 %    \end{macrocode}
 % \end{macro}
 %
