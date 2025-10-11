@@ -1351,20 +1351,19 @@
 %<platexrelease>\plIncludeInRelease{2025/06/01}{\@tombowreset@@paper}
 %<platexrelease>                   {Macro separated}%
 %<*plcore|platexrelease>
-\RemoveFromHook{build/page/reset}[platex/tombow]
-\AddToHook{build/page/reset}[platex/tombow]{%
-   \@@topmargin\topmargin
+\def\@tombowreset@@paper{%
+   \@@topmargin \topmargin % only for compatibility
    \iftombow
-     \@@paperwidth\paperwidth
-     \advance\@@paperwidth 2\dimexpr\@tombowbleed\relax
-     \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
-     \advance\@@paperheight 2\dimexpr\@tombowbleed\relax
-     \advance\@@topmargin 1in\relax\advance\topmargin 1in\relax 
+     \@@paperwidth\dimexpr\paperwidth+2\dimexpr\@tombowbleed\relax
+     \@@paperheight\dimexpr\paperheight+10mm+2\dimexpr\@tombowbleed\relax
+     \advance\topmargin 1in\relax
      \advance\oddsidemargin 1in\relax
      \advance\evensidemargin 1in\relax
    \fi
 }
-\let\@tombowreset@@paper\@undefined
+\AddToHook{build/page/reset}[platex/tombow]{%
+   \@tombowreset@@paper
+}
 \AddToHook{shipout/background}[platex/tombow]{%
   \put(72.27,-72.27){\lineskip\z@skip\lineskiplimit\z@\@outputtombow}%
 }
