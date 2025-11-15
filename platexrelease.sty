@@ -225,7 +225,9 @@ of this package available from CTAN}
 %% File: plexpl3.dtx
 \plIncludeInRelease{2020/10/01}%
                    {plexpl3}{Pre-load plexpl3}%
-\RequirePackage{plexpl3}
+\ExplSyntaxOn
+\input plexpl3.ltx
+\ExplSyntaxOff
 \plEndIncludeInRelease
 \plIncludeInRelease{0000/00/00}%
                    {plexpl3}{Not loading plexpl3}%
