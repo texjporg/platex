@@ -11,6 +11,7 @@
 %
 % \iffalse
 % \changes{v1.0}{2020/09/28}{初版：p\TeX{}の条件文を定義}
+% \changes{v1.0a}{2025/11/15}{platexrelease読み込み時にdvips backendが読み込まれてしまうことへの対処}
 % \fi
 %
 % \iffalse
@@ -67,10 +68,17 @@
 %    \end{macrocode}
 %
 % \file{platexrelease}のroll-forwardにも登録します。
+%
+% \cs{RequirePackage}で\file{plexpl3.sty}を読み込むと
+% \file{expl3.sty}読み込み時にdvips backendが読み込まれてしまうため
+% \file{plexpl3.ltx}を直接\cs{input}するようにします。
+% \changes{v1.0a}{2025/11/15}{パッケージではなく\file{plexpl3.ltx}を直接\cs{input}するように変更}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2020/10/01}%
 %<platexrelease>                   {plexpl3}{Pre-load plexpl3}%
-%<platexrelease>\RequirePackage{plexpl3}
+%<platexrelease>\ExplSyntaxOn
+%<platexrelease>\input plexpl3.ltx
+%<platexrelease>\ExplSyntaxOff
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{0000/00/00}%
 %<platexrelease>                   {plexpl3}{Not loading plexpl3}%
