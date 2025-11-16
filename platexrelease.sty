@@ -18,9 +18,9 @@
 %% 
 %% File: plvers.dtx
 \edef\p@known@latexreleaseversion
-   {2022-11-01}
+   {2025-11-01}
 \edef\platexreleaseversion
-   {2025-06-01}
+   {2025-11-01}
 \newif\if@plincludeinrelease
 \@plincludeinreleasefalse
 \def\plIncludeInRelease#1{%
@@ -104,6 +104,12 @@
   \AtEndOfPackage{\def\requestedpLaTeXdate{0}}}
 \let\requestedplpatchdate\pfmtversion
 \ProcessOptions\relax
+\@ifl@t@r\fmtversion{2025/06/01}{}{%
+  \@ifl@t@r\requestedplpatchdate{2025/06/01}{%
+    \def\requestedplpatchdate{2025/05/31}}{}}%
+\@ifl@t@r\fmtversion{2025/11/01}{}{%
+  \@ifl@t@r\requestedplpatchdate{2025/11/01}{%
+    \def\requestedplpatchdate{2025/10/31}}{}}%
 \def\reserved@a{%
 \edef\requestedpLaTeXdate{\the\count@}%
 \reserved@b}
@@ -1495,6 +1501,28 @@ of this package available from CTAN}
 \expandafter \let \csname useroman \endcsname \@undefined
 \expandafter \let \csname usefont \endcsname \@undefined
 \plEndIncludeInRelease
+\plIncludeInRelease{2025/11/01}%
+                   {\normalfont}{Support meta family}%
+\def\set@current@meta@kanjifamily {%
+  \ifx\k@family\mcdef@ult
+    \def\@currentmetakanjifamily{mc}%
+  \else
+    \ifx\k@family\gtdef@ult
+      \def\@currentmetakanjifamily{gt}%
+    \else
+      \def\@currentmetakanjifamily{??}%
+    \fi
+  \fi
+}
+\AddToHook{normalfont}{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
+    \let\delayed@k@adjustment\@empty
+    \set@current@meta@kanjifamily
+}
+\plEndIncludeInRelease
 \plIncludeInRelease{2020/04/12}{\normalfont}
                    {Use \@defaultfamilyhook}%
 \ifnum\pltx@newhook@avail=\z@ % --- for <= 2020-02-02 BEGIN
@@ -1559,9 +1587,6 @@ of this package available from CTAN}
 }
 \fi          % --- for >= 2021-06-01 END
 \fi   % --- for >= 2020-10-01 END
-\edef\@@@temp{\detokenize{nullfont}}\edef\@@@tempa{\fontname\jfont}
-\unless\ifx\@@@temp\@@@tempa\adjustbaseline\fi
-\let\@@@temp\undefined\let\@@@tempa\undefined
 \let\reset@font\normalfont
 \plEndIncludeInRelease
 \plIncludeInRelease{2020/02/02}{\normalfont}
@@ -1936,6 +1961,102 @@ of this package available from CTAN}
 \fi
 %%
 \pltx@reset@catcode@trick
+\plIncludeInRelease{2025/11/01}%
+    {\prepare@family@series@update}{Support meta family}%
+\def\@currentmetakanjifamily{??}
+\def\prepare@family@series@update#1#2{%
+ \def\@currentmetafamily{#1}%
+ \if@forced@series
+   \romanfamily#2%
+ \else
+   \expand@font@defaults
+   \let\target@series@value\@empty
+   \expandafter\edef\csname ??def@ult\endcsname{\f@family}%
+   \let\@elt\update@series@target@value
+      \@meta@family@list
+      \@elt{??}%
+   \let\@elt\relax
+   \fontfamily#2%
+   \ifx\target@series@value\@empty
+   \else
+     \ifx \f@series\target@series@value
+     \else
+       \maybe@load@fontshape
+       \series@maybe@drop@one@m\target@series@value\f@series
+     \fi
+   \fi
+ \fi
+}
+\def\prepare@family@series@update@kanji#1#2{%
+\def\@currentmetakanjifamily{#1}%
+ \if@forced@series@kanji
+   \kanjifamily#2%
+ \else
+   \expand@font@defaults
+   \let\target@series@value\@empty
+   \expandafter\edef\csname ??def@ult\endcsname{\k@family}%
+   \let\@elt\update@series@target@value@kanji
+      \@meta@family@list@kanji
+      \@elt{??}%
+   \let\@elt\relax
+   \kanjifamily#2%
+   \ifx\target@series@value\@empty
+   \else
+     \ifx \k@series\target@series@value
+     \else
+       \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+         \maybe@load@fontshape\endgroup
+       \let\k@series\target@series@value
+     \fi
+   \fi
+ \fi
+}
+\def\update@series@target@value@kanji#1{%
+  \def\reserved@a{#1}%
+  \ifx\@currentmetakanjifamily\reserved@a   % rm -> rm do nothing
+  \else
+    \expandafter\ifx\csname#1def@ult\endcsname\k@family
+      \let\@elt\@gobble
+      \expandafter\let\expandafter\reserved@b
+                      \csname mdseries@\@currentmetakanjifamily\endcsname
+      \expandafter\let\expandafter\reserved@c
+                      \csname bfseries@\@currentmetakanjifamily\endcsname
+      \expandafter\ifx\csname mdseries@#1\endcsname\k@series
+                                      \let\target@series@value\reserved@b
+      \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
+                                      \let\target@series@value\reserved@c
+      \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b
+      \else\ifx\k@series\bfdef@ult    \let\target@series@value\reserved@c
+      \fi\fi\fi\fi
+    \fi
+  \fi
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}%
+    {\prepare@family@series@update}{Support meta family}%
+\plEndIncludeInRelease
+\plIncludeInRelease{2025/11/01}%
+    {\process@table}{Support metafamily}%
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}%
+    {\process@table}{Support metafamily}%
+\def\pl@process@table{%
+  \romanprocess@table
+  \kanjiprocess@table
+}
+\ifx\process@table\pl@process@table\else
+  \let\romanprocess@table\process@table
+  \def\kanjiprocess@table{%
+    \kanjiencoding\kanjiencodingdefault
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
+  }
+  \let\process@table\pl@process@table
+  \@onlypreamble\romanprocess@table
+  \@onlypreamble\kanjiprocess@table
+\fi
+\plEndIncludeInRelease
 \plIncludeInRelease{2020/02/02}{\DeclareEmphSequence}
                                {Nested emph}%
 \ifx\DeclareEmphSequence\@undefined % old
@@ -2946,20 +3067,37 @@ of this package available from CTAN}
 \def \@outputpage {%
   \UseHook {build/page/before}%
 \begingroup
-  \let \protect \noexpand
   \language\document@default@language
   \@resetactivechars
-  \nfss@catcodes
-  \catcode`\$\thr@@
-  \catcode`\_8\relax
-  \catcode`\ 10\relax
-  \catcode`\^^I10\relax
-  \catcode`\~13\relax
-  \catcode`\^^M5\relax
+   \catcode`\\\z@
+   \catcode`\{\@ne
+   \catcode`\}\tw@
+   \catcode`\$\thr@@
+   \catcode`\&4\relax
+   \catcode`\^^M5\relax
+   \catcode`\#6\relax
+   \catcode`\^7\relax
+   \catcode`\_8\relax
+   \catcode`\ 10\relax
+   \catcode`\^^I10\relax
+   \@makeother\<%
+   \@makeother\>%
+   \@makeother\*%
+   \@makeother\.%
+   \@makeother\-%
+   \@makeother\/%
+   \@makeother\[%
+   \@makeother\]%
+   \@makeother\`%
+   \@makeother\'%
+   \@makeother\"%
+   \catcode`\~13\relax
+   \catcode`\%14\relax
   \global\let\@@if@newlist\if@newlist
   \global\@newlistfalse
   \@parboxrestore
-    \UseHook {build/page/reset}%
+  \UseHook {build/page/reset}%
+  \let \protect \noexpand
   \shipout \vbox{%
     \yoko \set@typeset@protect %<== pLaTeX
     \aftergroup \endgroup

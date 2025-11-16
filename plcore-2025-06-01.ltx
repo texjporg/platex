@@ -32,15 +32,9 @@
                 otherwise pLaTeX2e setup will^^Jnever succeed}\@@end
   \fi
 \fi
-\@ifl@t@r\fmtversion{2025/06/01}{}{%
-  \input plcore-2023-02-14.ltx
-  \endinput}%
-\@ifl@t@r\fmtversion{2025/11/01}{}{%
-  \input plcore-2025-06-01.ltx
-  \endinput}%
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2025-11-01}
+   {2025-06-01}
 \def\ppatch@level{0}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
@@ -1244,32 +1238,48 @@
   \ifin@ \usekanji{#1}{#2}{#3}{#4}%
   \else\useroman{#1}{#2}{#3}{#4}%
   \fi}
-\def\set@current@meta@kanjifamily {%
-  \ifx\k@family\mcdef@ult
-    \def\@currentmetakanjifamily{mc}%
-  \else
-    \ifx\k@family\gtdef@ult
-      \def\@currentmetakanjifamily{gt}%
-    \else
-      \def\@currentmetakanjifamily{??}%
-    \fi
-  \fi
+\ifnum\pltx@newhook@avail=\z@ % --- for <= 2020-02-02 BEGIN
+\ifx\@defaultfamilyhook\@undefined  % old
+\DeclareRobustCommand\normalfont{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
+    \romanencoding{\encodingdefault}%
+    \edef\f@family{\familydefault}%
+    \edef\f@series{\seriesdefault}%
+    \edef\f@shape{\shapedefault}%
+    \selectfont}
+\else                               % 2020-02-02 PL2
+\g@addto@macro\@defaultfamilyhook{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
 }
+\fi                                 % done
+\else % --- for <= 2020-02-02 END & for >= 2020-10-01 BEGIN
+\ifx\delayed@f@adjustment\@undefined % --- for == 2020-10-01 BEGIN
+\AddToHook{normalfont}{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
+}
+\else        % --- for == 2020-10-01 END & for >= 2021-06-01 BEGIN
 \AddToHook{normalfont}{%
     \kanjiencoding{\kanjiencodingdefault}%
     \edef\k@family{\kanjifamilydefault}%
     \edef\k@series{\kanjiseriesdefault}%
     \edef\k@shape{\kanjishapedefault}%
     \let\delayed@k@adjustment\@empty
-    \set@current@meta@kanjifamily
 }
-\edef\@@@temp{\detokenize{nullfont}}
-\edef\@@@tempa{\fontname\jfont}
-\unless\ifx\@@@temp\@@@tempa
-  \adjustbaseline
-\fi
-\let\@@@temp\undefined
-\let\@@@tempa\undefined
+\fi          % --- for >= 2021-06-01 END
+\fi   % --- for >= 2020-10-01 END
+\edef\@@@temp{\detokenize{nullfont}}\edef\@@@tempa{\fontname\jfont}
+\unless\ifx\@@@temp\@@@tempa\adjustbaseline\fi
+\let\@@@temp\undefined\let\@@@tempa\undefined
+\let\reset@font\normalfont
 \ifx\bfseries@rm\@undefined  % old
 \let\bfseries@mc\@undefined
 \let\bfseries@gt\@undefined
@@ -1614,74 +1624,19 @@
 \fi
 %%
 \pltx@reset@catcode@trick
-\def\@currentmetakanjifamily{??}
-\def\prepare@family@series@update#1#2{%
- \def\@currentmetafamily{#1}%
- \if@forced@series
-   \romanfamily#2%
- \else
-   \expand@font@defaults
-   \let\target@series@value\@empty
-   \expandafter\edef\csname ??def@ult\endcsname{\f@family}%
-   \let\@elt\update@series@target@value
-      \@meta@family@list
-      \@elt{??}%
-   \let\@elt\relax
-   \fontfamily#2%
-   \ifx\target@series@value\@empty
-   \else
-     \ifx \f@series\target@series@value
-     \else
-       \maybe@load@fontshape
-       \series@maybe@drop@one@m\target@series@value\f@series
-     \fi
-   \fi
- \fi
+\let\romanprocess@table\process@table
+\def\kanjiprocess@table{%
+  \kanjiencoding\kanjiencodingdefault
+  \edef\k@family{\kanjifamilydefault}%
+  \edef\k@series{\kanjiseriesdefault}%
+  \edef\k@shape{\kanjishapedefault}%
 }
-\def\prepare@family@series@update@kanji#1#2{%
-\def\@currentmetakanjifamily{#1}%
- \if@forced@series@kanji
-   \kanjifamily#2%
- \else
-   \expand@font@defaults
-   \let\target@series@value\@empty
-   \expandafter\edef\csname ??def@ult\endcsname{\k@family}%
-   \let\@elt\update@series@target@value@kanji
-      \@meta@family@list@kanji
-      \@elt{??}%
-   \let\@elt\relax
-   \kanjifamily#2%
-   \ifx\target@series@value\@empty
-   \else
-     \ifx \k@series\target@series@value
-     \else
-       \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
-         \maybe@load@fontshape\endgroup
-       \let\k@series\target@series@value
-     \fi
-   \fi
- \fi
+\def\process@table{%
+  \romanprocess@table
+  \kanjiprocess@table
 }
-\def\update@series@target@value@kanji#1{%
-  \def\reserved@a{#1}%
-  \ifx\@currentmetakanjifamily\reserved@a   % rm -> rm do nothing
-  \else
-    \expandafter\ifx\csname#1def@ult\endcsname\k@family
-      \let\@elt\@gobble
-      \expandafter\let\expandafter\reserved@b
-                      \csname mdseries@\@currentmetakanjifamily\endcsname
-      \expandafter\let\expandafter\reserved@c
-                      \csname bfseries@\@currentmetakanjifamily\endcsname
-      \expandafter\ifx\csname mdseries@#1\endcsname\k@series
-                                      \let\target@series@value\reserved@b
-      \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
-                                      \let\target@series@value\reserved@c
-      \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b
-      \else\ifx\k@series\bfdef@ult    \let\target@series@value\reserved@c
-      \fi\fi\fi\fi
-    \fi
-  \fi
-}
+\@onlypreamble\romanprocess@table
+\@onlypreamble\kanjiprocess@table
 \ifx\DeclareEmphSequence\@undefined % old
 \DeclareRobustCommand\em
         {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
@@ -2064,37 +2019,20 @@
 \def \@outputpage {%
   \UseHook {build/page/before}%
 \begingroup
+  \let \protect \noexpand
   \language\document@default@language
   \@resetactivechars
-   \catcode`\\\z@
-   \catcode`\{\@ne
-   \catcode`\}\tw@
-   \catcode`\$\thr@@
-   \catcode`\&4\relax
-   \catcode`\^^M5\relax
-   \catcode`\#6\relax
-   \catcode`\^7\relax
-   \catcode`\_8\relax
-   \catcode`\ 10\relax
-   \catcode`\^^I10\relax
-   \@makeother\<%
-   \@makeother\>%
-   \@makeother\*%
-   \@makeother\.%
-   \@makeother\-%
-   \@makeother\/%
-   \@makeother\[%
-   \@makeother\]%
-   \@makeother\`%
-   \@makeother\'%
-   \@makeother\"%
-   \catcode`\~13\relax
-   \catcode`\%14\relax
+  \nfss@catcodes
+  \catcode`\$\thr@@
+  \catcode`\_8\relax
+  \catcode`\ 10\relax
+  \catcode`\^^I10\relax
+  \catcode`\~13\relax
+  \catcode`\^^M5\relax
   \global\let\@@if@newlist\if@newlist
   \global\@newlistfalse
   \@parboxrestore
-  \UseHook {build/page/reset}%
-  \let \protect \noexpand
+    \UseHook {build/page/reset}%
   \shipout \vbox{%
     \yoko \set@typeset@protect %<== pLaTeX
     \aftergroup \endgroup
@@ -2346,9 +2284,7 @@
      \@startfield
      \strut\inhibitglue}
 \gdef\@stopfield{\null\color@endgroup\egroup}
-\AtBeginDocument{%
-  \ifdefined\printglossary\else\newcommand\printglossary{\@input@{\jobname.gls}}\fi
-}
+\newcommand\printglossary{\@input@{\jobname.gls}}
 \newcount\hour
 \newcount\minute
 \ifx\removejfmglue\@undefined

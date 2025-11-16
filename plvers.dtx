@@ -160,7 +160,7 @@
 %<latexrelease>\edef\latexreleaseversion
 %<platexrelease>\edef\p@known@latexreleaseversion
 %<*2ekernel|latexrelease|platexrelease>
-   {2022-11-01}
+   {2025-11-01}
 %</2ekernel|latexrelease|platexrelease>
 %    \end{macrocode}
 %
@@ -189,6 +189,18 @@
 %</plcore>
 %    \end{macrocode}
 %
+% 古い\LaTeXe{}の時は古いバージョンの\file{plcore.ltx}を読み込みます。
+%    \begin{macrocode}
+%<*plcore>
+\@ifl@t@r\fmtversion{2025/06/01}{}{%
+  \input plcore-2023-02-14.ltx
+  \endinput}%
+\@ifl@t@r\fmtversion{2025/11/01}{}{%
+  \input plcore-2025-06-01.ltx
+  \endinput}%
+%</plcore>
+%    \end{macrocode}
+%
 % \begin{macro}{\pfmtname}
 % \begin{macro}{\pfmtversion}
 % \begin{macro}{\ppatch@level}
@@ -201,7 +213,7 @@
 %</plcore>
 %<platexrelease>\edef\platexreleaseversion
 %<*plcore|platexrelease>
-   {2025-06-01}
+   {2025-11-01}
 %</plcore|platexrelease>
 %<*plcore>
 \def\ppatch@level{0}

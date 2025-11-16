@@ -32,16 +32,10 @@
                 otherwise pLaTeX2e setup will^^Jnever succeed}\@@end
   \fi
 \fi
-\@ifl@t@r\fmtversion{2025/06/01}{}{%
-  \input plcore-2023-02-14.ltx
-  \endinput}%
-\@ifl@t@r\fmtversion{2025/11/01}{}{%
-  \input plcore-2025-06-01.ltx
-  \endinput}%
 \def\pfmtname{pLaTeX2e}
 \def\pfmtversion
-   {2025-11-01}
-\def\ppatch@level{0}
+   {2023-02-14}
+\def\ppatch@level{1}
 \edef\platexBANNER{\noexpand\platexNILa
                    \the\everyjob % LaTeX banner and delayed codes
                    \noexpand\platexNILb}
@@ -1244,32 +1238,48 @@
   \ifin@ \usekanji{#1}{#2}{#3}{#4}%
   \else\useroman{#1}{#2}{#3}{#4}%
   \fi}
-\def\set@current@meta@kanjifamily {%
-  \ifx\k@family\mcdef@ult
-    \def\@currentmetakanjifamily{mc}%
-  \else
-    \ifx\k@family\gtdef@ult
-      \def\@currentmetakanjifamily{gt}%
-    \else
-      \def\@currentmetakanjifamily{??}%
-    \fi
-  \fi
+\ifnum\pltx@newhook@avail=\z@ % --- for <= 2020-02-02 BEGIN
+\ifx\@defaultfamilyhook\@undefined  % old
+\DeclareRobustCommand\normalfont{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
+    \romanencoding{\encodingdefault}%
+    \edef\f@family{\familydefault}%
+    \edef\f@series{\seriesdefault}%
+    \edef\f@shape{\shapedefault}%
+    \selectfont}
+\else                               % 2020-02-02 PL2
+\g@addto@macro\@defaultfamilyhook{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
 }
+\fi                                 % done
+\else % --- for <= 2020-02-02 END & for >= 2020-10-01 BEGIN
+\ifx\delayed@f@adjustment\@undefined % --- for == 2020-10-01 BEGIN
+\AddToHook{normalfont}{%
+    \kanjiencoding{\kanjiencodingdefault}%
+    \edef\k@family{\kanjifamilydefault}%
+    \edef\k@series{\kanjiseriesdefault}%
+    \edef\k@shape{\kanjishapedefault}%
+}
+\else        % --- for == 2020-10-01 END & for >= 2021-06-01 BEGIN
 \AddToHook{normalfont}{%
     \kanjiencoding{\kanjiencodingdefault}%
     \edef\k@family{\kanjifamilydefault}%
     \edef\k@series{\kanjiseriesdefault}%
     \edef\k@shape{\kanjishapedefault}%
     \let\delayed@k@adjustment\@empty
-    \set@current@meta@kanjifamily
 }
-\edef\@@@temp{\detokenize{nullfont}}
-\edef\@@@tempa{\fontname\jfont}
-\unless\ifx\@@@temp\@@@tempa
-  \adjustbaseline
-\fi
-\let\@@@temp\undefined
-\let\@@@tempa\undefined
+\fi          % --- for >= 2021-06-01 END
+\fi   % --- for >= 2020-10-01 END
+\edef\@@@temp{\detokenize{nullfont}}\edef\@@@tempa{\fontname\jfont}
+\unless\ifx\@@@temp\@@@tempa\adjustbaseline\fi
+\let\@@@temp\undefined\let\@@@tempa\undefined
+\let\reset@font\normalfont
 \ifx\bfseries@rm\@undefined  % old
 \let\bfseries@mc\@undefined
 \let\bfseries@gt\@undefined
@@ -1614,74 +1624,19 @@
 \fi
 %%
 \pltx@reset@catcode@trick
-\def\@currentmetakanjifamily{??}
-\def\prepare@family@series@update#1#2{%
- \def\@currentmetafamily{#1}%
- \if@forced@series
-   \romanfamily#2%
- \else
-   \expand@font@defaults
-   \let\target@series@value\@empty
-   \expandafter\edef\csname ??def@ult\endcsname{\f@family}%
-   \let\@elt\update@series@target@value
-      \@meta@family@list
-      \@elt{??}%
-   \let\@elt\relax
-   \fontfamily#2%
-   \ifx\target@series@value\@empty
-   \else
-     \ifx \f@series\target@series@value
-     \else
-       \maybe@load@fontshape
-       \series@maybe@drop@one@m\target@series@value\f@series
-     \fi
-   \fi
- \fi
+\let\romanprocess@table\process@table
+\def\kanjiprocess@table{%
+  \kanjiencoding\kanjiencodingdefault
+  \edef\k@family{\kanjifamilydefault}%
+  \edef\k@series{\kanjiseriesdefault}%
+  \edef\k@shape{\kanjishapedefault}%
 }
-\def\prepare@family@series@update@kanji#1#2{%
-\def\@currentmetakanjifamily{#1}%
- \if@forced@series@kanji
-   \kanjifamily#2%
- \else
-   \expand@font@defaults
-   \let\target@series@value\@empty
-   \expandafter\edef\csname ??def@ult\endcsname{\k@family}%
-   \let\@elt\update@series@target@value@kanji
-      \@meta@family@list@kanji
-      \@elt{??}%
-   \let\@elt\relax
-   \kanjifamily#2%
-   \ifx\target@series@value\@empty
-   \else
-     \ifx \k@series\target@series@value
-     \else
-       \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
-         \maybe@load@fontshape\endgroup
-       \let\k@series\target@series@value
-     \fi
-   \fi
- \fi
+\def\process@table{%
+  \romanprocess@table
+  \kanjiprocess@table
 }
-\def\update@series@target@value@kanji#1{%
-  \def\reserved@a{#1}%
-  \ifx\@currentmetakanjifamily\reserved@a   % rm -> rm do nothing
-  \else
-    \expandafter\ifx\csname#1def@ult\endcsname\k@family
-      \let\@elt\@gobble
-      \expandafter\let\expandafter\reserved@b
-                      \csname mdseries@\@currentmetakanjifamily\endcsname
-      \expandafter\let\expandafter\reserved@c
-                      \csname bfseries@\@currentmetakanjifamily\endcsname
-      \expandafter\ifx\csname mdseries@#1\endcsname\k@series
-                                      \let\target@series@value\reserved@b
-      \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
-                                      \let\target@series@value\reserved@c
-      \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b
-      \else\ifx\k@series\bfdef@ult    \let\target@series@value\reserved@c
-      \fi\fi\fi\fi
-    \fi
-  \fi
-}
+\@onlypreamble\romanprocess@table
+\@onlypreamble\kanjiprocess@table
 \ifx\DeclareEmphSequence\@undefined % old
 \DeclareRobustCommand\em
         {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
@@ -1874,33 +1829,54 @@
     \unskip \reserved@e {\reserved@f#1}\nobreak \hfil \break \null
     \ignorespaces
   \fi}
-\IfSocketPlugExistsTF{build/column/outputbox}{floats-footnotes-platex} {}{%
-  \NewSocketPlug {build/column/outputbox}{floats-footnotes-platex} {%
-    \@outputbox@reinsertbskip
-    \@outputbox@attachfloats
-    \@if@footnotes@TF
-      {\@outputbox@append{\@textbottom}\let\@textbottom\relax}%
-      {}%
-    \@outputbox@appendfootnotes
-  }
-}
-\AssignSocketPlug{build/column/outputbox}{floats-footnotes-platex}
 \def\pltx@adjust@wd@outputbox{%
   \ifydir\else\vbox{\pdfprimitive\everypar{}\hskip\z@}\fi}
 \def\pltx@adjust@wd@outputbox@vtryfc{%
   \ifydir\else\pdfprimitive\everypar{}\hskip\z@\fi}
-\def \@make@normalcolbox {%
-   \setbox\@outputbox \vbox to\@colht {%
-       \@texttop
-       \@outputbox@depth \dp\@outputbox
+\gdef\@makecol{%
+   \setbox\@outputbox\box\@cclv%
+   \let\@elt\relax % added on LaTeX (ltoutput.dtx 2003/12/16 v1.2k)
+   \xdef\@freelist{\@freelist\@midlist}%
+   \global \let \@midlist \@empty
+   \@combinefloats
+   \let\pltx@textbottom\@textbottom % save (pLaTeX 2017/02/25)
+   \ifvoid\footins\else % changed (pLaTeX 2017/02/25)
+     \setbox\@outputbox \vbox {%
+       \boxmaxdepth \@maxdepth
        \unvbox \@outputbox
-       \pltx@adjust@wd@outputbox % <== pLaTeX
-       \vskip -\@outputbox@depth
+       \@textbottom % inserted here (pLaTeX 2017/02/25)
+       \vskip \skip\footins
+       \color@begingroup
+         \normalcolor
+         \footnoterule
+         \unvbox \footins
+       \color@endgroup
+       }%
+       \let\@textbottom\relax % disable temporarily (pLaTeX 2017/02/25)
+   \fi
+   \ifvbox\@kludgeins
+     \@makespecialcolbox
+   \else
+     \setbox\@outputbox \vbox to\@colht {%
+       %\boxmaxdepth \@maxdepth    % comment out on LaTeX 1997/12/01
+       \@texttop
+       \dimen@ \dp\@outputbox
+       \unvbox \@outputbox
+       \pltx@adjust@wd@outputbox
+       \vskip -\dimen@
        \@textbottom
-      }%
+       }%
+   \fi
+   \let\@textbottom\pltx@textbottom % restore (pLaTeX 2017/02/25)
+   \global \maxdepth \@maxdepth
 }
 \gdef\@makespecialcolbox{%
-   \@outputbox@append {\vskip-\@outputbox@depth}%
+   \setbox\@outputbox \vbox {%
+     \@texttop
+     \dimen@ \dp\@outputbox
+     \unvbox\@outputbox
+     \vskip-\dimen@
+     }%
    \@tempdima \@colht
    \ifdim \wd\@kludgeins>\z@
      \advance \@tempdima -\ht\@outputbox
@@ -2041,123 +2017,76 @@
 \newdimen\@@paperwidth
 \newdimen\@@topmargin
 \def\@tombowreset@@paper{%
-   \@@topmargin \topmargin % only for compatibility
-   \iftombow
-     \@@paperwidth\dimexpr\paperwidth+2\dimexpr\@tombowbleed\relax
-     \@@paperheight\dimexpr\paperheight+10mm+2\dimexpr\@tombowbleed\relax
-     \advance\topmargin 1in\relax
-     \advance\oddsidemargin 1in\relax
-     \advance\evensidemargin 1in\relax
-   \fi
+     \@@topmargin\topmargin
+     \iftombow
+       \@@paperwidth\paperwidth
+       \advance\@@paperwidth 2\dimexpr\@tombowbleed\relax
+       \@@paperheight\paperheight \advance\@@paperheight 10mm\relax
+       \advance\@@paperheight 2\dimexpr\@tombowbleed\relax
+       \advance\@@topmargin 1in\relax \advance\@themargin 1in\relax
+     \fi
 }
-\AddToHook{build/page/reset}[platex/tombow]{%
-   \@tombowreset@@paper
-}
-\AddToHook{shipout/background}[platex/tombow]{%
-  \put(72.27,-72.27){\lineskip\z@skip\lineskiplimit\z@\@outputtombow}%
-}
-\AddToHook{build/page/reset}[platex]{%
+\def\@outputpage{%
+\begingroup % the \endgroup is put in by \aftergroup
   \iftdir
     \dimen\z@\textwidth \textwidth\textheight \textheight\dimen\z@
   \fi
-}
-\def \@outputpage {%
-  \UseHook {build/page/before}%
-\begingroup
+  \let \protect \noexpand
   \language\document@default@language
   \@resetactivechars
-   \catcode`\\\z@
-   \catcode`\{\@ne
-   \catcode`\}\tw@
-   \catcode`\$\thr@@
-   \catcode`\&4\relax
-   \catcode`\^^M5\relax
-   \catcode`\#6\relax
-   \catcode`\^7\relax
-   \catcode`\_8\relax
-   \catcode`\ 10\relax
-   \catcode`\^^I10\relax
-   \@makeother\<%
-   \@makeother\>%
-   \@makeother\*%
-   \@makeother\.%
-   \@makeother\-%
-   \@makeother\/%
-   \@makeother\[%
-   \@makeother\]%
-   \@makeother\`%
-   \@makeother\'%
-   \@makeother\"%
-   \catcode`\~13\relax
-   \catcode`\%14\relax
   \global\let\@@if@newlist\if@newlist
   \global\@newlistfalse
   \@parboxrestore
-  \UseHook {build/page/reset}%
-  \let \protect \noexpand
-  \shipout \vbox{%
-    \yoko \set@typeset@protect %<== pLaTeX
-    \aftergroup \endgroup
-    \aftergroup \set@typeset@protect
-  \if@specialpage
-    \global \@specialpagefalse
-    \@nameuse {ps@\@specialstyle}%
-  \fi
-  \if@twoside
-    \ifodd\count\z@
-      \let \@thehead \@oddhead
-      \let \@thefoot \@oddfoot
-      \let \@themargin \oddsidemargin
-    \else
-      \let \@thehead \@evenhead
-      \let \@thefoot \@evenfoot
-      \let \@themargin \evensidemargin
-    \fi
-  \fi
-  \reset@font
-  \normalsize
-  \normalsfcodes
-  \let \label \@gobble@with@sphack@om
-  \let \index \@gobble@with@sphack@som
-  \let \glossary \@gobble@with@sphack@om
-  \baselineskip \z@skip
-  \lineskip \z@skip
-  \lineskiplimit \z@
+  \shipout\vbox{\yoko
+    \set@typeset@protect
+    \aftergroup\endgroup
+    \aftergroup\set@typeset@protect
+     \if@specialpage
+       \global\@specialpagefalse\@nameuse{ps@\@specialstyle}%
+     \fi
+     \if@twoside
+       \ifodd\count\z@ \let\@thehead\@oddhead \let\@thefoot\@oddfoot
+          \iftdir\let\@themargin\evensidemargin
+          \else\let\@themargin\oddsidemargin\fi
+       \else \let\@thehead\@evenhead
+          \let\@thefoot\@evenfoot
+           \iftdir\let\@themargin\oddsidemargin
+           \else\let\@themargin\evensidemargin\fi
+     \fi\fi
+     \@tombowreset@@paper
+     \reset@font
+     \normalsize
+     \normalsfcodes
+     \let\label\@gobble
+     \let\index\@gobble
+     \let\glossary\@gobble
+     \baselineskip\z@skip \lineskip\z@skip \lineskiplimit\z@
     \@begindvi
-    \vskip \topmargin
-    \moveright\@themargin \vbox {%
-      \setbox\@tempboxa \vbox to\headheight {%
+    \@outputtombow
+    \vskip \@@topmargin
+    \moveright\@themargin\vbox{%
+      \setbox\@tempboxa \vbox to\headheight{%
         \vfil
-        \pdfannot@link@off@@
-        \UseTaggingSocket{build/page/header}{}%
-          {
-            \color@hbox
-              \normalcolor
-              \hb@xt@ \textwidth {\@thehead }%
-            \color@endbox
-          }
-        \pdfannot@link@on@@
-      }
-      \dp \@tempboxa \z@
-      \box \@tempboxa
+        \color@hbox
+          \normalcolor
+          \hb@xt@\textwidth{\@thehead}%
+        \color@endbox
+      }%                        %% 22 Feb 87
+      \dp\@tempboxa \z@
+      \box\@tempboxa
       \vskip \headsep
-      \box \@outputbox
+      \box\@outputbox
       \baselineskip \footskip
-      \pdfannot@link@off@@
-      \UseTaggingSocket{build/page/footer}{}%
-         {
-            \color@hbox
-               \normalcolor
-               \hb@xt@ \textwidth {\@thefoot }%
-             \color@endbox
-         }
-      \pdfannot@link@on@@
-      }
-    }
-  \global \let \if@newlist \@@if@newlist
+      \color@hbox
+        \normalcolor
+        \hb@xt@\textwidth{\@thefoot}%
+      \color@endbox
+    }%
+  }%
+  \global\let\if@newlist\@@if@newlist
   \global \@colht \textheight
   \stepcounter{page}%
-   \UseHook {build/page/after}%
+  \let\firstmark\botmark
 }
 \chardef\pltx@AtBeginDvi@untouched\z@
 \ifdefined\ExplSyntaxOn %--- expl3 available BEGIN

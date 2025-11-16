@@ -275,6 +275,18 @@
 \ProcessOptions\relax
 %    \end{macrocode}
 %
+% 巻き戻された\LaTeXe{}バージョンよりも新しいバージョンに
+% 「巻き戻し」されてしまわないようにします。
+% FIXME: もっといい方法を……
+%    \begin{macrocode}
+\@ifl@t@r\fmtversion{2025/06/01}{}{%
+  \@ifl@t@r\requestedplpatchdate{2025/06/01}{%
+    \def\requestedplpatchdate{2025/05/31}}{}}%
+\@ifl@t@r\fmtversion{2025/11/01}{}{%
+  \@ifl@t@r\requestedplpatchdate{2025/11/01}{%
+    \def\requestedplpatchdate{2025/10/31}}{}}%
+%    \end{macrocode}
+%
 %    \begin{macrocode}
 \def\reserved@a{%
 \edef\requestedpLaTeXdate{\the\count@}%

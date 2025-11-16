@@ -189,13 +189,14 @@
 % \changes{v1.7n}{2021/06/27}{従属欧文のシリーズとシェープ更新を
 %    反映するように修正}
 % \changes{v1.7n}{2021/06/27}{和欧文のforced@seriesフラグを分離}
+% \changes{v1.7o}{2025/11/01}{LaTeX 2025-11-01の変更に対応}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plfonts.dtx}[2021/06/27 v1.7n pLaTeX New Font Selection Scheme]
+\ProvidesFile{plfonts.dtx}[2025/11/01 v1.7o pLaTeX New Font Selection Scheme]
 % \iffalse
 \RequirePackage{plautopatch}
 \documentclass[dvipdfmx,a4paper]{jltxdoc}
@@ -3340,22 +3341,57 @@
 %    font face (latex2e/444)
 %    (sync with ltfssini.dtx 2021/04/26 v3.2h)}
 %    \begin{macrocode}
-%<platexrelease>\plIncludeInRelease{2020/04/12}{\normalfont}
-%<platexrelease>                   {Use \@defaultfamilyhook}%
+%<platexrelease>\plIncludeInRelease{2025/11/01}%
+%<platexrelease>                   {\normalfont}{Support meta family}%
 %<*plcore|platexrelease>
-\ifnum\pltx@newhook@avail=\z@ % --- for <= 2020-02-02 BEGIN
-\ifx\@defaultfamilyhook\@undefined  % old
-\DeclareRobustCommand\normalfont{%
+%    \end{macrocode}
+%
+%  \begin{macro}{\set@current@meta@kanjifamily}
+%    \cs{set@current@meta@family}の和文版。
+% \changes{v1.7o}{2025/11/01}{Macro added}
+%    \begin{macrocode}
+\def\set@current@meta@kanjifamily {%
+  \ifx\k@family\mcdef@ult
+    \def\@currentmetakanjifamily{mc}%
+  \else
+    \ifx\k@family\gtdef@ult
+      \def\@currentmetakanjifamily{gt}%
+    \else
+      \def\@currentmetakanjifamily{??}%
+    \fi
+  \fi
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+%    \begin{macrocode}
+\AddToHook{normalfont}{%
     \kanjiencoding{\kanjiencodingdefault}%
     \edef\k@family{\kanjifamilydefault}%
     \edef\k@series{\kanjiseriesdefault}%
     \edef\k@shape{\kanjishapedefault}%
-    \romanencoding{\encodingdefault}%
-    \edef\f@family{\familydefault}%
-    \edef\f@series{\seriesdefault}%
-    \edef\f@shape{\shapedefault}%
-    \selectfont}
-\else                               % 2020-02-02 PL2
+    \let\delayed@k@adjustment\@empty
+    \set@current@meta@kanjifamily
+}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{2020/04/12}{\normalfont}
+%<platexrelease>                   {Use \@defaultfamilyhook}%
+%<platexrelease>\ifnum\pltx@newhook@avail=\z@ % --- for <= 2020-02-02 BEGIN
+%<platexrelease>\ifx\@defaultfamilyhook\@undefined  % old
+%<platexrelease>\DeclareRobustCommand\normalfont{%
+%<platexrelease>    \kanjiencoding{\kanjiencodingdefault}%
+%<platexrelease>    \edef\k@family{\kanjifamilydefault}%
+%<platexrelease>    \edef\k@series{\kanjiseriesdefault}%
+%<platexrelease>    \edef\k@shape{\kanjishapedefault}%
+%<platexrelease>    \romanencoding{\encodingdefault}%
+%<platexrelease>    \edef\f@family{\familydefault}%
+%<platexrelease>    \edef\f@series{\seriesdefault}%
+%<platexrelease>    \edef\f@shape{\shapedefault}%
+%<platexrelease>    \selectfont}
+%<platexrelease>\else                               % 2020-02-02 PL2
 %<platexrelease>\DeclareRobustCommand\normalfont{%
 %<platexrelease>   \fontencoding\encodingdefault
 %<platexrelease>   \edef\f@family{\familydefault}%
@@ -3363,15 +3399,15 @@
 %<platexrelease>   \edef\f@shape{\shapedefault}%
 %<platexrelease>   \@defaultfamilyhook
 %<platexrelease>   \selectfont}
-\g@addto@macro\@defaultfamilyhook{%
-    \kanjiencoding{\kanjiencodingdefault}%
-    \edef\k@family{\kanjifamilydefault}%
-    \edef\k@series{\kanjiseriesdefault}%
-    \edef\k@shape{\kanjishapedefault}%
-}
-\fi                                 % done
-\else % --- for <= 2020-02-02 END & for >= 2020-10-01 BEGIN
-\ifx\delayed@f@adjustment\@undefined % --- for == 2020-10-01 BEGIN
+%<platexrelease>\g@addto@macro\@defaultfamilyhook{%
+%<platexrelease>    \kanjiencoding{\kanjiencodingdefault}%
+%<platexrelease>    \edef\k@family{\kanjifamilydefault}%
+%<platexrelease>    \edef\k@series{\kanjiseriesdefault}%
+%<platexrelease>    \edef\k@shape{\kanjishapedefault}%
+%<platexrelease>}
+%<platexrelease>\fi                                 % done
+%<platexrelease>\else % --- for <= 2020-02-02 END & for >= 2020-10-01 BEGIN
+%<platexrelease>\ifx\delayed@f@adjustment\@undefined % --- for == 2020-10-01 BEGIN
 %<platexrelease>\DeclareRobustCommand\normalfont{%
 %<platexrelease>   \fontencoding\encodingdefault
 %<platexrelease>   \edef\f@family{\familydefault}%
@@ -3380,13 +3416,13 @@
 %<platexrelease>   \UseHook{normalfont}%
 %<platexrelease>   \@defaultfamilyhook % hookname from 2020/02 will vanish
 %<platexrelease>   \selectfont}
-\AddToHook{normalfont}{%
-    \kanjiencoding{\kanjiencodingdefault}%
-    \edef\k@family{\kanjifamilydefault}%
-    \edef\k@series{\kanjiseriesdefault}%
-    \edef\k@shape{\kanjishapedefault}%
-}
-\else        % --- for == 2020-10-01 END & for >= 2021-06-01 BEGIN
+%<platexrelease>\AddToHook{normalfont}{%
+%<platexrelease>    \kanjiencoding{\kanjiencodingdefault}%
+%<platexrelease>    \edef\k@family{\kanjifamilydefault}%
+%<platexrelease>    \edef\k@series{\kanjiseriesdefault}%
+%<platexrelease>    \edef\k@shape{\kanjishapedefault}%
+%<platexrelease>}
+%<platexrelease>\else        % --- for == 2020-10-01 END & for >= 2021-06-01 BEGIN
 %<platexrelease>\DeclareRobustCommand\normalfont{%
 %<platexrelease>   \fontencoding\encodingdefault
 %<platexrelease>   \edef\f@family{\familydefault}%
@@ -3396,20 +3432,16 @@
 %<platexrelease>   \UseHook{normalfont}%
 %<platexrelease>   \@defaultfamilyhook % hookname from 2020/02 will vanish
 %<platexrelease>   \selectfont}
-\AddToHook{normalfont}{%
-    \kanjiencoding{\kanjiencodingdefault}%
-    \edef\k@family{\kanjifamilydefault}%
-    \edef\k@series{\kanjiseriesdefault}%
-    \edef\k@shape{\kanjishapedefault}%
-    \let\delayed@k@adjustment\@empty
-}
-\fi          % --- for >= 2021-06-01 END
-\fi   % --- for >= 2020-10-01 END
-\edef\@@@temp{\detokenize{nullfont}}\edef\@@@tempa{\fontname\jfont}
-\unless\ifx\@@@temp\@@@tempa\adjustbaseline\fi
-\let\@@@temp\undefined\let\@@@tempa\undefined
-\let\reset@font\normalfont
-%</plcore|platexrelease>
+%<platexrelease>\AddToHook{normalfont}{%
+%<platexrelease>    \kanjiencoding{\kanjiencodingdefault}%
+%<platexrelease>    \edef\k@family{\kanjifamilydefault}%
+%<platexrelease>    \edef\k@series{\kanjiseriesdefault}%
+%<platexrelease>    \edef\k@shape{\kanjishapedefault}%
+%<platexrelease>    \let\delayed@k@adjustment\@empty
+%<platexrelease>}
+%<platexrelease>\fi          % --- for >= 2021-06-01 END
+%<platexrelease>\fi   % --- for >= 2020-10-01 END
+%<platexrelease>\let\reset@font\normalfont
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2020/02/02}{\normalfont}
 %<platexrelease>                   {Don't call \fontseries or \fontshape}%
@@ -3441,8 +3473,21 @@
 %<platexrelease>\adjustbaseline
 %<platexrelease>\let\reset@font\normalfont
 %<platexrelease>\plEndIncludeInRelease
+%</plcore|platexrelease>
 %    \end{macrocode}
 % \end{macro}
+%
+%    \begin{macrocode}
+%<*plcore>
+\edef\@@@temp{\detokenize{nullfont}}
+\edef\@@@tempa{\fontname\jfont}
+\unless\ifx\@@@temp\@@@tempa
+  \adjustbaseline
+\fi
+\let\@@@temp\undefined
+\let\@@@tempa\undefined
+%</plcore>
+%    \end{macrocode}
 %
 %
 % \begin{macro}{\bfseries@mc}
@@ -4088,30 +4133,190 @@
 %    \end{macrocode}
 %
 %
+% \LaTeXe~2025-11-01以降への対応コードです。
+%
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2025/11/01}%
+%<platexrelease>    {\prepare@family@series@update}{Support meta family}%
+%<*plcore|platexrelease>
+%    \end{macrocode}
+%
+%  \begin{macro}{\@currentmetakanjifamily}
+%    \cs{@currentmetafamily}の和文版です。
+%    \begin{macrocode}
+\def\@currentmetakanjifamily{??}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\prepare@family@series@update}
+%
+%    p\LaTeXe では\cs{fontfamily}を\cs{romanfamily}に変更します。
+%
+% \changes{v1.7o}{2025/11/01}{Always set \cs{@currentmetafamily}.
+%    (sync with ltfssini.dtx 2025/09/15 v3.2l)}
+%    \begin{macrocode}
+\def\prepare@family@series@update#1#2{%
+ \def\@currentmetafamily{#1}%
+ \if@forced@series
+%<+debug> \series@change@debug{No series preparation (forced \f@series)\on@line}%
+   \romanfamily#2%
+ \else
+%<+debug> \series@change@debug{Preparing for switching to #1 (#2)\on@line}%
+   \expand@font@defaults
+   \let\target@series@value\@empty
+   \expandafter\edef\csname ??def@ult\endcsname{\f@family}%
+   \let\@elt\update@series@target@value
+      \@meta@family@list
+      \@elt{??}%
+   \let\@elt\relax
+   \fontfamily#2%
+   \ifx\target@series@value\@empty
+%<+debug> \series@change@debug{Target series still empty ...}%
+   \else
+     \ifx \f@series\target@series@value
+%<+debug> \series@change@debug{Target series unchanged:
+%<+debug>                      \f@series \space = \target@series@value}%
+     \else
+       \maybe@load@fontshape
+%<+debug> \series@change@debug{Target series:
+%<+debug>                      \f@series \space -> \target@series@value}%
+%      \let\f@series\target@series@value
+       \series@maybe@drop@one@m\target@series@value\f@series
+     \fi
+   \fi
+ \fi
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\prepare@family@series@update@kanji}
+%
+%    \cs{prepare@family@series@update}の和文版です。
+%
+% \changes{v1.7o}{2025/11/01}{LaTeX 2025-11-01の
+%    \cs{prepare@family@series@update}と同様の変更。}
+%    \begin{macrocode}
+\def\prepare@family@series@update@kanji#1#2{%
+\def\@currentmetakanjifamily{#1}%
+ \if@forced@series@kanji
+%<+debug> \series@change@debug{No series preparation (forced \k@series)\on@line}%
+   \kanjifamily#2%
+ \else
+%<+debug> \series@change@debug{Prepearing for switching to #1 (#2)\on@line}%
+   \expand@font@defaults
+   \let\target@series@value\@empty
+   \expandafter\edef\csname ??def@ult\endcsname{\k@family}%
+   \let\@elt\update@series@target@value@kanji
+      \@meta@family@list@kanji
+      \@elt{??}%
+   \let\@elt\relax
+   \kanjifamily#2%
+   \ifx\target@series@value\@empty
+%<+debug> \series@change@debug{Target series still empty ...}%
+   \else
+     \ifx \k@series\target@series@value
+%<+debug> \series@change@debug{Target series unchanged:
+%<+debug>                      \k@series \space = \target@series@value}%
+     \else
+       \begingroup\let\f@encoding\k@encoding\let\f@family\k@family
+         \maybe@load@fontshape\endgroup
+%<+debug> \series@change@debug{Target series:
+%<+debug>                      \k@series \space -> \target@series@value}%
+       \let\k@series\target@series@value
+     \fi
+   \fi
+ \fi
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\update@series@target@value@kanji}
+%
+%    \LaTeXe の\cs{update@series@target@value}の和文版です。
+%
+% \changes{v1.7o}{2025/11/01}{LaTeX 2025-11-01の
+%    \cs{update@series@target@value}と同様の変更。}
+%    \begin{macrocode}
+\def\update@series@target@value@kanji#1{%
+  \def\reserved@a{#1}%
+  \ifx\@currentmetakanjifamily\reserved@a   % rm -> rm do nothing
+  \else
+%<+debug> \series@change@debug{Trying to match #1: \csname#1def@ult\endcsname
+%<+debug>                      \space = \k@family\space ?}%
+    \expandafter\ifx\csname#1def@ult\endcsname\k@family
+      \let\@elt\@gobble
+      \expandafter\let\expandafter\reserved@b
+                      \csname mdseries@\@currentmetakanjifamily\endcsname
+      \expandafter\let\expandafter\reserved@c
+                      \csname bfseries@\@currentmetakanjifamily\endcsname
+%<+debug>\series@change@debug{Targets for mdseries and bfseries:
+%<+debug>                     \reserved@b\space and \reserved@c}%
+      \expandafter\ifx\csname mdseries@#1\endcsname\k@series
+%<+debug>   \series@change@debug{mdseries@#1 matched -> \reserved@b}%
+                                      \let\target@series@value\reserved@b
+      \else\expandafter\ifx\csname bfseries@#1\endcsname\k@series
+%<+debug>  \series@change@debug{bfseries@#1 matched -> \reserved@c}%
+                                      \let\target@series@value\reserved@c
+      \else\ifx\k@series\mddef@ult    \let\target@series@value\reserved@b
+%<+debug>  \series@change@debug{mddef@ult matched -> \reserved@b}%
+      \else\ifx\k@series\bfdef@ult    \let\target@series@value\reserved@c
+%<+debug>  \series@change@debug{bfdef@ult matched -> \reserved@c}%
+      \fi\fi\fi\fi
+    \fi
+  \fi
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+%    \begin{macrocode}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}%
+%<platexrelease>    {\prepare@family@series@update}{Support meta family}%
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+%
+%
 % \begin{macro}{\romanprocess@table}
 % \begin{macro}{\kanjiprocess@table}
 % \begin{macro}{\process@table}
 % 文書の先頭で、和文デフォルトフォントの変更が反映されないのを修正します。
+%
+% \LaTeXe~2025-11-01で\cs{process@table}に\texttt{normalfont}フックが
+% 追加されたため再定義の必要はなくなりました。
+% ^^A バージョンの組み合わせ？で無限ループになったので
+% ^^A 巻き戻し用のコードが複数回適用されてもいいように修正
+% 
 % \changes{v1.3g}{1999/04/05}{plpatch.ltxの内容を反映。
 %    ありがとう、山本さん。}
 % \changes{v1.7g}{2020/04/14}{Small update for speed.
 %    (sync with ltfssdcl.dtx 2020/04/13 v3.0v)}
+% \changes{v1.7o}{2025/11/01}{再定義を削除}
 %    \begin{macrocode}
-%<*plcore>
-\let\romanprocess@table\process@table
-\def\kanjiprocess@table{%
-  \kanjiencoding\kanjiencodingdefault
-  \edef\k@family{\kanjifamilydefault}%
-  \edef\k@series{\kanjiseriesdefault}%
-  \edef\k@shape{\kanjishapedefault}%
-}
-\def\process@table{%
-  \romanprocess@table
-  \kanjiprocess@table
-}
-\@onlypreamble\romanprocess@table
-\@onlypreamble\kanjiprocess@table
-%</plcore>
+%<platexrelease>\plIncludeInRelease{2025/11/01}%
+%<platexrelease>    {\process@table}{Support metafamily}%
+%<*plcore|platexrelease>
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}%
+%<platexrelease>    {\process@table}{Support metafamily}%
+%<platexrelease>\def\pl@process@table{%
+%<platexrelease>  \romanprocess@table
+%<platexrelease>  \kanjiprocess@table
+%<platexrelease>}
+%<platexrelease>\ifx\process@table\pl@process@table\else
+%<platexrelease>  \let\romanprocess@table\process@table
+%<platexrelease>  \def\kanjiprocess@table{%
+%<platexrelease>    \kanjiencoding\kanjiencodingdefault
+%<platexrelease>    \edef\k@family{\kanjifamilydefault}%
+%<platexrelease>    \edef\k@series{\kanjiseriesdefault}%
+%<platexrelease>    \edef\k@shape{\kanjishapedefault}%
+%<platexrelease>  }
+%<platexrelease>  \let\process@table\pl@process@table
+%<platexrelease>  \@onlypreamble\romanprocess@table
+%<platexrelease>  \@onlypreamble\kanjiprocess@table
+%<platexrelease>\fi
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}

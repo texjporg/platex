@@ -140,13 +140,14 @@
 % \changes{v1.3m}{2023/02/14}{フロート環境内での組方向変更をplextに誘導}
 % \changes{v1.3n}{2023/02/24}{\cs{marginpar}でエラーが出るバグ修正}
 % \changes{v1.3o}{2025/09/21}{\cs{printglossary}の定義を\cs{AtBeginDocument}内で行うように}
+% \changes{v1.3p}{2025/11/01}{\LaTeXe~2025-06-01, 2025-11-01に伴う修正}
 % \fi
 %
 % \iffalse
 %<*driver>
 \NeedsTeXFormat{pLaTeX2e}
 % \fi
-\ProvidesFile{plcore.dtx}[2023/02/24 v1.3n pLaTeX core file]
+\ProvidesFile{plcore.dtx}[2025/11/01 v1.3p pLaTeX core file]
 % \iffalse
 \RequirePackage{plautopatch}
 \documentclass[dvipdfmx,a4paper]{jltxdoc}
@@ -1418,20 +1419,37 @@
 \def \@outputpage {%
   \UseHook {build/page/before}%
 \begingroup
-  \let \protect \noexpand
   \language\document@default@language
   \@resetactivechars
-  \nfss@catcodes
-  \catcode`\$\thr@@
-  \catcode`\_8\relax
-  \catcode`\ 10\relax
-  \catcode`\^^I10\relax
-  \catcode`\~13\relax
-  \catcode`\^^M5\relax
+   \catcode`\\\z@
+   \catcode`\{\@ne
+   \catcode`\}\tw@
+   \catcode`\$\thr@@
+   \catcode`\&4\relax
+   \catcode`\^^M5\relax
+   \catcode`\#6\relax
+   \catcode`\^7\relax
+   \catcode`\_8\relax
+   \catcode`\ 10\relax
+   \catcode`\^^I10\relax
+   \@makeother\<%
+   \@makeother\>%
+   \@makeother\*%
+   \@makeother\.%
+   \@makeother\-%
+   \@makeother\/%
+   \@makeother\[%
+   \@makeother\]%
+   \@makeother\`%
+   \@makeother\'%
+   \@makeother\"%
+   \catcode`\~13\relax
+   \catcode`\%14\relax
   \global\let\@@if@newlist\if@newlist
   \global\@newlistfalse
   \@parboxrestore
-    \UseHook {build/page/reset}%
+  \UseHook {build/page/reset}%
+  \let \protect \noexpand
   \shipout \vbox{%
     \yoko \set@typeset@protect %<== pLaTeX
     \aftergroup \endgroup
