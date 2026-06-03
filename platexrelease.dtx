@@ -279,12 +279,13 @@
 % 「巻き戻し」されてしまわないようにします。
 % FIXME: もっといい方法を……
 %    \begin{macrocode}
-\@ifl@t@r\fmtversion{2025/06/01}{}{%
-  \@ifl@t@r\requestedplpatchdate{2025/06/01}{%
-    \def\requestedplpatchdate{2025/05/31}}{}}%
-\@ifl@t@r\fmtversion{2025/11/01}{}{%
-  \@ifl@t@r\requestedplpatchdate{2025/11/01}{%
-    \def\requestedplpatchdate{2025/10/31}}{}}%
+\def\platexrelease@adjust@patchdate#1#2{%
+  \@ifl@t@r\fmtversion{#1}{}{%
+    \@ifl@t@r\requestedplpatchdate{#1}{%
+      \def\requestedplpatchdate{#2}}{}}}
+\platexrelease@adjust@patchdate{2025/06/01}{2025/05/31}
+\platexrelease@adjust@patchdate{2025/11/01}{2025/10/31}
+\platexrelease@adjust@patchdate{2026/06/01}{2026/05/31}
 %    \end{macrocode}
 %
 %    \begin{macrocode}

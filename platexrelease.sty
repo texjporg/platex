@@ -18,9 +18,9 @@
 %% 
 %% File: plvers.dtx
 \edef\p@known@latexreleaseversion
-   {2025-11-01}
+   {2026-06-01}
 \edef\platexreleaseversion
-   {2025-11-01}
+   {2026-06-01}
 \newif\if@plincludeinrelease
 \@plincludeinreleasefalse
 \def\plIncludeInRelease#1{%
@@ -104,12 +104,13 @@
   \AtEndOfPackage{\def\requestedpLaTeXdate{0}}}
 \let\requestedplpatchdate\pfmtversion
 \ProcessOptions\relax
-\@ifl@t@r\fmtversion{2025/06/01}{}{%
-  \@ifl@t@r\requestedplpatchdate{2025/06/01}{%
-    \def\requestedplpatchdate{2025/05/31}}{}}%
-\@ifl@t@r\fmtversion{2025/11/01}{}{%
-  \@ifl@t@r\requestedplpatchdate{2025/11/01}{%
-    \def\requestedplpatchdate{2025/10/31}}{}}%
+\def\platexrelease@adjust@patchdate#1#2{%
+  \@ifl@t@r\fmtversion{#1}{}{%
+    \@ifl@t@r\requestedplpatchdate{#1}{%
+      \def\requestedplpatchdate{#2}}{}}}
+\platexrelease@adjust@patchdate{2025/06/01}{2025/05/31}
+\platexrelease@adjust@patchdate{2025/11/01}{2025/10/31}
+\platexrelease@adjust@patchdate{2026/06/01}{2026/05/31}
 \def\reserved@a{%
 \edef\requestedpLaTeXdate{\the\count@}%
 \reserved@b}
@@ -3988,6 +3989,9 @@ of this package available from CTAN}
                    {Add \pltx@next@inhibitglue}%
 \let\pltx@next@inhibitglue\@undefined
 \plEndIncludeInRelease
+\plIncludeInRelease{2026/06/01}%
+                   {\@tabular}{Use real text vcenter}%
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@tabular}
                    {Remove extra \xkanjiskip}%
 \def\@tabular{\leavevmode \null\hbox \bgroup $\let\@acol\@tabacol
@@ -4000,6 +4004,9 @@ of this package available from CTAN}
    \let\@classz\@tabclassz
    \let\@classiv\@tabclassiv \let\\\@tabularcr\@tabarray}
 \plEndIncludeInRelease
+\plIncludeInRelease{2026/06/01}%
+                   {\endtabular}{Use real text vcenter}%
+\plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\endtabular}
                    {Remove extra \xkanjiskip}%
 \def\endtabular{\crcr\egroup\egroup $\egroup\null}
@@ -4009,6 +4016,27 @@ of this package available from CTAN}
                    {LaTeX2e original}%
 \def\endtabular{\crcr\egroup\egroup $\egroup}
 \expandafter \let \csname endtabular*\endcsname = \endtabular
+\plEndIncludeInRelease
+\plIncludeInRelease{2026/06/01}
+                   {\vcenter@text}{Use real text vcenter}%
+\protected\def\vcenter@text@auxii{%
+  \begingroup
+    \dimen0\dimexpr\ht0+\dp0\relax
+    \ht0\dimexpr\dimexpr\ifodd\dimen0 1sp + \fi\dimen0\relax/2
+      +\vcenter@text@axis
+      -\iftdir\tbaselineshift
+       \else\ybaselineshift\fi\relax
+    \dp0\dimexpr\dimen0-\ht0\relax
+    \box0 %
+  \endgroup
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}%
+                   {\vcenter@text}{Use real text vcenter}%
+\let\vcenter@text@auxii\@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{2026/06/01}%
+                   {\@iiiparbox}{Use real text vcenter}%
 \plEndIncludeInRelease
 \plIncludeInRelease{2016/04/17}{\@iiiparbox}
                    {Remove extra \xkanjiskip}%
