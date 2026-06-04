@@ -4024,8 +4024,9 @@ of this package available from CTAN}
     \dimen0\dimexpr\ht0+\dp0\relax
     \ht0\dimexpr\dimexpr\ifodd\dimen0 1sp + \fi\dimen0\relax/2
       +\vcenter@text@axis
-      -\iftdir\tbaselineshift
-       \else\ybaselineshift\fi\relax
+      -\pltx@if@tate@text@dir
+         \tbaselineshift
+         \ybaselineshift\relax
     \dp0\dimexpr\dimen0-\ht0\relax
     \box0 %
   \endgroup

@@ -2412,13 +2412,20 @@
     \everypar{\unexpanded\expandafter{\the\everypar}}%
     \unexpanded\expandafter{\the\everypar}\inhibitglue}}%
   \@tempa\fi}
+\def\pltx@if@tate@text@dir{%
+  \ifnum0\iftdir1\fi\ifmmode\else1\fi=11 %
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi}
 \protected\def\vcenter@text@auxii{%
   \begingroup
     \dimen0\dimexpr\ht0+\dp0\relax
     \ht0\dimexpr\dimexpr\ifodd\dimen0 1sp + \fi\dimen0\relax/2
       +\vcenter@text@axis
-      -\iftdir\tbaselineshift
-       \else\ybaselineshift\fi\relax
+      -\pltx@if@tate@text@dir
+         \tbaselineshift
+         \ybaselineshift\relax
     \dp0\dimexpr\dimen0-\ht0\relax
     \box0 %
   \endgroup

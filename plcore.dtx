@@ -2877,8 +2877,22 @@
 % \end{macro}
 % \end{macro}
 %
+% \begin{macro}{\pltx@if@tate@text@dir}
+%   組方向が縦組かつ非数式モードを判定します。
+%    \begin{macrocode}
+%<*plcore>
+\def\pltx@if@tate@text@dir{%
+  \ifnum0\iftdir1\fi\ifmmode\else1\fi=11 %
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi}
+%</plcore>
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\vcenter@text@auxii}
-% \LaTeX~2026-006-01で追加された|\vcenter@text|の内部命令です。
+% \LaTeX~2026-06-01で追加された|\vcenter@text|の内部命令です。
 % もとは\file{ltboxes.dtx}で定義されています。
 % \verb+\(y|t)tbaselineshift+による補正を追加します。
 %    \begin{macrocode}
@@ -2890,8 +2904,9 @@
     \dimen0\dimexpr\ht0+\dp0\relax
     \ht0\dimexpr\dimexpr\ifodd\dimen0 1sp + \fi\dimen0\relax/2
       +\vcenter@text@axis
-      -\iftdir\tbaselineshift
-       \else\ybaselineshift\fi\relax
+      -\pltx@if@tate@text@dir
+         \tbaselineshift
+         \ybaselineshift\relax
     \dp0\dimexpr\dimen0-\ht0\relax
     \box0 %
   \endgroup
