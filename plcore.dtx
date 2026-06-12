@@ -2878,11 +2878,11 @@
 % \end{macro}
 %
 % \begin{macro}{\pltx@if@tate@text@dir}
-%   組方向が縦組かつ非数式モードを判定します。
+%   組方向が縦組（縦数式ディレクションは除く）かを判定します。
 %    \begin{macrocode}
 %<*plcore>
 \def\pltx@if@tate@text@dir{%
-  \ifnum0\iftdir1\fi\ifmmode\else1\fi=11 %
+  \ifnum0\iftdir1\fi\ifmdir\else1\fi=11 %
     \expandafter\@firstoftwo
   \else
     \expandafter\@secondoftwo
