@@ -3,7 +3,7 @@
 %
 %  Copyright 1995-2001 ASCII Corporation.
 %  Copyright (c) 2010 ASCII MEDIA WORKS
-%  Copyright (c) 2016-2022 Japanese TeX Development Community
+%  Copyright (c) 2016-2025 Japanese TeX Development Community
 %
 %  This file is part of the pLaTeX2e system (community edition).
 %  -------------------------------------------------------------
@@ -110,7 +110,7 @@
 %    (sync with ltsect.dtx 2020/07/27 v1.1e)}
 % \changes{v1.8g}{2025/01/02}{Don't use \cs{rensuji} in \file{.toc} files
 %    if vertical classes
-%    (sync with ltjclasses.dtx 2024-12-13 v1.8-ltj-24)}
+%    (backport from ltjclasses.dtx 2024-12-13 v1.8f-ltj-24)}
 % \fi
 %
 % \iffalse
@@ -140,7 +140,7 @@
 %<11pt&bk>\ProvidesFile{tbk11.clo}
 %<12pt&bk>\ProvidesFile{tbk12.clo}
 %</tate>
-  [2020/09/30 v1.8f
+  [2025/01/02 v1.8g
 %<article|report|book> Standard pLaTeX class]
 %<10pt|11pt|12pt>  Standard pLaTeX file (size option)]
 %<*driver>
@@ -3986,7 +3986,7 @@
 %    latex/2343 (sync with ltsect.dtx v1.0z)}
 % \changes{v1.8g}{2025/01/02}{Don't use \cs{rensuji} in \file{.toc} files
 %    if vertical classes
-%    (sync with ltjclasses.dtx 2024-12-13 v1.8-ltj-24)}
+%    (backport from ltjclasses.dtx 2024-12-13 v1.8f-ltj-24)}
 %    \begin{macrocode}
 \def\@dottedtocline#1#2#3#4#5{%
   \ifnum #1>\c@tocdepth \else
@@ -4009,7 +4009,7 @@
 %
 % \begin{macro}{\addcontentsline}
 % 以前のバージョンでは縦組の場合にページ番号を|\rensuji|で囲むように再定義
-% していました．これでは|hyperref|パッケージと干渉してしまうので、
+% していました。これでは|hyperref|パッケージと干渉してしまうので、
 % \cs{rensuji}は\cs{l@chapter}など実際の出力命令のほうに押し込めることにし、
 % \cs{addcontentsline}の再定義は削除します。
 %
@@ -4022,7 +4022,7 @@
 %    (sync with ltsect.dtx 2020/07/27 v1.1e)}
 % \changes{v1.8g}{2025/01/02}{Don't use \cs{rensuji} in \file{.toc} files
 %    if vertical classes
-%    (sync with ltjclasses.dtx 2024-12-13 v1.8-ltj-24)}
+%    (backport from ltjclasses.dtx 2024-12-13 v1.8f-ltj-24)}
 % ^^A    \begin{macrocode}
 % ^^A \providecommand*\protected@file@percent{}
 % ^^A \def\addcontentsline#1#2#3{%
@@ -4066,7 +4066,7 @@
 % partレベルの目次です。
 % \changes{v1.8g}{2025/01/02}{Don't use \cs{rensuji} in \file{.toc} files
 %    if vertical classes
-%    (sync with ltjclasses.dtx 2024-12-13 v1.8-ltj-24)}
+%    (backport from ltjclasses.dtx 2024-12-13 v1.8f-ltj-24)}
 %    \begin{macrocode}
 \newcommand*{\l@part}[2]{%
   \ifnum \c@tocdepth >-2\relax
@@ -4095,7 +4095,7 @@
 % chapterレベルの目次です。
 % \changes{v1.8g}{2025/01/02}{Don't use \cs{rensuji} in \file{.toc} files
 %    if vertical classes
-%    (sync with ltjclasses.dtx 2024-12-13 v1.8-ltj-24)}
+%    (backport from ltjclasses.dtx 2024-12-13 v1.8f-ltj-24)}
 %    \begin{macrocode}
 %<*report|book>
 \newcommand*{\l@chapter}[2]{%
@@ -4120,7 +4120,7 @@
 % sectionレベルの目次です。
 % \changes{v1.8g}{2025/01/02}{Don't use \cs{rensuji} in \file{.toc} files
 %    if vertical classes
-%    (sync with ltjclasses.dtx 2024-12-13 v1.8-ltj-24)}
+%    (backport from ltjclasses.dtx 2024-12-13 v1.8f-ltj-24)}
 %    \begin{macrocode}
 %<*article>
 \newcommand*{\l@section}[2]{%
