@@ -1245,17 +1245,6 @@
   \ifin@ \usekanji{#1}{#2}{#3}{#4}%
   \else\useroman{#1}{#2}{#3}{#4}%
   \fi}
-\def\set@current@meta@kanjifamily {%
-  \ifx\k@family\mcdef@ult
-    \def\@currentmetakanjifamily{mc}%
-  \else
-    \ifx\k@family\gtdef@ult
-      \def\@currentmetakanjifamily{gt}%
-    \else
-      \def\@currentmetakanjifamily{??}%
-    \fi
-  \fi
-}
 \AddToHook{normalfont}{%
     \kanjiencoding{\kanjiencodingdefault}%
     \edef\k@family{\kanjifamilydefault}%
@@ -1264,13 +1253,6 @@
     \let\delayed@k@adjustment\@empty
     \set@current@meta@kanjifamily
 }
-\edef\@@@temp{\detokenize{nullfont}}
-\edef\@@@tempa{\fontname\jfont}
-\unless\ifx\@@@temp\@@@tempa
-  \adjustbaseline
-\fi
-\let\@@@temp\undefined
-\let\@@@tempa\undefined
 \ifx\bfseries@rm\@undefined  % old
 \let\bfseries@mc\@undefined
 \let\bfseries@gt\@undefined
@@ -1615,11 +1597,22 @@
 \fi
 %%
 \pltx@reset@catcode@trick
+\def\set@current@meta@kanjifamily {%
+  \ifx\k@family\mcdef@ult
+    \def\@currentmetakanjifamily{mc}%
+  \else
+    \ifx\k@family\gtdef@ult
+      \def\@currentmetakanjifamily{gt}%
+    \else
+      \def\@currentmetakanjifamily{??}%
+    \fi
+  \fi
+}
 \def\@currentmetakanjifamily{??}
 \def\prepare@family@series@update#1#2{%
  \def\@currentmetafamily{#1}%
  \if@forced@series
-   \romanfamily#2%
+   \romanfamily#2%   % changed \fontfamily -> \romanfamily
  \else
    \expand@font@defaults
    \let\target@series@value\@empty
@@ -1628,7 +1621,7 @@
       \@meta@family@list
       \@elt{??}%
    \let\@elt\relax
-   \fontfamily#2%
+   \romanfamily#2%   % changed \fontfamily -> \romanfamily
    \ifx\target@series@value\@empty
    \else
      \ifx \f@series\target@series@value
@@ -1640,7 +1633,7 @@
  \fi
 }
 \def\prepare@family@series@update@kanji#1#2{%
-\def\@currentmetakanjifamily{#1}%
+ \def\@currentmetakanjifamily{#1}%
  \if@forced@series@kanji
    \kanjifamily#2%
  \else

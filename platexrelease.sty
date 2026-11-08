@@ -1504,17 +1504,6 @@ of this package available from CTAN}
 \plEndIncludeInRelease
 \plIncludeInRelease{2025/11/01}%
                    {\normalfont}{Support meta family}%
-\def\set@current@meta@kanjifamily {%
-  \ifx\k@family\mcdef@ult
-    \def\@currentmetakanjifamily{mc}%
-  \else
-    \ifx\k@family\gtdef@ult
-      \def\@currentmetakanjifamily{gt}%
-    \else
-      \def\@currentmetakanjifamily{??}%
-    \fi
-  \fi
-}
 \AddToHook{normalfont}{%
     \kanjiencoding{\kanjiencodingdefault}%
     \edef\k@family{\kanjifamilydefault}%
@@ -1963,6 +1952,24 @@ of this package available from CTAN}
 %%
 \pltx@reset@catcode@trick
 \plIncludeInRelease{2025/11/01}%
+    {\set@current@meta@kanjifamily}{Support meta family}%
+\def\set@current@meta@kanjifamily {%
+  \ifx\k@family\mcdef@ult
+    \def\@currentmetakanjifamily{mc}%
+  \else
+    \ifx\k@family\gtdef@ult
+      \def\@currentmetakanjifamily{gt}%
+    \else
+      \def\@currentmetakanjifamily{??}%
+    \fi
+  \fi
+}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}%
+    {\set@current@meta@kanjifamily}{Support meta family}%
+\let\set@current@meta@kanjifamily\@undefined
+\plEndIncludeInRelease
+\plIncludeInRelease{2025/11/01}%
     {\prepare@family@series@update}{Support meta family}%
 \def\@currentmetakanjifamily{??}
 \def\prepare@family@series@update#1#2{%
@@ -1989,7 +1996,7 @@ of this package available from CTAN}
  \fi
 }
 \def\prepare@family@series@update@kanji#1#2{%
-\def\@currentmetakanjifamily{#1}%
+ \def\@currentmetakanjifamily{#1}%
  \if@forced@series@kanji
    \kanjifamily#2%
  \else

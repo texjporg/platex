@@ -1276,9 +1276,7 @@
 }
 \fi          % --- for >= 2021-06-01 END
 \fi   % --- for >= 2020-10-01 END
-\edef\@@@temp{\detokenize{nullfont}}\edef\@@@tempa{\fontname\jfont}
-\unless\ifx\@@@temp\@@@tempa\adjustbaseline\fi
-\let\@@@temp\undefined\let\@@@tempa\undefined
+\adjustbaseline
 \let\reset@font\normalfont
 \ifx\bfseries@rm\@undefined  % old
 \let\bfseries@mc\@undefined
@@ -2275,9 +2273,7 @@
      \@startfield
      \strut\inhibitglue}
 \gdef\@stopfield{\null\color@endgroup\egroup}
-\AtBeginDocument{%
-  \ifdefined\printglossary\else\newcommand\printglossary{\@input@{\jobname.gls}}\fi
-}
+\newcommand\printglossary{\@input@{\jobname.gls}}
 \newcount\hour
 \newcount\minute
 \ifx\removejfmglue\@undefined
