@@ -1,4 +1,4 @@
-%% <2025-11-01>
+%% <2021-11-15>, <2023-02-14> and <2025-11-01>
 \documentclass{plnews}
 \usepackage{minijs}
 
@@ -29,6 +29,7 @@
 \section{\LaTeXe\ \texttt{<2021-11-15>}対応}
 →参考：|texjporg/platex#97|
 
+\pLaTeXe\ \texttt{<2021-11-15>}では、
 内部処理で\LaTeXe{}の修正に追随する調整を行いました。
 
 
@@ -115,6 +116,19 @@ GitHubのIssue等でのご意見を歓迎します。
 \texttt{mc}、\texttt{gt}または\texttt{??}%
 （どの和文メタファミリも使用されていない場合）
 のいずれかを返します。
+
+
+\section{縦組クラスの目次の連数字処理}
+→参考：|texjporg/platex#101|
+
+縦組クラスでは目次のページ番号を連数字で出力しますが、
+従来はその実現方法が「|\addcontentsline|命令を再定義して、
+|\contentsline|の第3引数（ページ番号）を|\rensuji|で囲む」という方法でした。
+しかしこれはhyperrefパッケージによって再び上書きされて無効化されてしまいます。
+
+新しいバージョンでは|\addcontentsline|命令の再定義は削除し、代わりに
+|\l@chapter|, |\l@section|, |\@dottedtocline|などの実際の出力命令に|\rensuji|を
+仕込むようにしました。
 
 
 \section{開発版のテストのお願い}
