@@ -3340,29 +3340,14 @@
 % \changes{v1.7l}{2021/05/23}{Unconditionally switch to the requested
 %    font face (latex2e/444)
 %    (sync with ltfssini.dtx 2021/04/26 v3.2h)}
+%
+% \LaTeXe~2025-11-01対応コードも追加してあります。
+% \changes{v1.7o}{2025/11/01}{Add \cs{set@current@meta@kanjifamily}}
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2025/11/01}%
 %<platexrelease>                   {\normalfont}{Support meta family}%
 %<*plcore|platexrelease>
 %    \end{macrocode}
-%
-%  \begin{macro}{\set@current@meta@kanjifamily}
-%    \cs{set@current@meta@family}の和文版。
-% \changes{v1.7o}{2025/11/01}{Macro added}
-%    \begin{macrocode}
-\def\set@current@meta@kanjifamily {%
-  \ifx\k@family\mcdef@ult
-    \def\@currentmetakanjifamily{mc}%
-  \else
-    \ifx\k@family\gtdef@ult
-      \def\@currentmetakanjifamily{gt}%
-    \else
-      \def\@currentmetakanjifamily{??}%
-    \fi
-  \fi
-}
-%    \end{macrocode}
-%  \end{macro}
 %
 %    \begin{macrocode}
 \AddToHook{normalfont}{%
@@ -3375,6 +3360,9 @@
 }
 %    \end{macrocode}
 %
+% なお、以前は|\normalfont|定義直後に|\adjustbaseline|を実行していましたが、
+% フォーマット作成中のこの時点ではまだ和文フォントが読まれておらず
+% |\jfont|が|\nullfont|の状態ですので、実行しないよう修正しました。
 %    \begin{macrocode}
 %<platexrelease>\plEndIncludeInRelease
 %<platexrelease>\plIncludeInRelease{2020/04/12}{\normalfont}
@@ -3476,18 +3464,6 @@
 %</plcore|platexrelease>
 %    \end{macrocode}
 % \end{macro}
-%
-%    \begin{macrocode}
-%<*plcore>
-\edef\@@@temp{\detokenize{nullfont}}
-\edef\@@@tempa{\fontname\jfont}
-\unless\ifx\@@@temp\@@@tempa
-  \adjustbaseline
-\fi
-\let\@@@temp\undefined
-\let\@@@tempa\undefined
-%</plcore>
-%    \end{macrocode}
 %
 %
 % \begin{macro}{\bfseries@mc}
@@ -4039,7 +4015,7 @@
 %<+debug> \series@change@debug{No series preparation (forced \f@series)\on@line}%
 ~  \romanfamily#2%   % changed \fontfamily -> \romanfamily
 ~\else
-%<+debug> \series@change@debug{Prepearing for switching to #1 (#2)\on@line}%
+%<+debug> \series@change@debug{Preparing for switching to #1 (#2)\on@line}%
    \expand@font@defaults
    \let\target@series@value\@empty
    \def\target@meta@family@value{#1}%
@@ -4069,7 +4045,7 @@
 %<+debug> \series@change@debug{No series preparation (forced \k@series)\on@line}%
 ~  \kanjifamily#2%
 ~\else
-%<+debug> \series@change@debug{Prepearing for switching to #1 (#2)\on@line}%
+%<+debug> \series@change@debug{Preparing for switching to #1 (#2)\on@line}%
    \expand@font@defaults
    \let\target@series@value\@empty
    \def\target@meta@family@value{#1}%
@@ -4133,7 +4109,37 @@
 %    \end{macrocode}
 %
 %
+% \subsubsection{\LaTeXe~2025-11-01への対応（和文メタファミリ）}
 % \LaTeXe~2025-11-01以降への対応コードです。
+%
+% \begin{macro}{\set@current@meta@kanjifamily}
+%
+%    \cs{set@current@meta@family}の和文版。|\normalfont|で使われます。
+%
+% \changes{v1.7o}{2025/11/01}{Macro added}
+%    \begin{macrocode}
+%<platexrelease>\plIncludeInRelease{2025/11/01}%
+%<platexrelease>    {\set@current@meta@kanjifamily}{Support meta family}%
+%<*plcore|platexrelease>
+\def\set@current@meta@kanjifamily {%
+  \ifx\k@family\mcdef@ult
+    \def\@currentmetakanjifamily{mc}%
+  \else
+    \ifx\k@family\gtdef@ult
+      \def\@currentmetakanjifamily{gt}%
+    \else
+      \def\@currentmetakanjifamily{??}%
+    \fi
+  \fi
+}
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}%
+%<platexrelease>    {\set@current@meta@kanjifamily}{Support meta family}%
+%<platexrelease>\let\set@current@meta@kanjifamily\@undefined
+%<platexrelease>\plEndIncludeInRelease
+%    \end{macrocode}
+%  \end{macro}
 %
 %    \begin{macrocode}
 %<platexrelease>\plIncludeInRelease{2025/11/01}%
@@ -4141,16 +4147,18 @@
 %<*plcore|platexrelease>
 %    \end{macrocode}
 %
-%  \begin{macro}{\@currentmetakanjifamily}
+% \begin{macro}{\@currentmetakanjifamily}
+%
 %    \cs{@currentmetafamily}の和文版です。
+%
 %    \begin{macrocode}
 \def\@currentmetakanjifamily{??}
 %    \end{macrocode}
 %  \end{macro}
 %
-%  \begin{macro}{\prepare@family@series@update}
+% \begin{macro}{\prepare@family@series@update}
 %
-%    p\LaTeXe では\cs{fontfamily}を\cs{romanfamily}に変更します。
+%    \pLaTeXe{}では\cs{fontfamily}を\cs{romanfamily}に変更します。
 %
 % \changes{v1.7o}{2025/11/01}{Always set \cs{@currentmetafamily}.
 %    (sync with ltfssini.dtx 2025/09/15 v3.2l)}
@@ -4159,7 +4167,7 @@
  \def\@currentmetafamily{#1}%
  \if@forced@series
 %<+debug> \series@change@debug{No series preparation (forced \f@series)\on@line}%
-   \romanfamily#2%
+   \romanfamily#2%   % changed \fontfamily -> \romanfamily
  \else
 %<+debug> \series@change@debug{Preparing for switching to #1 (#2)\on@line}%
    \expand@font@defaults
@@ -4169,7 +4177,7 @@
       \@meta@family@list
       \@elt{??}%
    \let\@elt\relax
-   \fontfamily#2%
+   \romanfamily#2%   % changed \fontfamily -> \romanfamily
    \ifx\target@series@value\@empty
 %<+debug> \series@change@debug{Target series still empty ...}%
    \else
@@ -4189,7 +4197,7 @@
 %    \end{macrocode}
 %  \end{macro}
 %
-%  \begin{macro}{\prepare@family@series@update@kanji}
+% \begin{macro}{\prepare@family@series@update@kanji}
 %
 %    \cs{prepare@family@series@update}の和文版です。
 %
@@ -4197,12 +4205,12 @@
 %    \cs{prepare@family@series@update}と同様の変更。}
 %    \begin{macrocode}
 \def\prepare@family@series@update@kanji#1#2{%
-\def\@currentmetakanjifamily{#1}%
+ \def\@currentmetakanjifamily{#1}%
  \if@forced@series@kanji
 %<+debug> \series@change@debug{No series preparation (forced \k@series)\on@line}%
    \kanjifamily#2%
  \else
-%<+debug> \series@change@debug{Prepearing for switching to #1 (#2)\on@line}%
+%<+debug> \series@change@debug{Preparing for switching to #1 (#2)\on@line}%
    \expand@font@defaults
    \let\target@series@value\@empty
    \expandafter\edef\csname ??def@ult\endcsname{\k@family}%
@@ -4230,9 +4238,9 @@
 %    \end{macrocode}
 %  \end{macro}
 %
-%  \begin{macro}{\update@series@target@value@kanji}
+% \begin{macro}{\update@series@target@value@kanji}
 %
-%    \LaTeXe の\cs{update@series@target@value}の和文版です。
+%    \LaTeXe{}の\cs{update@series@target@value}の和文版です。
 %
 % \changes{v1.7o}{2025/11/01}{LaTeX 2025-11-01の
 %    \cs{update@series@target@value}と同様の変更。}
