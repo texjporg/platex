@@ -2,6 +2,9 @@
 if "%~1"=="install" goto :install
 if "%~1"=="uninstall" goto :uninstall
 
+if "%~1"=="install-dev" goto :install-dev
+if "%~1"=="uninstall-dev" goto :uninstall-dev
+
 rem strip platex.ltx
 
 del /q platex.ltx plcore.ltx kinsoku.tex pldefs.ltx
@@ -230,4 +233,46 @@ rmdir /q /s "%USERPROFILE%\texmf\tex\platex\base"
 rmdir /q /s "%USERPROFILE%\texmf\tex\platex\config"
 
 rem end uninstall
+exit /b 0
+
+
+rem install-dev
+:install-dev
+
+mkdir "%USERPROFILE%\texmf\doc\platex-dev\base"
+copy /Y LICENSE     "%USERPROFILE%\texmf\doc\platex-dev\base"
+copy /Y README.md   "%USERPROFILE%\texmf\doc\platex-dev\base"
+copy /Y *.pdf       "%USERPROFILE%\texmf\doc\platex-dev\base"
+
+mkdir "%USERPROFILE%\texmf\source\platex-dev\base"
+copy /Y Makefile    "%USERPROFILE%\texmf\source\platex-dev\base"
+copy /Y plnews*.tex "%USERPROFILE%\texmf\source\platex-dev\base"
+copy /Y *.dtx       "%USERPROFILE%\texmf\source\platex-dev\base"
+copy /Y *.ins       "%USERPROFILE%\texmf\source\platex-dev\base"
+
+mkdir "%USERPROFILE%\texmf\tex\platex-dev\base"
+copy /Y kinsoku.tex "%USERPROFILE%\texmf\tex\platex-dev\base"
+copy /Y *.clo       "%USERPROFILE%\texmf\tex\platex-dev\base"
+copy /Y *.cls       "%USERPROFILE%\texmf\tex\platex-dev\base"
+copy /Y *.def       "%USERPROFILE%\texmf\tex\platex-dev\base"
+copy /Y *.fd        "%USERPROFILE%\texmf\tex\platex-dev\base"
+copy /Y *.ltx       "%USERPROFILE%\texmf\tex\platex-devbase"
+copy /Y *.sty       "%USERPROFILE%\texmf\tex\platex-dev\base"
+
+mkdir "%USERPROFILE%\texmf\tex\platex-dev\config"
+copy /Y platex.ini  "%USERPROFILE%\texmf\tex\platex-dev\config"
+
+rem end install-dev
+exit /b 0
+
+
+rem uninstall-dev
+:uninstall-dev
+
+rmdir /q /s "%USERPROFILE%\texmf\doc\platex-dev\base"
+rmdir /q /s "%USERPROFILE%\texmf\source\platex-dev\base"
+rmdir /q /s "%USERPROFILE%\texmf\tex\platex-dev\base"
+rmdir /q /s "%USERPROFILE%\texmf\tex\platex-dev\config"
+
+rem end uninstall-dev
 exit /b 0

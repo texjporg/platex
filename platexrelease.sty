@@ -1064,6 +1064,121 @@ of this package available from CTAN}
   \fi}
 \expandafter \let \csname adjustbaseline \endcsname \@undefined
 \plEndIncludeInRelease
+\plIncludeInRelease{2025/11/01}
+                   {\fontfamily}{LaTeX 2025-11-01: Set meta family}%
+\DeclareRobustCommand\romanfamily[1]
+      {\edef\f@family{#1}\set@current@meta@family}
+\DeclareRobustCommand\kanjifamily[1]
+      {\edef\k@family{#1}\set@current@meta@kanjifamily}
+\DeclareRobustCommand\fontfamily[1]{%
+  \edef\tmp@item{{#1}}%
+  \@notkfamfalse
+  \@notffamfalse
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\kfam@list}%
+  \ifin@ \edef\k@family{#1}\set@current@meta@kanjifamily
+  \else
+    \expandafter\expandafter\expandafter
+    \inlist@\expandafter\tmp@item\expandafter{\notkfam@list}%
+    \ifin@ \@notkfamtrue
+    \else
+      \@tempswzfalse
+      \def\fam@elt{\noexpand\fam@elt}%
+      \message{(I search kanjifont definition file:}%
+      \def\enc@elt<##1>{\message{.}%
+        \edef\reserved@a{\lowercase{\noexpand\IfFileExists{##1#1.fd}}}%
+        \reserved@a{\@tempswztrue}{}\relax}%
+      \kenc@list
+      \message{)}%
+      \if@tempswz
+        \edef\k@family{#1}\set@current@meta@kanjifamily
+      \else
+        \@notkfamtrue
+        \xdef\notkfam@list{\notkfam@list\fam@elt<#1>}%
+      \fi
+  \fi\fi
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\ffam@list}%
+  \ifin@ \edef\f@family{#1}\set@current@meta@family\else
+    \expandafter\expandafter\expandafter
+    \inlist@\expandafter\tmp@item\expandafter{\notffam@list}%
+    \ifin@ \@notffamtrue \else
+      \@tempswzfalse
+      \def\fam@elt{\noexpand\fam@elt}%
+      \message{(I search font definition file:}%
+      \def\enc@elt<##1>{\message{.}%
+        \edef\reserved@a{\lowercase{\noexpand\IfFileExists{##1#1.fd}}}%
+        \reserved@a{\@tempswztrue}{}\relax}%
+      \fenc@list
+      \message{)}%
+      \if@tempswz
+        \edef\f@family{#1}\set@current@meta@family
+      \else
+        \@notffamtrue
+        \xdef\notffam@list{\notffam@list\fam@elt<#1>}%
+      \fi
+  \fi\fi
+  \if@notkfam\if@notffam
+      \edef\k@family{#1}\set@current@meta@kanjifamily
+      \edef\f@family{#1}\set@current@meta@family
+  \fi\fi}
+\plEndIncludeInRelease
+\plIncludeInRelease{0000/00/00}
+                   {\fontfamily}{LaTeX 2025-11-01: Set meta family}%
+\DeclareRobustCommand\romanfamily[1]{\edef\f@family{#1}}
+\DeclareRobustCommand\kanjifamily[1]{\edef\k@family{#1}}
+\DeclareRobustCommand\fontfamily[1]{%
+  \edef\tmp@item{{#1}}%
+  \@notkfamfalse
+  \@notffamfalse
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\kfam@list}%
+  \ifin@ \edef\k@family{#1}%
+  \else
+    \expandafter\expandafter\expandafter
+    \inlist@\expandafter\tmp@item\expandafter{\notkfam@list}%
+    \ifin@ \@notkfamtrue
+    \else
+      \@tempswzfalse
+      \def\fam@elt{\noexpand\fam@elt}%
+      \message{(I search kanjifont definition file:}%
+      \def\enc@elt<##1>{\message{.}%
+        \edef\reserved@a{\lowercase{\noexpand\IfFileExists{##1#1.fd}}}%
+        \reserved@a{\@tempswztrue}{}\relax}%
+      \kenc@list
+      \message{)}%
+      \if@tempswz
+        \edef\k@family{#1}%
+      \else
+        \@notkfamtrue
+        \xdef\notkfam@list{\notkfam@list\fam@elt<#1>}%
+      \fi
+  \fi\fi
+  \expandafter\expandafter\expandafter
+  \inlist@\expandafter\tmp@item\expandafter{\ffam@list}%
+  \ifin@ \edef\f@family{#1}\else
+    \expandafter\expandafter\expandafter
+    \inlist@\expandafter\tmp@item\expandafter{\notffam@list}%
+    \ifin@ \@notffamtrue \else
+      \@tempswzfalse
+      \def\fam@elt{\noexpand\fam@elt}%
+      \message{(I search font definition file:}%
+      \def\enc@elt<##1>{\message{.}%
+        \edef\reserved@a{\lowercase{\noexpand\IfFileExists{##1#1.fd}}}%
+        \reserved@a{\@tempswztrue}{}\relax}%
+      \fenc@list
+      \message{)}%
+      \if@tempswz
+        \edef\f@family{#1}%
+      \else
+        \@notffamtrue
+        \xdef\notffam@list{\notffam@list\fam@elt<#1>}%
+      \fi
+  \fi\fi
+  \if@notkfam\if@notffam
+      \edef\k@family{#1}\edef\f@family{#1}%
+  \fi\fi}
+\plEndIncludeInRelease
 \ifx\fontseriesforce\@undefined      % old
         \def\pltx@latex@level{0}
 \else                                % 2020-02-02
@@ -1975,7 +2090,7 @@ of this package available from CTAN}
 \def\prepare@family@series@update#1#2{%
  \def\@currentmetafamily{#1}%
  \if@forced@series
-   \romanfamily#2%
+   \romanfamily#2%   % changed \fontfamily -> \romanfamily
  \else
    \expand@font@defaults
    \let\target@series@value\@empty
@@ -1984,7 +2099,7 @@ of this package available from CTAN}
       \@meta@family@list
       \@elt{??}%
    \let\@elt\relax
-   \fontfamily#2%
+   \romanfamily#2%   % changed \fontfamily -> \romanfamily
    \ifx\target@series@value\@empty
    \else
      \ifx \f@series\target@series@value

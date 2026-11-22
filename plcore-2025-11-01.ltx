@@ -867,15 +867,17 @@
 \newif\if@notkfam
 \newif\if@notffam
 \newif\if@tempswz
-\DeclareRobustCommand\romanfamily[1]{\edef\f@family{#1}}
-\DeclareRobustCommand\kanjifamily[1]{\edef\k@family{#1}}
+\DeclareRobustCommand\romanfamily[1]
+      {\edef\f@family{#1}\set@current@meta@family}
+\DeclareRobustCommand\kanjifamily[1]
+      {\edef\k@family{#1}\set@current@meta@kanjifamily}
 \DeclareRobustCommand\fontfamily[1]{%
   \edef\tmp@item{{#1}}%
   \@notkfamfalse
   \@notffamfalse
   \expandafter\expandafter\expandafter
   \inlist@\expandafter\tmp@item\expandafter{\kfam@list}%
-  \ifin@ \edef\k@family{#1}%
+  \ifin@ \edef\k@family{#1}\set@current@meta@kanjifamily
   \else
     \expandafter\expandafter\expandafter
     \inlist@\expandafter\tmp@item\expandafter{\notkfam@list}%
@@ -890,7 +892,7 @@
       \kenc@list
       \message{)}%
       \if@tempswz
-        \edef\k@family{#1}%
+        \edef\k@family{#1}\set@current@meta@kanjifamily
       \else
         \@notkfamtrue
         \xdef\notkfam@list{\notkfam@list\fam@elt<#1>}%
@@ -898,7 +900,7 @@
   \fi\fi
   \expandafter\expandafter\expandafter
   \inlist@\expandafter\tmp@item\expandafter{\ffam@list}%
-  \ifin@ \edef\f@family{#1}\else
+  \ifin@ \edef\f@family{#1}\set@current@meta@family\else
     \expandafter\expandafter\expandafter
     \inlist@\expandafter\tmp@item\expandafter{\notffam@list}%
     \ifin@ \@notffamtrue \else
@@ -911,14 +913,15 @@
       \fenc@list
       \message{)}%
       \if@tempswz
-        \edef\f@family{#1}%
+        \edef\f@family{#1}\set@current@meta@family
       \else
         \@notffamtrue
         \xdef\notffam@list{\notffam@list\fam@elt<#1>}%
       \fi
   \fi\fi
   \if@notkfam\if@notffam
-      \edef\k@family{#1}\edef\f@family{#1}%
+      \edef\k@family{#1}\set@current@meta@kanjifamily
+      \edef\f@family{#1}\set@current@meta@family
   \fi\fi}
 \ifx\fontseriesforce\@undefined      % old
         \def\pltx@latex@level{0}

@@ -2464,8 +2464,14 @@
 % 逆に|\romanfamily|に和文ファミリを指定した場合は、エラーとなり、
 % 代用フォントかエラーフォントが使われます。
 %    \begin{macrocode}
-\DeclareRobustCommand\romanfamily[1]{\edef\f@family{#1}}
-\DeclareRobustCommand\kanjifamily[1]{\edef\k@family{#1}}
+%</plcore>
+%<platexrelease>\plIncludeInRelease{2025/11/01}
+%<platexrelease>                   {\fontfamily}{LaTeX 2025-11-01: Set meta family}%
+%<*plcore|platexrelease>
+\DeclareRobustCommand\romanfamily[1]
+      {\edef\f@family{#1}\set@current@meta@family}
+\DeclareRobustCommand\kanjifamily[1]
+      {\edef\k@family{#1}\set@current@meta@kanjifamily}
 %    \end{macrocode}
 %
 % |\fontfamily|は、指定された値によって、和文ファミリか欧文ファミリ、
@@ -2493,7 +2499,7 @@
 %    \begin{macrocode}
   \expandafter\expandafter\expandafter
   \inlist@\expandafter\tmp@item\expandafter{\kfam@list}%
-  \ifin@ \edef\k@family{#1}%
+  \ifin@ \edef\k@family{#1}\set@current@meta@kanjifamily
 %    \end{macrocode}
 % そうでないときは、|\notkfam@list|に登録されているかどうかを調べます。
 % 登録されていれば、この引数は和文ファミリではありませんので、
@@ -2537,7 +2543,7 @@
       \kenc@list
       \message{)}%
       \if@tempswz
-        \edef\k@family{#1}%
+        \edef\k@family{#1}\set@current@meta@kanjifamily
 %    \end{macrocode}
 % つぎの部分が実行されるのは、和文ファミリとして認識できなかった場合です。
 % この場合は、|\@notkfam|フラグを真にして、|\notkfam@list|に登録します。
@@ -2559,7 +2565,7 @@
 %    \begin{macrocode}
   \expandafter\expandafter\expandafter
   \inlist@\expandafter\tmp@item\expandafter{\ffam@list}%
-  \ifin@ \edef\f@family{#1}\else
+  \ifin@ \edef\f@family{#1}\set@current@meta@family\else
     \expandafter\expandafter\expandafter
     \inlist@\expandafter\tmp@item\expandafter{\notffam@list}%
     \ifin@ \@notffamtrue \else
@@ -2572,7 +2578,7 @@
       \fenc@list
       \message{)}%
       \if@tempswz
-        \edef\f@family{#1}%
+        \edef\f@family{#1}\set@current@meta@family
       \else
         \@notffamtrue
         \xdef\notffam@list{\notffam@list\fam@elt<#1>}%
@@ -2587,9 +2593,67 @@
 % 入れます。
 %    \begin{macrocode}
   \if@notkfam\if@notffam
-      \edef\k@family{#1}\edef\f@family{#1}%
+      \edef\k@family{#1}\set@current@meta@kanjifamily
+      \edef\f@family{#1}\set@current@meta@family
   \fi\fi}
-%</plcore>
+%</plcore|platexrelease>
+%<platexrelease>\plEndIncludeInRelease
+%<platexrelease>\plIncludeInRelease{0000/00/00}
+%<platexrelease>                   {\fontfamily}{LaTeX 2025-11-01: Set meta family}%
+%<platexrelease>\DeclareRobustCommand\romanfamily[1]{\edef\f@family{#1}}
+%<platexrelease>\DeclareRobustCommand\kanjifamily[1]{\edef\k@family{#1}}
+%<platexrelease>\DeclareRobustCommand\fontfamily[1]{%
+%<platexrelease>  \edef\tmp@item{{#1}}%
+%<platexrelease>  \@notkfamfalse
+%<platexrelease>  \@notffamfalse
+%<platexrelease>  \expandafter\expandafter\expandafter
+%<platexrelease>  \inlist@\expandafter\tmp@item\expandafter{\kfam@list}%
+%<platexrelease>  \ifin@ \edef\k@family{#1}%
+%<platexrelease>  \else
+%<platexrelease>    \expandafter\expandafter\expandafter
+%<platexrelease>    \inlist@\expandafter\tmp@item\expandafter{\notkfam@list}%
+%<platexrelease>    \ifin@ \@notkfamtrue
+%<platexrelease>    \else
+%<platexrelease>      \@tempswzfalse
+%<platexrelease>      \def\fam@elt{\noexpand\fam@elt}%
+%<platexrelease>      \message{(I search kanjifont definition file:}%
+%<platexrelease>      \def\enc@elt<##1>{\message{.}%
+%<platexrelease>        \edef\reserved@a{\lowercase{\noexpand\IfFileExists{##1#1.fd}}}%
+%<platexrelease>        \reserved@a{\@tempswztrue}{}\relax}%
+%<platexrelease>      \kenc@list
+%<platexrelease>      \message{)}%
+%<platexrelease>      \if@tempswz
+%<platexrelease>        \edef\k@family{#1}%
+%<platexrelease>      \else
+%<platexrelease>        \@notkfamtrue
+%<platexrelease>        \xdef\notkfam@list{\notkfam@list\fam@elt<#1>}%
+%<platexrelease>      \fi
+%<platexrelease>  \fi\fi
+%<platexrelease>  \expandafter\expandafter\expandafter
+%<platexrelease>  \inlist@\expandafter\tmp@item\expandafter{\ffam@list}%
+%<platexrelease>  \ifin@ \edef\f@family{#1}\else
+%<platexrelease>    \expandafter\expandafter\expandafter
+%<platexrelease>    \inlist@\expandafter\tmp@item\expandafter{\notffam@list}%
+%<platexrelease>    \ifin@ \@notffamtrue \else
+%<platexrelease>      \@tempswzfalse
+%<platexrelease>      \def\fam@elt{\noexpand\fam@elt}%
+%<platexrelease>      \message{(I search font definition file:}%
+%<platexrelease>      \def\enc@elt<##1>{\message{.}%
+%<platexrelease>        \edef\reserved@a{\lowercase{\noexpand\IfFileExists{##1#1.fd}}}%
+%<platexrelease>        \reserved@a{\@tempswztrue}{}\relax}%
+%<platexrelease>      \fenc@list
+%<platexrelease>      \message{)}%
+%<platexrelease>      \if@tempswz
+%<platexrelease>        \edef\f@family{#1}%
+%<platexrelease>      \else
+%<platexrelease>        \@notffamtrue
+%<platexrelease>        \xdef\notffam@list{\notffam@list\fam@elt<#1>}%
+%<platexrelease>      \fi
+%<platexrelease>  \fi\fi
+%<platexrelease>  \if@notkfam\if@notffam
+%<platexrelease>      \edef\k@family{#1}\edef\f@family{#1}%
+%<platexrelease>  \fi\fi}
+%<platexrelease>\plEndIncludeInRelease
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
